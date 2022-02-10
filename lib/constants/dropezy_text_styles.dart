@@ -35,34 +35,34 @@ import 'dropezy_colors.dart';
 // );
 
 class DropezyTextStyles {
-  static final TextStyle button = TextStyle(
+  static const TextStyle button = TextStyle(
     color: DropezyColors.white,
     fontSize: 16,
     fontWeight: FontWeight.w700,
   );
 
-  static final title = TextStyle(
+  static const title = TextStyle(
     color: DropezyColors.black,
     fontSize: 20,
   );
 
-  static final subtitle = TextStyle(
+  static const subtitle = TextStyle(
     color: DropezyColors.black,
     fontSize: 16,
   );
 
   /// Default text style
-  static final caption1 = TextStyle(
+  static const caption1 = TextStyle(
     color: DropezyColors.black,
     fontSize: 14,
   );
 
-  static final caption2 = TextStyle(
+  static const caption2 = TextStyle(
     color: DropezyColors.black,
     fontSize: 12,
   );
 
-  static final caption3 = TextStyle(
+  static const caption3 = TextStyle(
     color: DropezyColors.black,
     fontSize: 10,
   );

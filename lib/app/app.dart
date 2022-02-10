@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:storefront_app/ui/widgets/dropezy_button.dart';
-import 'package:storefront_app/ui/widgets/dropezy_scaffold.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
+import 'package:storefront_app/ui/home/home_screen.dart';
+import 'package:storefront_app/ui/onboarding/onboarding_screen.dart';
 
+import 'router.dart';
 import 'theme.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -15,26 +20,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: lightTheme,
-      home: DropezyScaffold.textTitle(
-        title: 'Dropezy',
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Dropezy'),
-              SizedBox(height: 20),
-              DropezyButton.primary(
-                label: 'Primary',
-                onPressed: () {},
-              ),
-              SizedBox(height: 20),
-              DropezyButton.secondary(
-                label: 'Secondary',
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
+      onGenerateRoute: appRouter,
+      home: BlocBuilder<OnboardingCubit, bool>(
+        builder: (_, isOnboarded) {
+          return !isOnboarded ? const OnboardingScreen() : const HomeScreen();
+        },
       ),
     );
   }

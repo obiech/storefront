@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_svg: ^1.0.3
   geolocator: ^8.1.1
   grpc: ^3.0.2
   modal_bottom_sheet: ^2.0.0
@@ -45,6 +46,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^1.1.1
+  mocktail: ^0.2.0
 
 dependency_overrides:
   analyzer: 3.0.0
@@ -55,6 +57,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
 
   fonts:
     - family: Montserrat

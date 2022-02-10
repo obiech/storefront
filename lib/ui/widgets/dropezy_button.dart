@@ -56,7 +56,7 @@ class DropezyButton extends StatelessWidget {
         primary: backgroundColor,
         elevation: 0,
         padding: const EdgeInsets.symmetric(
-          vertical: 10.0,
+          vertical: 12.0,
           horizontal: 16.0,
         ),
         shape: const StadiumBorder(),
