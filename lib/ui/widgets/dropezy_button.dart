@@ -9,33 +9,42 @@ class DropezyButton extends StatelessWidget {
     required this.textStyle,
     required this.backgroundColor,
     this.onPressed,
+    this.isLoading = false,
   }) : super(key: key);
 
   factory DropezyButton.primary({
+    Key? key,
     required String label,
     required VoidCallback? onPressed,
+    bool isLoading = false,
   }) {
     return DropezyButton(
+      key: key,
       label: label,
       backgroundColor: DropezyColors.blue,
-      onPressed: onPressed,
+      onPressed: isLoading ? () {} : onPressed,
       textStyle: DropezyTextStyles.button.copyWith(
         color: DropezyColors.white,
       ),
+      isLoading: isLoading,
     );
   }
 
   factory DropezyButton.secondary({
+    Key? key,
     required String label,
     required VoidCallback? onPressed,
+    bool isLoading = false,
   }) {
     return DropezyButton(
+      key: key,
       label: label,
       backgroundColor: DropezyColors.white,
       onPressed: onPressed,
       textStyle: DropezyTextStyles.button.copyWith(
         color: DropezyColors.blue,
       ),
+      isLoading: isLoading,
     );
   }
 
@@ -43,15 +52,18 @@ class DropezyButton extends StatelessWidget {
   final TextStyle? textStyle;
   final Color backgroundColor;
   final VoidCallback? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(
-        label,
-        style: textStyle,
-      ),
+      child: !isLoading
+          ? Text(
+              label,
+              style: textStyle,
+            )
+          : _loadingIndicator(),
       style: ElevatedButton.styleFrom(
         primary: backgroundColor,
         elevation: 0,
@@ -63,4 +75,13 @@ class DropezyButton extends StatelessWidget {
       ),
     );
   }
+
+  Widget _loadingIndicator() => const SizedBox(
+        height: 18,
+        width: 18,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+      );
 }

@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:storefront_app/constant/assets_path.dart';
+import 'package:storefront_app/constants/dropezy_text_styles.dart';
+import 'package:storefront_app/ui/login/login_screen.dart';
+import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';
+
+/// [DropezyBottomSheet] for notifying user that their phone number
+/// has already been registered in Dropezy database.
+///
+/// When user clicks on the button:
+/// 1) This [BottomSheet] will be dismissed
+/// 2) App will navigate to [LoginScreen]
+class PhoneAlreadyRegisteredBottomSheet extends StatelessWidget {
+  final String phoneNumber;
+
+  const PhoneAlreadyRegisteredBottomSheet({
+    Key? key,
+    required this.phoneNumber,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropezyBottomSheet.singleButton(
+      svgIconPath: AssetsPath.icPhoneVerification,
+      content: _content(phoneNumber),
+      buttonLabel: 'Masuk',
+      buttonOnPressed: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pushNamed(LoginScreen.routeName);
+      },
+    );
+  }
+
+  Widget _content(String phoneNumber) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Sepertinya kamu sudah terdaftar',
+            style: DropezyTextStyles.subtitle,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text.rich(
+            TextSpan(
+              text: 'Nomor HP ',
+              children: [
+                TextSpan(
+                  text: phoneNumber,
+                  style: DropezyTextStyles.caption2
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
+                const TextSpan(
+                    text: ' sudah terdaftar di Dropezy. \nYuk, masuk aja!'),
+              ],
+            ),
+            style: DropezyTextStyles.caption2.copyWith(height: 1.5),
+            textAlign: TextAlign.center,
+          )
+        ],
+      );
+}

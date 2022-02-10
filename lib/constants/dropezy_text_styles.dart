@@ -44,11 +44,13 @@ class DropezyTextStyles {
   static const title = TextStyle(
     color: DropezyColors.black,
     fontSize: 20,
+    fontWeight: FontWeight.w600,
   );
 
   static const subtitle = TextStyle(
     color: DropezyColors.black,
     fontSize: 16,
+    fontWeight: FontWeight.w600,
   );
 
   /// Default text style
@@ -65,5 +67,23 @@ class DropezyTextStyles {
   static const caption3 = TextStyle(
     color: DropezyColors.black,
     fontSize: 10,
+  );
+
+  static const textFieldContent = TextStyle(
+    color: DropezyColors.black,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const textFieldHint = TextStyle(
+    color: DropezyColors.grey3,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const clickableText = TextStyle(
+    color: DropezyColors.blue,
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
   );
 }
