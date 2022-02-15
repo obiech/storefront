@@ -6,12 +6,20 @@ import 'package:storefront_app/constants/dropezy_colors.dart';
 ///
 /// [AppBar] is aware of whether it's pop-able
 /// and uses Cupertino style back button
+///
+/// Leading [IconButton] for Navigation has the following dimensions:
+/// - Content padding of [EdgeInsets.all(8.0)]
+/// - Left Margin of 16 units
+/// - Right Margin of 12 units
+///
+/// In total it has a distance of 24 units from left side of screen
+/// And a distance of 20 units from [AppBar] title
 class DropezyScaffold extends StatelessWidget {
   const DropezyScaffold({
     Key? key,
     required this.child,
     required this.title,
-    this.childPadding = 16.0,
+    this.childPadding = 24.0,
     this.actions,
   }) : super(key: key);
 
@@ -19,7 +27,7 @@ class DropezyScaffold extends StatelessWidget {
   factory DropezyScaffold.textTitle({
     required Widget child,
     required String title,
-    double childPadding = 16.0,
+    double childPadding = 24.0,
     List<Widget>? actions,
   }) {
     return DropezyScaffold(
@@ -38,12 +46,23 @@ class DropezyScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     final bool canPop = parentRoute?.canPop ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: title,
-        leading: canPop ? _backButton(context) : null,
+        leading: canPop
+            ? Container(
+                margin: const EdgeInsets.only(
+                  left: 16,
+                  right: 12,
+                ),
+                child: _backButton(context),
+              )
+            : null,
+        leadingWidth: canPop ? 40 : null,
         actions: actions,
       ),
+      resizeToAvoidBottomInset: true,
       body: Container(
         decoration: const BoxDecoration(
           color: DropezyColors.white,

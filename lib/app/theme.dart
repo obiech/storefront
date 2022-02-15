@@ -4,6 +4,7 @@ import 'package:storefront_app/constants/dropezy_colors.dart';
 const appBarStyle = TextStyle(
   color: DropezyColors.white,
   fontSize: 16,
+  fontFamily: 'Montserrat',
   fontWeight: FontWeight.w700,
 );
 
