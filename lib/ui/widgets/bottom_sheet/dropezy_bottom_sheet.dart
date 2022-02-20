@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:storefront_app/constant/dimensions.dart';
+import 'package:storefront_app/constants/dimensions.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
 import 'package:storefront_app/ui/widgets/dropezy_button.dart';
 

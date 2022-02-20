@@ -2,7 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
-import 'package:storefront_app/constant/prefs_keys.dart';
+import 'package:storefront_app/constants/prefs_keys.dart';
 
 void main() {
   group('Onboarding Cubit', () {

@@ -5,8 +5,8 @@ import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
-import 'package:storefront_app/constant/prefs_keys.dart';
 import 'package:storefront_app/constants/config/grpc_config.dart';
+import 'package:storefront_app/constants/prefs_keys.dart';
 import 'package:storefront_app/network/grpc/customer/customer.pbgrpc.dart';
 
 import 'app/app.dart';

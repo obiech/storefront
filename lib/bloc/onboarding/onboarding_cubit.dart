@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/constant/prefs_keys.dart';
+import 'package:storefront_app/constants/prefs_keys.dart';
 
 /// A [Cubit] for emitting the current Onboarding Status
 /// and to abstract away data persistence logic from the UI

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:storefront_app/constant/assets_path.dart';
+import 'package:storefront_app/constants/assets_path.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
 import 'package:storefront_app/ui/registration/registration_screen.dart';
 import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';

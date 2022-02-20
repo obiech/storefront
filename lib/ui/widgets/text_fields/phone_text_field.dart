@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:storefront_app/constant/assets_path.dart';
+import 'package:storefront_app/constants/assets_path.dart';
 import 'package:storefront_app/constants/dropezy_colors.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
 
