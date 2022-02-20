@@ -1,16 +1,24 @@
-# storefront_app
+# storefront-app
 
-A new Flutter project.
+Dropezy Storefront mobile app developed in Flutter.
 
-## Getting Started
+# Getting started
 
-This project is a starting point for a Flutter application.
+## Setting up Environment Variables
 
-A few resources to get you started if this is your first Flutter project:
+Environment variables are loaded using [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) package. 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Create a file named `env/.env` in your local repository. This file should not be commited and
+is added into `.gitignore`.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To quickly setup your local environment, copy the `env.example` file with this command:
+
+```
+$ cp ./env/.env.example ./env/.env
+```
+
+Then make changes as necessary.
+
+
+In the Flutter App, all references to environment variables are placed in classes inside `lib/constants/config` directory 
+and divided according to their domain for easier maintenance.

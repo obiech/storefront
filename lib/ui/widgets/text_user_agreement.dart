@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/constants/config/external_url_config.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Text to confirm
 class TextUserAgreement extends StatelessWidget {
-  // TODO: use Environment variables for URL
-  static const urlTermsAndConditions = 'https://dropezy.com';
-  static const urlPrivacyPolicy = 'https://dropezy.com';
-
   final String userAction;
 
   const TextUserAgreement({
@@ -60,14 +57,16 @@ class TextUserAgreement extends StatelessWidget {
   }
 
   void _openTermsAndConditions() async {
-    if (await canLaunch(urlTermsAndConditions)) {
-      launch(urlTermsAndConditions);
+    final url = ExternalUrlConfig.urlTermsConditions;
+    if (await canLaunch(url)) {
+      launch(url);
     }
   }
 
   void _openPrivacyPolicy() async {
-    if (await canLaunch(urlTermsAndConditions)) {
-      launch(urlTermsAndConditions);
+    final url = ExternalUrlConfig.urlPrivacyPolicy;
+    if (await canLaunch(url)) {
+      launch(url);
     }
   }
 }

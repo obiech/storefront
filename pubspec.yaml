@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_dotenv: ^5.0.2
   flutter_svg: ^1.0.3
   geolocator: ^8.1.1
   get_it: ^7.2.0
@@ -64,6 +65,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - env/.env
 
   fonts:
     - family: Montserrat
