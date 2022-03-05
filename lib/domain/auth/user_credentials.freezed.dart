@@ -18,9 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$UserCredentialsTearOff {
   const _$UserCredentialsTearOff();
 
-  _UserCredentials call({required String authToken}) {
+  _UserCredentials call(
+      {required String authToken, required String phoneNumber}) {
     return _UserCredentials(
       authToken: authToken,
+      phoneNumber: phoneNumber,
     );
   }
 }
@@ -31,6 +33,7 @@ const $UserCredentials = _$UserCredentialsTearOff();
 /// @nodoc
 mixin _$UserCredentials {
   String get authToken => throw _privateConstructorUsedError;
+  String get phoneNumber => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $UserCredentialsCopyWith<UserCredentials> get copyWith =>
@@ -42,7 +45,7 @@ abstract class $UserCredentialsCopyWith<$Res> {
   factory $UserCredentialsCopyWith(
           UserCredentials value, $Res Function(UserCredentials) then) =
       _$UserCredentialsCopyWithImpl<$Res>;
-  $Res call({String authToken});
+  $Res call({String authToken, String phoneNumber});
 }
 
 /// @nodoc
@@ -57,11 +60,16 @@ class _$UserCredentialsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? authToken = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_value.copyWith(
       authToken: authToken == freezed
           ? _value.authToken
           : authToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -74,7 +82,7 @@ abstract class _$UserCredentialsCopyWith<$Res>
           _UserCredentials value, $Res Function(_UserCredentials) then) =
       __$UserCredentialsCopyWithImpl<$Res>;
   @override
-  $Res call({String authToken});
+  $Res call({String authToken, String phoneNumber});
 }
 
 /// @nodoc
@@ -91,11 +99,16 @@ class __$UserCredentialsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? authToken = freezed,
+    Object? phoneNumber = freezed,
   }) {
     return _then(_UserCredentials(
       authToken: authToken == freezed
           ? _value.authToken
           : authToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      phoneNumber: phoneNumber == freezed
+          ? _value.phoneNumber
+          : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -104,14 +117,17 @@ class __$UserCredentialsCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_UserCredentials implements _UserCredentials {
-  const _$_UserCredentials({required this.authToken});
+  const _$_UserCredentials(
+      {required this.authToken, required this.phoneNumber});
 
   @override
   final String authToken;
+  @override
+  final String phoneNumber;
 
   @override
   String toString() {
-    return 'UserCredentials(authToken: $authToken)';
+    return 'UserCredentials(authToken: $authToken, phoneNumber: $phoneNumber)';
   }
 
   @override
@@ -119,12 +135,16 @@ class _$_UserCredentials implements _UserCredentials {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _UserCredentials &&
-            const DeepCollectionEquality().equals(other.authToken, authToken));
+            const DeepCollectionEquality().equals(other.authToken, authToken) &&
+            const DeepCollectionEquality()
+                .equals(other.phoneNumber, phoneNumber));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(authToken));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(authToken),
+      const DeepCollectionEquality().hash(phoneNumber));
 
   @JsonKey(ignore: true)
   @override
@@ -133,11 +153,14 @@ class _$_UserCredentials implements _UserCredentials {
 }
 
 abstract class _UserCredentials implements UserCredentials {
-  const factory _UserCredentials({required String authToken}) =
-      _$_UserCredentials;
+  const factory _UserCredentials(
+      {required String authToken,
+      required String phoneNumber}) = _$_UserCredentials;
 
   @override
   String get authToken;
+  @override
+  String get phoneNumber;
   @override
   @JsonKey(ignore: true)
   _$UserCredentialsCopyWith<_UserCredentials> get copyWith =>

@@ -1,7 +1,9 @@
 import 'dart:async';
 
-import 'package:storefront_app/domain/auth/phone_verification_result.dart';
-import 'package:storefront_app/domain/auth/user_credentials.dart';
+import 'package:flutter/foundation.dart';
+
+import '../../domain/auth/phone_verification_result.dart';
+import 'user_credentials_storage.dart';
 
 /// Contract for describing a Service that deals with Authentication.
 ///
@@ -17,7 +19,10 @@ import 'package:storefront_app/domain/auth/user_credentials.dart';
 /// - [PhoneVerificationStatus.verifiedSuccessfully] once phone number is verified
 /// - [PhoneVerificationStatus.error] if there are any errors
 abstract class AuthService {
-  AuthService();
+  AuthService(this.storage);
+
+  @protected
+  final UserCredentialsStorage storage;
 
   final _phoneVerificationStreamController =
       StreamController<PhoneVerificationResult>.broadcast();
@@ -25,14 +30,14 @@ abstract class AuthService {
   Stream<PhoneVerificationResult> get phoneVerificationStream =>
       _phoneVerificationStreamController.stream;
 
-  Stream<UserCredentials?> get userCredentialChanges;
-
   /// Sends an OTP to specified [phoneNumber]
   Future<void> sendOtp(String phoneNumber);
 
   /// Check submitted OTP against sent OTP
   Future<void> verifyOtp(String otp);
 
+  @protected
+  @visibleForTesting
   void addToPhoneVerificationStream(PhoneVerificationResult result) {
     _phoneVerificationStreamController.add(result);
   }

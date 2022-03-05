@@ -8,4 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// that fits the Key's purpose
 class PrefsKeys {
   static const kIsOnboarded = 'isOnboarded';
+  static const kUserAuthToken = 'userAuthToken';
+  static const kUserPhoneNumber = 'userPhoneNumber';
 }

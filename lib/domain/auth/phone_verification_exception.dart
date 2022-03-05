@@ -7,4 +7,13 @@ class PhoneVerificationException implements Exception {
 
   @override
   String toString() => 'PhoneVerificationException: $errorMessage';
+
+  @override
+  bool operator ==(Object other) =>
+      other is PhoneVerificationException &&
+      other.runtimeType == runtimeType &&
+      other.errorMessage == errorMessage;
+
+  @override
+  int get hashCode => errorMessage.hashCode;
 }
