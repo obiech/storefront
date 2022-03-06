@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/bloc/account_availability/account_availability.dart';
-import 'package:storefront_app/ui/otp_input/otp_input_screen.dart';
+import 'package:storefront_app/ui/otp_verification/otp_success_action.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification_screen.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification_screen_args.dart';
 import 'package:storefront_app/ui/registration/phone_already_registered_bottom_sheet.dart';
 import 'package:storefront_app/ui/screens.dart';
 import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';
@@ -69,26 +73,44 @@ void main() {
             .checkPhoneNumberAvailability(mockPhoneNumber)).called(1);
       });
       testWidgets(
-          '''-- If phone number is available, pushes a route to OTP screen ''',
+          '-- If phone number is available, pushes a route to OTP screen '
+          'with currently entered phone number and '
+          '[OtpSuccessBehavior.goToPinScreen] as args',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
+        final controller = StreamController<AccountAvailabilityState>();
+        controller.add(const AccountAvailabilityState());
+
         whenListen(
           accountAvailabilityCubit,
-          Stream.fromIterable([
-            const AccountAvailabilityState(),
-            const AccountAvailabilityState(
-                status: AccountAvailabilityStatus.phoneIsAvailable)
-          ]),
+          controller.stream,
         );
 
         await tester.pumpWidget(
             buildMockRegistrationScreen(accountAvailabilityCubit, navigator));
 
+        const mockInput = "81234567890";
+        const mockPhoneNumber = "+62$mockInput";
+
+        await tester.enterText(find.byType(PhoneTextField), mockInput);
         await tester.pumpAndSettle();
 
-        verifyRouteIsPushed(navigator, OtpInputScreen.routeName);
+        // Push state to trigger navigation
+        controller.add(const AccountAvailabilityState(
+            status: AccountAvailabilityStatus.phoneIsAvailable));
+
+        await tester.pumpAndSettle();
+
+        verifyRouteIsPushed(
+          navigator,
+          OtpVerificationScreen.routeName,
+          arguments: const OtpVerificationScreenArgs(
+            successAction: OtpSuccessAction.goToPinScreen,
+            phoneNumberIntlFormat: mockPhoneNumber,
+          ),
+        );
       });
       testWidgets('''-- If phone number is not available, display a 
         [PhoneAlreadyRegisteredBottomSheet]''', (WidgetTester tester) async {

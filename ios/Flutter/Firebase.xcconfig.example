@@ -1,0 +1,5 @@
+# Obtained from GoogleService-Info.plist
+FIREBASE_REVERSED_CLIENT_ID=<REVERSED_CLIENT_ID>
+
+# Obtained from Firebase Console
+FIREBASE_ENCODED_APP_ID=<ENCODED_APP_ID>

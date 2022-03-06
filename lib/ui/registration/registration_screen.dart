@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/bloc/account_availability/account_availability.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
-import 'package:storefront_app/ui/otp_input/otp_input_screen.dart';
+import 'package:storefront_app/ui/otp_verification/otp_success_action.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification_screen.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification_screen_args.dart';
 import 'package:storefront_app/ui/registration/phone_already_registered_bottom_sheet.dart';
 import 'package:storefront_app/ui/widgets/dropezy_button.dart';
 import 'package:storefront_app/ui/widgets/dropezy_scaffold.dart';
@@ -24,6 +27,8 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _ctrlPhoneNumber = TextEditingController();
+
+  String get intlPhoneNumber => '+62${_ctrlPhoneNumber.text}';
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +69,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       listener: (context, state) {
         switch (state.status as AccountAvailabilityStatus) {
           case AccountAvailabilityStatus.phoneIsAvailable:
-            _goToOtpPage();
+            _navigateToOtpScreen();
             break;
           case AccountAvailabilityStatus.phoneAlreadyRegistered:
             final phone = '0${_ctrlPhoneNumber.text}';
@@ -83,8 +88,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _goToOtpPage() {
-    Navigator.of(context).pushNamed(OtpInputScreen.routeName);
+  void _navigateToOtpScreen() {
+    Navigator.of(context).pushNamed(
+      OtpVerificationScreen.routeName,
+      arguments: OtpVerificationScreenArgs(
+        successAction: OtpSuccessAction.goToPinScreen,
+        phoneNumberIntlFormat: intlPhoneNumber,
+      ),
+    );
   }
 
   void _showErrorPhoneAlreadyRegistered(String phoneNumber) {

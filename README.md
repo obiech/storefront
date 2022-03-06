@@ -4,6 +4,32 @@ Dropezy Storefront mobile app developed in Flutter.
 
 # Getting started
 
+## Firebase Setup
+
+Setup is done using manual installation as described on [FlutterFire docs](https://firebase.flutter.dev/docs/manual-installation).
+
+### Android
+
+1. Download `google-services.json` from Dropezy Android App on Firebase Console.
+2. Put the file in `android/app/google-services.json`.
+
+### iOS
+
+1. Download `GoogleService-Info.plist` from Dropezy iOS App on Firebase Console.
+2. Put the file in `ios/GoogleService-Info.plist`.
+3. Create a Xcode Configuration file for Firebase in `Flutter/Firebase.xcconfig`. For quick setup, copy `Flutter/Firebase.xcconfig.example` with this command:
+
+```
+$ cp ./ios/Flutter/Firebase.xcconfig.example ./ios/Flutter/Firebase.xcconfig
+```
+
+---
+
+**Q: Why not use Dart initialization (FlutterFire CLI)?**
+
+A: There is an issue with Dart initialization when running on physical iOS device. See this [issue](https://github.com/FirebaseExtended/flutterfire/issues/7983).
+
+
 ## Setting up Environment Variables
 
 Environment variables are loaded using [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) package. 

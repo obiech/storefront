@@ -81,6 +81,9 @@ class DropezyTextStyles {
     fontWeight: FontWeight.w500,
   );
 
+  static const textOtp = TextStyle(
+      color: DropezyColors.black, fontSize: 22, fontWeight: FontWeight.w400);
+
   static const clickableText = TextStyle(
     color: DropezyColors.blue,
     fontSize: 12,
