@@ -6,11 +6,11 @@ import 'package:mockingjay/mockingjay.dart';
 /// [BlocProvider] with a minimal set of external dependencies
 ///
 ///
-/// When [navigator] is not null, the navigation will be mocked
+/// When [navigator] is not null, navigation will be mocked
 /// and route pushes will not create a new [Widget].
 ///
 /// In contrast, when it is null, route pushes will work normally
-/// and will create a new [Widget]. Use when trying to test
+/// and will create a new [Widget]. Pass a [navigator] when trying to test
 /// [SnackBar], [Dialog] or [BottomSheet].
 Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
     T bloc, Widget screen,
@@ -26,6 +26,38 @@ Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
 
   return BlocProvider<T>(
     create: (_) => bloc,
+    child: MaterialApp(
+      home: MockNavigatorProvider(
+        navigator: navigator,
+        child: screen,
+      ),
+    ),
+  );
+}
+
+/// Use this to create a [MaterialApp] instance wrapped with a
+/// [MultiBlocProvider] with a minimal set of external dependencies.
+///
+/// When [navigator] is not null, navigation will be mocked
+/// and route pushes will not create a new [Widget].
+///
+/// In contrast, when it is null, route pushes will work normally
+/// and will create a new [Widget]. Pass a [navigator] when trying to test
+/// [SnackBar], [Dialog] or [BottomSheet].
+Widget buildMockScreenWithMultiBlocProvider(
+    List<BlocProvider> providers, Widget screen,
+    [MockNavigator? navigator]) {
+  if (navigator == null) {
+    return MultiBlocProvider(
+      providers: providers,
+      child: MaterialApp(
+        home: screen,
+      ),
+    );
+  }
+
+  return MultiBlocProvider(
+    providers: providers,
     child: MaterialApp(
       home: MockNavigatorProvider(
         navigator: navigator,

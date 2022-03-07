@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +13,17 @@ import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
 import 'package:storefront_app/constants/config/auth_config.dart';
 import 'package:storefront_app/constants/config/grpc_config.dart';
 import 'package:storefront_app/constants/prefs_keys.dart';
+import 'package:storefront_app/domain/device/device_platform.dart';
 import 'package:storefront_app/network/grpc/customer/customer.pbgrpc.dart';
 import 'package:storefront_app/services/auth/auth_service.dart';
 import 'package:storefront_app/services/auth/firebase_auth_service.dart';
 import 'package:storefront_app/services/auth/prefs_user_credentials_storage.dart';
+import 'package:storefront_app/services/auth/user_credentials_storage.dart';
+import 'package:storefront_app/services/device/device_fingerprint_provider.dart';
+import 'package:storefront_app/services/device/device_info_device_name_provider.dart';
+import 'package:storefront_app/services/device/device_name_provider.dart';
+import 'package:storefront_app/services/device/uuid_device_fingerprint_provider.dart';
+import 'package:uuid/uuid.dart';
 
 import 'app/app.dart';
 
@@ -53,6 +63,9 @@ Future<void> _initializeFirebase() async {
 }
 
 void _setupServices(SharedPreferences sharedPrefs) {
+  final deviceInfoPlugin = DeviceInfoPlugin();
+  const uuidPlugin = Uuid();
+
   final credsStorage = PrefsUserCredentialsStorage(sharedPrefs);
   final authService = FirebaseAuthService(
     credentialsStorage: credsStorage,
@@ -60,7 +73,25 @@ void _setupServices(SharedPreferences sharedPrefs) {
     otpTimeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
   )..initialize();
 
+  final deviceFingerprintProvider = UuidDeviceFingerprintProvider(uuidPlugin);
+  final deviceNameProvider =
+      DeviceInfoDeviceNameProvider(_getDevicePlatform(), deviceInfoPlugin);
+
   GetIt.I.registerSingleton<AuthService>(authService);
+  GetIt.I.registerSingleton<UserCredentialsStorage>(credsStorage);
+  GetIt.I
+      .registerSingleton<DeviceFingerprintProvider>(deviceFingerprintProvider);
+  GetIt.I.registerSingleton<DeviceNameProvider>(deviceNameProvider);
+}
+
+DevicePlatform _getDevicePlatform() {
+  if (Platform.isAndroid) {
+    return DevicePlatform.android;
+  } else if (Platform.isIOS) {
+    return DevicePlatform.ios;
+  } else {
+    throw UnsupportedError("Currently only supports Android and iOS platforms");
+  }
 }
 
 /// Create a channel for gRPC connection

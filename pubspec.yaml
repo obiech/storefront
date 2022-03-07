@@ -28,6 +28,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   cupertino_icons: ^1.0.2
+  device_info_plus: ^3.2.2
   firebase_auth: ^3.3.7
   firebase_core: ^1.12.0
   flutter:
@@ -43,6 +44,7 @@ dependencies:
   protobuf: ^2.0.1
   shared_preferences: ^2.0.13
   url_launcher: ^6.0.20
+  uuid: ^3.0.6
 
 dev_dependencies:
   bloc_test: ^9.0.2
