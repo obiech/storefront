@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/bloc/account_availability/account_availability.dart';
 import 'package:storefront_app/ui/login/phone_not_registered_bottom_sheet.dart';
-import 'package:storefront_app/ui/pin_input/pin_input_screen.dart';
+import 'package:storefront_app/ui/otp_verification/otp_verification.dart';
 import 'package:storefront_app/ui/screens.dart';
 import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';
 import 'package:storefront_app/ui/widgets/text_fields/phone_text_field.dart';
@@ -20,6 +22,8 @@ void main() {
   late MockNavigator navigator;
   late AccountAvailabilityCubit phoneVerificationCubit;
 
+  final finderInputPhoneNumber =
+      find.byKey(const Key(LoginScreen.keyInputPhoneNumber));
   final verifyPhoneButtonFinder =
       find.byKey(const Key(LoginScreen.keyVerifyPhoneNumberButton));
 
@@ -90,26 +94,45 @@ void main() {
         expect(find.byType(PhoneNotRegisteredBottomSheet), findsOneWidget);
       });
       testWidgets(
-          '''-- If phone number is already registered, push a route to PIN input screen''',
-          (WidgetTester tester) async {
-        when(() => phoneVerificationCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+        '-- If phone number is already registered, push a route to OTP '
+        'verification screen with args of 1) intl phone number, 2) '
+        'OtpSuccessAction.goToHome, 3) timeout for OTP',
+        (WidgetTester tester) async {
+          when(() => phoneVerificationCubit.state)
+              .thenReturn(const AccountAvailabilityState());
 
-        whenListen(
-          phoneVerificationCubit,
-          Stream.fromIterable([
-            const AccountAvailabilityState(),
-            const AccountAvailabilityState(
-                status: AccountAvailabilityStatus.phoneAlreadyRegistered)
-          ]),
-        );
+          final controller = StreamController<AccountAvailabilityState>();
+          controller.add(const AccountAvailabilityState());
 
-        await tester.pumpWidget(
-            buildMockLoginScreen(phoneVerificationCubit, navigator));
+          whenListen(
+            phoneVerificationCubit,
+            controller.stream,
+          );
 
-        await tester.pumpAndSettle();
-        verifyRouteIsPushed(navigator, PinInputScreen.routeName);
-      });
+          await tester.pumpWidget(
+            buildMockLoginScreen(phoneVerificationCubit, navigator),
+          );
+
+          const mockInput = '81234567890';
+          const mockPhoneNumber = '+62$mockInput';
+
+          await tester.enterText(finderInputPhoneNumber, mockInput);
+
+          controller.add(const AccountAvailabilityState(
+              status: AccountAvailabilityStatus.phoneAlreadyRegistered));
+
+          await tester.pumpAndSettle();
+
+          verifyRouteIsPushed(
+            navigator,
+            OtpVerificationScreen.routeName,
+            arguments: const OtpVerificationScreenArgs(
+              phoneNumberIntlFormat: mockPhoneNumber,
+              successAction: OtpSuccessAction.goToHomeScreen,
+            ),
+          );
+        },
+      );
 
       testWidgets(
           '-- If an exception occurs, display a [DropezyBottomSheet] containing the error message',
