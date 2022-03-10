@@ -75,7 +75,7 @@ void main() {
       testWidgets(
           '-- If phone number is available, pushes a route to OTP screen '
           'with currently entered phone number and '
-          '[OtpSuccessBehavior.goToPinScreen] as args',
+          '[OtpSuccessBehavior.goToOtpVerificationScreen] as args',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
@@ -109,6 +109,7 @@ void main() {
           arguments: const OtpVerificationScreenArgs(
             successAction: OtpSuccessAction.goToPinScreen,
             phoneNumberIntlFormat: mockPhoneNumber,
+            registerAccountAfterSuccessfulOtp: true,
           ),
         );
       });

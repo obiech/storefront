@@ -56,9 +56,11 @@ Widget _buildOtpInputScreen(OtpVerificationScreenArgs args) {
   final customerServiceClient = GetIt.I<CustomerServiceClient>();
 
   return BlocProvider<AccountVerificationCubit>(
-    create: (context) =>
-        AccountVerificationCubit(authService, customerServiceClient)
-          ..sendOtp(args.phoneNumberIntlFormat),
+    create: (context) => AccountVerificationCubit(
+      authService,
+      customerServiceClient,
+      args.registerAccountAfterSuccessfulOtp,
+    )..sendOtp(args.phoneNumberIntlFormat),
     child: OtpVerificationScreen(
       phoneNumberIntlFormat: args.phoneNumberIntlFormat,
       successAction: args.successAction,

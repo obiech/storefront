@@ -43,8 +43,11 @@ void main() {
       /// Return an empty stream
       mockPhoneVerificationStream(authService, []);
 
-      final cubit =
-          AccountVerificationCubit(authService, customerServiceClient);
+      final cubit = AccountVerificationCubit(
+        authService,
+        customerServiceClient,
+        true,
+      );
 
       expect(
         cubit.state,
@@ -64,7 +67,11 @@ void main() {
         // /// Stub sendOtp function
         when(() => authService.sendOtp(any())).thenAnswer((_) async {});
       },
-      build: () => AccountVerificationCubit(authService, customerServiceClient),
+      build: () => AccountVerificationCubit(
+        authService,
+        customerServiceClient,
+        true,
+      ),
       act: (cubit) => cubit.sendOtp(dummyPhoneNumber),
       expect: () => const [
         AccountVerificationState(status: AccountVerificationStatus.sendingOtp),
@@ -82,8 +89,11 @@ void main() {
           when(() => authService.verifyOtp(any())).thenAnswer((_) async {});
         },
         build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
+          final cubit = AccountVerificationCubit(
+            authService,
+            customerServiceClient,
+            false,
+          );
           cubit.otpIsSent = true;
           return cubit;
         },
@@ -103,8 +113,11 @@ void main() {
           when(() => authService.verifyOtp(any())).thenAnswer((_) async {});
         },
         build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
+          final cubit = AccountVerificationCubit(
+            authService,
+            customerServiceClient,
+            false,
+          );
           cubit.otpIsSent = false;
           return cubit;
         },
@@ -127,81 +140,123 @@ void main() {
           ];
           mockPhoneVerificationStream(authService, mockEvents);
         },
-        build: () =>
-            AccountVerificationCubit(authService, customerServiceClient),
+        build: () => AccountVerificationCubit(
+          authService,
+          customerServiceClient,
+          true,
+        ),
         expect: () => const [
           AccountVerificationState(status: AccountVerificationStatus.otpSent),
         ],
       );
 
-      blocTest<AccountVerificationCubit, AccountVerificationState>(
-        '-- emit State with status [registeringAccount], call '
-        '[CustomerServiceClient.register] once, and emit State with status '
-        '[success] after receiving [PhoneVerificationStatus.verifiedSuccessfully]',
-        setUp: () {
+      group(
+          '-- after receiving [PhoneVerificationStatus.verifiedSuccessfully] ',
+          () {
+        void setupFn() {
+          // Emit phone verification success event
           final mockEvents = [
             PhoneVerificationResult(
-                status: PhoneVerificationStatus.verifiedSuccessfully)
+              status: PhoneVerificationStatus.verifiedSuccessfully,
+            )
           ];
 
           mockPhoneVerificationStream(authService, mockEvents);
+        }
 
+        void mockCustomerServiceRegisterSuccess() {
+          // Mock CustomerClientService register method
           mockCustomerServiceRegister(customerServiceClient,
               (_) => MockResponseFuture.value(dummyRegisterResponse));
-        },
-        build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
-          cubit.phoneNumber = dummyPhoneNumber;
+        }
 
-          return cubit;
-        },
-        expect: () => const [
-          AccountVerificationState(
-              status: AccountVerificationStatus.registeringAccount),
-          AccountVerificationState(status: AccountVerificationStatus.success),
-        ],
-        verify: (cubit) {
-          verify(() => customerServiceClient.register(any())).called(1);
-        },
-      );
-
-      blocTest<AccountVerificationCubit, AccountVerificationState>(
-        '-- emit State with status [registeringAccount], call '
-        '[CustomerServiceClient.register] once, and emit State with status [error]'
-        'if registration fails',
-        setUp: () {
-          final mockEvents = [
-            PhoneVerificationResult(
-                status: PhoneVerificationStatus.verifiedSuccessfully)
-          ];
-
-          mockPhoneVerificationStream(authService, mockEvents);
-
+        void mockCustomerServiceRegisterFailure() {
           mockCustomerServiceRegister(
-              customerServiceClient,
-              (_) =>
-                  MockResponseFuture.error(GrpcError.unknown('Dummy Error')));
-        },
-        build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
+            customerServiceClient,
+            (_) => MockResponseFuture.error(GrpcError.unknown('Dummy Error')),
+          );
+        }
+
+        AccountVerificationCubit buildFn(
+            bool registerAccountAfterSuccessfulOtp) {
+          final cubit = AccountVerificationCubit(
+            authService,
+            customerServiceClient,
+            registerAccountAfterSuccessfulOtp,
+          );
           cubit.phoneNumber = dummyPhoneNumber;
 
           return cubit;
-        },
-        expect: () => const [
-          AccountVerificationState(
-              status: AccountVerificationStatus.registeringAccount),
-          AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: 'Dummy Error',
-          ),
-        ],
-        verify: (cubit) {
-          verify(() => customerServiceClient.register(any())).called(1);
-        },
-      );
+        }
+
+        blocTest<AccountVerificationCubit, AccountVerificationState>(
+          'if [registerAccountAfterSuccessfulOtp] is set to false '
+          'should emit State with status [AccountVerificationStatus.success] '
+          'and not attempt to register phone number',
+          setUp: () {
+            setupFn();
+            mockCustomerServiceRegisterSuccess();
+          },
+          build: () => buildFn(false),
+          expect: () => const [
+            AccountVerificationState(
+              status: AccountVerificationStatus.registeringAccount,
+            ),
+            AccountVerificationState(
+              status: AccountVerificationStatus.success,
+            ),
+          ],
+          verify: (cubit) {
+            verifyNever(() => customerServiceClient.register(any()));
+          },
+        );
+
+        group(
+          'if [registerAccountAfterSuccessfulOtp] is set to true, '
+          'should emit State with status [registeringAccount], attempt to '
+          'register phone number to backend',
+          () {
+            blocTest<AccountVerificationCubit, AccountVerificationState>(
+              'and emit State with status [AccountVerificationStatus.success]',
+              setUp: () {
+                setupFn();
+                mockCustomerServiceRegisterSuccess();
+              },
+              build: () => buildFn(true),
+              expect: () => const [
+                AccountVerificationState(
+                    status: AccountVerificationStatus.registeringAccount),
+                AccountVerificationState(
+                    status: AccountVerificationStatus.success),
+              ],
+              verify: (cubit) {
+                verify(() => customerServiceClient.register(any())).called(1);
+              },
+            );
+
+            blocTest<AccountVerificationCubit, AccountVerificationState>(
+              'and emit State with status '
+              '[AccountVerificationStatus.error] if an exception is thrown',
+              setUp: () {
+                setupFn();
+                mockCustomerServiceRegisterFailure();
+              },
+              build: () => buildFn(true),
+              expect: () => const [
+                AccountVerificationState(
+                    status: AccountVerificationStatus.registeringAccount),
+                AccountVerificationState(
+                  status: AccountVerificationStatus.error,
+                  errMsg: 'Dummy Error',
+                ),
+              ],
+              verify: (cubit) {
+                verify(() => customerServiceClient.register(any())).called(1);
+              },
+            );
+          },
+        );
+      });
 
       blocTest<AccountVerificationCubit, AccountVerificationState>(
         '-- emit State with status [invalidOtp] and error message after receiving '
@@ -220,8 +275,11 @@ void main() {
               (_) => MockResponseFuture.value(dummyRegisterResponse));
         },
         build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
+          final cubit = AccountVerificationCubit(
+            authService,
+            customerServiceClient,
+            false,
+          );
           cubit.phoneNumber = dummyPhoneNumber;
 
           return cubit;
@@ -251,8 +309,11 @@ void main() {
               (_) => MockResponseFuture.value(dummyRegisterResponse));
         },
         build: () {
-          final cubit =
-              AccountVerificationCubit(authService, customerServiceClient);
+          final cubit = AccountVerificationCubit(
+            authService,
+            customerServiceClient,
+            false,
+          );
           cubit.phoneNumber = dummyPhoneNumber;
 
           return cubit;

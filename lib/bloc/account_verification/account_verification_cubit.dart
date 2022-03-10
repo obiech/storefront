@@ -15,8 +15,11 @@ import 'account_verification_state.dart';
 /// to backend.
 class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// Immediately listen to [_authService.phoneVerificationStream]
-  AccountVerificationCubit(this._authService, this._customerServiceClient)
-      : super(const AccountVerificationState()) {
+  AccountVerificationCubit(
+    this._authService,
+    this._customerServiceClient,
+    this.registerAccountAfterSuccessfulOtp,
+  ) : super(const AccountVerificationState()) {
     _phoneVerificationSubscription = _authService.phoneVerificationStream
         .listen(_handlePhoneVerificationResult);
   }
@@ -25,6 +28,7 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
 
   final AuthService _authService;
   final CustomerServiceClient _customerServiceClient;
+  final bool registerAccountAfterSuccessfulOtp;
 
   /// will be used for registration in backend after phone verification
   late String phoneNumber;
@@ -45,25 +49,13 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
           status: AccountVerificationStatus.registeringAccount,
         ));
 
-        final request = RegisterRequest(phoneNumber: phoneNumber);
-
-        try {
-          await _customerServiceClient.register(request);
+        if (registerAccountAfterSuccessfulOtp) {
+          await _registerPhoneNumberToBackend();
+        } else {
           emit(const AccountVerificationState(
             status: AccountVerificationStatus.success,
           ));
-        } on GrpcError catch (e) {
-          emit(AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: e.message,
-          ));
-        } catch (e) {
-          emit(AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: e.toString(),
-          ));
         }
-
         break;
 
       case PhoneVerificationStatus.error:
@@ -82,6 +74,29 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
           errMsg: exception.errorMessage,
         ));
         break;
+    }
+  }
+
+  /// Registers [phoneNumber] to storefront backend.
+  /// Call only after a successful OTP verification to ensure its validity.
+  Future<void> _registerPhoneNumberToBackend() async {
+    final request = RegisterRequest(phoneNumber: phoneNumber);
+
+    try {
+      await _customerServiceClient.register(request);
+      emit(const AccountVerificationState(
+        status: AccountVerificationStatus.success,
+      ));
+    } on GrpcError catch (e) {
+      emit(AccountVerificationState(
+        status: AccountVerificationStatus.error,
+        errMsg: e.message,
+      ));
+    } catch (e) {
+      emit(AccountVerificationState(
+        status: AccountVerificationStatus.error,
+        errMsg: e.toString(),
+      ));
     }
   }
 

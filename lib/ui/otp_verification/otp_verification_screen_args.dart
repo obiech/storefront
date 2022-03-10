@@ -14,5 +14,6 @@ class OtpVerificationScreenArgs with _$OtpVerificationScreenArgs {
   const factory OtpVerificationScreenArgs({
     required String phoneNumberIntlFormat,
     required OtpSuccessAction successAction,
+    @Default(false) bool registerAccountAfterSuccessfulOtp,
   }) = _OtpVerificationScreenArgs;
 }

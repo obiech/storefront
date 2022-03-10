@@ -20,10 +20,12 @@ class _$OtpVerificationScreenArgsTearOff {
 
   _OtpVerificationScreenArgs call(
       {required String phoneNumberIntlFormat,
-      required OtpSuccessAction successAction}) {
+      required OtpSuccessAction successAction,
+      bool registerAccountAfterSuccessfulOtp = false}) {
     return _OtpVerificationScreenArgs(
       phoneNumberIntlFormat: phoneNumberIntlFormat,
       successAction: successAction,
+      registerAccountAfterSuccessfulOtp: registerAccountAfterSuccessfulOtp,
     );
   }
 }
@@ -35,6 +37,8 @@ const $OtpVerificationScreenArgs = _$OtpVerificationScreenArgsTearOff();
 mixin _$OtpVerificationScreenArgs {
   String get phoneNumberIntlFormat => throw _privateConstructorUsedError;
   OtpSuccessAction get successAction => throw _privateConstructorUsedError;
+  bool get registerAccountAfterSuccessfulOtp =>
+      throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $OtpVerificationScreenArgsCopyWith<OtpVerificationScreenArgs> get copyWith =>
@@ -46,7 +50,10 @@ abstract class $OtpVerificationScreenArgsCopyWith<$Res> {
   factory $OtpVerificationScreenArgsCopyWith(OtpVerificationScreenArgs value,
           $Res Function(OtpVerificationScreenArgs) then) =
       _$OtpVerificationScreenArgsCopyWithImpl<$Res>;
-  $Res call({String phoneNumberIntlFormat, OtpSuccessAction successAction});
+  $Res call(
+      {String phoneNumberIntlFormat,
+      OtpSuccessAction successAction,
+      bool registerAccountAfterSuccessfulOtp});
 }
 
 /// @nodoc
@@ -62,6 +69,7 @@ class _$OtpVerificationScreenArgsCopyWithImpl<$Res>
   $Res call({
     Object? phoneNumberIntlFormat = freezed,
     Object? successAction = freezed,
+    Object? registerAccountAfterSuccessfulOtp = freezed,
   }) {
     return _then(_value.copyWith(
       phoneNumberIntlFormat: phoneNumberIntlFormat == freezed
@@ -72,6 +80,11 @@ class _$OtpVerificationScreenArgsCopyWithImpl<$Res>
           ? _value.successAction
           : successAction // ignore: cast_nullable_to_non_nullable
               as OtpSuccessAction,
+      registerAccountAfterSuccessfulOtp: registerAccountAfterSuccessfulOtp ==
+              freezed
+          ? _value.registerAccountAfterSuccessfulOtp
+          : registerAccountAfterSuccessfulOtp // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -83,7 +96,10 @@ abstract class _$OtpVerificationScreenArgsCopyWith<$Res>
           $Res Function(_OtpVerificationScreenArgs) then) =
       __$OtpVerificationScreenArgsCopyWithImpl<$Res>;
   @override
-  $Res call({String phoneNumberIntlFormat, OtpSuccessAction successAction});
+  $Res call(
+      {String phoneNumberIntlFormat,
+      OtpSuccessAction successAction,
+      bool registerAccountAfterSuccessfulOtp});
 }
 
 /// @nodoc
@@ -102,6 +118,7 @@ class __$OtpVerificationScreenArgsCopyWithImpl<$Res>
   $Res call({
     Object? phoneNumberIntlFormat = freezed,
     Object? successAction = freezed,
+    Object? registerAccountAfterSuccessfulOtp = freezed,
   }) {
     return _then(_OtpVerificationScreenArgs(
       phoneNumberIntlFormat: phoneNumberIntlFormat == freezed
@@ -112,6 +129,11 @@ class __$OtpVerificationScreenArgsCopyWithImpl<$Res>
           ? _value.successAction
           : successAction // ignore: cast_nullable_to_non_nullable
               as OtpSuccessAction,
+      registerAccountAfterSuccessfulOtp: registerAccountAfterSuccessfulOtp ==
+              freezed
+          ? _value.registerAccountAfterSuccessfulOtp
+          : registerAccountAfterSuccessfulOtp // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -120,16 +142,21 @@ class __$OtpVerificationScreenArgsCopyWithImpl<$Res>
 
 class _$_OtpVerificationScreenArgs implements _OtpVerificationScreenArgs {
   const _$_OtpVerificationScreenArgs(
-      {required this.phoneNumberIntlFormat, required this.successAction});
+      {required this.phoneNumberIntlFormat,
+      required this.successAction,
+      this.registerAccountAfterSuccessfulOtp = false});
 
   @override
   final String phoneNumberIntlFormat;
   @override
   final OtpSuccessAction successAction;
+  @JsonKey()
+  @override
+  final bool registerAccountAfterSuccessfulOtp;
 
   @override
   String toString() {
-    return 'OtpVerificationScreenArgs(phoneNumberIntlFormat: $phoneNumberIntlFormat, successAction: $successAction)';
+    return 'OtpVerificationScreenArgs(phoneNumberIntlFormat: $phoneNumberIntlFormat, successAction: $successAction, registerAccountAfterSuccessfulOtp: $registerAccountAfterSuccessfulOtp)';
   }
 
   @override
@@ -140,14 +167,18 @@ class _$_OtpVerificationScreenArgs implements _OtpVerificationScreenArgs {
             const DeepCollectionEquality()
                 .equals(other.phoneNumberIntlFormat, phoneNumberIntlFormat) &&
             const DeepCollectionEquality()
-                .equals(other.successAction, successAction));
+                .equals(other.successAction, successAction) &&
+            const DeepCollectionEquality().equals(
+                other.registerAccountAfterSuccessfulOtp,
+                registerAccountAfterSuccessfulOtp));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(phoneNumberIntlFormat),
-      const DeepCollectionEquality().hash(successAction));
+      const DeepCollectionEquality().hash(successAction),
+      const DeepCollectionEquality().hash(registerAccountAfterSuccessfulOtp));
 
   @JsonKey(ignore: true)
   @override
@@ -160,12 +191,15 @@ class _$_OtpVerificationScreenArgs implements _OtpVerificationScreenArgs {
 abstract class _OtpVerificationScreenArgs implements OtpVerificationScreenArgs {
   const factory _OtpVerificationScreenArgs(
       {required String phoneNumberIntlFormat,
-      required OtpSuccessAction successAction}) = _$_OtpVerificationScreenArgs;
+      required OtpSuccessAction successAction,
+      bool registerAccountAfterSuccessfulOtp}) = _$_OtpVerificationScreenArgs;
 
   @override
   String get phoneNumberIntlFormat;
   @override
   OtpSuccessAction get successAction;
+  @override
+  bool get registerAccountAfterSuccessfulOtp;
   @override
   @JsonKey(ignore: true)
   _$OtpVerificationScreenArgsCopyWith<_OtpVerificationScreenArgs>

@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/bloc/account_availability/account_availability.dart';
 import 'package:storefront_app/constants/dropezy_text_styles.dart';
-import 'package:storefront_app/ui/otp_verification/otp_success_action.dart';
 import 'package:storefront_app/ui/otp_verification/otp_verification.dart';
-import 'package:storefront_app/ui/otp_verification/otp_verification_screen.dart';
-import 'package:storefront_app/ui/otp_verification/otp_verification_screen_args.dart';
 import 'package:storefront_app/ui/registration/phone_already_registered_bottom_sheet.dart';
 import 'package:storefront_app/ui/widgets/dropezy_button.dart';
 import 'package:storefront_app/ui/widgets/dropezy_scaffold.dart';
@@ -94,6 +91,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       arguments: OtpVerificationScreenArgs(
         successAction: OtpSuccessAction.goToPinScreen,
         phoneNumberIntlFormat: intlPhoneNumber,
+        registerAccountAfterSuccessfulOtp: true,
       ),
     );
   }
