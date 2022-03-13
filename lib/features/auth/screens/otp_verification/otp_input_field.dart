@@ -59,7 +59,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
               width: double.infinity,
               child: PinCodeTextField(
                 key: const Key(OtpInputField.keyInputField),
-                enabled: !state.isLoading,
+                enabled: (!state.isLoading && !state.isInitialState),
                 controller: _ctrlOtp,
                 autoDisposeControllers: false,
                 appContext: context,

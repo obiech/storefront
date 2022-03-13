@@ -9,7 +9,6 @@ import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/screens/otp_verification/otp_input_field.dart';
 import 'package:storefront_app/features/auth/screens/otp_verification/otp_success_action.dart';
 import 'package:storefront_app/features/auth/screens/otp_verification/resend_otp_timer.dart';
-import 'package:storefront_app/features/auth/screens/screens.dart';
 import 'package:storefront_app/features/home/index.dart';
 
 import '../../src/mock_navigator.dart';

@@ -28,8 +28,11 @@ void main() {
       'been entered.',
       (WidgetTester tester) async {
         // Mock Cubit functions
-        when(() => cubit.state)
-            .thenAnswer((_) => const AccountVerificationState());
+        when(() => cubit.state).thenAnswer(
+          (_) => const AccountVerificationState(
+            status: AccountVerificationStatus.otpSent,
+          ),
+        );
 
         when(() => cubit.verifyOtp(any())).thenAnswer((_) async {});
         whenListen(cubit, Stream<AccountVerificationState>.fromIterable([]));
@@ -70,75 +73,69 @@ void main() {
     group(
       'is disabled when state has status that indicates loading state, i.e.',
       () {
+        Future<void> expectTextFieldIsDisabled(
+          WidgetTester tester,
+          AccountVerificationState stateToTest,
+        ) async {
+          when(() => cubit.state).thenAnswer((_) => stateToTest);
+
+          whenListen(
+            cubit,
+            Stream<AccountVerificationState>.fromIterable([]),
+          );
+
+          await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
+
+          await tester.enterText(finderInputField, '123456');
+          await tester.pump();
+
+          expect(find.text('123456'), findsNothing);
+        }
+
+        testWidgets(
+          '[AccountVerificationStatus.initialState]',
+          (WidgetTester tester) async {
+            expectTextFieldIsDisabled(
+              tester,
+              const AccountVerificationState(
+                status: AccountVerificationStatus.initialState,
+              ),
+            );
+          },
+        );
         testWidgets(
           '[AccountVerificationStatus.sendingOtp]',
           (WidgetTester tester) async {
-            // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer(
-              (_) => const AccountVerificationState(
+            expectTextFieldIsDisabled(
+              tester,
+              const AccountVerificationState(
                 status: AccountVerificationStatus.sendingOtp,
               ),
             );
-
-            whenListen(
-              cubit,
-              Stream<AccountVerificationState>.fromIterable([]),
-            );
-
-            await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
-
-            await tester.enterText(finderInputField, '123456');
-            await tester.pump();
-
-            expect(find.text('123456'), findsNothing);
           },
         );
 
         testWidgets(
           '[AccountVerificationStatus.verifyingOtp]',
           (WidgetTester tester) async {
-            // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer(
-              (_) => const AccountVerificationState(
+            expectTextFieldIsDisabled(
+              tester,
+              const AccountVerificationState(
                 status: AccountVerificationStatus.verifyingOtp,
               ),
             );
-
-            whenListen(
-              cubit,
-              Stream<AccountVerificationState>.fromIterable([]),
-            );
-
-            await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
-
-            await tester.enterText(finderInputField, '123456');
-            await tester.pump();
-
-            expect(find.text('123456'), findsNothing);
           },
         );
 
         testWidgets(
           '[AccountVerificationStatus.registeringAccount]',
           (WidgetTester tester) async {
-            // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer(
-              (_) => const AccountVerificationState(
+            expectTextFieldIsDisabled(
+              tester,
+              const AccountVerificationState(
                 status: AccountVerificationStatus.registeringAccount,
               ),
             );
-
-            whenListen(
-              cubit,
-              Stream<AccountVerificationState>.fromIterable([]),
-            );
-
-            await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
-
-            await tester.enterText(finderInputField, '123456');
-            await tester.pump();
-
-            expect(find.text('123456'), findsNothing);
           },
         );
       },

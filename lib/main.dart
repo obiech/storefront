@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/core/config/test_config.dart';
+import 'package:storefront_app/core/utils/is_test_mode.dart';
 
 import 'app.dart';
 import 'core/services/prefs/i_prefs_repository.dart';
@@ -17,7 +19,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Dependency Injection
-  configureInjection(kDebugMode ? Environment.dev : Environment.prod);
+  configureInjection(determineEnvironment());
 
   final prefs = getIt<IPrefsRepository>();
   final isOnboarded = await prefs.isOnBoarded();
@@ -35,4 +37,16 @@ Future<void> main() async {
       child: const MyApp(),
     ),
   );
+}
+
+String determineEnvironment() {
+  if (kTestMode) {
+    return Environment.test;
+  }
+
+  if (kReleaseMode || TestConfig.isEndToEndTest) {
+    return Environment.prod;
+  }
+
+  return Environment.dev;
 }
