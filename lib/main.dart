@@ -73,7 +73,8 @@ void _setupServices(SharedPreferences sharedPrefs) {
     otpTimeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
   )..initialize();
 
-  final deviceFingerprintProvider = UuidDeviceFingerprintProvider(uuidPlugin);
+  final deviceFingerprintProvider =
+      UuidDeviceFingerprintProvider(uuidPlugin, sharedPrefs);
   final deviceNameProvider =
       DeviceInfoDeviceNameProvider(_getDevicePlatform(), deviceInfoPlugin);
 
