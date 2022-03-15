@@ -47,8 +47,8 @@ void main() {
 
     group('Test phone verification', () {
       testWidgets(''' -- After entering phone number and tapping Submit button,
-        [AccountAvailabilityCubit.verifyPhone] will be called with argument
-        of +62 concatenated with user input''', (WidgetTester tester) async {
+        [AccountAvailabilityCubit.verifyPhone] will be called with entered phone
+        number in international format''', (WidgetTester tester) async {
         when(() => phoneVerificationCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
@@ -59,18 +59,50 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(
-            buildMockLoginScreen(phoneVerificationCubit, navigator));
+        await tester.pumpWidget(buildMockLoginScreen(
+          phoneVerificationCubit,
+          navigator,
+        ));
 
         const mockInput = "81234567890";
-        const mockPhoneNumber = "+62$mockInput";
+        const expectedPhoneNumber = "+6281234567890";
 
         await tester.enterText(find.byType(PhoneTextField), mockInput);
         await tester.tap(verifyPhoneButtonFinder);
         await tester.pumpAndSettle();
 
         verify(() => phoneVerificationCubit
-            .checkPhoneNumberAvailability(mockPhoneNumber)).called(1);
+            .checkPhoneNumberAvailability(expectedPhoneNumber)).called(1);
+      });
+
+      testWidgets(''' -- After entering phone number prefixed with '08' and
+         tapping Submit button, [AccountAvailabilityCubit.verifyPhone] will be
+         called with entered phone number in international format''',
+          (WidgetTester tester) async {
+        when(() => phoneVerificationCubit.state)
+            .thenReturn(const AccountAvailabilityState());
+
+        whenListen(
+          phoneVerificationCubit,
+          Stream.fromIterable([
+            const AccountAvailabilityState(),
+          ]),
+        );
+
+        await tester.pumpWidget(buildMockLoginScreen(
+          phoneVerificationCubit,
+          navigator,
+        ));
+
+        const mockInput = "081234567890";
+        const expectedPhoneNumber = "+6281234567890";
+
+        await tester.enterText(find.byType(PhoneTextField), mockInput);
+        await tester.tap(verifyPhoneButtonFinder);
+        await tester.pumpAndSettle();
+
+        verify(() => phoneVerificationCubit
+            .checkPhoneNumberAvailability(expectedPhoneNumber)).called(1);
       });
       testWidgets(
           '''-- If phone number is available, displays a [PhoneNotRegisteredBottomSheet]''',

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/bloc/account_availability/account_availability.dart';
-import 'package:storefront_app/constants/dropezy_text_styles.dart';
-import 'package:storefront_app/ui/otp_verification/otp_verification.dart';
 import 'package:storefront_app/ui/registration/phone_already_registered_bottom_sheet.dart';
-import 'package:storefront_app/ui/widgets/dropezy_button.dart';
-import 'package:storefront_app/ui/widgets/dropezy_scaffold.dart';
-import 'package:storefront_app/ui/widgets/text_fields/phone_text_field.dart';
-import 'package:storefront_app/ui/widgets/text_user_agreement.dart';
-import 'package:storefront_app/utils/bottom_sheet_utils.dart';
+
+import '../../bloc/account_availability/account_availability.dart';
+import '../../constants/dropezy_text_styles.dart';
+import '../../utils/bottom_sheet_utils.dart';
+import '../../utils/phone_number_transformer.dart';
+import '../otp_verification/otp_success_action.dart';
+import '../otp_verification/otp_verification_screen.dart';
+import '../otp_verification/otp_verification_screen_args.dart';
+import '../widgets/dropezy_button.dart';
+import '../widgets/dropezy_scaffold.dart';
+import '../widgets/text_fields/phone_text_field.dart';
+import '../widgets/text_user_agreement.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const routeName = 'registration';
@@ -25,7 +29,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
   final _ctrlPhoneNumber = TextEditingController();
 
-  String get intlPhoneNumber => '+62${_ctrlPhoneNumber.text}';
+  String get enteredPhoneNumber => _ctrlPhoneNumber.text;
+
+  String get enteredPhoneNumberInIntlFormat =>
+      trimAndTransformPhoneToIntlFormat(enteredPhoneNumber);
+
+  String get enteredPhoneNumberInLocalFormat =>
+      trimAndTransformPhoneToLocalFormat(enteredPhoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +79,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             _navigateToOtpScreen();
             break;
           case AccountAvailabilityStatus.phoneAlreadyRegistered:
-            final phone = '0${_ctrlPhoneNumber.text}';
-            _showErrorPhoneAlreadyRegistered(phone);
+            _showErrorPhoneAlreadyRegistered(enteredPhoneNumberInLocalFormat);
             break;
           case AccountAvailabilityStatus.error:
             final errMsg = state.errStatusCode != null
@@ -90,7 +99,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       OtpVerificationScreen.routeName,
       arguments: OtpVerificationScreenArgs(
         successAction: OtpSuccessAction.goToPinScreen,
-        phoneNumberIntlFormat: intlPhoneNumber,
+        phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
         registerAccountAfterSuccessfulOtp: true,
       ),
     );
@@ -106,9 +115,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    final phoneNumber = '+62${_ctrlPhoneNumber.text}';
     context
         .read<AccountAvailabilityCubit>()
-        .checkPhoneNumberAvailability(phoneNumber);
+        .checkPhoneNumberAvailability(enteredPhoneNumberInIntlFormat);
   }
 }

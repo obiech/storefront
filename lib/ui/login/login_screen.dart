@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/account_availability/account_availability.dart';
 import '../../constants/dropezy_text_styles.dart';
 import '../../utils/bottom_sheet_utils.dart';
+import '../../utils/phone_number_transformer.dart';
 import '../otp_verification/otp_verification.dart';
 import '../widgets/dropezy_button.dart';
 import '../widgets/dropezy_scaffold.dart';
@@ -27,7 +28,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _ctrlPhoneNumber = TextEditingController();
 
-  String get intlPhoneNumber => '+62${_ctrlPhoneNumber.text}';
+  String get enteredPhoneNumber => _ctrlPhoneNumber.text;
+
+  String get enteredPhoneNumberInIntlFormat =>
+      trimAndTransformPhoneToIntlFormat(enteredPhoneNumber);
+
+  String get enteredPhoneNumberInLocalFormat =>
+      trimAndTransformPhoneToLocalFormat(enteredPhoneNumber);
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
       listener: (context, state) {
         switch (state.status as AccountAvailabilityStatus) {
           case AccountAvailabilityStatus.phoneIsAvailable:
-            final phone = '0${_ctrlPhoneNumber.text}';
-            _showDialogPhoneNotRegistered(phone);
+            _showDialogPhoneNotRegistered(enteredPhoneNumberInLocalFormat);
             break;
           case AccountAvailabilityStatus.phoneAlreadyRegistered:
             _goToOtpPage();
@@ -98,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToOtpPage() {
     final args = OtpVerificationScreenArgs(
-      phoneNumberIntlFormat: intlPhoneNumber,
+      phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
       successAction: OtpSuccessAction.goToHomeScreen,
     );
     Navigator.of(context).pushNamed(
@@ -111,9 +117,9 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    final phoneNumber = '+62${_ctrlPhoneNumber.text}';
+
     context
         .read<AccountAvailabilityCubit>()
-        .checkPhoneNumberAvailability(phoneNumber);
+        .checkPhoneNumberAvailability(enteredPhoneNumberInIntlFormat);
   }
 }
