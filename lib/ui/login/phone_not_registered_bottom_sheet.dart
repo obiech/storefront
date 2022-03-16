@@ -9,25 +9,31 @@ import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart
 /// their phone number.
 ///
 /// When user clicks on the button:
-/// 1) This [BottomSheet] will be dismissed
-/// 2) App will navigate to [RegistrationScreen]
+/// 1) This [BottomSheet] will be dismissed.
+/// 2) App will navigate to [RegistrationScreen] with [phoneNumberLocalFormat] without
+/// leading zero as pre-filled phone number.
 class PhoneNotRegisteredBottomSheet extends StatelessWidget {
-  final String phoneNumber;
-
-  const PhoneNotRegisteredBottomSheet({
+  /// [phoneNumberLocalFormat] will be displayed in the error message.
+  PhoneNotRegisteredBottomSheet({
     Key? key,
-    required this.phoneNumber,
-  }) : super(key: key);
+    required this.phoneNumberLocalFormat,
+  })  : assert(phoneNumberLocalFormat.startsWith('0')),
+        super(key: key);
+
+  final String phoneNumberLocalFormat;
 
   @override
   Widget build(BuildContext context) {
     return DropezyBottomSheet.singleButton(
       svgIconPath: AssetsPath.icPhoneVerification,
-      content: _content(phoneNumber),
+      content: _content(phoneNumberLocalFormat),
       buttonLabel: 'Daftar Sekarang',
       buttonOnPressed: () {
         Navigator.of(context).pop();
-        Navigator.of(context).pushNamed(RegistrationScreen.routeName);
+        Navigator.of(context).pushNamed(
+          RegistrationScreen.routeName,
+          arguments: phoneNumberLocalFormat.substring(1), // Remove leading zero
+        );
       },
     );
   }

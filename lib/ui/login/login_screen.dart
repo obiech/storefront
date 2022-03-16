@@ -13,12 +13,19 @@ import '../widgets/text_user_agreement.dart';
 import 'phone_not_registered_bottom_sheet.dart';
 
 class LoginScreen extends StatefulWidget {
+  /// setting [initialPhoneNumber] pre-fills [PhoneTextField] with
+  /// [initialPhoneNumber].
+  const LoginScreen({
+    Key? key,
+    this.initialPhoneNumber,
+  }) : super(key: key);
+
   static const routeName = 'login';
   static const keyInputPhoneNumber = 'LoginScreen_inputPhoneNumber';
   static const keyVerifyPhoneNumberButton =
       'LoginScreen_buttonVerifyPhoneNumber';
 
-  const LoginScreen({Key? key}) : super(key: key);
+  final String? initialPhoneNumber;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -35,6 +42,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String get enteredPhoneNumberInLocalFormat =>
       trimAndTransformPhoneToLocalFormat(enteredPhoneNumber);
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Pre-fill phone number input
+    _ctrlPhoneNumber.text = widget.initialPhoneNumber ?? '';
+  }
+
+  @override
+  void dispose() {
+    _ctrlPhoneNumber.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _showDialogPhoneNotRegistered(String phoneNumber) {
     showDropezyBottomSheet(context, (_) {
-      return PhoneNotRegisteredBottomSheet(phoneNumber: phoneNumber);
+      return PhoneNotRegisteredBottomSheet(phoneNumberLocalFormat: phoneNumber);
     });
   }
 

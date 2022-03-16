@@ -40,10 +40,40 @@ void main() {
       await tester
           .pumpWidget(buildMockLoginScreen(phoneVerificationCubit, navigator));
 
-      expect(find.byType(PhoneTextField), findsOneWidget);
+      // Expect an empty PhoneTextField
+      final emptyPhoneTextField = find.byWidgetPredicate(
+        (widget) => widget is PhoneTextField && widget.controller.text.isEmpty,
+      );
+
+      expect(emptyPhoneTextField, findsOneWidget);
       expect(verifyPhoneButtonFinder, findsOneWidget);
       expect(find.byType(TextUserAgreement), findsOneWidget);
     });
+
+    testWidgets(
+      'should be pre-filled with phone number if [initialPhoneNumber] is not null',
+      (WidgetTester tester) async {
+        // Setup
+        const initialPhoneNumber = '81234567890';
+
+        when(() => phoneVerificationCubit.state)
+            .thenReturn(const AccountAvailabilityState());
+
+        // Build Widget
+        await tester.pumpWidget(buildMockLoginScreen(
+          phoneVerificationCubit,
+          navigator,
+          initialPhoneNumber,
+        ));
+
+        // Expect a pre-filled PhoneTextField
+        final finderPreFilledPhoneTextField = find.byWidgetPredicate((widget) =>
+            widget is PhoneTextField &&
+            widget.controller.text == initialPhoneNumber);
+
+        expect(finderPreFilledPhoneTextField, findsOneWidget);
+      },
+    );
 
     group('Test phone verification', () {
       testWidgets(''' -- After entering phone number and tapping Submit button,
@@ -201,7 +231,13 @@ void main() {
   });
 }
 
-Widget buildMockLoginScreen(AccountAvailabilityCubit cubit,
-        [MockNavigator? navigator]) =>
+Widget buildMockLoginScreen(
+  AccountAvailabilityCubit cubit, [
+  MockNavigator? navigator,
+  String? initialPhoneNumber,
+]) =>
     buildMockScreenWithBlocProvider<AccountAvailabilityCubit>(
-        cubit, const LoginScreen(), navigator);
+      cubit,
+      LoginScreen(initialPhoneNumber: initialPhoneNumber),
+      navigator,
+    );

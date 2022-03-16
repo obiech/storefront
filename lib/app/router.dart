@@ -21,9 +21,11 @@ Route? appRouter(RouteSettings settings) {
     case OnboardingScreen.routeName:
       return _buildRoute(const OnboardingScreen());
     case RegistrationScreen.routeName:
-      return _buildRoute(_buildRegistrationScreen());
+      final String? phoneNumber = settings.arguments as String?;
+      return _buildRoute(_buildRegistrationScreen(phoneNumber));
     case LoginScreen.routeName:
-      return _buildRoute(_buildLoginScreen());
+      final String? phoneNumber = settings.arguments as String?;
+      return _buildRoute(_buildLoginScreen(phoneNumber));
     case OtpVerificationScreen.routeName:
       final OtpVerificationScreenArgs args =
           settings.arguments as OtpVerificationScreenArgs;
@@ -37,21 +39,25 @@ Route? appRouter(RouteSettings settings) {
   }
 }
 
-Widget _buildRegistrationScreen() {
+Widget _buildRegistrationScreen(String? initialPhoneNumber) {
   final customerServiceClient = GetIt.I<CustomerServiceClient>();
 
   return BlocProvider<AccountAvailabilityCubit>(
     create: (_) => AccountAvailabilityCubit(customerServiceClient),
-    child: const RegistrationScreen(),
+    child: RegistrationScreen(
+      initialPhoneNumber: initialPhoneNumber,
+    ),
   );
 }
 
-Widget _buildLoginScreen() {
+Widget _buildLoginScreen(String? initialPhoneNumber) {
   final customerServiceClient = GetIt.I<CustomerServiceClient>();
 
   return BlocProvider<AccountAvailabilityCubit>(
     create: (_) => AccountAvailabilityCubit(customerServiceClient),
-    child: const LoginScreen(),
+    child: LoginScreen(
+      initialPhoneNumber: initialPhoneNumber,
+    ),
   );
 }
 
