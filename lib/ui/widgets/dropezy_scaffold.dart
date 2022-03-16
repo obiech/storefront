@@ -40,6 +40,7 @@ class DropezyScaffold extends StatelessWidget {
       child: child,
       title: Text(title),
       childPadding: childPadding,
+      actions: actions,
     );
   }
 
