@@ -132,6 +132,8 @@ class OnboardingScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _dropezyLogo(),
+
+              // TODO(leovinsen): Use TextButtonSkip instead
               const ButtonSkipOnboarding(),
             ],
           ),

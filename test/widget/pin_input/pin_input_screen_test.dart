@@ -36,6 +36,8 @@ void main() {
       find.text(PinInputScreen.textInstructionsConfirmPin);
   final Finder finderErrorPinMismatch =
       find.text(PinInputScreen.textErrorPinMismatch);
+  final Finder finderButtonSkip =
+      find.byKey(const Key(PinInputScreen.keyButtonSkip));
 
   /// Mock methods that will be tested for
   setUpAll(() {
@@ -216,6 +218,35 @@ void main() {
           onboardingCubit: onboardingCubit,
           mockNavigator: mockNavigator,
         ));
+
+        verify(() => onboardingCubit.finishOnboarding()).called(1);
+        verifyPushNamedAndRemoveUntil(mockNavigator, HomeScreen.routeName);
+      },
+    );
+
+    testWidgets(
+      'when user chooses skip option, pop all routes and push route for Homepage '
+      'and call [OnboardingCubit.finishOnboarding()]',
+      (WidgetTester tester) async {
+        when(() => pinRegistrationCubit.state)
+            .thenReturn(const PinRegistrationState());
+
+        final stream = Stream.fromIterable([
+          const PinRegistrationState(),
+        ]);
+
+        whenListen(pinRegistrationCubit, stream);
+        when(() => pinRegistrationCubit.state)
+            .thenReturn(const PinRegistrationState());
+
+        await tester.pumpWidget(buildMockOtpVerificationScreen(
+          pinRegistrationCubit: pinRegistrationCubit,
+          onboardingCubit: onboardingCubit,
+          mockNavigator: mockNavigator,
+        ));
+
+        await tester.tap(finderButtonSkip);
+        await tester.pumpAndSettle();
 
         verify(() => onboardingCubit.finishOnboarding()).called(1);
         verifyPushNamedAndRemoveUntil(mockNavigator, HomeScreen.routeName);

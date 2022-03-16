@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
 
+import '../../bloc/onboarding/onboarding_cubit.dart';
 import '../../bloc/pin/pin_registration.dart';
 import '../../constants/assets_path.dart';
+import '../../constants/dimensions.dart';
 import '../../constants/dropezy_colors.dart';
 import '../../constants/dropezy_text_styles.dart';
 import '../../utils/bottom_sheet_utils.dart';
 import '../home/home_screen.dart';
+import '../widgets/buttons/text_button_skip.dart';
 import '../widgets/dropezy_scaffold.dart';
 import 'pin_input_field.dart';
 
@@ -29,6 +31,7 @@ class PinInputScreen extends StatefulWidget {
   static const keyInputPin = 'PinInputScreen_inputPin';
   static const keyInputConfirmPin = 'PinInputScreen_inputConfirmPin';
   static const keyLoadingIndicator = 'PinInputScreen_loadingIndicator';
+  static const keyButtonSkip = 'PinInputScreen_buttonSkip';
 
   @override
   State<PinInputScreen> createState() => _PinInputScreenState();
@@ -70,15 +73,7 @@ class _PinInputScreenState extends State<PinInputScreen> {
       listener: (context, state) {
         switch (state.status as PinRegistrationStatus) {
           case PinRegistrationStatus.success:
-
-            // Finish onboarding process
-            context.read<OnboardingCubit>().finishOnboarding();
-
-            // Remove all previous routes and push Home on top
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              HomeScreen.routeName,
-              (route) => false,
-            );
+            _finishPinRegistrationProcess();
             break;
           case PinRegistrationStatus.error:
             showErrorBottomSheet(context, state.errMsg!);
@@ -91,6 +86,15 @@ class _PinInputScreenState extends State<PinInputScreen> {
       child: DropezyScaffold.textTitle(
         title: 'PIN',
         useWhiteBody: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: Dimensions.pagePadding),
+            child: TextButtonSkip(
+              key: const Key(PinInputScreen.keyButtonSkip),
+              onPressed: _finishPinRegistrationProcess,
+            ),
+          ),
+        ],
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -115,6 +119,19 @@ class _PinInputScreenState extends State<PinInputScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  /// Marks onboarding process as finished, removes all previous routes
+  /// and pushes [HomeScreen] route.
+  ///
+  /// Can be called without actually registering PIN, as it's optional
+  void _finishPinRegistrationProcess() {
+    context.read<OnboardingCubit>().finishOnboarding();
+
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      HomeScreen.routeName,
+      (route) => false,
     );
   }
 
