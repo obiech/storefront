@@ -29,8 +29,11 @@ class PhoneNotRegisteredBottomSheet extends StatelessWidget {
       content: _content(phoneNumberLocalFormat),
       buttonLabel: 'Daftar Sekarang',
       buttonOnPressed: () {
+        // Pops the BottomSheet
         Navigator.of(context).pop();
-        Navigator.of(context).pushNamed(
+
+        // Pop current route and push RegistrationScreen
+        Navigator.of(context).pushReplacementNamed(
           RegistrationScreen.routeName,
           arguments: phoneNumberLocalFormat.substring(1), // Remove leading zero
         );

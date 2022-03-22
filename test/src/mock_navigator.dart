@@ -5,11 +5,16 @@ import 'package:mockingjay/mockingjay.dart';
 /// but does nothing
 MockNavigator createStubbedMockNavigator() {
   final navigator = MockNavigator();
-  when(() => navigator.pushNamed(any(), arguments: any(named: 'arguments')))
-      .thenAnswer((_) async {
+  when(() => navigator.pushNamed(
+        any(),
+        arguments: any(named: 'arguments'),
+      )).thenAnswer((_) async {
     return null;
   });
-  when(() => navigator.pushReplacementNamed(any())).thenAnswer((_) async {
+  when(() => navigator.pushReplacementNamed(
+        any(),
+        arguments: any(named: 'arguments'),
+      )).thenAnswer((_) async {
     return null;
   });
   when(() => navigator.pushNamedAndRemoveUntil(any(), any()))
@@ -20,6 +25,7 @@ MockNavigator createStubbedMockNavigator() {
   return navigator;
 }
 
+//TODO (leovinsen): rename to verifyPushNamed
 /// Convenience function for testing route pushes
 ///
 /// [navigator] - [MockNavigator] object from mockingjay package
@@ -33,6 +39,18 @@ void verifyRouteIsPushed(
   int callCount = 1,
 }) {
   verify(() => navigator.pushNamed(routeName, arguments: arguments))
+      .called(callCount);
+}
+
+/// Convenience function for testing route pushes
+///
+/// [navigator] - [MockNavigator] object from mockingjay package
+/// [routeName] - name of route that is expected to be replaced
+/// [arguments] - (optional) arguments for the route
+/// [callCount] - (optional) expected number of calls. Default is 1.
+void verifyPushReplacementNamed(MockNavigator navigator, String routeName,
+    {Object? arguments, int callCount = 1}) {
+  verify(() => navigator.pushReplacementNamed(routeName, arguments: arguments))
       .called(callCount);
 }
 

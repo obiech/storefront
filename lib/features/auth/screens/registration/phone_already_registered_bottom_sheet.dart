@@ -28,8 +28,11 @@ class PhoneAlreadyRegisteredBottomSheet extends StatelessWidget {
       content: _content(phoneNumberLocalFormat),
       buttonLabel: 'Masuk',
       buttonOnPressed: () {
+        // Pops the BottomSheet
         Navigator.of(context).pop();
-        Navigator.of(context).pushNamed(
+
+        // Pop current route and push LoginScreen
+        Navigator.of(context).pushReplacementNamed(
           LoginScreen.routeName,
           arguments: phoneNumberLocalFormat.substring(1), // Remove leading zero
         );

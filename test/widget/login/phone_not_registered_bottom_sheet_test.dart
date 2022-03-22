@@ -69,7 +69,7 @@ void main() {
 
         // Should push a route for Registration Screen
         await tester.tap(find.byType(DropezyButton));
-        verifyRouteIsPushed(
+        verifyPushReplacementNamed(
           navigator,
           RegistrationScreen.routeName,
           arguments: '81234567890',
