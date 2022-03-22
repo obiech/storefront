@@ -33,15 +33,16 @@ void main() {
     });
 
     blocTest(
-        'Sets SharedPreferences with key [PrefsKeys.kIsOnboarded] to TRUE when [isOnboarded()] is called, and emits TRUE afterwards',
-        build: () => OnboardingCubit(
-              sharedPreferences: prefs,
-              initialState: false,
-            ),
-        act: (OnboardingCubit cubit) => cubit.finishOnboarding(),
-        expect: () => [true],
-        verify: (_) {
-          expect(prefs.getBool(PrefsKeys.kIsOnboarded), true);
-        });
+      'Sets SharedPreferences with key [PrefsKeys.kIsOnboarded] to TRUE when [isOnboarded()] is called, and emits TRUE afterwards',
+      build: () => OnboardingCubit(
+        sharedPreferences: prefs,
+        initialState: false,
+      ),
+      act: (OnboardingCubit cubit) => cubit.finishOnboarding(),
+      expect: () => [true],
+      verify: (_) {
+        expect(prefs.getBool(PrefsKeys.kIsOnboarded), true);
+      },
+    );
   });
 }

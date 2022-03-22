@@ -58,11 +58,13 @@ void main() {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         expect(finderInstructionsInputPin, findsOneWidget);
         expect(finderInputFirstPin, findsOneWidget);
@@ -78,13 +80,16 @@ void main() {
       'State is loading',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state).thenReturn(
-            const PinRegistrationState(status: PinRegistrationStatus.loading));
+          const PinRegistrationState(status: PinRegistrationStatus.loading),
+        );
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         expect(finderLoadingIndicator, findsOneWidget);
         expect(finderInputFirstPin, findsNothing);
@@ -94,18 +99,20 @@ void main() {
     );
 
     testWidgets(
-      'upon 6 letters are entered should switch to Confirm Pin,'
+      'upon 6 letters are entered should switch to Confirm Pin, '
       'and upon another 6 letters are entered should call '
       '[PinRegistrationCubit.registerPin] with entered PIN as args',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         // Initial state
         expect(finderInputFirstPin, findsOneWidget);
@@ -139,11 +146,13 @@ void main() {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         // Initial state
         expect(finderInputFirstPin, findsOneWidget);
@@ -172,11 +181,13 @@ void main() {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         // Initial state
         expect(finderInputFirstPin, findsOneWidget);
@@ -213,11 +224,13 @@ void main() {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         verify(() => onboardingCubit.finishOnboarding()).called(1);
         verifyPushNamedAndRemoveUntil(mockNavigator, HomeScreen.routeName);
@@ -239,11 +252,13 @@ void main() {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-          mockNavigator: mockNavigator,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+            mockNavigator: mockNavigator,
+          ),
+        );
 
         await tester.tap(finderButtonSkip);
         await tester.pumpAndSettle();
@@ -265,17 +280,21 @@ void main() {
         controller.add(const PinRegistrationState());
         whenListen(pinRegistrationCubit, controller.stream);
 
-        await tester.pumpWidget(buildMockOtpVerificationScreen(
-          pinRegistrationCubit: pinRegistrationCubit,
-          onboardingCubit: onboardingCubit,
-        ));
+        await tester.pumpWidget(
+          buildMockOtpVerificationScreen(
+            pinRegistrationCubit: pinRegistrationCubit,
+            onboardingCubit: onboardingCubit,
+          ),
+        );
 
         // Add error State and wait for the animation to finish
         const errMsg = 'Dummy Error';
-        controller.add(const PinRegistrationState(
-          status: PinRegistrationStatus.error,
-          errMsg: errMsg,
-        ));
+        controller.add(
+          const PinRegistrationState(
+            status: PinRegistrationStatus.error,
+            errMsg: errMsg,
+          ),
+        );
         await tester.pumpAndSettle();
 
         // Expect the error Bottom Sheet

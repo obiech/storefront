@@ -58,12 +58,6 @@ class DropezyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: !isLoading
-          ? Text(
-              label,
-              style: textStyle,
-            )
-          : _loadingIndicator(),
       style: ElevatedButton.styleFrom(
         primary: backgroundColor,
         elevation: 0,
@@ -73,6 +67,12 @@ class DropezyButton extends StatelessWidget {
         ),
         shape: const StadiumBorder(),
       ),
+      child: !isLoading
+          ? Text(
+              label,
+              style: textStyle,
+            )
+          : _loadingIndicator(),
     );
   }
 

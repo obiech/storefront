@@ -28,13 +28,13 @@ Route? appRouter(RouteSettings settings) {
       return _buildRoute(_buildLoginScreen(phoneNumber));
     case OtpVerificationScreen.routeName:
       final OtpVerificationScreenArgs args =
-          settings.arguments as OtpVerificationScreenArgs;
+          settings.arguments! as OtpVerificationScreenArgs;
 
       return _buildRoute(_buildOtpInputScreen(args));
     case PinInputScreen.routeName:
       return _buildRoute(_buildPinInputScreen());
     default:
-      assert(false, 'Route \'${settings.name}\' is not implemented.');
+      assert(false, "Route '${settings.name}' is not implemented.");
       return null;
   }
 }

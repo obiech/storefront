@@ -49,10 +49,12 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
 
     // In theory, this should never happen as user should already be logged in
     if (credentials == null) {
-      emit(const PinRegistrationState(
-        status: PinRegistrationStatus.error,
-        errMsg: 'Anda belum melakukan login',
-      ));
+      emit(
+        const PinRegistrationState(
+          status: PinRegistrationStatus.error,
+          errMsg: 'Anda belum melakukan login',
+        ),
+      );
 
       return;
     }
@@ -75,15 +77,19 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
 
       emit(const PinRegistrationState(status: PinRegistrationStatus.success));
     } on GrpcError catch (e) {
-      emit(PinRegistrationState(
-        status: PinRegistrationStatus.error,
-        errMsg: '${e.code}, ${e.message}',
-      ));
+      emit(
+        PinRegistrationState(
+          status: PinRegistrationStatus.error,
+          errMsg: '${e.code}, ${e.message}',
+        ),
+      );
     } catch (e) {
-      emit(PinRegistrationState(
-        status: PinRegistrationStatus.error,
-        errMsg: e.toString(),
-      ));
+      emit(
+        PinRegistrationState(
+          status: PinRegistrationStatus.error,
+          errMsg: e.toString(),
+        ),
+      );
     }
   }
 }

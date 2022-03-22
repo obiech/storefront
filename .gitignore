@@ -47,3 +47,13 @@ app.*.map.json
 
 # Environment Variables
 env/.env
+
+# Firebase Config
+google-services.json
+GoogleService-Info.plist
+
+# Freezed files
+*.freezed.dart
+
+# VSCode
+.vscode/

@@ -28,16 +28,22 @@ class AccountAvailabilityCubit extends Cubit<AccountAvailabilityState> {
   ///
   void checkPhoneNumberAvailability(String phoneNumber) async {
     // Notify UI that verification process has started
-    emit(const AccountAvailabilityState(
-        status: AccountAvailabilityStatus.loading));
+    emit(
+      const AccountAvailabilityState(
+        status: AccountAvailabilityStatus.loading,
+      ),
+    );
 
     final req = CheckRequest(phoneNumber: phoneNumber);
 
     try {
       await _customerServiceClient.check(req);
 
-      emit(const AccountAvailabilityState(
-          status: AccountAvailabilityStatus.phoneAlreadyRegistered));
+      emit(
+        const AccountAvailabilityState(
+          status: AccountAvailabilityStatus.phoneAlreadyRegistered,
+        ),
+      );
     } catch (e) {
       String? msg;
       int? statusCode;
@@ -51,16 +57,20 @@ class AccountAvailabilityCubit extends Cubit<AccountAvailabilityState> {
       }
 
       if (statusCode == StatusCode.notFound) {
-        emit(AccountAvailabilityState(
-          status: AccountAvailabilityStatus.phoneIsAvailable,
-          errStatusCode: statusCode,
-        ));
+        emit(
+          AccountAvailabilityState(
+            status: AccountAvailabilityStatus.phoneIsAvailable,
+            errStatusCode: statusCode,
+          ),
+        );
       } else {
-        emit(AccountAvailabilityState(
-          status: AccountAvailabilityStatus.error,
-          errMsg: msg,
-          errStatusCode: statusCode,
-        ));
+        emit(
+          AccountAvailabilityState(
+            status: AccountAvailabilityStatus.error,
+            errMsg: msg,
+            errStatusCode: statusCode,
+          ),
+        );
       }
     }
   }

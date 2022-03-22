@@ -13,8 +13,10 @@ import 'package:mockingjay/mockingjay.dart';
 /// and will create a new [Widget]. Pass a [navigator] when trying to test
 /// [SnackBar], [Dialog] or [BottomSheet].
 Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
-    T bloc, Widget screen,
-    [MockNavigator? navigator]) {
+  T bloc,
+  Widget screen, [
+  MockNavigator? navigator,
+]) {
   if (navigator == null) {
     return BlocProvider<T>(
       create: (_) => bloc,
@@ -45,8 +47,10 @@ Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
 /// and will create a new [Widget]. Pass a [navigator] when trying to test
 /// [SnackBar], [Dialog] or [BottomSheet].
 Widget buildMockScreenWithMultiBlocProvider(
-    List<BlocProvider> providers, Widget screen,
-    [MockNavigator? navigator]) {
+  List<BlocProvider> providers,
+  Widget screen, [
+  MockNavigator? navigator,
+]) {
   if (navigator == null) {
     return MultiBlocProvider(
       providers: providers,

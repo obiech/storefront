@@ -60,7 +60,7 @@ extension DotEnvX on DotEnv {
   /// [fallback] will be returned if key [keyName] is not found. Otherwise,
   /// throws a [MissingEnvError].
   T tryGet<T>(String keyName, T Function(String) parser, {T? fallback}) {
-    String? value = dotenv.maybeGet(keyName);
+    final String? value = dotenv.maybeGet(keyName);
 
     if (value == null && fallback != null) {
       return fallback;
@@ -81,6 +81,6 @@ class MissingEnvError extends Error {
 
   @override
   String toString() {
-    return "Failed to load env variable with name: $envKeyName";
+    return 'Failed to load env variable with name: $envKeyName';
   }
 }

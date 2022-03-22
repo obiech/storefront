@@ -56,14 +56,14 @@ class TextUserAgreement extends StatelessWidget {
     );
   }
 
-  void _openTermsAndConditions() async {
+  Future<void> _openTermsAndConditions() async {
     final url = ExternalUrlConfig.urlTermsConditions;
     if (await canLaunch(url)) {
       launch(url);
     }
   }
 
-  void _openPrivacyPolicy() async {
+  Future<void> _openPrivacyPolicy() async {
     final url = ExternalUrlConfig.urlPrivacyPolicy;
     if (await canLaunch(url)) {
       launch(url);

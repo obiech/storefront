@@ -81,15 +81,16 @@ class FirebaseAuthService extends AuthService {
   @visibleForTesting
   void onSmsCodeSent(String verificationId, int? resendToken) {
     _verificationId = verificationId;
-    resendToken = resendToken;
+    _resendToken = resendToken;
 
     addToPhoneVerificationStream(
-        PhoneVerificationResult(status: PhoneVerificationStatus.otpSent));
+      PhoneVerificationResult(status: PhoneVerificationStatus.otpSent),
+    );
   }
 
   @override
   Future<void> verifyOtp(String otp) async {
-    AuthCredential creds = PhoneAuthProvider.credential(
+    final AuthCredential creds = PhoneAuthProvider.credential(
       verificationId: _verificationId!,
       smsCode: otp,
     );
@@ -103,7 +104,8 @@ class FirebaseAuthService extends AuthService {
       await firebaseAuth.signInWithCredential(credential);
 
       final result = PhoneVerificationResult(
-          status: PhoneVerificationStatus.verifiedSuccessfully);
+        status: PhoneVerificationStatus.verifiedSuccessfully,
+      );
       addToPhoneVerificationStream(result);
     } on FirebaseAuthException catch (e) {
       handleFirebaseExceptions(e);
@@ -120,15 +122,15 @@ class FirebaseAuthService extends AuthService {
 
     switch (exception.code) {
       case FirebaseAuthExceptionCodes.invalidPhoneNumber:
-        errMsg = "Nomor handphone yang digunakan tidak valid!";
+        errMsg = 'Nomor handphone yang digunakan tidak valid!';
         break;
       case FirebaseAuthExceptionCodes.invalidPhoneVerificationCode:
       case FirebaseAuthExceptionCodes.invalidPhoneVerificationId:
         status = PhoneVerificationStatus.invalidOtp;
-        errMsg = "OTP tidak valid!";
+        errMsg = 'OTP tidak valid!';
         break;
       case FirebaseAuthExceptionCodes.userDisabled:
-        errMsg = "Akun tidak dapat diakses!";
+        errMsg = 'Akun tidak dapat diakses!';
         break;
       // TODO (leovinsen): 'Operation Not Allowed' should not be shown to user
       // but should be escalated to development team e.g. through logging
@@ -136,7 +138,7 @@ class FirebaseAuthService extends AuthService {
       default:
         // Other error codes which in theory should not occur e.g. related to
         // email or social logins.
-        errMsg = "Proses verifikasi gagal; mohon coba kembali";
+        errMsg = 'Proses verifikasi gagal; mohon coba kembali';
         break;
     }
 

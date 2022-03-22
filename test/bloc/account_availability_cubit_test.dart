@@ -28,23 +28,24 @@ void main() {
       final cubit = AccountAvailabilityCubit(customerServiceClient);
 
       expect(
-          cubit.state,
-          const AccountAvailabilityState(
-            status: AccountAvailabilityStatus.initialState,
-            errMsg: null,
-            errStatusCode: null,
-          ));
+        cubit.state,
+        const AccountAvailabilityState(
+          status: AccountAvailabilityStatus.initialState,
+        ),
+      );
     });
 
     blocTest<AccountAvailabilityCubit, AccountAvailabilityState>(
-      '''Phone number is available for registration; 
+      '''
+      Phone number is available for registration; 
       should return State with [AccountAvailabilityStatus.loading]
       followed by State with [AccountAvailabilityStatus.phoneIsAvailable]''',
       setUp: () {
         mockClientResponse(
           customerServiceClient,
           (_) => MockResponseFuture.error(
-              GrpcError.notFound('Profile not found!')),
+            GrpcError.notFound('Profile not found!'),
+          ),
         );
       },
       build: () => AccountAvailabilityCubit(customerServiceClient),
@@ -59,7 +60,8 @@ void main() {
     );
 
     blocTest<AccountAvailabilityCubit, AccountAvailabilityState>(
-      '''Phone number is already registered; 
+      '''
+      Phone number is already registered; 
       should return State with [AccountAvailabilityStatus.loading]
       followed by State with [AccountAvailabilityStatus.phoneAlreadyRegistered]''',
       setUp: () {
@@ -86,19 +88,22 @@ void main() {
       expect: () => const [
         AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
         AccountAvailabilityState(
-            status: AccountAvailabilityStatus.phoneAlreadyRegistered),
+          status: AccountAvailabilityStatus.phoneAlreadyRegistered,
+        ),
       ],
     );
 
     blocTest<AccountAvailabilityCubit, AccountAvailabilityState>(
-      '''Failed request; 
+      '''
+      Failed request; 
       should return State with [AccountAvailabilityStatus.loading]
       followed by State with [AccountAvailabilityStatus.phoneAlreadyRegistered]''',
       setUp: () {
         mockClientResponse(
           customerServiceClient,
           (_) => MockResponseFuture.error(
-              GrpcError.deadlineExceeded('Connection timed out')),
+            GrpcError.deadlineExceeded('Connection timed out'),
+          ),
         );
       },
       build: () => AccountAvailabilityCubit(customerServiceClient),
@@ -115,7 +120,9 @@ void main() {
   });
 }
 
-void mockClientResponse(CustomerServiceClient mockClient,
-    ResponseFuture<CheckResponse> Function(Invocation) mockCallback) {
+void mockClientResponse(
+  CustomerServiceClient mockClient,
+  ResponseFuture<CheckResponse> Function(Invocation) mockCallback,
+) {
   when(() => mockClient.check(any())).thenAnswer(mockCallback);
 }

@@ -14,8 +14,11 @@ extension PhoneVerificationResultX on PhoneVerificationResult {
 @freezed
 class PhoneVerificationResult with _$PhoneVerificationResult {
   /// exception must not be null when status == [PhoneVerificationStatus.error]
-  @Assert('''status != PhoneVerificationStatus.error || 
- exception != null''')
+  @Assert(
+    '''
+  status != PhoneVerificationStatus.error || 
+  exception != null''',
+  )
   const factory PhoneVerificationResult({
     required PhoneVerificationStatus status,
     @Default(null) PhoneVerificationException? exception,

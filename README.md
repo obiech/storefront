@@ -19,8 +19,8 @@ Setup is done using manual installation as described on [FlutterFire docs](https
 2. Put the file in `ios/GoogleService-Info.plist`.
 3. Create a Xcode Configuration file for Firebase in `Flutter/Firebase.xcconfig`. For quick setup, copy `Flutter/Firebase.xcconfig.example` with this command:
 
-```
-$ cp ./ios/Flutter/Firebase.xcconfig.example ./ios/Flutter/Firebase.xcconfig
+```bash
+cp ./ios/Flutter/Firebase.xcconfig.example ./ios/Flutter/Firebase.xcconfig
 ```
 
 ---
@@ -29,22 +29,28 @@ $ cp ./ios/Flutter/Firebase.xcconfig.example ./ios/Flutter/Firebase.xcconfig
 
 A: There is an issue with Dart initialization when running on physical iOS device. See this [issue](https://github.com/FirebaseExtended/flutterfire/issues/7983).
 
-
 ## Setting up Environment Variables
 
-Environment variables are loaded using [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) package. 
+Environment variables are loaded using [flutter_dotenv](https://pub.dev/packages/flutter_dotenv) package.
 
 Create a file named `env/.env` in your local repository. This file should not be commited and
 is added into `.gitignore`.
 
 To quickly setup your local environment, copy the `env.example` file with this command:
 
-```
-$ cp ./env/.env.example ./env/.env
+```bash
+cp ./env/.env.example ./env/.env
 ```
 
 Then make changes as necessary.
 
-
-In the Flutter App, all references to environment variables are placed in classes inside `lib/constants/config` directory 
+In the Flutter App, all references to environment variables are placed in classes inside `lib/constants/config` directory
 and divided according to their domain for easier maintenance.
+
+## Pre-push checks
+
+We have set up Git hooks to prevent extra whitespace and other possible mistakes before pushing the code to your branch. Run the below command in the project root directory to copy the pre-push hooks to your local `.git` directory.
+
+```bash
+  cp ./hooks/pre-push.example ./.git/hooks/pre-push
+```

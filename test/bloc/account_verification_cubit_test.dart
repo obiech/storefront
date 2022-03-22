@@ -53,7 +53,6 @@ void main() {
         cubit.state,
         const AccountVerificationState(
           status: AccountVerificationStatus.initialState,
-          errMsg: null,
         ),
       );
     });
@@ -100,7 +99,8 @@ void main() {
         act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
         expect: () => const [
           AccountVerificationState(
-              status: AccountVerificationStatus.verifyingOtp),
+            status: AccountVerificationStatus.verifyingOtp,
+          ),
         ],
       );
       blocTest<AccountVerificationCubit, AccountVerificationState>(
@@ -166,8 +166,10 @@ void main() {
 
         void mockCustomerServiceRegisterSuccess() {
           // Mock CustomerClientService register method
-          mockCustomerServiceRegister(customerServiceClient,
-              (_) => MockResponseFuture.value(dummyRegisterResponse));
+          mockCustomerServiceRegister(
+            customerServiceClient,
+            (_) => MockResponseFuture.value(dummyRegisterResponse),
+          );
         }
 
         void mockCustomerServiceRegisterFailure() {
@@ -178,7 +180,8 @@ void main() {
         }
 
         AccountVerificationCubit buildFn(
-            bool registerAccountAfterSuccessfulOtp) {
+          bool registerAccountAfterSuccessfulOtp,
+        ) {
           final cubit = AccountVerificationCubit(
             authService,
             customerServiceClient,
@@ -225,9 +228,11 @@ void main() {
               build: () => buildFn(true),
               expect: () => const [
                 AccountVerificationState(
-                    status: AccountVerificationStatus.registeringAccount),
+                  status: AccountVerificationStatus.registeringAccount,
+                ),
                 AccountVerificationState(
-                    status: AccountVerificationStatus.success),
+                  status: AccountVerificationStatus.success,
+                ),
               ],
               verify: (cubit) {
                 verify(() => customerServiceClient.register(any())).called(1);
@@ -244,7 +249,8 @@ void main() {
               build: () => buildFn(true),
               expect: () => const [
                 AccountVerificationState(
-                    status: AccountVerificationStatus.registeringAccount),
+                  status: AccountVerificationStatus.registeringAccount,
+                ),
                 AccountVerificationState(
                   status: AccountVerificationStatus.error,
                   errMsg: 'Dummy Error',
@@ -271,8 +277,10 @@ void main() {
 
           mockPhoneVerificationStream(authService, mockEvents);
 
-          mockCustomerServiceRegister(customerServiceClient,
-              (_) => MockResponseFuture.value(dummyRegisterResponse));
+          mockCustomerServiceRegister(
+            customerServiceClient,
+            (_) => MockResponseFuture.value(dummyRegisterResponse),
+          );
         },
         build: () {
           final cubit = AccountVerificationCubit(
@@ -305,8 +313,10 @@ void main() {
 
           mockPhoneVerificationStream(authService, mockEvents);
 
-          mockCustomerServiceRegister(customerServiceClient,
-              (_) => MockResponseFuture.value(dummyRegisterResponse));
+          mockCustomerServiceRegister(
+            customerServiceClient,
+            (_) => MockResponseFuture.value(dummyRegisterResponse),
+          );
         },
         build: () {
           final cubit = AccountVerificationCubit(
@@ -330,12 +340,16 @@ void main() {
 }
 
 void mockPhoneVerificationStream(
-    AuthService authService, Iterable<PhoneVerificationResult> mockEvents) {
+  AuthService authService,
+  Iterable<PhoneVerificationResult> mockEvents,
+) {
   when(() => authService.phoneVerificationStream)
       .thenAnswer((invocation) => Stream.fromIterable(mockEvents));
 }
 
-void mockCustomerServiceRegister(CustomerServiceClient mockClient,
-    ResponseFuture<RegisterResponse> Function(Invocation) mockCallback) {
+void mockCustomerServiceRegister(
+  CustomerServiceClient mockClient,
+  ResponseFuture<RegisterResponse> Function(Invocation) mockCallback,
+) {
   when(() => mockClient.register(any())).thenAnswer(mockCallback);
 }

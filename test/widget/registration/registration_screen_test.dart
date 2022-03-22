@@ -38,7 +38,8 @@ void main() {
       when(() => accountAvailabilityCubit.state)
           .thenReturn(const AccountAvailabilityState());
       await tester.pumpWidget(
-          buildMockRegistrationScreen(accountAvailabilityCubit, navigator));
+        buildMockRegistrationScreen(accountAvailabilityCubit, navigator),
+      );
 
       // Expect an empty PhoneTextField
       final emptyPhoneTextField = find.byWidgetPredicate(
@@ -60,23 +61,28 @@ void main() {
             .thenReturn(const AccountAvailabilityState());
 
         // Build Widget
-        await tester.pumpWidget(buildMockRegistrationScreen(
-          accountAvailabilityCubit,
-          navigator,
-          initialPhoneNumber,
-        ));
+        await tester.pumpWidget(
+          buildMockRegistrationScreen(
+            accountAvailabilityCubit,
+            navigator,
+            initialPhoneNumber,
+          ),
+        );
 
         // Expect a pre-filled PhoneTextField
-        final finderPreFilledPhoneTextField = find.byWidgetPredicate((widget) =>
-            widget is PhoneTextField &&
-            widget.controller.text == initialPhoneNumber);
+        final finderPreFilledPhoneTextField = find.byWidgetPredicate(
+          (widget) =>
+              widget is PhoneTextField &&
+              widget.controller.text == initialPhoneNumber,
+        );
 
         expect(finderPreFilledPhoneTextField, findsOneWidget);
       },
     );
 
     group('Test phone verification', () {
-      testWidgets(''' -- After entering phone number and tapping Submit button,
+      testWidgets('''
+        -- After entering phone number and tapping Submit button,
         [AccountAvailabilityCubit.verifyPhone] will be called with entered phone
         number in international format''', (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
@@ -89,25 +95,30 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(buildMockRegistrationScreen(
-          accountAvailabilityCubit,
-          navigator,
-        ));
+        await tester.pumpWidget(
+          buildMockRegistrationScreen(
+            accountAvailabilityCubit,
+            navigator,
+          ),
+        );
 
-        const mockInput = "81234567890";
-        const expectedPhoneNumber = "+6281234567890";
+        const mockInput = '81234567890';
+        const expectedPhoneNumber = '+6281234567890';
 
         await tester.enterText(find.byType(PhoneTextField), mockInput);
         await tester.tap(verifyPhoneButtonFinder);
         await tester.pumpAndSettle();
 
-        verify(() => accountAvailabilityCubit
-            .checkPhoneNumberAvailability(expectedPhoneNumber)).called(1);
+        verify(
+          () => accountAvailabilityCubit
+              .checkPhoneNumberAvailability(expectedPhoneNumber),
+        ).called(1);
       });
 
-      testWidgets(''' -- After entering phone number prefixed with '08' and
-         tapping Submit button, [AccountAvailabilityCubit.verifyPhone] will be
-         called with entered phone number in international format''',
+      testWidgets('''
+        -- After entering phone number prefixed with '08' and
+        tapping Submit button, [AccountAvailabilityCubit.verifyPhone] will be
+        called with entered phone number in international format''',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
@@ -119,20 +130,24 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(buildMockRegistrationScreen(
-          accountAvailabilityCubit,
-          navigator,
-        ));
+        await tester.pumpWidget(
+          buildMockRegistrationScreen(
+            accountAvailabilityCubit,
+            navigator,
+          ),
+        );
 
-        const mockInput = "081234567890";
-        const expectedPhoneNumber = "+6281234567890";
+        const mockInput = '081234567890';
+        const expectedPhoneNumber = '+6281234567890';
 
         await tester.enterText(find.byType(PhoneTextField), mockInput);
         await tester.tap(verifyPhoneButtonFinder);
         await tester.pumpAndSettle();
 
-        verify(() => accountAvailabilityCubit
-            .checkPhoneNumberAvailability(expectedPhoneNumber)).called(1);
+        verify(
+          () => accountAvailabilityCubit
+              .checkPhoneNumberAvailability(expectedPhoneNumber),
+        ).called(1);
       });
       testWidgets(
           '-- If phone number is available, pushes a route to OTP screen '
@@ -151,17 +166,21 @@ void main() {
         );
 
         await tester.pumpWidget(
-            buildMockRegistrationScreen(accountAvailabilityCubit, navigator));
+          buildMockRegistrationScreen(accountAvailabilityCubit, navigator),
+        );
 
-        const mockInput = "81234567890";
-        const mockPhoneNumber = "+62$mockInput";
+        const mockInput = '81234567890';
+        const mockPhoneNumber = '+62$mockInput';
 
         await tester.enterText(find.byType(PhoneTextField), mockInput);
         await tester.pumpAndSettle();
 
         // Push state to trigger navigation
-        controller.add(const AccountAvailabilityState(
-            status: AccountAvailabilityStatus.phoneIsAvailable));
+        controller.add(
+          const AccountAvailabilityState(
+            status: AccountAvailabilityStatus.phoneIsAvailable,
+          ),
+        );
 
         await tester.pumpAndSettle();
 
@@ -175,7 +194,8 @@ void main() {
           ),
         );
       });
-      testWidgets('''-- If phone number is not available, display a 
+      testWidgets('''
+        -- If phone number is not available, display a 
         [PhoneAlreadyRegisteredBottomSheet]''', (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
@@ -185,12 +205,14 @@ void main() {
           Stream.fromIterable([
             const AccountAvailabilityState(),
             const AccountAvailabilityState(
-                status: AccountAvailabilityStatus.phoneAlreadyRegistered)
+              status: AccountAvailabilityStatus.phoneAlreadyRegistered,
+            )
           ]),
         );
 
         await tester.pumpWidget(
-            buildMockRegistrationScreen(accountAvailabilityCubit, null));
+          buildMockRegistrationScreen(accountAvailabilityCubit),
+        );
 
         await tester.pumpAndSettle();
 
@@ -221,7 +243,8 @@ void main() {
         );
 
         await tester.pumpWidget(
-            buildMockRegistrationScreen(accountAvailabilityCubit, null));
+          buildMockRegistrationScreen(accountAvailabilityCubit),
+        );
 
         await tester.pumpAndSettle();
 

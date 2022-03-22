@@ -66,7 +66,8 @@ void main() {
 
           verify(() => credentialsStorage.unpersistCredentials()).called(1);
           verifyNever(
-              () => credentialsStorage.persistCredentials(any(), any()));
+            () => credentialsStorage.persistCredentials(any(), any()),
+          );
         },
       );
 
@@ -94,25 +95,29 @@ void main() {
       '[sendOtp()] should call [FirebaseAuth.verifyPhoneNumber()] with '
       'specified phone number and callbacks',
       () async {
-        when(() => firebaseAuth.verifyPhoneNumber(
-              phoneNumber: mockPhoneNumber,
-              verificationCompleted: service.tryFirebaseSignIn,
-              verificationFailed: service.handleFirebaseExceptions,
-              codeSent: service.onSmsCodeSent,
-              codeAutoRetrievalTimeout: any(named: 'codeAutoRetrievalTimeout'),
-              timeout: Duration(seconds: service.otpTimeoutInSeconds),
-            )).thenAnswer((_) async {});
+        when(
+          () => firebaseAuth.verifyPhoneNumber(
+            phoneNumber: mockPhoneNumber,
+            verificationCompleted: service.tryFirebaseSignIn,
+            verificationFailed: service.handleFirebaseExceptions,
+            codeSent: service.onSmsCodeSent,
+            codeAutoRetrievalTimeout: any(named: 'codeAutoRetrievalTimeout'),
+            timeout: Duration(seconds: service.otpTimeoutInSeconds),
+          ),
+        ).thenAnswer((_) async {});
 
         await service.sendOtp(mockPhoneNumber);
 
-        verify(() => firebaseAuth.verifyPhoneNumber(
-              phoneNumber: mockPhoneNumber,
-              verificationCompleted: service.tryFirebaseSignIn,
-              verificationFailed: service.handleFirebaseExceptions,
-              codeSent: service.onSmsCodeSent,
-              codeAutoRetrievalTimeout: any(named: 'codeAutoRetrievalTimeout'),
-              timeout: Duration(seconds: service.otpTimeoutInSeconds),
-            )).called(1);
+        verify(
+          () => firebaseAuth.verifyPhoneNumber(
+            phoneNumber: mockPhoneNumber,
+            verificationCompleted: service.tryFirebaseSignIn,
+            verificationFailed: service.handleFirebaseExceptions,
+            codeSent: service.onSmsCodeSent,
+            codeAutoRetrievalTimeout: any(named: 'codeAutoRetrievalTimeout'),
+            timeout: Duration(seconds: service.otpTimeoutInSeconds),
+          ),
+        ).called(1);
       },
     );
 
@@ -120,7 +125,7 @@ void main() {
       test(
         'should call [FirebaseAuth.signInWithCredential]',
         () async {
-          AuthCredential creds = PhoneAuthProvider.credential(
+          final AuthCredential creds = PhoneAuthProvider.credential(
             verificationId: '123',
             smsCode: '123456',
           );
@@ -139,34 +144,39 @@ void main() {
           final expectedErrorFirebaseAuth = PhoneVerificationResult(
             status: PhoneVerificationStatus.error,
             exception: const PhoneVerificationException(
-                "Nomor handphone yang digunakan tidak valid!"),
+              'Nomor handphone yang digunakan tidak valid!',
+            ),
           );
 
           final expectedErrorOthers = PhoneVerificationResult(
             status: PhoneVerificationStatus.error,
             exception:
-                const PhoneVerificationException("Exception: Dummy Error"),
+                const PhoneVerificationException('Exception: Dummy Error'),
           );
 
           // Expect two errors to be handled
-          expectLater(service.phoneVerificationStream,
-              emitsInOrder([expectedErrorFirebaseAuth, expectedErrorOthers]));
+          expectLater(
+            service.phoneVerificationStream,
+            emitsInOrder([expectedErrorFirebaseAuth, expectedErrorOthers]),
+          );
 
-          AuthCredential creds = PhoneAuthProvider.credential(
+          final AuthCredential creds = PhoneAuthProvider.credential(
             verificationId: '123',
             smsCode: '123456',
           );
 
           // Throw FirebaseAuthException
           when(() => firebaseAuth.signInWithCredential(creds)).thenThrow(
-              FirebaseAuthException(
-                  code: FirebaseAuthExceptionCodes.invalidPhoneNumber));
+            FirebaseAuthException(
+              code: FirebaseAuthExceptionCodes.invalidPhoneNumber,
+            ),
+          );
 
           await service.tryFirebaseSignIn(creds);
 
           // Throw other exception
           when(() => firebaseAuth.signInWithCredential(creds))
-              .thenThrow(Exception("Dummy Error"));
+              .thenThrow(Exception('Dummy Error'));
 
           await service.tryFirebaseSignIn(creds);
         },

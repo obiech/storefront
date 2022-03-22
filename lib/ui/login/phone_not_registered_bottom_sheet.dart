@@ -57,7 +57,8 @@ class PhoneNotRegisteredBottomSheet extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 const TextSpan(
-                    text: ' belum terdaftar di Dropezy. \nYuk, daftarin dulu!'),
+                  text: ' belum terdaftar di Dropezy. \nYuk, daftarin dulu!',
+                ),
               ],
             ),
             style: DropezyTextStyles.caption2.copyWith(height: 1.5),

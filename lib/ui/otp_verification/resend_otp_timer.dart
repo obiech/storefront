@@ -67,7 +67,7 @@ class ResendOtpTimerState extends State<ResendOtpTimer> {
 
   @override
   Widget build(BuildContext context) {
-    bool canResend = secsBeforeEnablingResend > 0;
+    final bool canResend = secsBeforeEnablingResend > 0;
     return canResend ? _countdownText() : _resendOtpText();
   }
 
@@ -99,7 +99,7 @@ class ResendOtpTimerState extends State<ResendOtpTimer> {
   }
 
   Widget _countdownText() {
-    String secs = secsBeforeEnablingResend.toString().padLeft(2, '0');
+    final String secs = secsBeforeEnablingResend.toString().padLeft(2, '0');
     return Padding(
       padding: const EdgeInsets.only(
         top: ResendOtpTimer.paddingForTapArea,

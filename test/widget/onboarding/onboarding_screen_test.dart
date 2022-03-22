@@ -69,7 +69,9 @@ void main() {
 }
 
 Widget buildMockOnboardingScreen(
-    OnboardingCubit cubit, MockNavigator navigator) {
+  OnboardingCubit cubit,
+  MockNavigator navigator,
+) {
   return BlocProvider<OnboardingCubit>(
     create: (_) => cubit,
     child: MaterialApp(

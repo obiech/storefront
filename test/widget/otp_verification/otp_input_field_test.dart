@@ -10,9 +10,10 @@ class MockAccountVerificationCubit extends MockCubit<AccountVerificationState>
     implements AccountVerificationCubit {}
 
 void main() {
-  Finder finderInputField = find.byKey(const Key(OtpInputField.keyInputField));
+  final Finder finderInputField =
+      find.byKey(const Key(OtpInputField.keyInputField));
 
-  Finder finderErrorMessage =
+  final Finder finderErrorMessage =
       find.byKey(const Key(OtpInputField.keyErrorMessage));
 
   group('OTP Input Field', () {
@@ -73,12 +74,16 @@ void main() {
           '[AccountVerificationStatus.sendingOtp]',
           (WidgetTester tester) async {
             // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer((_) =>
-                const AccountVerificationState(
-                    status: AccountVerificationStatus.sendingOtp));
+            when(() => cubit.state).thenAnswer(
+              (_) => const AccountVerificationState(
+                status: AccountVerificationStatus.sendingOtp,
+              ),
+            );
 
             whenListen(
-                cubit, Stream<AccountVerificationState>.fromIterable([]));
+              cubit,
+              Stream<AccountVerificationState>.fromIterable([]),
+            );
 
             await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
 
@@ -93,12 +98,16 @@ void main() {
           '[AccountVerificationStatus.verifyingOtp]',
           (WidgetTester tester) async {
             // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer((_) =>
-                const AccountVerificationState(
-                    status: AccountVerificationStatus.verifyingOtp));
+            when(() => cubit.state).thenAnswer(
+              (_) => const AccountVerificationState(
+                status: AccountVerificationStatus.verifyingOtp,
+              ),
+            );
 
             whenListen(
-                cubit, Stream<AccountVerificationState>.fromIterable([]));
+              cubit,
+              Stream<AccountVerificationState>.fromIterable([]),
+            );
 
             await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
 
@@ -113,12 +122,16 @@ void main() {
           '[AccountVerificationStatus.registeringAccount]',
           (WidgetTester tester) async {
             // Set cubit state to invalidOtp
-            when(() => cubit.state).thenAnswer((_) =>
-                const AccountVerificationState(
-                    status: AccountVerificationStatus.registeringAccount));
+            when(() => cubit.state).thenAnswer(
+              (_) => const AccountVerificationState(
+                status: AccountVerificationStatus.registeringAccount,
+              ),
+            );
 
             whenListen(
-                cubit, Stream<AccountVerificationState>.fromIterable([]));
+              cubit,
+              Stream<AccountVerificationState>.fromIterable([]),
+            );
 
             await tester.pumpWidget(_buildMockAppWithOtpInputField(cubit));
 
@@ -136,9 +149,11 @@ void main() {
       '[AccountVerificationStatus.invalidOtp]',
       (WidgetTester tester) async {
         // Set cubit state to invalidOtp
-        when(() => cubit.state).thenAnswer((_) =>
-            const AccountVerificationState(
-                status: AccountVerificationStatus.invalidOtp));
+        when(() => cubit.state).thenAnswer(
+          (_) => const AccountVerificationState(
+            status: AccountVerificationStatus.invalidOtp,
+          ),
+        );
 
         whenListen(cubit, Stream<AccountVerificationState>.fromIterable([]));
 

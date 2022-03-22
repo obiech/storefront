@@ -10,8 +10,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
-      child: const Text('Home placeholder'),
       title: 'Home',
+      child: const Text('Home placeholder'),
     );
   }
 }

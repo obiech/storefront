@@ -55,24 +55,24 @@ class OnboardingScreen extends StatelessWidget {
           child: Stack(
             children: [
               Positioned(
-                child: _paprika(),
                 bottom: 14,
                 left: 0,
+                child: _paprika(),
               ),
               Positioned(
-                child: _meat(),
                 bottom: 0,
                 left: 0,
+                child: _meat(),
               ),
               Positioned(
+                bottom: 0,
+                right: 0,
                 child: _broccoli(),
-                bottom: 0,
-                right: 0,
               ),
               Positioned(
-                child: _tomato(),
                 bottom: 0,
                 right: 0,
+                child: _tomato(),
               ),
               _body(),
             ],
@@ -109,7 +109,6 @@ class OnboardingScreen extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

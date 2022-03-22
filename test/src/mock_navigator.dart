@@ -12,7 +12,7 @@ MockNavigator createStubbedMockNavigator() {
   when(() => navigator.pushReplacementNamed(any())).thenAnswer((_) async {
     return null;
   });
-  when(() => navigator.pushNamedAndRemoveUntil(any(), (any())))
+  when(() => navigator.pushNamedAndRemoveUntil(any(), any()))
       .thenAnswer((_) async {
     return null;
   });
@@ -26,8 +26,12 @@ MockNavigator createStubbedMockNavigator() {
 /// [routeName] - name of route that is expected to be pushed
 /// [arguments] - (optional) arguments for the route
 /// [callCount] - (optional) expected number of calls. Default is 1.
-void verifyRouteIsPushed(MockNavigator navigator, String routeName,
-    {Object? arguments, int callCount = 1}) {
+void verifyRouteIsPushed(
+  MockNavigator navigator,
+  String routeName, {
+  Object? arguments,
+  int callCount = 1,
+}) {
   verify(() => navigator.pushNamed(routeName, arguments: arguments))
       .called(callCount);
 }
@@ -47,6 +51,11 @@ void verifyPushNamedAndRemoveUntil(
   Object? arguments,
   int callCount = 1,
 }) {
-  verify(() => navigator.pushNamedAndRemoveUntil(routeName, predicate ?? any(),
-      arguments: arguments)).called(callCount);
+  verify(
+    () => navigator.pushNamedAndRemoveUntil(
+      routeName,
+      predicate ?? any(),
+      arguments: arguments,
+    ),
+  ).called(callCount);
 }

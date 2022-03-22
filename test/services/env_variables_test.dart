@@ -1,7 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:storefront_app/constants/config/grpc_config.dart';
 import 'package:storefront_app/constants/config/external_url_config.dart';
+import 'package:storefront_app/constants/config/grpc_config.dart';
 
 void main() {
   const testVariables = '''
@@ -18,7 +18,9 @@ void main() {
     expect(GrpcConfig.grpcServerPort, 8443);
     expect(GrpcConfig.grpcEnableTls, false);
     expect(ExternalUrlConfig.urlPrivacyPolicy, 'https://dropezy.com/privacy');
-    expect(ExternalUrlConfig.urlTermsConditions,
-        'https://dropezy.com/terms-and-conditions');
+    expect(
+      ExternalUrlConfig.urlTermsConditions,
+      'https://dropezy.com/terms-and-conditions',
+    );
   });
 }

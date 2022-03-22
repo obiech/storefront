@@ -64,7 +64,7 @@ void main() {
         );
 
         test(
-          'should return \'Unknown Android Device\' if device model and name unavailable',
+          "should return 'Unknown Android Device' if device model and name unavailable",
           () async {
             when(() => androidDeviceInfo.model).thenReturn(null);
             when(() => androidDeviceInfo.manufacturer).thenReturn(null);
@@ -87,7 +87,7 @@ void main() {
         test(
           'should return device name',
           () async {
-            const fakeDeviceName = 'Leonardo\'s iPhone';
+            const fakeDeviceName = "Leonardo's iPhone";
             when(() => iosDeviceInfo.name).thenReturn(fakeDeviceName);
 
             final name = await deviceNameProvider.getDeviceName();
@@ -110,7 +110,7 @@ void main() {
         );
 
         test(
-          'should return \'Unknown iOS Device\' if device model and name unavailable',
+          "should return 'Unknown iOS Device' if device model and name unavailable",
           () async {
             when(() => iosDeviceInfo.name).thenReturn(null);
             when(() => iosDeviceInfo.model).thenReturn(null);

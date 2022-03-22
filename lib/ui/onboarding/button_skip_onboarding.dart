@@ -12,9 +12,8 @@ class ButtonSkipOnboarding extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async => await _skipOnboarding(context),
+      onTap: () async => _skipOnboarding(context),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(

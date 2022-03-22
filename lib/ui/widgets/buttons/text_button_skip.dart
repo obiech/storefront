@@ -20,7 +20,6 @@ class TextButtonSkip extends StatelessWidget {
     return TextButton(
       onPressed: onPressed,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(

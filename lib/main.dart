@@ -27,7 +27,7 @@ import 'package:uuid/uuid.dart';
 
 import 'app/app.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
@@ -91,7 +91,7 @@ DevicePlatform _getDevicePlatform() {
   } else if (Platform.isIOS) {
     return DevicePlatform.ios;
   } else {
-    throw UnsupportedError("Currently only supports Android and iOS platforms");
+    throw UnsupportedError('Currently only supports Android and iOS platforms');
   }
 }
 

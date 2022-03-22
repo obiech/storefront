@@ -31,7 +31,9 @@ void main() {
               .thenReturn(mockPhoneNumber);
 
           const expectedCreds = UserCredentials(
-              authToken: mockToken, phoneNumber: mockPhoneNumber);
+            authToken: mockToken,
+            phoneNumber: mockPhoneNumber,
+          );
 
           // Cache should be empty
           expect(credentialsStorage.creds, null);
@@ -57,7 +59,7 @@ void main() {
       );
 
       test(
-        'should return null if [SharedPreferences] does not contain user\'s '
+        "should return null if [SharedPreferences] does not contain user's "
         'information',
         () async {
           when(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken))
@@ -91,30 +93,41 @@ void main() {
         () async {
           when(() => sharedPrefs.setString(PrefsKeys.kUserAuthToken, mockToken))
               .thenAnswer((_) async => true);
-          when(() => sharedPrefs.setString(
-                  PrefsKeys.kUserPhoneNumber, mockPhoneNumber))
-              .thenAnswer((_) async => true);
+          when(
+            () => sharedPrefs.setString(
+              PrefsKeys.kUserPhoneNumber,
+              mockPhoneNumber,
+            ),
+          ).thenAnswer((_) async => true);
 
           // Initial state
           expect(credentialsStorage.creds, null);
           expect(credentialsStorage.credsIsCached, false);
 
           await credentialsStorage.persistCredentials(
-              mockToken, mockPhoneNumber);
+            mockToken,
+            mockPhoneNumber,
+          );
 
           const expectedCreds = UserCredentials(
-              authToken: mockToken, phoneNumber: mockPhoneNumber);
+            authToken: mockToken,
+            phoneNumber: mockPhoneNumber,
+          );
 
           // cache should be updated, and values stored in [SharedPreferences]
           expect(credentialsStorage.creds, expectedCreds);
           expect(credentialsStorage.credsIsCached, true);
 
-          verify(() =>
-                  sharedPrefs.setString(PrefsKeys.kUserAuthToken, mockToken))
-              .called(1);
+          verify(
+            () => sharedPrefs.setString(PrefsKeys.kUserAuthToken, mockToken),
+          ).called(1);
 
-          verify(() => sharedPrefs.setString(
-              PrefsKeys.kUserPhoneNumber, mockPhoneNumber)).called(1);
+          verify(
+            () => sharedPrefs.setString(
+              PrefsKeys.kUserPhoneNumber,
+              mockPhoneNumber,
+            ),
+          ).called(1);
         },
       );
     });

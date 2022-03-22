@@ -13,13 +13,14 @@ class MockFunction extends Mock {
 }
 
 void main() {
-  Finder finderResendOtpTimerWidget = find.byType(ResendOtpTimer);
-  Finder finderTextCountdown =
+  final Finder finderResendOtpTimerWidget = find.byType(ResendOtpTimer);
+  final Finder finderTextCountdown =
       find.byKey(const Key(ResendOtpTimer.keyTextCountdown));
-  Finder finderTextResend = find.byKey(const Key(ResendOtpTimer.keyTextResend));
+  final Finder finderTextResend =
+      find.byKey(const Key(ResendOtpTimer.keyTextResend));
 
   group('Resend OTP Timer', () {
-    VoidCallback mockCallback = MockFunction();
+    final VoidCallback mockCallback = MockFunction();
 
     testWidgets(
       'should initialize a timer with time specified in its '
@@ -28,7 +29,8 @@ void main() {
         const waitPeriod = 30;
 
         await tester.pumpWidget(
-            _buildMockAppWithResendOtpTimer(mockCallback, waitPeriod));
+          _buildMockAppWithResendOtpTimer(mockCallback, waitPeriod),
+        );
         final ResendOtpTimerState state =
             tester.state(finderResendOtpTimerWidget);
 
@@ -50,7 +52,8 @@ void main() {
         const waitPeriod = 30;
 
         await tester.pumpWidget(
-            _buildMockAppWithResendOtpTimer(mockCallback, waitPeriod));
+          _buildMockAppWithResendOtpTimer(mockCallback, waitPeriod),
+        );
         final ResendOtpTimerState state =
             tester.state(finderResendOtpTimerWidget);
 
@@ -62,7 +65,7 @@ void main() {
         expect(finderTextCountdown, findsNothing);
         expect(finderTextResend, findsOneWidget);
 
-        when((() => mockCallback.call())).thenAnswer((invocation) {});
+        when(() => mockCallback.call()).thenAnswer((invocation) {});
 
         // Tapping on Resend should call mockCallback
         verifyNever(() => mockCallback.call());
@@ -80,8 +83,10 @@ void main() {
   });
 }
 
-Widget _buildMockAppWithResendOtpTimer(VoidCallback callback,
-    [int waitPeriod = 60]) {
+Widget _buildMockAppWithResendOtpTimer(
+  VoidCallback callback, [
+  int waitPeriod = 60,
+]) {
   return MaterialApp(
     home: Scaffold(
       body: Center(

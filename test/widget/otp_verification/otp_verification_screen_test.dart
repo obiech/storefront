@@ -42,14 +42,18 @@ void main() {
       when(() => accountVerificationCubit.state)
           .thenReturn(const AccountVerificationState());
 
-      await tester.pumpWidget(buildMockOtpVerificationScreen(
+      await tester.pumpWidget(
+        buildMockOtpVerificationScreen(
           cubit: accountVerificationCubit,
-          args: argsForLogin(mockPhoneNumberIntl)));
+          args: argsForLogin(mockPhoneNumberIntl),
+        ),
+      );
 
       expect(find.text('Verifikasi Ponsel Kamu'), findsOneWidget);
       expect(
-          find.text('Kode OTP telah dikirimkan ke nomor $mockPhoneNumberLocal'),
-          findsOneWidget);
+        find.text('Kode OTP telah dikirimkan ke nomor $mockPhoneNumberLocal'),
+        findsOneWidget,
+      );
       expect(find.byType(OtpInputField), findsOneWidget);
       expect(find.byType(ResendOtpTimer), findsOneWidget);
     });
@@ -66,15 +70,18 @@ void main() {
             Stream.fromIterable([
               const AccountVerificationState(),
               const AccountVerificationState(
-                  status: AccountVerificationStatus.success),
+                status: AccountVerificationStatus.success,
+              ),
             ]),
           );
 
-          await tester.pumpWidget(buildMockOtpVerificationScreen(
-            cubit: accountVerificationCubit,
-            navigator: navigator,
-            args: argsForLogin(mockPhoneNumberIntl),
-          ));
+          await tester.pumpWidget(
+            buildMockOtpVerificationScreen(
+              cubit: accountVerificationCubit,
+              navigator: navigator,
+              args: argsForLogin(mockPhoneNumberIntl),
+            ),
+          );
 
           verifyPushNamedAndRemoveUntil(
             navigator,
@@ -94,15 +101,18 @@ void main() {
             Stream.fromIterable([
               const AccountVerificationState(),
               const AccountVerificationState(
-                  status: AccountVerificationStatus.success),
+                status: AccountVerificationStatus.success,
+              ),
             ]),
           );
 
-          await tester.pumpWidget(buildMockOtpVerificationScreen(
-            cubit: accountVerificationCubit,
-            navigator: navigator,
-            args: argsForRegistration(mockPhoneNumberIntl),
-          ));
+          await tester.pumpWidget(
+            buildMockOtpVerificationScreen(
+              cubit: accountVerificationCubit,
+              navigator: navigator,
+              args: argsForRegistration(mockPhoneNumberIntl),
+            ),
+          );
 
           verifyRouteIsPushed(
             navigator,
@@ -127,15 +137,19 @@ void main() {
             controller.stream,
           );
 
-          await tester.pumpWidget(buildMockOtpVerificationScreen(
-            cubit: accountVerificationCubit,
-            args: argsForLogin(mockPhoneNumberIntl),
-          ));
+          await tester.pumpWidget(
+            buildMockOtpVerificationScreen(
+              cubit: accountVerificationCubit,
+              args: argsForLogin(mockPhoneNumberIntl),
+            ),
+          );
 
-          controller.add(const AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: errMsg,
-          ));
+          controller.add(
+            const AccountVerificationState(
+              status: AccountVerificationStatus.error,
+              errMsg: errMsg,
+            ),
+          );
 
           await tester.pumpAndSettle();
 

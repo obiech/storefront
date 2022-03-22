@@ -13,10 +13,10 @@ void main() {
   Widget buildWidgetToTest(String phoneNumber) {
     return MaterialApp(
       home: MockNavigatorProvider(
+        navigator: navigator,
         child: PhoneNotRegisteredBottomSheet(
           phoneNumberLocalFormat: phoneNumber,
         ),
-        navigator: navigator,
       ),
     );
   }
@@ -36,13 +36,13 @@ void main() {
         try {
           await tester.pumpWidget(
             MockNavigatorProvider(
+              navigator: navigator,
               child: PhoneNotRegisteredBottomSheet(
                 phoneNumberLocalFormat: phoneNumber,
               ),
-              navigator: navigator,
             ),
           );
-        } on AssertionError catch (e) {
+        } on AssertionError catch (_) {
           throwsAssertionError = true;
         }
 
@@ -59,9 +59,11 @@ void main() {
         await tester.pumpWidget(buildWidgetToTest(phoneNumber));
 
         // Phone number should be displayed
-        final finderTextPhoneNumber = find.byWidgetPredicate((Widget widget) =>
-            widget is RichText &&
-            widget.text.toPlainText().contains(phoneNumber));
+        final finderTextPhoneNumber = find.byWidgetPredicate(
+          (Widget widget) =>
+              widget is RichText &&
+              widget.text.toPlainText().contains(phoneNumber),
+        );
 
         expect(finderTextPhoneNumber, findsOneWidget);
 

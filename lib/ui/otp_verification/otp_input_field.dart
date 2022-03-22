@@ -10,8 +10,8 @@ import '../../constants/dropezy_text_styles.dart';
 import '../../utils/is_test_mode.dart';
 
 class OtpInputField extends StatefulWidget {
-  static const keyInputField = "OtpInputField_textField";
-  static const keyErrorMessage = "OtpInputFied_errorMsg";
+  static const keyInputField = 'OtpInputField_textField';
+  static const keyErrorMessage = 'OtpInputFied_errorMsg';
 
   const OtpInputField({Key? key}) : super(key: key);
 
@@ -69,7 +69,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
 
                 /// causes pumpAndSettle in Widget Test to time out
                 /// if set to true
-                showCursor: kTestMode ? false : true,
+                showCursor: !kTestMode,
                 cursorHeight: 20,
                 textStyle: DropezyTextStyles.textOtp,
                 animationType: AnimationType.fade,

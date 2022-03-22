@@ -38,41 +38,51 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   void _handlePhoneVerificationResult(PhoneVerificationResult result) async {
     switch (result.status) {
       case PhoneVerificationStatus.otpSent:
-        emit(const AccountVerificationState(
-          status: AccountVerificationStatus.otpSent,
-        ));
+        emit(
+          const AccountVerificationState(
+            status: AccountVerificationStatus.otpSent,
+          ),
+        );
         otpIsSent = true;
         break;
 
       case PhoneVerificationStatus.verifiedSuccessfully:
-        emit(const AccountVerificationState(
-          status: AccountVerificationStatus.registeringAccount,
-        ));
+        emit(
+          const AccountVerificationState(
+            status: AccountVerificationStatus.registeringAccount,
+          ),
+        );
 
         if (registerAccountAfterSuccessfulOtp) {
           await _registerPhoneNumberToBackend();
         } else {
-          emit(const AccountVerificationState(
-            status: AccountVerificationStatus.success,
-          ));
+          emit(
+            const AccountVerificationState(
+              status: AccountVerificationStatus.success,
+            ),
+          );
         }
         break;
 
       case PhoneVerificationStatus.error:
         final exception = result.exception!;
 
-        emit(AccountVerificationState(
-          status: AccountVerificationStatus.error,
-          errMsg: exception.errorMessage,
-        ));
+        emit(
+          AccountVerificationState(
+            status: AccountVerificationStatus.error,
+            errMsg: exception.errorMessage,
+          ),
+        );
 
         break;
       case PhoneVerificationStatus.invalidOtp:
         final exception = result.exception!;
-        emit(AccountVerificationState(
-          status: AccountVerificationStatus.invalidOtp,
-          errMsg: exception.errorMessage,
-        ));
+        emit(
+          AccountVerificationState(
+            status: AccountVerificationStatus.invalidOtp,
+            errMsg: exception.errorMessage,
+          ),
+        );
         break;
     }
   }
@@ -84,19 +94,25 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
 
     try {
       await _customerServiceClient.register(request);
-      emit(const AccountVerificationState(
-        status: AccountVerificationStatus.success,
-      ));
+      emit(
+        const AccountVerificationState(
+          status: AccountVerificationStatus.success,
+        ),
+      );
     } on GrpcError catch (e) {
-      emit(AccountVerificationState(
-        status: AccountVerificationStatus.error,
-        errMsg: e.message,
-      ));
+      emit(
+        AccountVerificationState(
+          status: AccountVerificationStatus.error,
+          errMsg: e.message,
+        ),
+      );
     } catch (e) {
-      emit(AccountVerificationState(
-        status: AccountVerificationStatus.error,
-        errMsg: e.toString(),
-      ));
+      emit(
+        AccountVerificationState(
+          status: AccountVerificationStatus.error,
+          errMsg: e.toString(),
+        ),
+      );
     }
   }
 
@@ -111,8 +127,11 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// [AccountVerificationStatus.error].
   Future<void> sendOtp(String phoneNumber) async {
     this.phoneNumber = phoneNumber;
-    emit(const AccountVerificationState(
-        status: AccountVerificationStatus.sendingOtp));
+    emit(
+      const AccountVerificationState(
+        status: AccountVerificationStatus.sendingOtp,
+      ),
+    );
 
     await _authService.sendOtp(phoneNumber);
   }
@@ -121,16 +140,21 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// will emit an error state if otp is not yet sent
   Future<void> verifyOtp(String otp) async {
     if (!otpIsSent) {
-      emit(const AccountVerificationState(
-        status: AccountVerificationStatus.error,
-        errMsg: 'OTP belum terkirim!',
-      ));
+      emit(
+        const AccountVerificationState(
+          status: AccountVerificationStatus.error,
+          errMsg: 'OTP belum terkirim!',
+        ),
+      );
 
       return;
     }
 
-    emit(const AccountVerificationState(
-        status: AccountVerificationStatus.verifyingOtp));
+    emit(
+      const AccountVerificationState(
+        status: AccountVerificationStatus.verifyingOtp,
+      ),
+    );
 
     await _authService.verifyOtp(otp);
   }

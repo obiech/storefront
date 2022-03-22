@@ -46,7 +46,6 @@ class PinInputField extends StatelessWidget {
       showCursor: false,
       animationType: AnimationType.none,
       useHapticFeedback: true,
-      autoFocus: false,
       enableActiveFill: true,
       errorAnimationController: errorAnimationController,
       errorAnimationDuration: 200,

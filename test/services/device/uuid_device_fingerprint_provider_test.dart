@@ -38,16 +38,16 @@ void main() {
           () async {
             // Simulate no fingerprint saved in device
             when(
-              (() => sharedPreferences.getString(
-                    UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-                  )),
+              () => sharedPreferences.getString(
+                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
+              ),
             ).thenAnswer((_) => null);
 
             when(
-              (() => sharedPreferences.setString(
-                    UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-                    any(),
-                  )),
+              () => sharedPreferences.setString(
+                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
+                any(),
+              ),
             ).thenAnswer((_) async => true);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
@@ -75,9 +75,9 @@ void main() {
           () async {
             // Simulate saved fingerprint is available
             when(
-              (() => sharedPreferences.getString(
-                    UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-                  )),
+              () => sharedPreferences.getString(
+                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
+              ),
             ).thenAnswer((_) => mockUuid);
 
             final fingerprint = await fingerprintProvider.getFingerprint();

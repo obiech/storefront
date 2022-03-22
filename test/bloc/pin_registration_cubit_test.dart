@@ -77,7 +77,6 @@ void main() {
           pinRegistrationCubit.state,
           const PinRegistrationState(
             status: PinRegistrationStatus.initialState,
-            errMsg: null,
           ),
         );
       },
@@ -95,11 +94,12 @@ void main() {
 
           // Mock SavePIN request
           final expectedRequest = SavePINRequest(
-              device: Device(
-            fingerprint: fakeFingerprint,
-            name: fakeDeviceName,
-            pin: fakePin,
-          ));
+            device: Device(
+              fingerprint: fakeFingerprint,
+              name: fakeDeviceName,
+              pin: fakePin,
+            ),
+          );
 
           _mockSavePINRequest(
             customerServiceClient,
@@ -116,10 +116,12 @@ void main() {
           verify(() => userCredentialsStorage.getCredentials()).called(1);
 
           // Ensure SavePIN request uses informaton provided above
-          verify(() => customerServiceClient.savePIN(
-                expectedRequest,
-                options: any(named: 'options'),
-              )).called(1);
+          verify(
+            () => customerServiceClient.savePIN(
+              expectedRequest,
+              options: any(named: 'options'),
+            ),
+          ).called(1);
         },
       );
 
@@ -185,7 +187,8 @@ void main() {
             _mockSavePINRequest(
               customerServiceClient,
               (_) => MockResponseFuture<SavePINResponse>.error(
-                  GrpcError.unknown('Dummy Error')),
+                GrpcError.unknown('Dummy Error'),
+              ),
             );
           },
           build: () => PinRegistrationCubit(
@@ -194,7 +197,7 @@ void main() {
             deviceNameProvider: deviceNameProvider,
             userCredentialsStorage: userCredentialsStorage,
           ),
-          act: (cubit) async => await cubit.registerPin(fakePin),
+          act: (cubit) async => cubit.registerPin(fakePin),
           expect: () => const [
             PinRegistrationState(status: PinRegistrationStatus.loading),
             PinRegistrationState(
@@ -214,12 +217,14 @@ void main() {
 
             // Mock SavePIN request
             _mockSavePINRequest(
-                customerServiceClient,
-                (_) => MockResponseFuture<SavePINResponse>.error(
-                    Exception('Dummy Error')));
+              customerServiceClient,
+              (_) => MockResponseFuture<SavePINResponse>.error(
+                Exception('Dummy Error'),
+              ),
+            );
           },
           build: () => _buildCubit(),
-          act: (cubit) async => await cubit.registerPin(fakePin),
+          act: (cubit) async => cubit.registerPin(fakePin),
           expect: () => [
             const PinRegistrationState(status: PinRegistrationStatus.loading),
             PinRegistrationState(
@@ -234,7 +239,9 @@ void main() {
 }
 
 void _mockDeviceFingerprint(
-    DeviceFingerprintProvider provider, String fingerprint) {
+  DeviceFingerprintProvider provider,
+  String fingerprint,
+) {
   when(() => provider.getFingerprint()).thenAnswer((_) async => fingerprint);
 }
 
@@ -244,12 +251,16 @@ void _mockDeviceName(DeviceNameProvider provider, String name) {
 
 /// Pass null for [userCredentials] to simulate unauthenticated state
 void _mockUserCredentials(
-    UserCredentialsStorage storage, UserCredentials? userCredentials) {
+  UserCredentialsStorage storage,
+  UserCredentials? userCredentials,
+) {
   when(() => storage.getCredentials()).thenAnswer((_) async => userCredentials);
 }
 
-void _mockSavePINRequest(CustomerServiceClient mockClient,
-    ResponseFuture<SavePINResponse> Function(Invocation) mockCallback) {
+void _mockSavePINRequest(
+  CustomerServiceClient mockClient,
+  ResponseFuture<SavePINResponse> Function(Invocation) mockCallback,
+) {
   when(() => mockClient.savePIN(any(), options: any(named: 'options')))
       .thenAnswer(mockCallback);
 }
