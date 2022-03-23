@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -67,9 +68,19 @@ void _setupServices(SharedPreferences sharedPrefs) {
   const uuidPlugin = Uuid();
 
   final credsStorage = PrefsUserCredentialsStorage(sharedPrefs);
+
+  final firebaseInstance = FirebaseAuth.instance;
+
+  if (!kReleaseMode) {
+    firebaseInstance.useAuthEmulator(
+      AuthConfig.authEmulatorHost,
+      AuthConfig.authEmulatorPort,
+    );
+  }
+
   final authService = FirebaseAuthService(
     credentialsStorage: credsStorage,
-    firebaseAuth: FirebaseAuth.instance,
+    firebaseAuth: firebaseInstance,
     otpTimeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
   )..initialize();
 

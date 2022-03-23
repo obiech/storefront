@@ -54,3 +54,19 @@ We have set up Git hooks to prevent extra whitespace and other possible mistakes
 ```bash
   cp ./hooks/pre-push.example ./.git/hooks/pre-push
 ```
+
+## Firebase Emulator
+
+To be able to use the firebase emulator for development authentication, you'll have to start it via `docker-compose`
+
+- Make sure you have docker installed.
+- Go to the `tools/emulator` folder.
+- Copy the `.env-example` file to setup environment variables for the emulator.
+
+```bash
+cp .env-example .env
+```
+
+- Set the `GCP_PROJECT` value to your firebase **project id**
+- Start the emulator with `docker-compose up -d`
+- Open `http://0.0.0.0:4000` on your browser to ensure it's on.

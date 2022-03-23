@@ -1,0 +1,7 @@
+version: "3.7"
+services:
+  emulator:
+    image: spine3/firebase-emulator
+    ports:
+      - 4000:4000 # Expose Firebase UI
+      - 9099:9099 # Expose Firebase Auth Port
