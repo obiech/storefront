@@ -39,7 +39,7 @@ void main() {
       await tester.tap(find.byType(ButtonLogin));
       await tester.pumpAndSettle();
 
-      verifyRouteIsPushed(navigator, LoginScreen.routeName);
+      verifyPushNamed(navigator, LoginScreen.routeName);
     });
 
     testWidgets(
@@ -51,7 +51,7 @@ void main() {
       await tester.tap(find.byType(ButtonRegister));
       await tester.pumpAndSettle();
 
-      verifyRouteIsPushed(navigator, RegistrationScreen.routeName);
+      verifyPushNamed(navigator, RegistrationScreen.routeName);
     });
 
     testWidgets(

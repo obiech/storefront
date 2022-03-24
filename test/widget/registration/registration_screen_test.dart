@@ -179,7 +179,7 @@ void main() {
 
         await tester.pumpAndSettle();
 
-        verifyRouteIsPushed(
+        verifyPushNamed(
           navigator,
           OtpVerificationScreen.routeName,
           arguments: const OtpVerificationScreenArgs(

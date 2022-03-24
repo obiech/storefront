@@ -25,14 +25,13 @@ MockNavigator createStubbedMockNavigator() {
   return navigator;
 }
 
-//TODO (leovinsen): rename to verifyPushNamed
 /// Convenience function for testing route pushes
 ///
 /// [navigator] - [MockNavigator] object from mockingjay package
 /// [routeName] - name of route that is expected to be pushed
 /// [arguments] - (optional) arguments for the route
 /// [callCount] - (optional) expected number of calls. Default is 1.
-void verifyRouteIsPushed(
+void verifyPushNamed(
   MockNavigator navigator,
   String routeName, {
   Object? arguments,

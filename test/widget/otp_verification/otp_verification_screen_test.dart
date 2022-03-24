@@ -112,7 +112,7 @@ void main() {
             ),
           );
 
-          verifyRouteIsPushed(
+          verifyPushNamed(
             navigator,
             PinInputScreen.routeName,
           );
