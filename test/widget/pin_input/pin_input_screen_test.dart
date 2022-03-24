@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
-import 'package:storefront_app/bloc/pin/pin_registration.dart';
-import 'package:storefront_app/ui/home/home_screen.dart';
-import 'package:storefront_app/ui/pin_input/pin_input_screen.dart';
-import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';
+import 'package:storefront_app/core/shared_widgets/widgets.dart';
+import 'package:storefront_app/features/auth/index.dart';
+import 'package:storefront_app/features/home/index.dart';
 
 import '../../src/mock_navigator.dart';
 import '../../src/mock_screen_utils.dart';

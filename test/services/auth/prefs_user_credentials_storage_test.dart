@@ -1,22 +1,24 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/constants/prefs_keys.dart';
-import 'package:storefront_app/domain/auth/user_credentials.dart';
-import 'package:storefront_app/services/auth/prefs_user_credentials_storage.dart';
+import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
+import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
+import 'package:storefront_app/features/auth/domain/services/prefs_user_credentials_storage.dart';
+
+import '../../src/mock_customer_service_client.dart';
 
 class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group('Prefs User Credentials Storage', () {
     late PrefsUserCredentialsStorage credentialsStorage;
-    late SharedPreferences sharedPrefs;
+    late IPrefsRepository sharedPrefs;
 
     const mockToken = '1234';
     const mockPhoneNumber = '+6281234567890';
 
     setUp(() async {
-      sharedPrefs = MockSharedPreferences();
+      sharedPrefs = MockIPrefsRepository();
       credentialsStorage = PrefsUserCredentialsStorage(sharedPrefs);
     });
 
@@ -25,10 +27,10 @@ void main() {
         'should return UserCredentials if it exists in [SharedPreferences] '
         'and cache the result',
         () async {
-          when(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken))
-              .thenReturn(mockToken);
-          when(() => sharedPrefs.getString(PrefsKeys.kUserPhoneNumber))
-              .thenReturn(mockPhoneNumber);
+          when(() => sharedPrefs.userAuthToken())
+              .thenAnswer((_) async => mockToken);
+          when(() => sharedPrefs.userPhoneNumber())
+              .thenAnswer((_) async => mockPhoneNumber);
 
           const expectedCreds = UserCredentials(
             authToken: mockToken,
@@ -44,17 +46,15 @@ void main() {
 
           expect(creds, expectedCreds);
           expect(credentialsStorage.credsIsCached, true);
-          verify(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken))
-              .called(1);
-          verify(() => sharedPrefs.getString(PrefsKeys.kUserPhoneNumber))
-              .called(1);
+          verify(() => sharedPrefs.userAuthToken()).called(1);
+          verify(() => sharedPrefs.userPhoneNumber()).called(1);
 
           // Test caching; should not hit SharedPreferences
           final cachedCreds = await credentialsStorage.getCredentials();
 
           expect(cachedCreds, expectedCreds);
-          verifyNever(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken));
-          verifyNever(() => sharedPrefs.getString(PrefsKeys.kUserPhoneNumber));
+          verifyNever(() => sharedPrefs.userAuthToken());
+          verifyNever(() => sharedPrefs.userPhoneNumber());
         },
       );
 
@@ -62,10 +62,13 @@ void main() {
         "should return null if [SharedPreferences] does not contain user's "
         'information',
         () async {
-          when(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken))
-              .thenReturn(null);
-          when(() => sharedPrefs.getString(PrefsKeys.kUserPhoneNumber))
-              .thenReturn(null);
+          when(() => sharedPrefs.userAuthToken()).thenAnswer(
+            (_) async => null,
+          );
+
+          when(() => sharedPrefs.userPhoneNumber()).thenAnswer(
+            (_) async => null,
+          );
 
           const expectedCreds = null;
 
@@ -78,10 +81,8 @@ void main() {
 
           expect(creds, expectedCreds);
           expect(credentialsStorage.credsIsCached, true);
-          verify(() => sharedPrefs.getString(PrefsKeys.kUserAuthToken))
-              .called(1);
-          verify(() => sharedPrefs.getString(PrefsKeys.kUserPhoneNumber))
-              .called(1);
+          verify(() => sharedPrefs.userAuthToken()).called(1);
+          verify(() => sharedPrefs.userPhoneNumber()).called(1);
         },
       );
     });
@@ -91,11 +92,10 @@ void main() {
         'should persist user token and phone number into [SharedPreferences] '
         'and update [UserCredentials] in cache',
         () async {
-          when(() => sharedPrefs.setString(PrefsKeys.kUserAuthToken, mockToken))
+          when(() => sharedPrefs.setUserAuthToken(mockToken))
               .thenAnswer((_) async => true);
           when(
-            () => sharedPrefs.setString(
-              PrefsKeys.kUserPhoneNumber,
+            () => sharedPrefs.setUserPhoneNumber(
               mockPhoneNumber,
             ),
           ).thenAnswer((_) async => true);
@@ -119,14 +119,11 @@ void main() {
           expect(credentialsStorage.credsIsCached, true);
 
           verify(
-            () => sharedPrefs.setString(PrefsKeys.kUserAuthToken, mockToken),
+            () => sharedPrefs.setUserAuthToken(mockToken),
           ).called(1);
 
           verify(
-            () => sharedPrefs.setString(
-              PrefsKeys.kUserPhoneNumber,
-              mockPhoneNumber,
-            ),
+            () => sharedPrefs.setUserPhoneNumber(mockPhoneNumber),
           ).called(1);
         },
       );
@@ -137,22 +134,21 @@ void main() {
         'should remove user token and phone number from [SharedPreferences] '
         'and store [null] in cache',
         () async {
-          when(() => sharedPrefs.remove(PrefsKeys.kUserAuthToken))
+          when(() => sharedPrefs.clearUserAuthToken())
               .thenAnswer((_) async => true);
-          when(() => sharedPrefs.remove(PrefsKeys.kUserPhoneNumber))
+          when(() => sharedPrefs.clearUserPhoneNumber())
               .thenAnswer((_) async => true);
 
           // Initial state
           expect(credentialsStorage.credsIsCached, false);
 
-          credentialsStorage.unpersistCredentials();
+          await credentialsStorage.unpersistCredentials();
 
           // Cache should be null, and keys removed from [SharedPreferences]
           expect(credentialsStorage.creds, null);
-          expect(credentialsStorage.credsIsCached, true);
-          verify(() => sharedPrefs.remove(PrefsKeys.kUserAuthToken)).called(1);
-          verify(() => sharedPrefs.remove(PrefsKeys.kUserPhoneNumber))
-              .called(1);
+          expect(credentialsStorage.credsIsCached, false);
+          verify(() => sharedPrefs.clearUserAuthToken()).called(1);
+          verify(() => sharedPrefs.clearUserPhoneNumber()).called(1);
         },
       );
     });

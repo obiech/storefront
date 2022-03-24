@@ -4,13 +4,11 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:storefront_app/bloc/account_availability/account_availability.dart';
-import 'package:storefront_app/ui/login/phone_not_registered_bottom_sheet.dart';
-import 'package:storefront_app/ui/otp_verification/otp_verification.dart';
-import 'package:storefront_app/ui/screens.dart';
-import 'package:storefront_app/ui/widgets/bottom_sheet/dropezy_bottom_sheet.dart';
-import 'package:storefront_app/ui/widgets/text_fields/phone_text_field.dart';
-import 'package:storefront_app/ui/widgets/text_user_agreement.dart';
+import 'package:storefront_app/core/shared_widgets/widgets.dart';
+import 'package:storefront_app/features/auth/index.dart';
+import 'package:storefront_app/features/auth/screens/login/phone_not_registered_bottom_sheet.dart';
+import 'package:storefront_app/features/auth/screens/otp_verification/otp_success_action.dart';
+import 'package:storefront_app/features/auth/screens/screens.dart';
 
 import '../../src/mock_navigator.dart';
 import '../../src/mock_screen_utils.dart';

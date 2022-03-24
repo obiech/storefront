@@ -1,17 +1,18 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
-import 'package:storefront_app/constants/prefs_keys.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
+import 'package:storefront_app/features/auth/index.dart';
+
+import '../src/mock_customer_service_client.dart';
 
 void main() {
   group('Onboarding Cubit', () {
-    late SharedPreferences prefs;
+    late IPrefsRepository prefs;
 
     setUp(() async {
       // Set onboarded to be initially false
-      SharedPreferences.setMockInitialValues({PrefsKeys.kIsOnboarded: false});
-      prefs = await SharedPreferences.getInstance();
+      prefs = MockIPrefsRepository();
     });
 
     test('Initial state is FALSE if FALSE is passed in constructor', () {
@@ -38,10 +39,14 @@ void main() {
         sharedPreferences: prefs,
         initialState: false,
       ),
+      setUp: () {
+        when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
+        when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
+      },
       act: (OnboardingCubit cubit) => cubit.finishOnboarding(),
       expect: () => [true],
-      verify: (_) {
-        expect(prefs.getBool(PrefsKeys.kIsOnboarded), true);
+      verify: (_) async {
+        expect(await prefs.isOnBoarded(), true);
       },
     );
   });

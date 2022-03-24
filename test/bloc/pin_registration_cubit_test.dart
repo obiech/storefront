@@ -2,12 +2,11 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/bloc/pin/pin_registration.dart';
-import 'package:storefront_app/domain/auth/user_credentials.dart';
-import 'package:storefront_app/network/grpc/customer/customer.pbgrpc.dart';
-import 'package:storefront_app/services/auth/user_credentials_storage.dart';
-import 'package:storefront_app/services/device/device_fingerprint_provider.dart';
-import 'package:storefront_app/services/device/device_name_provider.dart';
+import 'package:storefront_app/core/network/grpc/customer/customer.pbgrpc.dart';
+import 'package:storefront_app/core/services/device/index.dart';
+import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
+import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
+import 'package:storefront_app/features/auth/index.dart';
 
 import '../src/mock_customer_service_client.dart';
 import '../src/mock_response_future.dart';

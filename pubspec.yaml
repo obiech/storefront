@@ -40,6 +40,7 @@ dependencies:
   geolocator: ^8.1.1
   get_it: ^7.2.0
   grpc: ^3.0.2
+  injectable: ^1.5.3
   modal_bottom_sheet: ^2.0.0
   pin_code_fields: ^7.3.0
   protobuf: ^2.0.1
@@ -54,6 +55,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^1.1.1
+  injectable_generator: ^1.5.3
   mockingjay: ^0.2.0
   mocktail: ^0.2.0
 

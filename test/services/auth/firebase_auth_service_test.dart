@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/domain/auth/phone_verification_result.dart';
-import 'package:storefront_app/services/auth/firebase_auth_exception_codes.dart';
-import 'package:storefront_app/services/auth/firebase_auth_service.dart';
-import 'package:storefront_app/services/auth/user_credentials_storage.dart';
+import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
+import 'package:storefront_app/features/auth/domain/services/firebase_auth_exception_codes.dart';
+import 'package:storefront_app/features/auth/domain/services/firebase_auth_service.dart';
+import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 
 class MockUser extends Mock implements User {}
 
@@ -60,7 +60,7 @@ void main() {
         'Calls [UserCredentialsStorage.unpersistCredentials()] if user is null',
         () async {
           when(() => credentialsStorage.unpersistCredentials())
-              .thenReturn(null);
+              .thenAnswer((_) async {});
 
           await service.onFirebaseUserChanged(null);
 

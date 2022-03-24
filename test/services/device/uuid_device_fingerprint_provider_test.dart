@@ -1,8 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/services/device/uuid_device_fingerprint_provider.dart';
+import 'package:storefront_app/core/services/device/index.dart';
+import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../src/mock_customer_service_client.dart';
 
 class MockUuidPlugin extends Mock implements Uuid {}
 
@@ -11,7 +14,7 @@ class MockSharedPreferences extends Mock implements SharedPreferences {}
 void main() {
   group('UuidDeviceFingerprintProvider', () {
     late Uuid uuidPlugin;
-    late SharedPreferences sharedPreferences;
+    late IPrefsRepository sharedPreferences;
     late UuidDeviceFingerprintProvider fingerprintProvider;
 
     const mockUuid = 'version-4-uuid';
@@ -20,7 +23,7 @@ void main() {
       uuidPlugin = MockUuidPlugin();
       when(() => uuidPlugin.v4()).thenReturn(mockUuid);
 
-      sharedPreferences = MockSharedPreferences();
+      sharedPreferences = MockIPrefsRepository();
 
       fingerprintProvider = UuidDeviceFingerprintProvider(
         uuidPlugin,
@@ -38,16 +41,11 @@ void main() {
           () async {
             // Simulate no fingerprint saved in device
             when(
-              () => sharedPreferences.getString(
-                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-              ),
-            ).thenAnswer((_) => null);
+              () => sharedPreferences.getFingerPrint(),
+            ).thenAnswer((_) async => null);
 
             when(
-              () => sharedPreferences.setString(
-                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-                any(),
-              ),
+              () => sharedPreferences.setFingerPrint(any()),
             ).thenAnswer((_) async => true);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
@@ -55,15 +53,10 @@ void main() {
             // Verifies a UUID v4 is generated and saved into SharedPreferences
             verify(() => uuidPlugin.v4()).called(1);
             verify(
-              () => sharedPreferences.getString(
-                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-              ),
+              () => sharedPreferences.getFingerPrint(),
             ).called(1);
             verify(
-              () => sharedPreferences.setString(
-                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-                mockUuid,
-              ),
+              () => sharedPreferences.setFingerPrint(mockUuid),
             ).called(1);
 
             expect(fingerprint, mockUuid);
@@ -75,10 +68,8 @@ void main() {
           () async {
             // Simulate saved fingerprint is available
             when(
-              () => sharedPreferences.getString(
-                UuidDeviceFingerprintProvider.kPrefsFakeFingerprint,
-              ),
-            ).thenAnswer((_) => mockUuid);
+              () => sharedPreferences.getFingerPrint(),
+            ).thenAnswer((_) async => mockUuid);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
 

@@ -2,10 +2,10 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/bloc/account_verification/account_verification.dart';
-import 'package:storefront_app/domain/auth/phone_verification_result.dart';
-import 'package:storefront_app/network/grpc/customer/customer.pbgrpc.dart';
-import 'package:storefront_app/services/auth/auth_service.dart';
+import 'package:storefront_app/core/network/grpc/customer/customer.pbgrpc.dart';
+import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
+import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
+import 'package:storefront_app/features/auth/index.dart';
 
 import '../src/auth/mock_auth_service.dart';
 import '../src/mock_customer_service_client.dart';

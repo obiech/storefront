@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:storefront_app/bloc/onboarding/onboarding_cubit.dart';
-import 'package:storefront_app/ui/onboarding/onboarding_widgets.dart';
-import 'package:storefront_app/ui/screens.dart';
+import 'package:storefront_app/features/auth/index.dart';
+import 'package:storefront_app/features/auth/screens/onboarding/onboarding_widgets.dart';
+import 'package:storefront_app/features/auth/screens/screens.dart';
 
 import '../../src/mock_navigator.dart';
 

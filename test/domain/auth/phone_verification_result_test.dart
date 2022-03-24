@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:storefront_app/domain/auth/phone_verification_result.dart';
+import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
 
 void main() {
   group('Phone Verification Result', () {

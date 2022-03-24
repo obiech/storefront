@@ -2,8 +2,9 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/bloc/account_availability/account_availability.dart';
-import 'package:storefront_app/network/grpc/customer/customer.pbgrpc.dart';
+import 'package:storefront_app/core/network/grpc/customer/customer.pbgrpc.dart';
+import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
+import 'package:storefront_app/features/auth/index.dart';
 
 import '../src/mock_customer_service_client.dart';
 import '../src/mock_response_future.dart';
@@ -11,6 +12,7 @@ import '../src/mock_response_future.dart';
 void main() {
   group('Account Availability Cubit', () {
     late CustomerServiceClient customerServiceClient;
+    late IPrefsRepository prefsRepository;
 
     /// Setup default request
     setUpAll(() {
@@ -20,12 +22,14 @@ void main() {
     /// Initialize new client for each test
     setUp(() {
       customerServiceClient = MockCustomerServiceClient();
+      prefsRepository = MockIPrefsRepository();
     });
 
     test(
         'Initial state status should be [AccountAvailabilityStatus.initialState]',
         () {
-      final cubit = AccountAvailabilityCubit(customerServiceClient);
+      final cubit =
+          AccountAvailabilityCubit(customerServiceClient, prefsRepository);
 
       expect(
         cubit.state,
@@ -47,8 +51,12 @@ void main() {
             GrpcError.notFound('Profile not found!'),
           ),
         );
+
+        when(() => prefsRepository.setUserPhoneNumber(any()))
+            .thenAnswer((_) async => {});
       },
-      build: () => AccountAvailabilityCubit(customerServiceClient),
+      build: () =>
+          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
         AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
@@ -82,8 +90,12 @@ void main() {
           customerServiceClient,
           (_) => MockResponseFuture.value(successCheckResponse),
         );
+
+        when(() => prefsRepository.setUserPhoneNumber(any()))
+            .thenAnswer((_) async => {});
       },
-      build: () => AccountAvailabilityCubit(customerServiceClient),
+      build: () =>
+          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
         AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
@@ -105,8 +117,12 @@ void main() {
             GrpcError.deadlineExceeded('Connection timed out'),
           ),
         );
+
+        when(() => prefsRepository.setUserPhoneNumber(any()))
+            .thenAnswer((_) async => {});
       },
-      build: () => AccountAvailabilityCubit(customerServiceClient),
+      build: () =>
+          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
         AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
