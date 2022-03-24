@@ -22,7 +22,10 @@ class FirebaseAuthService extends AuthService {
     required UserCredentialsStorage credentialsStorage,
     required this.firebaseAuth,
     @Named('otpTimeOut') required this.otpTimeoutInSeconds,
-  }) : super(credentialsStorage);
+  }) : super(credentialsStorage) {
+    _subscriptionFirebaseUserChanges =
+        firebaseAuth.authStateChanges().listen(onFirebaseUserChanged);
+  }
 
   final FirebaseAuth firebaseAuth;
   final int otpTimeoutInSeconds;
@@ -30,18 +33,6 @@ class FirebaseAuthService extends AuthService {
   late StreamSubscription<User?> _subscriptionFirebaseUserChanges;
   int? _resendToken;
   String? _verificationId;
-
-  bool isInitialized = false;
-
-  /// Call this once when app is first started
-  void initialize() {
-    if (isInitialized) return;
-
-    _subscriptionFirebaseUserChanges =
-        firebaseAuth.authStateChanges().listen(onFirebaseUserChanged);
-
-    isInitialized = true;
-  }
 
   /// Persists a [UserCredentials] when [user] is not null, otherwise
   /// unpersists existing information from storage.

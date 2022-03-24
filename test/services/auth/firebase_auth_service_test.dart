@@ -26,34 +26,16 @@ void main() {
       credentialsStorage = MockUserCredentialsStorage();
       firebaseAuth = MockFirebaseAuth();
 
+      //  Always return an empty stream
+      when(() => firebaseAuth.authStateChanges())
+          .thenAnswer((_) => const Stream.empty());
+
       service = FirebaseAuthService(
         credentialsStorage: credentialsStorage,
         firebaseAuth: firebaseAuth,
         otpTimeoutInSeconds: 10,
       );
     });
-    test(
-      'should subscribe to stream [FirebaseAuth.authStateChanges() when '
-      '[initialize()] is called.',
-      () {
-        when(() => firebaseAuth.authStateChanges())
-            .thenAnswer((_) => const Stream.empty());
-
-        // Verify initial state
-        expect(service.isInitialized, false);
-        verifyNever(() => firebaseAuth.authStateChanges());
-
-        // After initialize is called, isInitialized should be true
-        // and authStateChanges should be called once
-        service.initialize();
-        verify(() => firebaseAuth.authStateChanges()).called(1);
-        expect(service.isInitialized, true);
-
-        // If called more than once, should not create a new subscription
-        service.initialize();
-        verifyNever(() => firebaseAuth.authStateChanges());
-      },
-    );
 
     group('[onFirebaseUserChanged()]', () {
       test(
