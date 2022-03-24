@@ -5,3 +5,6 @@ services:
     ports:
       - 4000:4000 # Expose Firebase UI
       - 9099:9099 # Expose Firebase Auth Port
+    volumes:
+      - "./script:/home/node"
+    entrypoint: /home/node/entrypoint.sh
