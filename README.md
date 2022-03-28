@@ -44,7 +44,7 @@ cp ./env/.env.example ./env/.env
 
 Then make changes as necessary.
 
-In the Flutter App, all references to environment variables are placed in classes inside `lib/constants/config` directory
+In the Flutter App, all references to environment variables are placed in classes inside `lib/core/config` directory
 and divided according to their domain for easier maintenance.
 
 ## Pre-push checks
