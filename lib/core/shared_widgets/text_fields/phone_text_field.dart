@@ -16,8 +16,12 @@ import '../../../core/constants/dropezy_text_styles.dart';
 /// which will hide the system keyboard when tapped.
 class PhoneTextField extends StatelessWidget {
   /// Excluding '0' or '+62'
-  static const indonesiaMinPhoneNumLength = 10;
+
+  static const indonesiaMinPhoneNumLength = 9;
   static const indonesiaMaxPhoneNumLength = 13;
+
+  static const errorPhoneNumberTooShort =
+      'Nomor HP minimal $indonesiaMinPhoneNumLength angka';
 
   static final phoneNumberFormatters = [
     FilteringTextInputFormatter.digitsOnly,
@@ -92,7 +96,7 @@ class PhoneTextField extends StatelessWidget {
                         if (str == null) return null;
 
                         if (str.length < indonesiaMinPhoneNumLength) {
-                          return 'Nomor HP minimal $indonesiaMinPhoneNumLength angka';
+                          return errorPhoneNumberTooShort;
                         }
 
                         return null;
