@@ -3,7 +3,6 @@ import 'package:grpc/grpc.dart';
 
 import '../../../../core/network/grpc/customer/customer.pbgrpc.dart';
 import '../../../../core/services/device/index.dart';
-import '../../../../core/utils/grpc_metadata_builder.dart';
 import '../../domain/services/user_credentials_storage.dart';
 import 'pin_registration_state.dart';
 
@@ -67,12 +66,7 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
     final request = SavePINRequest(device: device);
 
     try {
-      await customerServiceClient.savePIN(
-        request,
-        options: CallOptions(
-          metadata: createAuthMetadata(credentials.authToken),
-        ),
-      );
+      await customerServiceClient.savePIN(request);
 
       emit(const PinRegistrationState(status: PinRegistrationStatus.success));
     } on GrpcError catch (e) {
