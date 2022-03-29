@@ -4,6 +4,8 @@ Dropezy Storefront mobile app developed in Flutter.
 
 # Getting started
 
+![coverage](coverage_badge.svg)
+
 ## Firebase Setup
 
 Setup is done using manual installation as described on [FlutterFire docs](https://firebase.flutter.dev/docs/manual-installation).
