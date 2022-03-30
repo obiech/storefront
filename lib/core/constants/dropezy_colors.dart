@@ -27,4 +27,7 @@ class DropezyColors {
   static const altBlue = Color(0xFF5F97F6);
   static const lightBlue = Color(0xFFE8F1FF);
   static const darkBlue = Color(0xFF0D4699);
+
+  /// Divider color
+  static const dividerColor = Color(0xFFE6EDF5);
 }

@@ -15,6 +15,9 @@ void main() {
     var amount = '1500050';
     expect(amount.toCurrency(), 'Rp 15.000,50');
 
+    amount = '10800056';
+    expect(amount.toCurrency(), 'Rp 108.000,56');
+
     // assert that hundred-thousands is formatted
     amount = '150250';
     expect(amount.toCurrency(), 'Rp 1.502,50');

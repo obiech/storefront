@@ -2,13 +2,18 @@
 extension StringX on String {
   /// Takes a [String] [this] and converts it to IDR currency
   String toCurrency() {
-    if (!isNumeric()) return 'Rp 0,00';
+    return 'Rp ${toIDRFormat()}';
+  }
+
+  /// Takes a [String] [this] and converts it to IDR format
+  String toIDRFormat() {
+    if (!isNumeric()) return '0,00';
 
     switch (length) {
       case 1:
-        return 'Rp 0,0$this';
+        return '0,0$this';
       case 2:
-        return 'Rp 0,$this';
+        return '0,$this';
       default:
 
         /// Pick last two digits
@@ -17,7 +22,7 @@ extension StringX on String {
         /// Pick the rest of the digits & format them
         final body = substring(0, length - 2).formatNumber('.');
 
-        return 'Rp $body,$cents';
+        return '$body,$cents';
     }
   }
 

@@ -31,3 +31,14 @@ void showDropezyBottomSheet(BuildContext context, BottomSheetBuilder builder) {
     builder: builder,
   );
 }
+
+/// Makes a [DraggableScrollableSheet] dismissable
+Widget makeDismissable({
+  required BuildContext context,
+  required Widget child,
+}) =>
+    GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: child,
+      onTap: () => Navigator.of(context).pop(),
+    );

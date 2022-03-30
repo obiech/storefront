@@ -8,7 +8,6 @@ import 'package:storefront_app/core/shared_widgets/widgets.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/screens/login/phone_not_registered_bottom_sheet.dart';
 import 'package:storefront_app/features/auth/screens/otp_verification/otp_success_action.dart';
-import 'package:storefront_app/features/auth/screens/screens.dart';
 
 import '../../src/mock_navigator.dart';
 import '../../src/mock_screen_utils.dart';

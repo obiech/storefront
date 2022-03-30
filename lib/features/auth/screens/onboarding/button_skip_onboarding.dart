@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 import '../../../../core/constants/constants.dart';
-import '../../blocs/onboarding/onboarding_cubit.dart';
 import '../../../home/screens/home_screen.dart';
+import '../../blocs/onboarding/onboarding_cubit.dart';
 
 class ButtonSkipOnboarding extends StatelessWidget {
   const ButtonSkipOnboarding({Key? key}) : super(key: key);

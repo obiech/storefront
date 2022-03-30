@@ -8,8 +8,6 @@ import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/is_test_mode.dart';
 import '../../blocs/blocs.dart';
 
-
-
 class OtpInputField extends StatefulWidget {
   static const keyInputField = 'OtpInputField_textField';
   static const keyErrorMessage = 'OtpInputFied_errorMsg';
@@ -59,7 +57,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
               width: double.infinity,
               child: PinCodeTextField(
                 key: const Key(OtpInputField.keyInputField),
-                enabled: (!state.isLoading && !state.isInitialState),
+                enabled: !state.isLoading && !state.isInitialState,
                 controller: _ctrlOtp,
                 autoDisposeControllers: false,
                 appContext: context,

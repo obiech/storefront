@@ -5,16 +5,20 @@ import 'package:mockingjay/mockingjay.dart';
 /// but does nothing
 MockNavigator createStubbedMockNavigator() {
   final navigator = MockNavigator();
-  when(() => navigator.pushNamed(
-        any(),
-        arguments: any(named: 'arguments'),
-      )).thenAnswer((_) async {
+  when(
+    () => navigator.pushNamed(
+      any(),
+      arguments: any(named: 'arguments'),
+    ),
+  ).thenAnswer((_) async {
     return null;
   });
-  when(() => navigator.pushReplacementNamed(
-        any(),
-        arguments: any(named: 'arguments'),
-      )).thenAnswer((_) async {
+  when(
+    () => navigator.pushReplacementNamed(
+      any(),
+      arguments: any(named: 'arguments'),
+    ),
+  ).thenAnswer((_) async {
     return null;
   });
   when(() => navigator.pushNamedAndRemoveUntil(any(), any()))
@@ -47,8 +51,12 @@ void verifyPushNamed(
 /// [routeName] - name of route that is expected to be replaced
 /// [arguments] - (optional) arguments for the route
 /// [callCount] - (optional) expected number of calls. Default is 1.
-void verifyPushReplacementNamed(MockNavigator navigator, String routeName,
-    {Object? arguments, int callCount = 1}) {
+void verifyPushReplacementNamed(
+  MockNavigator navigator,
+  String routeName, {
+  Object? arguments,
+  int callCount = 1,
+}) {
   verify(() => navigator.pushReplacementNamed(routeName, arguments: arguments))
       .called(callCount);
 }

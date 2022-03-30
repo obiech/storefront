@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import './config/auth_config.dart';
 import '../di/injection.dart';
 import '../features/auth/domain/services/auth_service.dart';
 import '../features/auth/domain/services/user_credentials_storage.dart';
 import '../features/auth/index.dart';
+import '../features/cart_checkout/blocs/blocs.dart';
+import '../features/cart_checkout/index.dart';
 import '../features/home/index.dart';
+import 'config/auth_config.dart';
 import 'network/grpc/customer/customer.pbgrpc.dart';
 import 'services/device/device_fingerprint_provider.dart';
 import 'services/device/device_name_provider.dart';
@@ -30,6 +32,15 @@ Route? appRouter(RouteSettings settings) {
       return _buildRoute(_buildOtpInputScreen(args));
     case PinInputScreen.routeName:
       return _buildRoute(_buildPinInputScreen());
+    case CartCheckoutPage.routeName:
+      return _buildRoute(
+        BlocProvider(
+          lazy: true,
+          create: (context) =>
+              getIt<PaymentMethodCubit>()..queryPaymentMethods(),
+          child: const CartCheckoutPage(),
+        ),
+      );
     default:
       assert(false, "Route '${settings.name}' is not implemented.");
       return null;

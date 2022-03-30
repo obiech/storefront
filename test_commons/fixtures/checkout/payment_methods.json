@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Go Pay",
+    "tag": "go_pay",
+    "image": "assets/icons/providers/go_pay.png",
+    "link": "gopay.com",
+    "type": "ewallet"
+  },
+  {
+    "title": "OVO",
+    "tag": "ovo",
+    "image": "assets/icons/providers/ovo.png",
+    "link": "ovo.com",
+    "type": "ewallet"
+  },
+  {
+    "title": "DANA",
+    "tag": "dana",
+    "image": "assets/icons/providers/dana.png",
+    "link": "ovo.com",
+    "type": "ewallet"
+  },
+  {
+    "title": "ShopeePay",
+    "tag": "shopee_pay",
+    "image": "assets/icons/providers/shopeepay.png",
+    "link": "shopeepay.com",
+    "type": "ewallet"
+  }
+]

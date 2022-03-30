@@ -8,8 +8,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/shared_widgets/widgets.dart';
 import '../../../../core/utils/bottom_sheet_utils.dart';
-import '../../blocs/blocs.dart';
 import '../../../home/screens/home_screen.dart';
+import '../../blocs/blocs.dart';
 import 'pin_input_field.dart';
 
 class PinInputScreen extends StatefulWidget {
