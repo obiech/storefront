@@ -1,7 +1,7 @@
 import 'dart:io';
 
 Future<void> main() async {
-  await analyzeLCoveFile("coverage/lcov.info");
+  await analyzeLCoveFile('coverage/lcov.info');
 }
 
 Future<void> analyzeLCoveFile(final String path) async {
@@ -24,7 +24,7 @@ Future<void> analyzeLCoveFile(final String path) async {
 }
 
 Future<void> writeCoverageToSVG(final double coverage) async {
-  final svgFile = File("coverage_badge.svg");
+  final svgFile = File('coverage_badge.svg');
   final svgContent = await svgFile.readAsString();
 
   final regExp = RegExp(r'textLength="390">(.*?)<\/text>');
@@ -37,7 +37,7 @@ Future<void> writeCoverageToSVG(final double coverage) async {
 
   final finalSVGContent = svgContent.replaceAll(
     previousString,
-    "${coverage >= 100 ? 100 : coverage.toStringAsFixed(2)}%",
+    '${coverage >= 100 ? 100 : coverage.toStringAsFixed(2)}%',
   );
 
   await svgFile.writeAsString(finalSVGContent);

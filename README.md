@@ -72,3 +72,7 @@ cp .env-example .env
 - Set the `GCP_PROJECT` value to your firebase **project id**
 - Start the emulator with `docker-compose up -d`
 - Open `http://0.0.0.0:4000` on your browser to ensure it's on.
+
+## Using res Folder
+
+Please add any resource to the appropriate file in `res` folder and use your variable via importing `package:storefront_app/core/utils/build_context.ext.dart`. Example usage of string will be `context.res.strings.superEasyWithDropezy`
