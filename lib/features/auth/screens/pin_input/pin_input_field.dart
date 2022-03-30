@@ -5,7 +5,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../../../core/constants/constants.dart';
 
-
 /// Wrapper [Widget] for [PinCodeTextField] themed and purposed for entering
 /// PIN, so text is by default obscured and length is enforced to 6.
 ///

@@ -61,6 +61,9 @@ class Resources {
     return AppStyles(colors);
   }
 
+  // TODO: think of another approach perhaps through use of singletons, or
+  // look at existing .of implementations in Provider, Localization, etc.
+  // ignore: prefer_constructors_over_static_methods
   static Resources of(BuildContext context) {
     return Resources(context);
   }

@@ -56,8 +56,18 @@ void main() {
     testWidgets(
         ' -- Tapping on Skip calls [OnboardingCubit.finishOnboarding()] once',
         (WidgetTester tester) async {
-      await tester
-          .pumpWidget(buildMockOnboardingScreen(onboardingCubit, navigator));
+      await tester.pumpWidget(
+        buildMockOnboardingScreen(
+          onboardingCubit,
+          navigator,
+        ),
+      );
+
+      when(
+        () => onboardingCubit.finishOnboarding(),
+      ).thenAnswer(
+        (_) async {},
+      );
 
       await tester.tap(find.byType(ButtonSkipOnboarding));
       await tester.pumpAndSettle();

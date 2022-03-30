@@ -17,7 +17,7 @@ class MockAccountAvailabilityCubit extends MockCubit<AccountAvailabilityState>
 
 void main() {
   late MockNavigator navigator;
-  late AccountAvailabilityCubit phoneVerificationCubit;
+  late AccountAvailabilityCubit accountAvailabilityCubit;
 
   final finderInputPhoneNumber =
       find.byKey(const Key(LoginScreen.keyInputPhoneNumber));
@@ -26,16 +26,28 @@ void main() {
 
   setUp(() {
     navigator = createStubbedMockNavigator();
-    phoneVerificationCubit = MockAccountAvailabilityCubit();
+    accountAvailabilityCubit = MockAccountAvailabilityCubit();
+
+    when(
+      () => accountAvailabilityCubit.checkPhoneNumberAvailability(
+        any(),
+      ),
+    ).thenAnswer(
+      (_) async {},
+    );
   });
 
   group('Login Screen', () {
     testWidgets(' -- Ensure important elements are visible',
         (WidgetTester tester) async {
-      when(() => phoneVerificationCubit.state)
+      when(() => accountAvailabilityCubit.state)
           .thenReturn(const AccountAvailabilityState());
-      await tester
-          .pumpWidget(buildMockLoginScreen(phoneVerificationCubit, navigator));
+      await tester.pumpWidget(
+        buildMockLoginScreen(
+          accountAvailabilityCubit,
+          navigator,
+        ),
+      );
 
       // Expect an empty PhoneTextField
       final emptyPhoneTextField = find.byWidgetPredicate(
@@ -53,13 +65,13 @@ void main() {
         // Setup
         const initialPhoneNumber = '81234567890';
 
-        when(() => phoneVerificationCubit.state)
+        when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
         // Build Widget
         await tester.pumpWidget(
           buildMockLoginScreen(
-            phoneVerificationCubit,
+            accountAvailabilityCubit,
             navigator,
             initialPhoneNumber,
           ),
@@ -81,11 +93,11 @@ void main() {
         -- After entering phone number and tapping Submit button,
         [AccountAvailabilityCubit.verifyPhone] will be called with entered phone
         number in international format''', (WidgetTester tester) async {
-        when(() => phoneVerificationCubit.state)
+        when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
         whenListen(
-          phoneVerificationCubit,
+          accountAvailabilityCubit,
           Stream.fromIterable([
             const AccountAvailabilityState(),
           ]),
@@ -93,7 +105,7 @@ void main() {
 
         await tester.pumpWidget(
           buildMockLoginScreen(
-            phoneVerificationCubit,
+            accountAvailabilityCubit,
             navigator,
           ),
         );
@@ -106,7 +118,7 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(
-          () => phoneVerificationCubit
+          () => accountAvailabilityCubit
               .checkPhoneNumberAvailability(expectedPhoneNumber),
         ).called(1);
       });
@@ -116,11 +128,11 @@ void main() {
          tapping Submit button, [AccountAvailabilityCubit.verifyPhone] will be
          called with entered phone number in international format''',
           (WidgetTester tester) async {
-        when(() => phoneVerificationCubit.state)
+        when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
         whenListen(
-          phoneVerificationCubit,
+          accountAvailabilityCubit,
           Stream.fromIterable([
             const AccountAvailabilityState(),
           ]),
@@ -128,7 +140,7 @@ void main() {
 
         await tester.pumpWidget(
           buildMockLoginScreen(
-            phoneVerificationCubit,
+            accountAvailabilityCubit,
             navigator,
           ),
         );
@@ -141,18 +153,18 @@ void main() {
         await tester.pumpAndSettle();
 
         verify(
-          () => phoneVerificationCubit
+          () => accountAvailabilityCubit
               .checkPhoneNumberAvailability(expectedPhoneNumber),
         ).called(1);
       });
       testWidgets(
           '''-- If phone number is available, displays a [PhoneNotRegisteredBottomSheet]''',
           (WidgetTester tester) async {
-        when(() => phoneVerificationCubit.state)
+        when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
         whenListen(
-          phoneVerificationCubit,
+          accountAvailabilityCubit,
           Stream.fromIterable([
             const AccountAvailabilityState(),
             const AccountAvailabilityState(
@@ -161,7 +173,7 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(buildMockLoginScreen(phoneVerificationCubit));
+        await tester.pumpWidget(buildMockLoginScreen(accountAvailabilityCubit));
 
         await tester.pumpAndSettle();
 
@@ -172,19 +184,19 @@ void main() {
         'verification screen with args of 1) intl phone number, 2) '
         'OtpSuccessAction.goToHome, 3) timeout for OTP',
         (WidgetTester tester) async {
-          when(() => phoneVerificationCubit.state)
+          when(() => accountAvailabilityCubit.state)
               .thenReturn(const AccountAvailabilityState());
 
           final controller = StreamController<AccountAvailabilityState>();
           controller.add(const AccountAvailabilityState());
 
           whenListen(
-            phoneVerificationCubit,
+            accountAvailabilityCubit,
             controller.stream,
           );
 
           await tester.pumpWidget(
-            buildMockLoginScreen(phoneVerificationCubit, navigator),
+            buildMockLoginScreen(accountAvailabilityCubit, navigator),
           );
 
           const mockInput = '81234567890';
@@ -214,7 +226,7 @@ void main() {
       testWidgets(
           '-- If an exception occurs, display a [DropezyBottomSheet] containing the error message',
           (WidgetTester tester) async {
-        when(() => phoneVerificationCubit.state)
+        when(() => accountAvailabilityCubit.state)
             .thenReturn(const AccountAvailabilityState());
 
         const errMsg = 'Test error';
@@ -223,7 +235,7 @@ void main() {
         const displayedMessage = '$errStatusCode, $errMsg';
 
         whenListen(
-          phoneVerificationCubit,
+          accountAvailabilityCubit,
           Stream.fromIterable([
             const AccountAvailabilityState(),
             const AccountAvailabilityState(
@@ -234,7 +246,7 @@ void main() {
           ]),
         );
 
-        await tester.pumpWidget(buildMockLoginScreen(phoneVerificationCubit));
+        await tester.pumpWidget(buildMockLoginScreen(accountAvailabilityCubit));
 
         await tester.pumpAndSettle();
 

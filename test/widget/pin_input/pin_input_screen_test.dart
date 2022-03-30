@@ -46,7 +46,7 @@ void main() {
         .thenAnswer((_) async {});
 
     onboardingCubit = MockOnboardingCubit();
-    when(() => onboardingCubit.finishOnboarding()).thenAnswer((_) {});
+    when(() => onboardingCubit.finishOnboarding()).thenAnswer((_) async {});
   });
 
   group('PIN Input Screen', () {

@@ -35,7 +35,9 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
 
   bool otpIsSent = false;
 
-  void _handlePhoneVerificationResult(PhoneVerificationResult result) async {
+  Future<void> _handlePhoneVerificationResult(
+    PhoneVerificationResult result,
+  ) async {
     switch (result.status) {
       case PhoneVerificationStatus.otpSent:
         emit(

@@ -30,7 +30,7 @@ class AccountAvailabilityCubit extends Cubit<AccountAvailabilityState> {
   /// [AccountAvailabilityStatus.error]
   /// Retrieve the error message from [AccountAvailabilityState.errMsg]
   ///
-  void checkPhoneNumberAvailability(String phoneNumber) async {
+  Future<void> checkPhoneNumberAvailability(String phoneNumber) async {
     // Notify UI that verification process has started
     emit(
       const AccountAvailabilityState(

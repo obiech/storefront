@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,7 +10,6 @@ import 'package:storefront_app/features/cart_checkout/widgets/payment_method/key
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/widgets.dart';
 
-import '../../../../../test_commons/fixtures/fixture_reader.dart';
 import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 

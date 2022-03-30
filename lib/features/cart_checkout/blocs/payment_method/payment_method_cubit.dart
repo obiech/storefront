@@ -27,7 +27,7 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
 
   /// Set the active [PaymentMethod]
   void setPaymentMethod(PaymentMethod paymentMethod) {
-    if(state is LoadedPaymentMethods){
+    if (state is LoadedPaymentMethods) {
       emit(
         LoadedPaymentMethods(
           (state as LoadedPaymentMethods).methods,

@@ -25,6 +25,13 @@ void main() {
   setUp(() {
     navigator = createStubbedMockNavigator();
     accountAvailabilityCubit = MockAccountAvailabilityCubit();
+    when(
+      () => accountAvailabilityCubit.checkPhoneNumberAvailability(
+        any(),
+      ),
+    ).thenAnswer(
+      (_) async {},
+    );
   });
 
   group('Registration Screen', () {
