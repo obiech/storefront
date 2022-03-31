@@ -92,3 +92,15 @@ jobs:
           bundle exec fastlane supply \
           --aab build/app/outputs/bundle/release/app-release.aab \
           --track alpha
+
+      - name: Send Slack Notification
+        if: always()
+        uses: ravsamhq/notify-slack-action@1.9.0
+        with:
+          status: ${{ job.status }}
+          notification_title: 'The CI job *{workflow}* on {run_url} with author name `${{ github.event.head_commit.author.name }}` and commit message `${{ github.event.head_commit.message }}` has {status_message}'
+          message_format: '{emoji} *{workflow}* {status_message} in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>. Please check it @${{ github.event.head_commit.author.name }}'
+          footer: 'Linked Repo <{repo_url}|{repo}>'
+          notify_when: 'failure'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_SLACK_ALERTS_WEBHOOK }}
