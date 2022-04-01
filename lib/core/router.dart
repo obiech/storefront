@@ -5,7 +5,6 @@ import '../di/injection.dart';
 import '../features/auth/domain/services/auth_service.dart';
 import '../features/auth/domain/services/user_credentials_storage.dart';
 import '../features/auth/index.dart';
-import '../features/cart_checkout/blocs/blocs.dart';
 import '../features/cart_checkout/index.dart';
 import '../features/home/index.dart';
 import 'config/auth_config.dart';
@@ -34,13 +33,10 @@ Route? appRouter(RouteSettings settings) {
       return _buildRoute(_buildPinInputScreen());
     case CartCheckoutPage.routeName:
       return _buildRoute(
-        BlocProvider(
-          lazy: true,
-          create: (context) =>
-              getIt<PaymentMethodCubit>()..queryPaymentMethods(),
-          child: const CartCheckoutPage(),
-        ),
+        const CartCheckoutPage(),
       );
+    case OrderSuccessfulPage.routeName:
+      return _buildRoute(const OrderSuccessfulPage());
     default:
       assert(false, "Route '${settings.name}' is not implemented.");
       return null;

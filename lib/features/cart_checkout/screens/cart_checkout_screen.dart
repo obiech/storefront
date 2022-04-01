@@ -22,6 +22,7 @@ class CartCheckoutPage extends StatelessWidget {
             price: '10300',
             discount: '12300',
             preferredPayment: 'OVO',
+            points: '100',
           )
         ],
       ),

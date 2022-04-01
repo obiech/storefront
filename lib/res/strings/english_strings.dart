@@ -258,4 +258,23 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String oopsWrongPinCode() => 'Oops, wrong PIN code';
+
+  @override
+  String get onThisOrderYouHaveSuccessfully =>
+      'In this order you have successfully:';
+
+  @override
+  String get orderSuccessful => 'Order Successful!';
+
+  @override
+  String get pointsEarned => 'Points earned';
+
+  @override
+  String get savedMoney => 'Saved';
+
+  @override
+  String get viewOrderDetails => 'View Order Details';
+
+  @override
+  String get yourOrderWillArriveIn => 'Your order will arrive in';
 }

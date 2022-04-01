@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:storefront_app/features/cart_checkout/domain/models/payment_method.dart';
-import 'package:storefront_app/features/cart_checkout/domain/models/payment_method_type.dart';
-import 'package:storefront_app/features/cart_checkout/domain/repository/i_payment_method_repository.dart';
+
+import '../domains.dart';
 
 @LazySingleton(as: IPaymentMethodRepository)
 class PaymentMethodService implements IPaymentMethodRepository {

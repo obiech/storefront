@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants/dropezy_colors.dart';
+import '../utils/build_context.ext.dart';
 
 /// Includes a Dropezy-themed [Scaffold] with [AppBar]
 /// And a body that uses a rounded rectangle by default
@@ -26,6 +26,8 @@ class DropezyScaffold extends StatelessWidget {
     required this.title,
     this.childPadding = 24.0,
     this.actions,
+    this.centerTitle = false,
+    this.bodyColor = Colors.white,
   }) : super(key: key);
 
   /// uses [Text] widget as AppBar title
@@ -33,18 +35,30 @@ class DropezyScaffold extends StatelessWidget {
     required Widget child,
     required String title,
     bool useWhiteBody = true,
+    bool centerTitle = false,
     double childPadding = 24.0,
+    bodyColor = Colors.white,
     List<Widget>? actions,
   }) {
     return DropezyScaffold(
       useWhiteBody: useWhiteBody,
       title: Text(title),
       childPadding: childPadding,
+      centerTitle: centerTitle,
+      bodyColor: bodyColor,
       actions: actions,
       child: child,
     );
   }
 
+  /// Set to [true] when the [AppBar] title
+  /// should be centered
+  final bool centerTitle;
+
+  /// Set the [Color] of the rounded [Scaffold] body
+  final Color bodyColor;
+
+  /// TODO - Can be renamed to useRoundedBody
   final bool useWhiteBody;
   final Widget child;
   final Widget title;
@@ -55,30 +69,34 @@ class DropezyScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     final bool canPop = parentRoute?.canPop ?? false;
+    final res = context.res;
 
     return Scaffold(
       appBar: AppBar(
         title: title,
+        centerTitle: centerTitle,
         leading: canPop
             ? Container(
-                margin: const EdgeInsets.only(
-                  left: 16,
-                  right: 12,
+                margin: EdgeInsets.only(
+                  left: res.dimens.spacingLarge,
+                  right: res.dimens.spacingMiddle,
                 ),
                 child: _backButton(context),
               )
             : null,
-        leadingWidth: canPop ? 40 : null,
+        leadingWidth: canPop ? res.dimens.leadingWidth : null,
         actions: actions,
       ),
       resizeToAvoidBottomInset: true,
       body: useWhiteBody
           ? Container(
-              decoration: const BoxDecoration(
-                color: DropezyColors.white,
+              decoration: BoxDecoration(
+                color: bodyColor,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24.0),
-                  topRight: Radius.circular(24.0),
+                  topLeft:
+                      Radius.circular(res.dimens.bottomSheetHorizontalPadding),
+                  topRight:
+                      Radius.circular(res.dimens.bottomSheetHorizontalPadding),
                 ),
               ),
               width: double.infinity,

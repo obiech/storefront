@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:storefront_app/core/constants/constants.dart';
+import 'package:storefront_app/core/core.dart';
 
 /// A [Widget] that shows a countdown if [resendWaitPeriodInSeconds]
 /// seconds has not elapsed, otherwise shows a clickable text that

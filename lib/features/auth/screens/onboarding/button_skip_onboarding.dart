@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
 import '../../../home/screens/home_screen.dart';
 import '../../blocs/onboarding/onboarding_cubit.dart';
 

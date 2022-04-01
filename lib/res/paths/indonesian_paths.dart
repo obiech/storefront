@@ -13,4 +13,10 @@ class IndonesianPaths implements BasePaths {
 
   @override
   String get icPhoneVerification => 'assets/icons/ic_phone_verification.svg';
+
+  @override
+  String get icDiscount => 'assets/icons/ic_discount.svg';
+
+  @override
+  String get icCoin => 'assets/icons/ic_coin.svg';
 }

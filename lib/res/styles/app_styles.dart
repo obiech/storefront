@@ -5,6 +5,7 @@ import 'base_styles.dart';
 
 class AppStyles implements BaseStyles {
   AppStyles(this._colors);
+
   final BaseColors _colors;
 
   @override
@@ -72,5 +73,21 @@ class AppStyles implements BaseStyles {
         color: _colors.black,
         fontSize: 20,
         fontWeight: FontWeight.w600,
+      );
+
+  @override
+  BoxDecoration get bottomSheetStyle => BoxDecoration(
+        color: _colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: _colors.black.withOpacity(.1),
+            blurRadius: 16,
+            offset: const Offset(0, -5),
+          ),
+        ],
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+        ),
       );
 }

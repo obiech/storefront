@@ -1,16 +1,11 @@
 ///
-//  Generated code. Do not modify.
-//  source: v1/customer/customer.proto
-//
-// @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
-
 import 'dart:async' as $async;
-
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+
 import 'customer.pb.dart' as $1;
+
 export 'customer.pb.dart';
 
 class CustomerServiceClient extends $grpc.Client {
@@ -120,10 +115,13 @@ abstract class CustomerServiceBase extends $grpc.Service {
 
   $async.Future<$1.CheckResponse> check(
       $grpc.ServiceCall call, $1.CheckRequest request);
+
   $async.Future<$1.RegisterResponse> register(
       $grpc.ServiceCall call, $1.RegisterRequest request);
+
   $async.Future<$1.SavePINResponse> savePIN(
       $grpc.ServiceCall call, $1.SavePINRequest request);
+
   $async.Future<$1.AuthorizeResponse> authorize(
       $grpc.ServiceCall call, $1.AuthorizeRequest request);
 }

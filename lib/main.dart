@@ -11,6 +11,7 @@ import 'app.dart';
 import 'core/services/prefs/i_prefs_repository.dart';
 import 'di/injection.dart';
 import 'features/auth/index.dart';
+import 'features/cart_checkout/index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,10 @@ Future<void> main() async {
             initialState: isOnboarded,
           ),
         ),
+        BlocProvider(
+          lazy: true,
+          create: (context) => getIt<PaymentMethodCubit>(),
+        )
       ],
       child: const MyApp(),
     ),

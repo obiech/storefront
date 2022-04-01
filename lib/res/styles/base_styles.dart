@@ -21,4 +21,6 @@ abstract class BaseStyles {
   TextStyle get textOtp;
 
   TextStyle get clickableText;
+
+  BoxDecoration get bottomSheetStyle;
 }

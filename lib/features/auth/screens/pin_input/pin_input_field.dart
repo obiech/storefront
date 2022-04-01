@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
-import '../../../../core/constants/constants.dart';
+import 'package:storefront_app/core/core.dart';
 
 /// Wrapper [Widget] for [PinCodeTextField] themed and purposed for entering
 /// PIN, so text is by default obscured and length is enforced to 6.

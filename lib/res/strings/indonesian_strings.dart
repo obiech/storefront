@@ -257,4 +257,23 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String oopsWrongPinCode() => 'Ups, kode PINnya salah';
+
+  @override
+  String get onThisOrderYouHaveSuccessfully =>
+      'Pada order kali ini kamu berhasil:';
+
+  @override
+  String get orderSuccessful => 'Order Berhasil!';
+
+  @override
+  String get pointsEarned => 'Point yang didapat';
+
+  @override
+  String get savedMoney => 'Hemat';
+
+  @override
+  String get viewOrderDetails => 'Lihat Detail Order';
+
+  @override
+  String get yourOrderWillArriveIn => 'Pesanan kamu akan tiba dalam';
 }

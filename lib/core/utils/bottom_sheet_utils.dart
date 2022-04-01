@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import '../shared_widgets/widgets.dart';
+import 'package:storefront_app/core/core.dart';
 
 typedef BottomSheetBuilder = Widget Function(BuildContext);
 
@@ -31,14 +31,3 @@ void showDropezyBottomSheet(BuildContext context, BottomSheetBuilder builder) {
     builder: builder,
   );
 }
-
-/// Makes a [DraggableScrollableSheet] dismissable
-Widget makeDismissable({
-  required BuildContext context,
-  required Widget child,
-}) =>
-    GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      child: child,
-      onTap: () => Navigator.of(context).pop(),
-    );

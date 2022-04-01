@@ -1,8 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/core/services/device/index.dart';
-import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../src/mock_customer_service_client.dart';

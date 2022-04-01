@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
 import 'button_login.dart';
 import 'button_register.dart';
 import 'button_skip_onboarding.dart';

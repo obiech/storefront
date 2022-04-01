@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
+import 'package:storefront_app/core/core.dart';
 
 import '../../../../core/network/grpc/customer/customer.pbgrpc.dart';
-import '../../../../core/services/device/index.dart';
 import '../../domain/services/user_credentials_storage.dart';
 import 'pin_registration_state.dart';
 

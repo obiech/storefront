@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/shared_widgets/widgets.dart';
-import '../../../../core/utils/bottom_sheet_utils.dart';
 import '../../../home/screens/home_screen.dart';
 import '../../blocs/blocs.dart';
 import 'pin_input_field.dart';

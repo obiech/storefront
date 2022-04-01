@@ -18,10 +18,14 @@ void main() {
   group(
     'Payment Methods List',
     () {
-      Future<void> _pumpTestWidget(WidgetTester tester) => tester.pumpWidget(
+      Future<void> _pumpTestWidget(
+        WidgetTester tester, {
+        PaymentMethodCubit? cubit,
+      }) =>
+          tester.pumpWidget(
             MaterialApp(
               home: Scaffold(
-                body: PaymentMethodList(cubit: _cubit),
+                body: PaymentMethodList(cubit: cubit ?? _cubit),
               ),
             ),
           );
@@ -37,7 +41,13 @@ void main() {
           'When no payment methods are loaded '
           'should display empty state ', (WidgetTester tester) async {
         /// Load Payment Methods List
-        await _pumpTestWidget(tester);
+        when(() => _paymentMethodsRepository.getPaymentMethods())
+            .thenAnswer((_) async => []);
+
+        await _pumpTestWidget(
+          tester,
+          cubit: PaymentMethodCubit(_paymentMethodsRepository),
+        );
         await tester.pumpAndSettle();
 
         expect(find.text('No Payment Methods'), findsOneWidget);
@@ -56,7 +66,7 @@ void main() {
         await _cubit.queryPaymentMethods();
         await tester.pumpAndSettle();
 
-        expect(find.text('Error loading Payment Methods'), findsOneWidget);
+        expect(find.text('Error loading payment methods'), findsOneWidget);
       });
 
       testWidgets(

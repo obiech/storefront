@@ -2,19 +2,31 @@ import 'base_dimensions.dart';
 
 class PhoneDimensions implements BaseDimensions {
   @override
-  double get bigMargin => 20;
+  double get spacingXxlarge => 36;
 
   @override
-  double get defaultMargin => 16;
+  double get spacingXlarge => 32;
 
   @override
-  double get mediumMargin => 12;
+  double get spacingMxlarge => 28;
 
   @override
-  double get smallMargin => 8;
+  double get spacingMlarge => 24;
 
   @override
-  double get verySmallMargin => 4;
+  double get spacingSmlarge => 20;
+
+  @override
+  double get spacingLarge => 16;
+
+  @override
+  double get spacingMiddle => 12;
+
+  @override
+  double get spacingMedium => 8;
+
+  @override
+  double get spacingSmall => 4;
 
   @override
   double get highElevation => 16;
@@ -45,4 +57,7 @@ class PhoneDimensions implements BaseDimensions {
 
   @override
   double get pagePadding => 16;
+
+  @override
+  double get leadingWidth => 40;
 }

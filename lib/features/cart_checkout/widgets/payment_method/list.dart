@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/shared_widgets/bottom_sheet/dropezy_bottom_sheet.dart';
-import '../../../../core/utils/bottom_sheet_utils.dart';
 import '../../blocs/blocs.dart';
 import '../../domain/domains.dart';
 
@@ -28,8 +26,8 @@ class PaymentMethodList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return makeDismissable(
-      context: context,
+    final res = context.res;
+    return DropezyDismissable(
       child: DraggableScrollableSheet(
         /// TODO - Set basing on number of payment methods
         maxChildSize: .8,
@@ -40,9 +38,9 @@ class PaymentMethodList extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               // controller: controller,
               children: [
-                const Text(
+                Text(
                   'Pilih Metode Pembayaran',
-                  style: DropezyTextStyles.subtitle,
+                  style: res.styles.subtitle,
                 ),
                 const SizedBox(
                   height: 16,
@@ -71,10 +69,11 @@ class PaymentMethodList extends StatelessWidget {
                         /// When there is an error when loading payment methods
                         ///
                         /// TODO - Request design team for proper design
-                        return const Center(
-                          child: Text('Error loading Payment Methods'),
+                        return Center(
+                          child: Text(state.message),
                         );
-                      } else if (state is LoadedPaymentMethods) {
+                      } else if (state is LoadedPaymentMethods &&
+                          state.methods.isNotEmpty) {
                         /// Display payment methods and their logos
                         return ListView.separated(
                           controller: controller,
@@ -97,8 +96,7 @@ class PaymentMethodList extends StatelessWidget {
                                     ),
                                     Text(
                                       paymentMethod.title,
-                                      style:
-                                          DropezyTextStyles.caption1.copyWith(
+                                      style: res.styles.caption1.copyWith(
                                         fontWeight: FontWeight.w400,
                                       ),
                                     )

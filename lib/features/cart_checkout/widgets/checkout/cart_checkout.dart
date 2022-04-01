@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/shared_widgets/widgets.dart';
-import '../../../../core/utils/string.ext.dart';
+import '../../../../res/resources.dart';
+import '../../index.dart';
 import '../payment_method/selector.dart';
 import 'keys.dart';
 
@@ -34,21 +34,9 @@ class CartCheckout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final res = Resources.of(context);
     return Container(
-      decoration: BoxDecoration(
-        color: DropezyColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: DropezyColors.black.withOpacity(.1),
-            blurRadius: 16,
-            offset: const Offset(0, -5),
-          ),
-        ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-        ),
-      ),
+      decoration: res.styles.bottomSheetStyle,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -68,14 +56,14 @@ class CartCheckout extends StatelessWidget {
                         Text(
                           price.toCurrency(),
                           key: const ValueKey(CheckoutKeys.price),
-                          style: DropezyTextStyles.caption1
+                          style: res.styles.caption1
                               .copyWith(fontWeight: FontWeight.w600),
                         ),
                         if (discount != null)
                           Text(
                             discount!.toCurrency(),
                             key: const ValueKey(CheckoutKeys.discount),
-                            style: DropezyTextStyles.caption2.copyWith(
+                            style: res.styles.caption2.copyWith(
                               decoration: TextDecoration.lineThrough,
                             ),
                           ),
@@ -84,7 +72,7 @@ class CartCheckout extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: PaymentMethodSelector(
                     key: const ValueKey(CheckoutKeys.payment),
                     onChange: (method) {
@@ -101,13 +89,33 @@ class CartCheckout extends StatelessWidget {
                   child: DropezyButton.primary(
                     key: const ValueKey(CheckoutKeys.buy),
                     label: 'Bayar',
-                    textStyle: DropezyTextStyles.button.copyWith(fontSize: 14),
+                    textStyle: res.styles.button.copyWith(fontSize: 14),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 10,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       // TODO - Launch payment web-link
+                      Navigator.of(context).pushNamed(
+                        OrderSuccessfulPage.routeName,
+                      );
+                      /*try {
+                        final opened = await launch(
+                          'gojek://gopay/merchanttransfer?tref=1509110800474199656LMVO&amount=10000&activity=GP:RR&callback_url=someapps://callback?order_id=SAMPLE-ORDER-ID-01',
+                        );
+
+                        if (!opened) {
+                          throw PlatformException(code: 'ACTIVITY_NOT_FOUND');
+                        }
+                      } on PlatformException catch (e) {
+                        if (e.code == 'ACTIVITY_NOT_FOUND') {
+                          await launch(
+                            Platform.isAndroid
+                                ? 'https://play.google.com/store/apps/details?id=com.gojek.app'
+                                : 'https://apps.apple.com/us/app/gojek/id944875099',
+                          );
+                        }
+                      }*/
                     },
                   ),
                 )

@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/is_test_mode.dart';
 import '../../blocs/blocs.dart';
 
 class OtpInputField extends StatefulWidget {

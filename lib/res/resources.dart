@@ -2,15 +2,15 @@ import 'package:flutter/cupertino.dart';
 
 import 'colors/app_colors.dart';
 import 'colors/base_colors.dart';
-import 'dimentions/base_dimensions.dart';
-import 'dimentions/phone_dimensions.dart';
-import 'dimentions/tablet_dimensions.dart';
+import 'dimensions/base_dimensions.dart';
+import 'dimensions/phone_dimensions.dart';
+import 'dimensions/tablet_dimensions.dart';
 import 'paths/base_paths.dart';
 import 'paths/english_paths.dart';
 import 'paths/indonesian_paths.dart';
 import 'strings/base_strings.dart';
 import 'strings/english_strings.dart';
-import 'strings/indonesion_strings.dart';
+import 'strings/indonesian_strings.dart';
 import 'styles/app_styles.dart';
 import 'styles/base_styles.dart';
 
@@ -35,7 +35,7 @@ class Resources {
     return AppColors();
   }
 
-  BaseDimensions get dimensions {
+  BaseDimensions get dimens {
     final shortestSide = MediaQuery.of(_context).size.shortestSide;
 
     if (shortestSide > 600) {

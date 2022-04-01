@@ -11,7 +11,9 @@ part 'payment_method_state.dart';
 class PaymentMethodCubit extends Cubit<PaymentMethodState> {
   final IPaymentMethodRepository paymentMethodRepository;
 
-  PaymentMethodCubit(this.paymentMethodRepository) : super(InitialState());
+  PaymentMethodCubit(this.paymentMethodRepository) : super(InitialState()) {
+    queryPaymentMethods();
+  }
 
   /// Query [PaymentMethod]s from cache or end-point
   Future<void> queryPaymentMethods() async {
@@ -19,7 +21,11 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
 
     try {
       final methods = await paymentMethodRepository.getPaymentMethods();
-      emit(LoadedPaymentMethods(methods, methods.first));
+      if (methods.isNotEmpty) {
+        emit(LoadedPaymentMethods(methods, methods.first));
+      } else {
+        emit(const ErrorLoadingPaymentMethods('No Payment Methods'));
+      }
     } catch (_) {
       emit(const ErrorLoadingPaymentMethods('Error loading payment methods'));
     }

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/constants/constants.dart';
-import '../../../../core/shared_widgets/widgets.dart';
-import '../../../../core/utils/bottom_sheet_utils.dart';
-import '../../../../core/utils/phone_number_transformer.dart';
+import '../../../../core/core.dart';
 import '../../blocs/blocs.dart';
 import '../otp_verification/otp_success_action.dart';
 import '../otp_verification/otp_verification_screen.dart';

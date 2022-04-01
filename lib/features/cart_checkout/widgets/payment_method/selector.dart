@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/dropezy_colors.dart';
+import '../../../../res/resources.dart';
 import '../../blocs/blocs.dart';
 import '../../domain/domains.dart';
 import 'keys.dart';
@@ -18,10 +19,11 @@ class PaymentMethodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final res = Resources.of(context);
     return Container(
-      decoration: const BoxDecoration(
-        color: DropezyColors.white,
-        boxShadow: [
+      decoration: BoxDecoration(
+        color: res.colors.white,
+        boxShadow: const [
           BoxShadow(
             offset: Offset(-1, 0),
             color: Color(0xFFE6EDF5),

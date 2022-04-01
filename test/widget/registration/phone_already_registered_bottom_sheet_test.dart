@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
-import 'package:storefront_app/core/shared_widgets/widgets.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/screens/registration/phone_already_registered_bottom_sheet.dart';
 

@@ -83,4 +83,12 @@ abstract class BaseStrings {
   String welcomeBackEnterYourPinCode();
   String forgotPinCode();
   String oopsWrongPinCode();
+
+  /// Order Successful Page
+  String get orderSuccessful;
+  String get yourOrderWillArriveIn;
+  String get onThisOrderYouHaveSuccessfully;
+  String get savedMoney;
+  String get pointsEarned;
+  String get viewOrderDetails;
 }

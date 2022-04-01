@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../constants/constants.dart';
-import 'i_prefs_repository.dart';
+import '../../core.dart';
 
 @LazySingleton(as: IPrefsRepository)
 class PrefsRepository implements IPrefsRepository {

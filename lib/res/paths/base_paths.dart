@@ -4,4 +4,6 @@ abstract class BasePaths {
   String get icPhoneVerification;
   String get icLock;
   String get icChevronRight;
+  String get icDiscount;
+  String get icCoin;
 }

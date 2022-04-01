@@ -18,6 +18,8 @@ class AppColors implements BaseColors {
   Color get grey4 => const Color(0xFF92A0AD);
   @override
   Color get grey5 => const Color(0xFF787C8F);
+  @override
+  Color get grey6 => const Color(0xFF5F6379);
 
   @override
   Color get textFieldBorderGrey => const Color(0xFFDBDFE3);

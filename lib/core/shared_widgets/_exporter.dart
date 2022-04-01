@@ -1,5 +1,6 @@
 /// Export Shared Widgets for easy access
 export 'bottom_sheet/dropezy_bottom_sheet.dart';
+export 'bottom_sheet/dropezy_dismissable.dart';
 export 'buttons/text_button_skip.dart';
 export 'dropezy_button.dart';
 export 'dropezy_scaffold.dart';

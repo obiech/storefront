@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/constants/dropezy_text_styles.dart';
-import '../../../../core/shared_widgets/widgets.dart';
-import '../../../../core/utils/bottom_sheet_utils.dart';
-import '../../../../core/utils/phone_number_transformer.dart';
 import '../../index.dart';
 import '../otp_verification/otp_verification.dart';
 import 'phone_not_registered_bottom_sheet.dart';

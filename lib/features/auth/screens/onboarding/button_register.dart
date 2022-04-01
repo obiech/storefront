@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/shared_widgets/widgets.dart';
 import '../registration/registration_screen.dart';
 
 class ButtonRegister extends StatelessWidget {
