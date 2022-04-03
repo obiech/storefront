@@ -1,11 +1,14 @@
-name: Run Tests for Every Pushs
+name: Run Tests before Release
 
 on:
-  push:
   pull_request:
+    branches:
+      - main
+    types: [closed]
 
 jobs:
   test:
+    if: ${{ github.event.pull_request.merged }}
     runs-on: ubuntu-latest
 
     steps:
@@ -38,3 +41,13 @@ jobs:
 
       - name: 🧪 Run Tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+
+      - name: Commit and push if coverage percentage changed
+        if: ${{ false }}
+        run: |-
+          dart env/analyze.dart
+          git add .
+          git config --global user.email "mehmet@dropezy.com"
+          git config --global user.name "GitHub Action Bot"
+          git commit -m "Updated test coverage badge in README" -a || echo "No changes to commit"
+          git push
