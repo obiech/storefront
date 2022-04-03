@@ -38,7 +38,7 @@ void main() {
       find.byKey(const Key(PinInputScreen.keyButtonSkip));
 
   /// Mock methods that will be tested for
-  setUpAll(() {
+  setUp(() {
     mockNavigator = createStubbedMockNavigator();
 
     pinRegistrationCubit = MockPinRegistrationCubit();

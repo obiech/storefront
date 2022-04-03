@@ -56,7 +56,7 @@ void main() {
     final SavePINResponse dummySavePinResponse =
         SavePINResponse(device: device);
 
-    setUpAll(() {
+    setUp(() {
       registerFallbackValue(SavePINRequest(device: device));
       registerFallbackValue(dummySavePinResponse);
       customerServiceClient = MockCustomerServiceClient();

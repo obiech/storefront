@@ -18,12 +18,9 @@ void main() {
 
     const mockUuid = 'version-4-uuid';
 
-    setUpAll(() {
+    setUp(() {
       uuidPlugin = MockUuidPlugin();
-      when(() => uuidPlugin.v4()).thenReturn(mockUuid);
-
       sharedPreferences = MockIPrefsRepository();
-
       fingerprintProvider = UuidDeviceFingerprintProvider(
         uuidPlugin,
         sharedPreferences,
@@ -46,6 +43,8 @@ void main() {
             when(
               () => sharedPreferences.setFingerPrint(any()),
             ).thenAnswer((_) async => true);
+
+            when(() => uuidPlugin.v4()).thenReturn(mockUuid);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
 
