@@ -276,4 +276,33 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get yourOrderWillArriveIn => 'Pesanan kamu akan tiba dalam';
+
+  /// Order History Page
+  @override
+  String get myOrders => 'Pesananku';
+
+  @override
+  String get otherProducts => 'produk lainnya';
+
+  @override
+  String get totalSpent => 'Total Belanja';
+
+  /// Order Status
+  @override
+  String get awaitingPayment => 'Menunggu Pembayaran';
+
+  @override
+  String get inProcess => 'Diproses';
+
+  @override
+  String get inDelivery => 'Dikirim';
+
+  @override
+  String get arrived => 'Sampai Tujuan';
+
+  @override
+  String get cancelled => 'Dibatalkan';
+
+  @override
+  String get unspecified => 'Tidak Diketahui';
 }

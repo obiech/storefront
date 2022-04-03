@@ -91,4 +91,17 @@ abstract class BaseStrings {
   String get savedMoney;
   String get pointsEarned;
   String get viewOrderDetails;
+
+  /// Order History Page
+  String get myOrders;
+  String get otherProducts;
+  String get totalSpent;
+
+  /// Order Status
+  String get awaitingPayment;
+  String get inProcess;
+  String get inDelivery;
+  String get arrived;
+  String get cancelled;
+  String get unspecified;
 }

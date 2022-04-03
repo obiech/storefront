@@ -7,6 +7,7 @@ import '../features/auth/domain/services/user_credentials_storage.dart';
 import '../features/auth/index.dart';
 import '../features/cart_checkout/index.dart';
 import '../features/home/index.dart';
+import '../features/order/index.dart';
 import 'config/auth_config.dart';
 import 'network/grpc/customer/customer.pbgrpc.dart';
 import 'services/device/device_fingerprint_provider.dart';
@@ -37,6 +38,8 @@ Route? appRouter(RouteSettings settings) {
       );
     case OrderSuccessfulPage.routeName:
       return _buildRoute(const OrderSuccessfulPage());
+    case OrderHistoryScreen.routeName:
+      return _buildRoute(_buildOrderHistoryScreen());
     default:
       assert(false, "Route '${settings.name}' is not implemented.");
       return null;
@@ -93,6 +96,13 @@ Widget _buildPinInputScreen() {
       userCredentialsStorage: userCredentialsStorage,
     ),
     child: const PinInputScreen(),
+  );
+}
+
+Widget _buildOrderHistoryScreen() {
+  return BlocProvider<OrderHistoryCubit>(
+    create: (_) => getIt<OrderHistoryCubit>()..fetchUserOrderHistory(),
+    child: const OrderHistoryScreen(),
   );
 }
 

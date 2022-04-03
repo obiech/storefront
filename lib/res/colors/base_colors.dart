@@ -19,11 +19,18 @@ abstract class BaseColors {
 
   Color get cartCheckBorderColor;
 
+  /// Pale variants are used for backgrounds e.g. in [OrderStatusChip]
+
   Color get red;
   Color get yellow;
+  Color get paleYellow;
+  Color get deepYellow;
   Color get orange;
   Color get lightOrange;
+
   Color get green;
+  Color get paleGreen;
+
   Color get dividerColor;
 
   /// [blue] is the primary Color (text, buttons)
@@ -31,6 +38,7 @@ abstract class BaseColors {
   /// [lightBlue] and [darkBlue] are used for backgrounds
   Color get blue;
   Color get altBlue;
+  Color get paleBlue;
   Color get lightBlue;
   Color get darkBlue;
 }

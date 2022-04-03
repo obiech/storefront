@@ -277,4 +277,33 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get yourOrderWillArriveIn => 'Your order will arrive in';
+
+  /// Order History Page
+  @override
+  String get myOrders => 'My Orders';
+
+  @override
+  String get otherProducts => 'other products';
+
+  @override
+  String get totalSpent => 'Total Spent';
+
+  /// Order Status
+  @override
+  String get arrived => 'Arrived';
+
+  @override
+  String get awaitingPayment => 'Awaiting Payment';
+
+  @override
+  String get inProcess => 'Being Processed';
+
+  @override
+  String get inDelivery => 'In Delivery';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get unspecified => 'Unspecified';
 }

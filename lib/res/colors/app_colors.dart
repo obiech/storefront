@@ -32,11 +32,19 @@ class AppColors implements BaseColors {
   @override
   Color get yellow => const Color(0xFFFFF3E8);
   @override
+  Color get paleYellow => const Color(0xFFFFF8DA);
+  @override
+  Color get deepYellow => const Color(0xFFED9C00);
+  @override
   Color get orange => const Color(0xFFFF6712);
   @override
   Color get lightOrange => const Color(0xFFFFF5EC);
+
   @override
   Color get green => const Color(0xFF009E3D);
+  @override
+  Color get paleGreen => const Color(0xFFE4F5ED);
+
   @override
   Color get dividerColor => const Color(0xFFE6EDF5);
 
@@ -44,6 +52,8 @@ class AppColors implements BaseColors {
   Color get blue => const Color(0xFF1574FF);
   @override
   Color get altBlue => const Color(0xFF5F97F6);
+  @override
+  Color get paleBlue => const Color(0xFFDBEAFF);
   @override
   Color get lightBlue => const Color(0xFFE8F1FF);
   @override
