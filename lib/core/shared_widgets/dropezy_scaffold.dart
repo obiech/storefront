@@ -79,7 +79,6 @@ class DropezyScaffold extends StatelessWidget {
             ? Container(
                 margin: EdgeInsets.only(
                   left: res.dimens.spacingLarge,
-                  right: res.dimens.spacingMiddle,
                 ),
                 child: _backButton(context),
               )
