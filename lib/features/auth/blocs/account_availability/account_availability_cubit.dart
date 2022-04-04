@@ -1,8 +1,8 @@
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../core/network/grpc/customer/customer.pbgrpc.dart';
 import '../../../../core/services/prefs/i_prefs_repository.dart';
 import 'account_availability_state.dart';
 

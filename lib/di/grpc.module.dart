@@ -1,9 +1,9 @@
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../core/config/grpc_config.dart';
-import '../core/network/grpc/customer/customer.pbgrpc.dart';
 import '../core/network/grpc/interceptors/auth/index.dart';
 import '../features/auth/domain/services/user_credentials_storage.dart';
 

@@ -1,8 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/core/network/grpc/customer/customer.pbgrpc.dart';
 import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
 import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
 import 'package:storefront_app/features/auth/index.dart';

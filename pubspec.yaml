@@ -30,6 +30,10 @@ dependencies:
   cached_network_image: ^3.2.0
   cupertino_icons: ^1.0.2
   device_info_plus: ^3.2.2
+  dropezy_proto:
+    git:
+      url: https://github.com/dropezy/proto.git
+      ref: 05d639e
   equatable: ^2.0.3
   firebase_auth: ^3.3.7
   firebase_core: ^1.12.0

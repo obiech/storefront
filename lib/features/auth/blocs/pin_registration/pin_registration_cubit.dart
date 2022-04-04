@@ -1,8 +1,8 @@
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/network/grpc/customer/customer.pbgrpc.dart';
 import '../../domain/services/user_credentials_storage.dart';
 import 'pin_registration_state.dart';
 
@@ -63,10 +63,10 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
       fingerprint: fingerprint,
     );
 
-    final request = SavePINRequest(device: device);
+    final request = RegisterDeviceRequest(device: device);
 
     try {
-      await customerServiceClient.savePIN(request);
+      await customerServiceClient.registerDevice(request);
 
       emit(const PinRegistrationState(status: PinRegistrationStatus.success));
     } on GrpcError catch (e) {

@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,7 +10,6 @@ import '../features/cart_checkout/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
 import 'config/auth_config.dart';
-import 'network/grpc/customer/customer.pbgrpc.dart';
 import 'services/device/device_fingerprint_provider.dart';
 import 'services/device/device_name_provider.dart';
 

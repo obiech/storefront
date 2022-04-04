@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
 
-import '../../../../core/network/grpc/customer/customer.pbgrpc.dart';
 import '../../domain/repository/phone_verification_result.dart';
 import '../../domain/services/auth_service.dart';
 import 'account_verification_state.dart';

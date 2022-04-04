@@ -267,6 +267,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.1"
+  dropezy_proto:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "05d639e"
+      resolved-ref: "05d639ee5c7fd83ba0dbc59d056c9b02eedfea0f"
+      url: "https://github.com/dropezy/proto.git"
+    source: git
+    version: "0.0.1"
   equatable:
     dependency: "direct main"
     description:

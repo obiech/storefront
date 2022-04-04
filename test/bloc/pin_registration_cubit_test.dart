@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/core/network/grpc/customer/customer.pbgrpc.dart';
 import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/auth/index.dart';
@@ -53,12 +53,11 @@ void main() {
       pin: fakePin,
     );
 
-    final SavePINResponse dummySavePinResponse =
-        SavePINResponse(device: device);
+    final dummyRegisterDeviceResponse = RegisterDeviceResponse(device: device);
 
     setUp(() {
-      registerFallbackValue(SavePINRequest(device: device));
-      registerFallbackValue(dummySavePinResponse);
+      registerFallbackValue(RegisterDeviceRequest(device: device));
+      registerFallbackValue(dummyRegisterDeviceResponse);
       customerServiceClient = MockCustomerServiceClient();
 
       deviceFingerprintProvider = MockDeviceFingerprintProvider();
@@ -92,7 +91,7 @@ void main() {
           _mockUserCredentials(userCredentialsStorage, fakeUserCredentials);
 
           // Mock SavePIN request
-          final expectedRequest = SavePINRequest(
+          final expectedRequest = RegisterDeviceRequest(
             device: Device(
               fingerprint: fakeFingerprint,
               name: fakeDeviceName,
@@ -102,7 +101,7 @@ void main() {
 
           _mockSavePINRequest(
             customerServiceClient,
-            (_) => MockResponseFuture.value(dummySavePinResponse),
+            (_) => MockResponseFuture.value(dummyRegisterDeviceResponse),
           );
 
           // Initialize cubit and call registerPin
@@ -116,7 +115,7 @@ void main() {
 
           // Ensure SavePIN request uses informaton provided above
           verify(
-            () => customerServiceClient.savePIN(
+            () => customerServiceClient.registerDevice(
               expectedRequest,
               options: any(named: 'options'),
             ),
@@ -136,7 +135,7 @@ void main() {
             // Mock SavePIN request
             _mockSavePINRequest(
               customerServiceClient,
-              (_) => MockResponseFuture.value(dummySavePinResponse),
+              (_) => MockResponseFuture.value(dummyRegisterDeviceResponse),
             );
 
             return _buildCubit();
@@ -159,7 +158,7 @@ void main() {
             // Mock SavePIN request
             _mockSavePINRequest(
               customerServiceClient,
-              (_) => MockResponseFuture.value(dummySavePinResponse),
+              (_) => MockResponseFuture.value(dummyRegisterDeviceResponse),
             );
 
             return _buildCubit();
@@ -185,7 +184,7 @@ void main() {
             // Mock SavePIN request
             _mockSavePINRequest(
               customerServiceClient,
-              (_) => MockResponseFuture<SavePINResponse>.error(
+              (_) => MockResponseFuture<RegisterDeviceResponse>.error(
                 GrpcError.unknown('Dummy Error'),
               ),
             );
@@ -217,7 +216,7 @@ void main() {
             // Mock SavePIN request
             _mockSavePINRequest(
               customerServiceClient,
-              (_) => MockResponseFuture<SavePINResponse>.error(
+              (_) => MockResponseFuture<RegisterDeviceResponse>.error(
                 Exception('Dummy Error'),
               ),
             );
@@ -258,8 +257,8 @@ void _mockUserCredentials(
 
 void _mockSavePINRequest(
   CustomerServiceClient mockClient,
-  ResponseFuture<SavePINResponse> Function(Invocation) mockCallback,
+  ResponseFuture<RegisterDeviceResponse> Function(Invocation) mockCallback,
 ) {
-  when(() => mockClient.savePIN(any(), options: any(named: 'options')))
+  when(() => mockClient.registerDevice(any(), options: any(named: 'options')))
       .thenAnswer(mockCallback);
 }
