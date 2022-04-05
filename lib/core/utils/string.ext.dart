@@ -1,29 +1,32 @@
 /// Extension methods for [String] data
 extension StringX on String {
   /// Takes a [String] [this] and converts it to IDR currency
-  String toCurrency() {
-    return 'Rp ${toIDRFormat()}';
+  /// by applying [toIDRFormat] and prefixing the result with 'Rp '
+  String toCurrency([String fallback = '0']) {
+    return 'Rp ${toIDRFormat(fallback)}';
   }
 
   /// Takes a [String] [this] and converts it to IDR format
-  String toIDRFormat() {
-    if (!isNumeric()) return '0,00';
+  /// i.e. with period '.' as thousands separator
+  /// and comma ',' as decimal separator
+  ///
+  /// Omits cents component if last two digits are zero
+  ///
+  /// [fallback] is returned if string is malformed
+  String toIDRFormat([String fallback = '0']) {
+    // String is malformed
+    if (!isNumeric() || length < 3) return fallback;
 
-    switch (length) {
-      case 1:
-        return '0,0$this';
-      case 2:
-        return '0,$this';
-      default:
+    /// Pick last two digits
+    final cents = substring(length - 2, length);
 
-        /// Pick last two digits
-        final cents = substring(length - 2, length);
+    /// Pick the rest of the digits & format them
+    final body = substring(0, length - 2).formatNumber('.');
 
-        /// Pick the rest of the digits & format them
-        final body = substring(0, length - 2).formatNumber('.');
+    /// Omit cents if it's 0
+    if (cents == '00') return body;
 
-        return '$body,$cents';
-    }
+    return '$body,$cents';
   }
 
   /// Takes in a string number and formats it using separator

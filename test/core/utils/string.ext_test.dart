@@ -25,15 +25,40 @@ void main() {
     // assert that hundreds is formatted
     amount = '15025';
     expect(amount.toCurrency(), 'Rp 150,25');
-
-    // assert that cents are formatted
-    amount = '15';
-    expect(amount.toCurrency(), 'Rp 0,15');
   });
 
-  test('should return Rp 0,00 for non numeric amount', () async {
-    const amount = 'abcd';
-    expect(amount.toCurrency(), 'Rp 0,00');
+  test(
+    'should return fallback value if string length is less than 3 '
+    'or is not a numerical value',
+    () {
+      const nonNumeric = 'abcd';
+
+      // Test default fallback
+      expect(nonNumeric.toCurrency(), 'Rp 0');
+      expect(nonNumeric.toIDRFormat(), '0');
+
+      // Test fallback values
+      expect(nonNumeric.toCurrency('N/A'), 'Rp N/A');
+      expect(nonNumeric.toIDRFormat('N/A'), 'N/A');
+
+      const shortString = '01';
+
+      // Test default fallback
+      expect(shortString.toCurrency(), 'Rp 0');
+      expect(shortString.toIDRFormat(), '0');
+
+      // Test fallback values
+      expect(shortString.toCurrency('N/A'), 'Rp N/A');
+      expect(shortString.toIDRFormat('N/A'), 'N/A');
+    },
+  );
+
+  test('should not return cents component if cents is zero', () {
+    const noCents = '10000';
+    expect(noCents.toCurrency(), 'Rp 100');
+
+    const hasCents = '10031';
+    expect(hasCents.toCurrency(), 'Rp 100,31');
   });
 
   group('[String].commas()', () {

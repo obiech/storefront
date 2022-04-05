@@ -81,14 +81,14 @@ void main() {
       /// Price display tests
       group('Checkout Price', () {
         testWidgets(
-            'should display price in Rupiahs with 2dp for whole numbers',
+            'should display price in Rupiahs with 0dp for whole numbers',
             (WidgetTester tester) async {
           // Price
           await _testWidgetForAmount(
             tester,
             key: priceKey,
             price: '10800',
-            result: 'Rp 108,00',
+            result: 'Rp 108',
           );
         });
 
@@ -114,14 +114,14 @@ void main() {
       /// Discount display tests
       group('Checkout Discount', () {
         testWidgets(
-            'should display discount in Rupiahs with 2dp for whole numbers',
+            'should display discount in Rupiahs with 0dp for whole numbers',
             (WidgetTester tester) async {
           // Discount
           await _testWidgetForAmount(
             tester,
             key: discountKey,
             discount: '10800',
-            result: 'Rp 108,00',
+            result: 'Rp 108',
           );
         });
 
@@ -272,7 +272,7 @@ void main() {
             'show points display with right message',
             (WidgetTester tester) async {
           /// Load Checkout sticky bottom sheet
-          const pointsWon = '50';
+          const pointsWon = '5000';
           await _pumpTestWidget(tester, price: '12000', points: pointsWon);
           await tester.pumpAndSettle();
 
