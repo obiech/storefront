@@ -1,26 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../widgets/widgets.dart';
-
-/// Displayed when an order is successfully completed
+/// Displayed when an order is failed
 ///
 /// Redirect comes from deeplink
-class OrderSuccessfulPage extends StatefulWidget {
+class OrderFailurePage extends StatefulWidget {
   /// The order id from gojek app
   final String orderId;
 
-  const OrderSuccessfulPage({Key? key, required this.orderId})
-      : super(key: key);
-  static const routeName = '/order/gopay/finish';
+  const OrderFailurePage({Key? key, required this.orderId}) : super(key: key);
+  static const routeName = '/order/gopay/failure';
 
   @override
-  State<OrderSuccessfulPage> createState() => _OrderSuccessfulPageState();
+  State<OrderFailurePage> createState() => _OrderFailurePageState();
 }
 
-class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
+class _OrderFailurePageState extends State<OrderFailurePage> {
   @override
   void initState() {
     /// TODO(obella465): Check order [widget.orderId] status with backend
@@ -32,13 +27,13 @@ class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
     final res = context.res;
     return DropezyScaffold(
       title: Text(
-        res.strings.orderSuccessful,
+        res.strings.orderFailed,
         style: res.styles.button,
       ),
       useWhiteBody: true,
       centerTitle: true,
       childPadding: 0,
-      bodyColor: res.colors.blue,
+      bodyColor: res.colors.red,
       child: Stack(
         children: [
           Container(
@@ -52,25 +47,24 @@ class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Ngeng... ${res.strings.yourOrderWillArriveIn}',
+                  res.strings.orderFailedMessage,
+                  textAlign: TextAlign.center,
                   style: res.styles.caption1.copyWith(
                     fontWeight: FontWeight.w700,
                     color: res.colors.white,
-                  ),
-                ),
-                Text(
-                  /// TODO(obella465): Pick delivery time from backend
-                  res.strings.minutes(20),
-                  style: res.styles.caption1.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: res.colors.white,
-                    fontSize: 36,
                   ),
                 ),
                 SizedBox(
                   height: res.dimens.spacingMxlarge,
                 ),
-                Image.asset('assets/images/order_success.png')
+                CircleAvatar(
+                  radius: MediaQuery.of(context).size.width / 2 - 10,
+                  backgroundColor: res.colors.grey3,
+                  child: Text(
+                    'ORDER FAILED IMAGE',
+                    style: res.styles.title.copyWith(color: res.colors.white),
+                  ),
+                )
               ],
             ),
           ),
@@ -88,7 +82,7 @@ class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  /*Text(
                     res.strings.onThisOrderYouHaveSuccessfully,
                     style: res.styles.subtitle,
                   ),
@@ -107,14 +101,14 @@ class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
                       leading: res.strings.savedMoney,
                       trailing: '800000'.toCurrency(),
                     ),
-                  ),
+                  ),*/
                   const SizedBox(
                     height: 12,
                   ),
                   SizedBox(
                     width: double.maxFinite,
                     child: DropezyButton.primary(
-                      label: res.strings.viewOrderDetails,
+                      label: res.strings.retry,
                       textStyle: res.styles.button,
                       onPressed: () {
                         /// TODO(obella465): Pass [widget.orderId] to page to view order details

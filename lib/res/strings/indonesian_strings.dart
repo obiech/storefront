@@ -305,4 +305,14 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get unspecified => 'Tidak Diketahui';
+
+  @override
+  String get orderFailed => 'Pesanan Gagal!';
+
+  @override
+  String get orderFailedMessage =>
+      'Pesanan Anda tidak berhasil\n Periksa saldo Anda dan coba lagi.';
+
+  @override
+  String get retry => 'Coba lagi';
 }

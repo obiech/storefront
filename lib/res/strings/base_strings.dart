@@ -92,6 +92,11 @@ abstract class BaseStrings {
   String get pointsEarned;
   String get viewOrderDetails;
 
+  /// Order failed
+  String get orderFailed;
+  String get orderFailedMessage;
+  String get retry;
+
   /// Order History Page
   String get myOrders;
   String get otherProducts;

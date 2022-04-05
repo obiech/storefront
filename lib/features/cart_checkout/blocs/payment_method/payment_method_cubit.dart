@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/models/payment_method.dart';
-import '../../domain/repository/i_payment_method_repository.dart';
+import '../../domain/repository/i_payment_repository.dart';
 
 part 'payment_method_state.dart';
 
-@lazySingleton
+@injectable
 class PaymentMethodCubit extends Cubit<PaymentMethodState> {
-  final IPaymentMethodRepository paymentMethodRepository;
+  final IPaymentRepository paymentMethodRepository;
 
-  PaymentMethodCubit(this.paymentMethodRepository) : super(InitialState()) {
+  PaymentMethodCubit(this.paymentMethodRepository)
+      : super(InitialPaymentMethodState()) {
     queryPaymentMethods();
   }
 

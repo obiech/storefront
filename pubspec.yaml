@@ -46,6 +46,7 @@ dependencies:
   geolocator: ^8.1.1
   get_it: ^7.2.0
   grpc: ^3.0.2
+  http: ^0.13.4 # TODO - Remove once checkout is replaced with grpc
   injectable: ^1.5.3
   modal_bottom_sheet: ^2.0.0
   pin_code_fields: ^7.3.0

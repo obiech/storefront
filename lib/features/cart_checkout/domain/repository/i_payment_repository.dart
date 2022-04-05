@@ -1,7 +1,10 @@
-import 'package:storefront_app/features/cart_checkout/domain/models/payment_method.dart';
+import '../domains.dart';
 
 /// Repo structure for payment methods repository
-abstract class IPaymentMethodRepository {
+abstract class IPaymentRepository {
   /// Get list of all payment methods
   Future<List<PaymentMethod>> getPaymentMethods();
+
+  /// Checkout Cart
+  Future<String> checkoutPayment(PaymentMethod method);
 }

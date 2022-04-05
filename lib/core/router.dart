@@ -36,11 +36,35 @@ Route? appRouter(RouteSettings settings) {
       return _buildRoute(
         const CartCheckoutPage(),
       );
-    case OrderSuccessfulPage.routeName:
-      return _buildRoute(const OrderSuccessfulPage());
     case OrderHistoryScreen.routeName:
       return _buildRoute(_buildOrderHistoryScreen());
     default:
+
+      /// Handle order success deeplink
+      ///
+      /// /order/gopay/finish?order_id=77864048-c83e-4e48-9c32-f4c987be0b41&result=success
+      /// With auto_route, this will be replaced with https://pub.dev/packages/auto_route#query-parameters
+      if ((settings.name ?? '').contains(OrderSuccessfulPage.routeName)) {
+        // Extract order id and status
+        final orderResult = Uri.parse(settings.name ?? '').queryParameters;
+        final orderId = orderResult['order_id'];
+        final orderStatus = orderResult['result'];
+        if (orderId == null || orderStatus == null) return null;
+        if (orderStatus == 'success') {
+          return _buildRoute(
+            OrderSuccessfulPage(
+              orderId: orderId,
+            ),
+          );
+        } else {
+          return _buildRoute(
+            OrderFailurePage(
+              orderId: orderId,
+            ),
+          );
+        }
+      }
+
       assert(false, "Route '${settings.name}' is not implemented.");
       return null;
   }

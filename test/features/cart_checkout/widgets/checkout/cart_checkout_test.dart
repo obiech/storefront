@@ -14,7 +14,7 @@ import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 
 void main() {
-  late IPaymentMethodRepository _paymentMethodsRepository;
+  late IPaymentRepository _paymentMethodsRepository;
   late PaymentMethodCubit _cubit;
   setUp(() {
     _paymentMethodsRepository = MockPaymentMethodRepository();
@@ -32,8 +32,16 @@ void main() {
         String? preferredPaymentMethod,
       }) =>
           tester.pumpWidget(
-            BlocProvider(
-              create: (context) => _cubit,
+            MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => _cubit,
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      PaymentCheckoutCubit(_paymentMethodsRepository),
+                ),
+              ],
               child: MaterialApp(
                 home: Scaffold(
                   body: CartCheckout(

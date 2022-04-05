@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 
 import '../../../core/shared_widgets/dropezy_scaffold.dart';
+import '../../../di/injection.dart';
 import '../widgets/widgets.dart';
 
 class CartCheckoutPage extends StatelessWidget {
@@ -10,21 +13,24 @@ class CartCheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropezyScaffold.textTitle(
-      title: 'Konfirmasi Belanja',
-      childPadding: 0,
-      child: Column(
-        children: const [
-          Expanded(
-            child: Center(child: Text('Checkout')),
-          ),
-          CartCheckout(
-            price: '10300',
-            discount: '12300',
-            preferredPayment: 'OVO',
-            points: '100',
-          )
-        ],
+    return BlocProvider(
+      create: (context) => getIt<PaymentCheckoutCubit>(),
+      child: DropezyScaffold.textTitle(
+        title: 'Konfirmasi Belanja',
+        childPadding: 0,
+        child: Column(
+          children: const [
+            Expanded(
+              child: Center(child: Text('Checkout')),
+            ),
+            CartCheckout(
+              price: '10300',
+              discount: '12300',
+              preferredPayment: 'OVO',
+              points: '100',
+            )
+          ],
+        ),
       ),
     );
   }

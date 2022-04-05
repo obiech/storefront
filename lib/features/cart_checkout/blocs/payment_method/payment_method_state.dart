@@ -8,7 +8,7 @@ abstract class PaymentMethodState extends Equatable {
 }
 
 /// Default Payment methods state
-class InitialState extends PaymentMethodState {}
+class InitialPaymentMethodState extends PaymentMethodState {}
 
 /// When [PaymentMethod]s are being loaded
 /// from cache or backend

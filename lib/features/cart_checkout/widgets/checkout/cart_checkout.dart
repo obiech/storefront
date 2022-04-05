@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../../../res/resources.dart';
-import '../../index.dart';
 import '../payment_method/selector.dart';
+import 'checkout_button.dart';
 import 'keys.dart';
 
 /// A checkout widget for the cart
@@ -83,41 +83,9 @@ class CartCheckout extends StatelessWidget {
                 const SizedBox(
                   width: 12,
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 9.5),
-                  child: DropezyButton.primary(
-                    key: const ValueKey(CheckoutKeys.buy),
-                    label: 'Bayar',
-                    textStyle: res.styles.button.copyWith(fontSize: 14),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 10,
-                    ),
-                    onPressed: () async {
-                      // TODO - Launch payment web-link
-                      Navigator.of(context).pushNamed(
-                        OrderSuccessfulPage.routeName,
-                      );
-                      /*try {
-                        final opened = await launch(
-                          'gojek://gopay/merchanttransfer?tref=1509110800474199656LMVO&amount=10000&activity=GP:RR&callback_url=someapps://callback?order_id=SAMPLE-ORDER-ID-01',
-                        );
-
-                        if (!opened) {
-                          throw PlatformException(code: 'ACTIVITY_NOT_FOUND');
-                        }
-                      } on PlatformException catch (e) {
-                        if (e.code == 'ACTIVITY_NOT_FOUND') {
-                          await launch(
-                            Platform.isAndroid
-                                ? 'https://play.google.com/store/apps/details?id=com.gojek.app'
-                                : 'https://apps.apple.com/us/app/gojek/id944875099',
-                          );
-                        }
-                      }*/
-                    },
-                  ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 9.5),
+                  child: CheckoutButton(),
                 )
               ],
             ),

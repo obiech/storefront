@@ -9,7 +9,7 @@ import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 
 void main() {
-  late IPaymentMethodRepository _paymentMethodsRepository;
+  late IPaymentRepository _paymentMethodsRepository;
   late PaymentMethodCubit _cubit;
   setUp(() {
     _paymentMethodsRepository = MockPaymentMethodRepository();
