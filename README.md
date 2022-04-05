@@ -6,7 +6,16 @@ Dropezy Storefront mobile app developed in Flutter.
 
 ![coverage](coverage_badge.svg)
 
+In order to run the app on your local development machine, make sure you have performed these steps:
+
+1) Setting up a Github Personal Access Token as described in [Developer Onboarding doc](https://dropezy.atlassian.net/wiki/spaces/DROPEZY/pages/4489217/Developer+Onboarding#Access-Token). This step is necessary even if you are using SSH keys, because there are dependencies on other Dropezy Dart packages which uses HTTPS connection. (see `pubspec.yaml`)
+2) Perform Firebase Setup and Environment Variables as described below.
+3) Additionally if you need to test Firebase Auth features, we recommend using [Firebase Auth Emulator](https://dropezy.atlassian.net/wiki/spaces/STOR/pages/6619165/Firebase+Auth+Emulator).
+
+
 ## Firebase Setup
+
+Create a new project on your Firebase Console for development purposes.
 
 Setup is done using manual installation as described on [FlutterFire docs](https://firebase.flutter.dev/docs/manual-installation).
 
@@ -56,22 +65,6 @@ We have set up Git hooks to prevent extra whitespace and other possible mistakes
 ```bash
   cp ./hooks/pre-push.example ./.git/hooks/pre-push
 ```
-
-## Firebase Emulator
-
-To be able to use the firebase emulator for development authentication, you'll have to start it via `docker-compose`
-
-- Make sure you have docker installed.
-- Go to the `tools/emulator` folder.
-- Copy the `.env-example` file to setup environment variables for the emulator.
-
-```bash
-cp .env-example .env
-```
-
-- Set the `GCP_PROJECT` value to your firebase **project id**
-- Start the emulator with `docker-compose up -d`
-- Open `http://0.0.0.0:4000` on your browser to ensure it's on.
 
 ## Using res Folder
 
