@@ -3,9 +3,12 @@ import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:uuid/uuid.dart';
 
 import '../core/config/grpc_config.dart';
 import '../core/network/grpc/interceptors/auth/index.dart';
+import '../core/network/grpc/interceptors/device_info/device_info_interceptor.dart';
+import '../core/services/device/repository/_exporter.dart';
 import '../features/auth/domain/services/user_credentials_storage.dart';
 
 /// GRPC Dependency Injection Module
@@ -25,6 +28,18 @@ abstract class GrpcModule {
       AuthInterceptor(
         userCredentialsStorage: userCredentialsStorage,
         whitelistedPaths: authWhitelistedPaths,
+      );
+
+  /// Creates a gRPC [DeviceInterceptor] responsible for sending
+  /// metadata of device information in every gRPC requests
+  @lazySingleton
+  DeviceInterceptor deviceInterceptor(
+    IUserDeviceInfoRepository userDeviceInfoRepository,
+    Uuid uuid,
+  ) =>
+      DeviceInterceptor(
+        userDeviceInfoProvider: userDeviceInfoRepository,
+        uuid: uuid,
       );
 
   /// Create a channel for gRPC connection
@@ -52,11 +67,13 @@ abstract class GrpcModule {
   CustomerServiceClient serviceClient(
     ClientChannel channel,
     AuthInterceptor authInterceptor,
+    DeviceInterceptor deviceInterceptor,
   ) {
     return CustomerServiceClient(
       channel,
       interceptors: [
         authInterceptor,
+        deviceInterceptor,
       ],
     );
   }
@@ -68,11 +85,13 @@ abstract class GrpcModule {
   OrderServiceClient orderClient(
     ClientChannel channel,
     AuthInterceptor authInterceptor,
+    DeviceInterceptor deviceInterceptor,
   ) {
     return OrderServiceClient(
       channel,
       interceptors: [
         authInterceptor,
+        deviceInterceptor,
       ],
     );
   }

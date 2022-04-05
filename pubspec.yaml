@@ -29,6 +29,7 @@ environment:
 dependencies:
   cached_network_image: ^3.2.0
   cupertino_icons: ^1.0.2
+  dart_ipify: ^1.1.1
   device_info_plus: ^3.2.2
   dropezy_proto:
     git:
@@ -50,6 +51,7 @@ dependencies:
   injectable: ^1.5.3
   intl: ^0.17.0
   modal_bottom_sheet: ^2.0.0
+  package_info_plus: ^1.4.0
   pin_code_fields: ^7.3.0
   protobuf: ^2.0.1
   shared_preferences: ^2.0.13
