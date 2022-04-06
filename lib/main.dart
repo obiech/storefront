@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/features/home/blocs/categories_one/cubit/categories_one_cubit.dart';
 
 import 'app.dart';
 import 'core/core.dart';
@@ -49,6 +50,9 @@ Future<void> main() async {
         ),
         BlocProvider(
           create: (_) => getIt<OrderHistoryCubit>()..fetchUserOrderHistory(),
+        ),
+        BlocProvider<CategoriesOneCubit>(
+          create: (_) => getIt<CategoriesOneCubit>()..fetchCategoriesOne(),
         )
       ],
       child: AppWidget(
