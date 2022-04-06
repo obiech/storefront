@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +8,6 @@ import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/keys.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/keys.dart';
-import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/widgets.dart';
 
 import '../../../../../test_commons/utils/payment_methods.dart';
@@ -160,7 +160,7 @@ void main() {
 
       /// Payment method selection tests
       group('Payment method selector', () {
-        late List<PaymentMethod> paymentMethods;
+        late List<PaymentChannel> paymentMethods;
 
         setUp(() {
           /// Load sample payment methods
@@ -195,12 +195,13 @@ void main() {
 
           expect(
             (paymentSelectorLogo.image as AssetImage).assetName,
-            paymentMethods.first.image,
+            paymentMethods.first.paymentInfo().image,
           );
         });
 
+        /// TODO(obella465): Re-enable when we have more than one payment method
         /// Test Selecting changing payment method
-        testWidgets('should safely toggle payment methods',
+        /*testWidgets('should safely toggle payment methods',
             (WidgetTester tester) async {
           /// Load Checkout sticky bottom sheet
           await _pumpTestWidget(tester, price: '12000');
@@ -247,9 +248,9 @@ void main() {
 
           expect(
             (paymentSelectorLogo.image as AssetImage).assetName,
-            secondPaymentMethod.image,
+            secondPaymentMethod.paymentInfo().image,
           );
-        });
+        });*/
       });
 
       /// Points display

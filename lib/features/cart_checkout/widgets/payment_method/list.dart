@@ -14,9 +14,9 @@ class PaymentMethodList extends StatelessWidget {
   /// [BlocProvider] access
   final PaymentMethodCubit cubit;
 
-  /// When a [PaymentMethod] is selected,
+  /// When [PaymentMethodDetails] is selected,
   /// this callback is triggered
-  final Function(PaymentMethod paymentMethod)? onChange;
+  final Function(PaymentMethodDetails paymentMethod)? onChange;
 
   const PaymentMethodList({
     Key? key,
@@ -69,8 +69,12 @@ class PaymentMethodList extends StatelessWidget {
                         /// When there is an error when loading payment methods
                         ///
                         /// TODO - Request design team for proper design
-                        return Center(
-                          child: Text(state.message),
+                        return DropezyEmptyState(
+                          message: state.message,
+                          showRetry: true,
+                          onRetry: () => context
+                              .read<PaymentMethodCubit>()
+                              .queryPaymentMethods(),
                         );
                       } else if (state is LoadedPaymentMethods &&
                           state.methods.isNotEmpty) {

@@ -1,15 +1,12 @@
-import 'dart:convert';
-
-import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
-
-import '../fixtures/fixture_reader.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 
 /// Loads sample payment methods for tests
 ///
 /// From fixtures
-List<PaymentMethod> get samplePaymentMethods =>
-    (jsonDecode(fixture('checkout/payment_methods.json')) as List<dynamic>)
-        .map(
-          (json) => PaymentMethod.fromJson(json as Map<String, dynamic>),
-        )
-        .toList();
+List<PaymentChannel> get samplePaymentMethods => [
+      PaymentChannel(
+        paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
+        paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_DEEPLINK,
+        status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
+      )
+    ];

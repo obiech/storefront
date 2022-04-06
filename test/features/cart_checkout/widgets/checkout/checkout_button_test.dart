@@ -26,7 +26,7 @@ void main() {
 
       _paymentMethodsCubit = PaymentMethodCubit(_repository);
 
-      registerFallbackValue(samplePaymentMethods.first);
+      registerFallbackValue(samplePaymentMethods.first.paymentMethod);
     });
 
     Future<void> _pumpTestWidget(WidgetTester tester) => tester.pumpWidget(

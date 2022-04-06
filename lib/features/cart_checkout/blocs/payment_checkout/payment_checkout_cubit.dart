@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/models/payment_method.dart';
-import '../../domain/repository/i_payment_repository.dart';
+import '../../domain/domains.dart';
 
 part 'payment_checkout_state.dart';
 
@@ -14,13 +13,14 @@ class PaymentCheckoutCubit extends Cubit<PaymentCheckoutState> {
   PaymentCheckoutCubit(this.paymentRepository)
       : super(InitialPaymentCheckoutState());
 
-  /// Query [PaymentCheckout] end-point
+  /// Query [PaymentMethodDetails] end-point
   /// for checkout link
-  Future<void> checkoutPayment(PaymentMethod method) async {
+  Future<void> checkoutPayment(PaymentMethodDetails paymentMethod) async {
     emit(LoadingPaymentCheckout());
 
     try {
-      final checkoutLink = await paymentRepository.checkoutPayment(method);
+      final checkoutLink =
+          await paymentRepository.checkoutPayment(paymentMethod.method);
       emit(LoadedPaymentCheckout(checkoutLink));
     } catch (_) {
       emit(const ErrorLoadingPaymentCheckout('Error checking out'));

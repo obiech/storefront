@@ -1,4 +1,5 @@
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
+import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
@@ -53,6 +54,22 @@ abstract class GrpcModule {
     AuthInterceptor authInterceptor,
   ) {
     return CustomerServiceClient(
+      channel,
+      interceptors: [
+        authInterceptor,
+      ],
+    );
+  }
+
+  /// Creates a gRPC [Client] responsible for communicating with
+  /// storefront-backend Order Service,
+  ///
+  /// and registers it to Service Locator [GetIt].
+  OrderServiceClient orderClient(
+    ClientChannel channel,
+    AuthInterceptor authInterceptor,
+  ) {
+    return OrderServiceClient(
       channel,
       interceptors: [
         authInterceptor,

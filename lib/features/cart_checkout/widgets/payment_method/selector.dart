@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,7 +12,7 @@ import 'list.dart';
 /// Helps toggle different payment providers
 class PaymentMethodSelector extends StatelessWidget {
   /// Callback to handle payment method change
-  final Function(PaymentMethod paymentMethod) onChange;
+  final Function(PaymentMethodDetails paymentMethod) onChange;
 
   const PaymentMethodSelector({Key? key, required this.onChange})
       : super(key: key);
@@ -41,7 +41,7 @@ class PaymentMethodSelector extends StatelessWidget {
               final paymentMethodCubit = context.read<PaymentMethodCubit>();
               return PaymentMethodList(
                 cubit: paymentMethodCubit,
-                onChange: (PaymentMethod paymentMethod) {
+                onChange: (PaymentMethodDetails paymentMethod) {
                   paymentMethodCubit.setPaymentMethod(paymentMethod);
                   Navigator.of(context).pop();
                 },

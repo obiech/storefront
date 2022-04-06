@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -30,7 +31,7 @@ void main() {
             ),
           );
 
-      late List<PaymentMethod> paymentMethods;
+      late List<PaymentChannel> paymentMethods;
 
       setUp(() {
         /// Load sample payment methods
@@ -99,7 +100,9 @@ void main() {
             ),
           ) as Image;
 
-          expect((methodLogo.image as AssetImage).assetName, method.image);
+          final info = method.paymentInfo();
+
+          expect((methodLogo.image as AssetImage).assetName, info.image);
 
           /// Payment method title is displayed
           final methodTitle = tester.firstWidget(
@@ -109,7 +112,7 @@ void main() {
             ),
           ) as Text;
 
-          expect(methodTitle.data, method.title);
+          expect(methodTitle.data, info.title);
         }
       });
     },

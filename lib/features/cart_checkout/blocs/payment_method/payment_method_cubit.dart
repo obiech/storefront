@@ -2,8 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../domain/models/payment_method.dart';
-import '../../domain/repository/i_payment_repository.dart';
+import '../../domain/domains.dart';
 
 part 'payment_method_state.dart';
 
@@ -16,14 +15,15 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
     queryPaymentMethods();
   }
 
-  /// Query [PaymentMethod]s from cache or end-point
+  /// Query [PaymentMethodDetails]s from cache or end-point
   Future<void> queryPaymentMethods() async {
     emit(LoadingPaymentMethods());
 
     try {
       final methods = await paymentMethodRepository.getPaymentMethods();
       if (methods.isNotEmpty) {
-        emit(LoadedPaymentMethods(methods, methods.first));
+        final paymentMethods = methods.toPaymentDetails();
+        emit(LoadedPaymentMethods(paymentMethods, paymentMethods.first));
       } else {
         emit(const ErrorLoadingPaymentMethods('No Payment Methods'));
       }
@@ -32,8 +32,8 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
     }
   }
 
-  /// Set the active [PaymentMethod]
-  void setPaymentMethod(PaymentMethod paymentMethod) {
+  /// Set the active [PaymentMethodDetails]
+  void setPaymentMethod(PaymentMethodDetails paymentMethod) {
     if (state is LoadedPaymentMethods) {
       emit(
         LoadedPaymentMethods(

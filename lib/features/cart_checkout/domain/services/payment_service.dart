@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
@@ -10,47 +11,27 @@ import '../domains.dart';
 @LazySingleton(as: IPaymentRepository)
 class PaymentService implements IPaymentRepository {
   final Uuid uuid;
+  final OrderServiceClient orderServiceClient;
 
-  PaymentService(this.uuid);
+  PaymentService(this.uuid, this.orderServiceClient);
 
   @override
-  Future<List<PaymentMethod>> getPaymentMethods() async {
-    // TODO: query Payment Methods via grpc
-    return const [
-      PaymentMethod(
-        title: 'Go Pay',
-        tag: 'go_pay',
-        image: 'assets/icons/providers/go_pay.png',
-        link: 'gopay.com',
-        type: PaymentMethodType.EWallet,
-      ),
-      PaymentMethod(
-        title: 'OVO',
-        tag: 'ovo',
-        image: 'assets/icons/providers/ovo.png',
-        link: 'ovo.com',
-        type: PaymentMethodType.EWallet,
-      ),
-      PaymentMethod(
-        title: 'DANA',
-        tag: 'dana',
-        image: 'assets/icons/providers/dana.png',
-        link: 'ovo.com',
-        type: PaymentMethodType.EWallet,
-      ),
-      PaymentMethod(
-        title: 'ShopeePay',
-        tag: 'shopee_pay',
-        image: 'assets/icons/providers/shopeepay.png',
-        link: 'shopeepay.com',
-        type: PaymentMethodType.EWallet,
-      )
-    ];
+  Future<List<PaymentChannel>> getPaymentMethods() async {
+    final paymentMethods = await orderServiceClient
+        .getAvailablePaymentMethod(GetAvailablePaymentMethodRequest());
+
+    return paymentMethods.paymentMethods
+        .where(
+          (channel) =>
+              channel.status ==
+              PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
+        )
+        .toList();
   }
 
   @override
   Future<String> checkoutPayment(PaymentMethod method) async {
-    if (method.tag == 'go_pay') {
+    if (method == PaymentMethod.PAYMENT_METHOD_GOPAY) {
       // TODO - Replace with grpc call for checkout
       final resp = await http.post(
         Uri.parse('https://api.sandbox.midtrans.com/v2/charge'),

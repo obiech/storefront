@@ -11,6 +11,8 @@ void main() {
   group('[PaymentCheckoutCubit]', () {
     late PaymentCheckoutCubit _cubit;
     late IPaymentRepository _repository;
+    final List<PaymentMethodDetails> _paymentMethods =
+        samplePaymentMethods.toPaymentDetails();
 
     setUp(() {
       _repository = MockPaymentMethodRepository();
@@ -29,11 +31,14 @@ void main() {
       'should emit a checkout link',
       setUp: () {
         /// arrange
-        when(() => _repository.checkoutPayment(samplePaymentMethods.first))
-            .thenAnswer((_) async => link);
+        when(
+          () => _repository.checkoutPayment(
+            _paymentMethods.first.method,
+          ),
+        ).thenAnswer((_) async => link);
       },
       build: () => _cubit,
-      act: (cubit) => cubit.checkoutPayment(samplePaymentMethods.first),
+      act: (cubit) => cubit.checkoutPayment(_paymentMethods.first),
       expect: () =>
           [isA<LoadingPaymentCheckout>(), const LoadedPaymentCheckout(link)],
     );
@@ -43,11 +48,12 @@ void main() {
       'should emit an error',
       setUp: () {
         /// arrange
-        when(() => _repository.checkoutPayment(samplePaymentMethods.first))
-            .thenThrow(Exception('No such payment method'));
+        when(
+          () => _repository.checkoutPayment(_paymentMethods.first.method),
+        ).thenThrow(Exception('No such payment method'));
       },
       build: () => _cubit,
-      act: (cubit) => cubit.checkoutPayment(samplePaymentMethods.first),
+      act: (cubit) => cubit.checkoutPayment(_paymentMethods.first),
       expect: () => [
         isA<LoadingPaymentCheckout>(),
         isA<ErrorLoadingPaymentCheckout>(),

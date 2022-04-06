@@ -10,18 +10,18 @@ abstract class PaymentMethodState extends Equatable {
 /// Default Payment methods state
 class InitialPaymentMethodState extends PaymentMethodState {}
 
-/// When [PaymentMethod]s are being loaded
+/// When [PaymentMethodDetails]s are being loaded
 /// from cache or backend
 class LoadingPaymentMethods extends PaymentMethodState {}
 
-/// When [PaymentMethod]s have been
+/// When [PaymentMethodDetails]s have been
 /// successfully loaded
 class LoadedPaymentMethods extends PaymentMethodState {
   /// Currently active payment method
-  final PaymentMethod activePaymentMethod;
+  final PaymentMethodDetails activePaymentMethod;
 
   /// All supported payment methods
-  final List<PaymentMethod> methods;
+  final List<PaymentMethodDetails> methods;
 
   const LoadedPaymentMethods(this.methods, this.activePaymentMethod);
 
@@ -29,7 +29,7 @@ class LoadedPaymentMethods extends PaymentMethodState {
   List<Object> get props => [methods, activePaymentMethod];
 }
 
-/// When an error has occurred while loading [PaymentMethod]s
+/// When an error has occurred while loading [PaymentMethodDetails]s
 class ErrorLoadingPaymentMethods extends PaymentMethodState {
   final String message;
 
