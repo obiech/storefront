@@ -20,6 +20,13 @@ final orderAwaitingPayment = OrderModel(
       quantity: 1,
     ),
   ],
+  paymentExpiryTime: DateTime.now().add(
+    const Duration(
+      hours: 1,
+      minutes: 23,
+      seconds: 15,
+    ),
+  ),
 );
 
 final orderPaid = OrderModel(
@@ -52,6 +59,7 @@ final orderPaid = OrderModel(
       quantity: 5,
     ),
   ],
+  estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
 );
 
 final orderInDelivery = OrderModel(
@@ -84,6 +92,7 @@ final orderInDelivery = OrderModel(
       quantity: 1,
     ),
   ],
+  estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
 );
 
 final orderArrived = OrderModel(
@@ -104,4 +113,11 @@ final orderArrived = OrderModel(
       quantity: 1,
     ),
   ],
+  orderCompletionTime: DateTime.now().subtract(
+    const Duration(
+      days: 1,
+      hours: 1,
+      minutes: 10,
+    ),
+  ),
 );

@@ -1,4 +1,4 @@
-part of 'list.dart';
+part of '../list.dart';
 
 /// [Key] names used in [OrderHistoryList]
 class OrderHistoryListKeys {

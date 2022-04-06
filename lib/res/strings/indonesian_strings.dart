@@ -282,6 +282,22 @@ class IndonesianStrings implements BaseStrings {
   String get myOrders => 'Pesananku';
 
   @override
+  String get estimatedArrivalTime => 'Estimasi pesanan sampai';
+
+  @override
+  String get orderArrivedAt => 'Pesanan sampai pada';
+
+  @override
+  String get completePaymentWithin => 'Bayar sebelum';
+
+  // button labels
+  @override
+  String get continuePayment => 'Lanjut Pembayaran';
+
+  @override
+  String get orderAgain => 'Order Lagi';
+
+  @override
   String get otherProducts => 'produk lainnya';
 
   @override

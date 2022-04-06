@@ -57,6 +57,7 @@ class DummyOrderRepository extends IOrderRepository {
             quantity: 1,
           ),
         ],
+        paymentExpiryTime: DateTime.now().add(const Duration(hours: 1)),
       ),
       OrderModel(
         id: '2',
@@ -88,6 +89,7 @@ class DummyOrderRepository extends IOrderRepository {
             quantity: 5,
           ),
         ],
+        estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
       ),
       OrderModel(
         id: '3',
@@ -119,6 +121,7 @@ class DummyOrderRepository extends IOrderRepository {
             quantity: 1,
           ),
         ],
+        estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
       ),
       OrderModel(
         id: '4',
@@ -138,6 +141,12 @@ class DummyOrderRepository extends IOrderRepository {
             quantity: 1,
           ),
         ],
+        orderCompletionTime: DateTime.now().subtract(
+          const Duration(
+            days: 1,
+            hours: 2,
+          ),
+        ),
       ),
     ];
   }

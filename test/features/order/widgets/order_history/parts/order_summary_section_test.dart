@@ -5,7 +5,7 @@ import 'package:storefront_app/core/utils/string.ext.dart';
 import 'package:storefront_app/features/order/utils/order_products_summarizer.dart';
 import 'package:storefront_app/features/order/widgets/order_history/list.dart';
 
-import '../../../../../test_commons/utils/sample_order_models.dart';
+import '../../../../../../test_commons/utils/sample_order_models.dart';
 
 void main() {
   testWidgets(

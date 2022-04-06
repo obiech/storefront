@@ -11,6 +11,9 @@ class OrderModel extends Equatable {
     required this.id,
     required this.status,
     required this.orderDate,
+    this.paymentExpiryTime,
+    this.estimatedArrivalTime,
+    this.orderCompletionTime,
     required this.deliveryFee,
     required this.discount,
     required this.subTotal,
@@ -26,6 +29,25 @@ class OrderModel extends Equatable {
 
   /// Date & Time when order was first created
   final DateTime orderDate;
+
+  /// Time limit before order expires
+  /// because no payment is received
+  ///
+  /// Will be null if status is not [OrderStatus.awaitingPayment]
+  final DateTime? paymentExpiryTime;
+
+  /// Estimated arrival time at which
+  /// items are delivered to customer's address
+  ///
+  /// Will be null if status is not
+  /// [OrderStatus.paid] or [OrderStatus.inDelivery]
+  final DateTime? estimatedArrivalTime;
+
+  /// Date & Time at which items are successfully
+  /// delivered to customer's address
+  ///
+  /// Will be null if status is not [OrderStatus.arrived]
+  final DateTime? orderCompletionTime;
 
   /// Total delivery fee for current order
   final String deliveryFee;

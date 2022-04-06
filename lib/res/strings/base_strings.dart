@@ -99,6 +99,15 @@ abstract class BaseStrings {
 
   /// Order History Page
   String get myOrders;
+
+  String get completePaymentWithin;
+  String get estimatedArrivalTime;
+  String get orderArrivedAt;
+
+  // button labels
+  String get continuePayment;
+  String get orderAgain;
+
   String get otherProducts;
   String get totalSpent;
 

@@ -1,4 +1,4 @@
-part of 'list.dart';
+part of '../list.dart';
 
 /// Order Summary Section located to the right of Order thumbnail consisting of:
 /// - Order summary (products bought, amount spent)
