@@ -85,6 +85,10 @@ flutter:
     - env/.env
 
   fonts:
+    - family: Dropezy
+      fonts:
+        - asset: assets/fonts/icons/Dropezy.ttf
+
     - family: Montserrat
       fonts:
         - asset: assets/fonts/Montserrat-Bold.ttf

@@ -12,7 +12,6 @@ In order to run the app on your local development machine, make sure you have pe
 2) Perform Firebase Setup and Environment Variables as described below.
 3) Additionally if you need to test Firebase Auth features, we recommend using [Firebase Auth Emulator](https://dropezy.atlassian.net/wiki/spaces/STOR/pages/6619165/Firebase+Auth+Emulator).
 
-
 ## Firebase Setup
 
 Create a new project on your Firebase Console for development purposes.
@@ -69,3 +68,24 @@ We have set up Git hooks to prevent extra whitespace and other possible mistakes
 ## Using res Folder
 
 Please add any resource to the appropriate file in `res` folder and use your variable via importing `package:storefront_app/core/utils/build_context.ext.dart`. Example usage of string will be `context.res.strings.superEasyWithDropezy`
+
+## Adding new icon svg
+
+To update the icons font with a new svg, go to [FlutterIcons](https://www.fluttericon.com/)
+
+- Appended to the `Download` button is a settings button, tap that and choose `Import`.
+- Browse to your project folder and choose the [config.json](../assets/fonts/icons/config.json) file
+  that contains the font configuration. That should restore the existing font.
+- Drag your svg to the `Custom Icons` section then select it.
+- Switch to the names tab right next to the icons tab.
+- Give your icon an appropriate name then `Download`
+- Replace the corresponding [config.json](../assets/fonts/icons/config.json)
+  ,[Dropezy.ttf](../assets/fonts/icons/Dropezy.ttf)
+  and [dropezy_icons.dart](../lib/core/dropezy_icons.dart) files in the project.
+- Use your new icon
+
+> Note I : If the icon preview in [FlutterIcons](https://www.fluttericon.com/) is not how you expect the icon to look, reach out to the design team to help flatten the svg or use inkscape to do it.
+
+> Note II :All icons have a default padding set by the figma `IconSystem` which ensures they fit square bounds.
+
+> Note III :Icons can be [previewed here.](assets/icon_svgs/README.md)
