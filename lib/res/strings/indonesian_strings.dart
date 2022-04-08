@@ -331,4 +331,35 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get retry => 'Coba lagi';
+
+  /// Order Payment Summary
+  @override
+  String get deliveryFee => 'Biaya antar';
+
+  @override
+  String get discount => 'Diskon';
+
+  @override
+  String get dropezyPoints => 'Dropezy Points';
+
+  @override
+  String get free => 'Gratis';
+
+  @override
+  String get paymentDetails => 'Detail Pembayaran';
+
+  @override
+  String get paymentMethod => 'Metode Pembayaran';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get totalPayment => 'Total Pembayaran';
+
+  @override
+  String get voucher => 'Voucher';
+
+  @override
+  String get wowYouManagedToSave => 'Wow! Kamu berhasil hemat';
 }

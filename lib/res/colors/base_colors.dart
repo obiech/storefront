@@ -30,6 +30,7 @@ abstract class BaseColors {
 
   Color get green;
   Color get paleGreen;
+  Color get savingsRibbonGreen;
 
   Color get dividerColor;
 

@@ -118,4 +118,16 @@ abstract class BaseStrings {
   String get arrived;
   String get cancelled;
   String get unspecified;
+
+  /// Order Payment Summary
+  String get wowYouManagedToSave;
+  String get paymentDetails;
+  String get paymentMethod;
+  String get subtotal;
+  String get deliveryFee;
+  String get free;
+  String get discount;
+  String get voucher;
+  String get dropezyPoints;
+  String get totalPayment;
 }

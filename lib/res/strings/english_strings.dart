@@ -331,4 +331,35 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get retry => 'Retry';
+
+  /// Order Payment Summary
+  @override
+  String get deliveryFee => 'Delivery Fee';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
+  String get dropezyPoints => 'Dropezy Points';
+
+  @override
+  String get free => 'Free';
+
+  @override
+  String get paymentDetails => 'Payment Details';
+
+  @override
+  String get paymentMethod => 'Payment Method';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get totalPayment => 'Total Payment';
+
+  @override
+  String get voucher => 'Voucher';
+
+  @override
+  String get wowYouManagedToSave => 'Wow! You managed to save';
 }
