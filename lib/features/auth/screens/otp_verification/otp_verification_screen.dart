@@ -60,39 +60,46 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       },
       child: DropezyScaffold.textTitle(
         title: 'Kode OTP',
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Verifikasi Ponsel Kamu',
-              style: DropezyTextStyles.title,
-            ),
-            const SizedBox(height: 6),
-            Text.rich(
-              TextSpan(
-                text: 'Kode OTP telah dikirimkan ke nomor ',
-                children: [
-                  TextSpan(
-                    text: phoneNumberLocalFormat,
-                    style: DropezyTextStyles.caption2
-                        .copyWith(fontWeight: FontWeight.w600),
-                  )
-                ],
+        child: Padding(
+          padding: EdgeInsets.only(
+            left: context.res.dimens.spacingMlarge,
+            right: context.res.dimens.spacingMlarge,
+            top: context.res.dimens.spacingMlarge,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Verifikasi Ponsel Kamu',
+                style: DropezyTextStyles.title,
               ),
-              style: DropezyTextStyles.caption1,
-            ),
-            const SizedBox(height: 24),
-            const OtpInputField(),
-            const SizedBox(height: 24 - ResendOtpTimer.paddingForTapArea),
-            ResendOtpTimer(
-              resendWaitPeriodInSeconds: widget.timeoutInSeconds,
-              onResendTap: () {
-                context
-                    .read<AccountVerificationCubit>()
-                    .sendOtp(widget.phoneNumberIntlFormat);
-              },
-            ),
-          ],
+              const SizedBox(height: 6),
+              Text.rich(
+                TextSpan(
+                  text: 'Kode OTP telah dikirimkan ke nomor ',
+                  children: [
+                    TextSpan(
+                      text: phoneNumberLocalFormat,
+                      style: DropezyTextStyles.caption2
+                          .copyWith(fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+                style: DropezyTextStyles.caption1,
+              ),
+              const SizedBox(height: 24),
+              const OtpInputField(),
+              const SizedBox(height: 24 - ResendOtpTimer.paddingForTapArea),
+              ResendOtpTimer(
+                resendWaitPeriodInSeconds: widget.timeoutInSeconds,
+                onResendTap: () {
+                  context
+                      .read<AccountVerificationCubit>()
+                      .sendOtp(widget.phoneNumberIntlFormat);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

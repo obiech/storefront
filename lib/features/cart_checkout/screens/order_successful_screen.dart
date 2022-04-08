@@ -35,9 +35,8 @@ class _OrderSuccessfulPageState extends State<OrderSuccessfulPage> {
         res.strings.orderSuccessful,
         style: res.styles.button,
       ),
-      useWhiteBody: true,
+      useRoundedBody: true,
       centerTitle: true,
-      childPadding: 0,
       bodyColor: res.colors.blue,
       child: Stack(
         children: [

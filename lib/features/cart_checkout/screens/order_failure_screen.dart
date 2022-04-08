@@ -30,9 +30,8 @@ class _OrderFailurePageState extends State<OrderFailurePage> {
         res.strings.orderFailed,
         style: res.styles.button,
       ),
-      useWhiteBody: true,
+      useRoundedBody: true,
       centerTitle: true,
-      childPadding: 0,
       bodyColor: res.colors.red,
       child: Stack(
         children: [

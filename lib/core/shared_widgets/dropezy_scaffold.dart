@@ -16,18 +16,20 @@ import '../utils/build_context.ext.dart';
 /// In total it has a distance of 24 units from left side of screen
 /// And a distance of 20 units from [AppBar] title
 ///
-/// Setting [useWhiteBody] to [true] will use a Rounded White Rectangle
+/// Setting [useRoundedBody] to [true] will use a Rounded White Rectangle
 /// as the parent of the [child].
 class DropezyScaffold extends StatelessWidget {
   const DropezyScaffold({
     Key? key,
-    required this.useWhiteBody,
+    required this.useRoundedBody,
     required this.child,
     required this.title,
-    this.childPadding = 24.0,
+    this.childPadding,
     this.actions,
     this.centerTitle = false,
     this.bodyColor = Colors.white,
+    this.toolbarHeight,
+    this.bodyAlignment,
   }) : super(key: key);
 
   /// uses [Text] widget as AppBar title
@@ -36,17 +38,21 @@ class DropezyScaffold extends StatelessWidget {
     required String title,
     bool useWhiteBody = true,
     bool centerTitle = false,
-    double childPadding = 24.0,
+    EdgeInsets? childPadding,
     bodyColor = Colors.white,
     List<Widget>? actions,
+    double? toolBarHeight,
+    Alignment? bodyAlignment,
   }) {
     return DropezyScaffold(
-      useWhiteBody: useWhiteBody,
+      useRoundedBody: useWhiteBody,
       title: Text(title),
       childPadding: childPadding,
       centerTitle: centerTitle,
       bodyColor: bodyColor,
       actions: actions,
+      toolbarHeight: toolBarHeight,
+      bodyAlignment: bodyAlignment,
       child: child,
     );
   }
@@ -58,11 +64,15 @@ class DropezyScaffold extends StatelessWidget {
   /// Set the [Color] of the rounded [Scaffold] body
   final Color bodyColor;
 
-  /// TODO - Can be renamed to useRoundedBody
-  final bool useWhiteBody;
+  /// Set a custom toolbar height
+  final double? toolbarHeight;
+
+  final Alignment? bodyAlignment;
+
+  final bool useRoundedBody;
   final Widget child;
   final Widget title;
-  final double childPadding;
+  final EdgeInsets? childPadding;
   final List<Widget>? actions;
 
   @override
@@ -75,6 +85,7 @@ class DropezyScaffold extends StatelessWidget {
       appBar: AppBar(
         title: title,
         centerTitle: centerTitle,
+        toolbarHeight: toolbarHeight,
         leading: canPop
             ? Container(
                 margin: EdgeInsets.only(
@@ -87,26 +98,22 @@ class DropezyScaffold extends StatelessWidget {
         actions: actions,
       ),
       resizeToAvoidBottomInset: true,
-      body: useWhiteBody
-          ? Container(
-              decoration: BoxDecoration(
+      body: useRoundedBody
+          ? ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft:
+                    Radius.circular(res.dimens.bottomSheetHorizontalPadding),
+                topRight:
+                    Radius.circular(res.dimens.bottomSheetHorizontalPadding),
+              ),
+              child: Container(
                 color: bodyColor,
-                borderRadius: BorderRadius.only(
-                  topLeft:
-                      Radius.circular(res.dimens.bottomSheetHorizontalPadding),
-                  topRight:
-                      Radius.circular(res.dimens.bottomSheetHorizontalPadding),
-                ),
+                width: double.infinity,
+                height: double.infinity,
+                alignment: bodyAlignment ?? Alignment.center,
+                padding: childPadding,
+                child: child,
               ),
-              width: double.infinity,
-              height: double.infinity,
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                left: childPadding,
-                right: childPadding,
-                top: childPadding,
-              ),
-              child: child,
             )
           : child,
     );

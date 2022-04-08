@@ -17,7 +17,6 @@ class CartCheckoutPage extends StatelessWidget {
       create: (context) => getIt<PaymentCheckoutCubit>(),
       child: DropezyScaffold.textTitle(
         title: 'Konfirmasi Belanja',
-        childPadding: 0,
         child: Column(
           children: const [
             Expanded(

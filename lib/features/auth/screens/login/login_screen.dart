@@ -57,35 +57,43 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         return DropezyScaffold.textTitle(
           title: 'Akun',
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Masuk',
-                  style: DropezyTextStyles.title,
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'Masukkan nomor HP kamu yang sudah terdaftar',
-                  style: DropezyTextStyles.caption1,
-                ),
-                const SizedBox(height: 24),
-                PhoneTextField(
-                  key: const Key(LoginScreen.keyInputPhoneNumber),
-                  controller: _ctrlPhoneNumber,
-                ),
-                const SizedBox(height: 26.5),
-                DropezyButton.primary(
-                  key: const Key(LoginScreen.keyVerifyPhoneNumberButton),
-                  label: 'Lanjutkan',
-                  onPressed: _verifyPhoneNumber,
-                  isLoading: state.status == AccountAvailabilityStatus.loading,
-                ),
-                const SizedBox(height: 24),
-                TextUserAgreement.login(),
-              ],
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: context.res.dimens.spacingMlarge,
+              right: context.res.dimens.spacingMlarge,
+              top: context.res.dimens.spacingMlarge,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Masuk',
+                    style: DropezyTextStyles.title,
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Masukkan nomor HP kamu yang sudah terdaftar',
+                    style: DropezyTextStyles.caption1,
+                  ),
+                  const SizedBox(height: 24),
+                  PhoneTextField(
+                    key: const Key(LoginScreen.keyInputPhoneNumber),
+                    controller: _ctrlPhoneNumber,
+                  ),
+                  const SizedBox(height: 26.5),
+                  DropezyButton.primary(
+                    key: const Key(LoginScreen.keyVerifyPhoneNumberButton),
+                    label: 'Lanjutkan',
+                    onPressed: _verifyPhoneNumber,
+                    isLoading:
+                        state.status == AccountAvailabilityStatus.loading,
+                  ),
+                  const SizedBox(height: 24),
+                  TextUserAgreement.login(),
+                ],
+              ),
             ),
           ),
         );

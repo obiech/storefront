@@ -57,32 +57,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       builder: (context, state) {
         return DropezyScaffold.textTitle(
           title: 'Akun',
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  'Daftar',
-                  style: DropezyTextStyles.title,
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  'Yuk daftar pakai nomor HP kamu',
-                  style: DropezyTextStyles.caption1,
-                ),
-                const SizedBox(height: 24),
-                PhoneTextField(controller: _ctrlPhoneNumber),
-                const SizedBox(height: 26.5),
-                DropezyButton.primary(
-                  key: const Key(RegistrationScreen.keyVerifyPhoneNumberButton),
-                  label: 'Lanjutkan',
-                  onPressed: _verifyPhoneNumber,
-                  isLoading: state.status == AccountAvailabilityStatus.loading,
-                ),
-                const SizedBox(height: 24),
-                TextUserAgreement.registration(),
-              ],
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: context.res.dimens.spacingMlarge,
+              right: context.res.dimens.spacingMlarge,
+              top: context.res.dimens.spacingMlarge,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    'Daftar',
+                    style: DropezyTextStyles.title,
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Yuk daftar pakai nomor HP kamu',
+                    style: DropezyTextStyles.caption1,
+                  ),
+                  const SizedBox(height: 24),
+                  PhoneTextField(controller: _ctrlPhoneNumber),
+                  const SizedBox(height: 26.5),
+                  DropezyButton.primary(
+                    key: const Key(
+                      RegistrationScreen.keyVerifyPhoneNumberButton,
+                    ),
+                    label: 'Lanjutkan',
+                    onPressed: _verifyPhoneNumber,
+                    isLoading:
+                        state.status == AccountAvailabilityStatus.loading,
+                  ),
+                  const SizedBox(height: 24),
+                  TextUserAgreement.registration(),
+                ],
+              ),
             ),
           ),
         );

@@ -17,7 +17,6 @@ class OrderHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: context.res.strings.myOrders,
-      childPadding: context.res.dimens.spacingMedium,
       child: BlocBuilder<OrderHistoryCubit, OrderHistoryState>(
         builder: _mapStateToWidget,
       ),
