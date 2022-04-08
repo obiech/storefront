@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/res/dimensions/base_dimensions.dart';
 
 import '../colors/base_colors.dart';
 import 'base_styles.dart';
 
 class AppStyles implements BaseStyles {
-  AppStyles(this._colors);
+  AppStyles(this._colors, this._dimens);
 
   final BaseColors _colors;
+  final BaseDimensions _dimens;
 
   @override
   TextStyle get button => TextStyle(
@@ -85,9 +87,34 @@ class AppStyles implements BaseStyles {
             offset: const Offset(0, -5),
           ),
         ],
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
+        borderRadius: topBorderRadius,
+      );
+
+  @override
+  InputDecoration get roundedInputStyle => InputDecoration(
+        filled: true,
+        fillColor: _colors.white,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
+          borderSide: BorderSide(color: _colors.black),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
+          borderSide: BorderSide(color: _colors.black),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
+          borderSide: BorderSide(color: _colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
+          borderSide: BorderSide(color: _colors.orange),
+        ),
+      );
+
+  @override
+  BorderRadius get topBorderRadius => BorderRadius.only(
+        topLeft: Radius.circular(_dimens.spacingMlarge),
+        topRight: Radius.circular(_dimens.spacingMlarge),
       );
 }

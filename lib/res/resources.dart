@@ -58,7 +58,7 @@ class Resources {
   }
 
   BaseStyles get styles {
-    return AppStyles(colors);
+    return AppStyles(colors, dimens);
   }
 
   // TODO: think of another approach perhaps through use of singletons, or

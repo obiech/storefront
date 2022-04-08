@@ -22,5 +22,7 @@ abstract class BaseStyles {
 
   TextStyle get clickableText;
 
+  BorderRadius get topBorderRadius;
   BoxDecoration get bottomSheetStyle;
+  InputDecoration get roundedInputStyle;
 }
