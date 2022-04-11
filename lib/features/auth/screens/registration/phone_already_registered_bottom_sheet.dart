@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -31,9 +32,8 @@ class PhoneAlreadyRegisteredBottomSheet extends StatelessWidget {
         Navigator.of(context).pop();
 
         // Pop current route and push LoginScreen
-        Navigator.of(context).pushReplacementNamed(
-          LoginScreen.routeName,
-          arguments: phoneNumberLocalFormat.substring(1), // Remove leading zero
+        context.router.push(
+          LoginRoute(initialPhoneNumber: phoneNumberLocalFormat.substring(1)),
         );
       },
     );

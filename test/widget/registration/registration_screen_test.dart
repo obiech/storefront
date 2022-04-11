@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
@@ -15,15 +17,18 @@ import '../../src/mock_screen_utils.dart';
 class MockAccountAvailabilityCubit extends MockCubit<AccountAvailabilityState>
     implements AccountAvailabilityCubit {}
 
-void main() {
-  late MockNavigator navigator;
+Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: 'env/.env');
+
+  late StackRouter mockStackRouter;
+
   late AccountAvailabilityCubit accountAvailabilityCubit;
 
   final verifyPhoneButtonFinder =
       find.byKey(const Key(RegistrationScreen.keyVerifyPhoneNumberButton));
 
   setUp(() {
-    navigator = createStubbedMockNavigator();
     accountAvailabilityCubit = MockAccountAvailabilityCubit();
     when(
       () => accountAvailabilityCubit.checkPhoneNumberAvailability(
@@ -32,6 +37,12 @@ void main() {
     ).thenAnswer(
       (_) async {},
     );
+
+    // Router stubs
+    registerFallbackValue(FakePageRouteInfo());
+    mockStackRouter = MockStackRouter();
+    when(() => mockStackRouter.push(any())).thenAnswer((_) async => null);
+    when(() => mockStackRouter.replaceAll(any())).thenAnswer((_) async => {});
   });
 
   group('Registration Screen', () {
@@ -40,7 +51,7 @@ void main() {
       when(() => accountAvailabilityCubit.state)
           .thenReturn(const AccountAvailabilityState());
       await tester.pumpWidget(
-        buildMockRegistrationScreen(accountAvailabilityCubit, navigator),
+        buildMockRegistrationScreen(accountAvailabilityCubit, mockStackRouter),
       );
 
       // Expect an empty PhoneTextField
@@ -66,7 +77,7 @@ void main() {
         await tester.pumpWidget(
           buildMockRegistrationScreen(
             accountAvailabilityCubit,
-            navigator,
+            mockStackRouter,
             initialPhoneNumber,
           ),
         );
@@ -100,7 +111,7 @@ void main() {
         await tester.pumpWidget(
           buildMockRegistrationScreen(
             accountAvailabilityCubit,
-            navigator,
+            mockStackRouter,
           ),
         );
 
@@ -135,7 +146,7 @@ void main() {
         await tester.pumpWidget(
           buildMockRegistrationScreen(
             accountAvailabilityCubit,
-            navigator,
+            mockStackRouter,
           ),
         );
 
@@ -168,7 +179,10 @@ void main() {
         );
 
         await tester.pumpWidget(
-          buildMockRegistrationScreen(accountAvailabilityCubit, navigator),
+          buildMockRegistrationScreen(
+            accountAvailabilityCubit,
+            mockStackRouter,
+          ),
         );
 
         const mockInput = '81234567890';
@@ -185,16 +199,16 @@ void main() {
         );
 
         await tester.pumpAndSettle();
+        final routes =
+            verify(() => mockStackRouter.push(captureAny())).captured;
 
-        verifyPushNamed(
-          navigator,
-          OtpVerificationScreen.routeName,
-          arguments: const OtpVerificationScreenArgs(
-            successAction: OtpSuccessAction.goToPinScreen,
-            phoneNumberIntlFormat: mockPhoneNumber,
-            registerAccountAfterSuccessfulOtp: true,
-          ),
-        );
+        expect(routes.length, 1);
+        var route = routes.first;
+        expect(route, isA<OtpVerificationRouteWrapper>());
+        route = route as OtpVerificationRouteWrapper;
+        expect(route.args?.successAction, OtpSuccessAction.goToPinScreen);
+        expect(route.args?.phoneNumberIntlFormat, mockPhoneNumber);
+        expect(route.args?.registerAccountAfterSuccessfulOtp, true);
       });
       testWidgets('''
         -- If phone number is not available, display a 
@@ -245,7 +259,10 @@ void main() {
         );
 
         await tester.pumpWidget(
-          buildMockRegistrationScreen(accountAvailabilityCubit),
+          buildMockRegistrationScreen(
+            accountAvailabilityCubit,
+            mockStackRouter,
+          ),
         );
 
         await tester.pumpAndSettle();
@@ -259,10 +276,10 @@ void main() {
 
 Widget buildMockRegistrationScreen(
   AccountAvailabilityCubit cubit, [
-  MockNavigator? navigator,
+  StackRouter? navigator,
   String? initialPhoneNumber,
 ]) =>
-    buildMockScreenWithBlocProvider<AccountAvailabilityCubit>(
+    buildMockScreenWithBlocProviderAndAutoRoute<AccountAvailabilityCubit>(
       cubit,
       RegistrationScreen(initialPhoneNumber: initialPhoneNumber),
       navigator,

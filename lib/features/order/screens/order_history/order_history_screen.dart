@@ -11,7 +11,7 @@ part 'keys.dart';
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
 
-  static const routeName = 'order-history';
+  static const routeName = '/order-history';
 
   @override
   Widget build(BuildContext context) {

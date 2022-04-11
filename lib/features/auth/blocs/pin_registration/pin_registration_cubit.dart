@@ -1,6 +1,7 @@
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grpc/grpc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../domain/services/user_credentials_storage.dart';
@@ -16,6 +17,7 @@ import 'pin_registration_state.dart';
 /// Request is sent to storefront backend using
 /// [customerServiceClient] and authentication token is obtained from
 /// [userCredentialsStorage].
+@injectable
 class PinRegistrationCubit extends Cubit<PinRegistrationState> {
   PinRegistrationCubit({
     required this.customerServiceClient,

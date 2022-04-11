@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -32,10 +33,11 @@ class PhoneNotRegisteredBottomSheet extends StatelessWidget {
         Navigator.of(context).pop();
 
         // Pop current route and push RegistrationScreen
-        Navigator.of(context).pushReplacementNamed(
-          RegistrationScreen.routeName,
-          arguments: phoneNumberLocalFormat.substring(1), // Remove leading zero
-        );
+        context.router.replaceAll([
+          RegistrationRoute(
+            initialPhoneNumber: phoneNumberLocalFormat.substring(1),
+          )
+        ]);
       },
     );
   }

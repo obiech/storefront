@@ -1,10 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storefront_app/core/core.dart';
-
-import '../../../home/screens/home_screen.dart';
-import '../../blocs/onboarding/onboarding_cubit.dart';
+import 'package:storefront_app/di/injection.dart';
 
 class ButtonSkipOnboarding extends StatelessWidget {
   const ButtonSkipOnboarding({Key? key}) : super(key: key);
@@ -31,7 +29,7 @@ class ButtonSkipOnboarding extends StatelessWidget {
   }
 
   Future<void> _skipOnboarding(BuildContext context) async {
-    context.read<OnboardingCubit>().finishOnboarding();
-    Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+    await getIt<IPrefsRepository>().setIsOnBoarded(true);
+    context.router.replaceAll([const MainRoute()]);
   }
 }

@@ -1,11 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/core.dart';
 import '../../blocs/blocs.dart';
 import '../otp_verification/otp_success_action.dart';
-import '../otp_verification/otp_verification_screen.dart';
-import '../otp_verification/otp_verification_screen_args.dart';
 import 'phone_already_registered_bottom_sheet.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -15,7 +14,7 @@ class RegistrationScreen extends StatefulWidget {
     Key? key,
     this.initialPhoneNumber,
   }) : super(key: key);
-  static const routeName = 'registration';
+  static const routeName = '/registration';
   static const keyVerifyPhoneNumberButton =
       '${routeName}_button_verifyPhoneNumber';
 
@@ -119,11 +118,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _navigateToOtpScreen() {
-    Navigator.of(context).pushNamed(
-      OtpVerificationScreen.routeName,
-      arguments: OtpVerificationScreenArgs(
-        successAction: OtpSuccessAction.goToPinScreen,
+    context.router.push(
+      OtpVerificationRouteWrapper(
         phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
+        successAction: OtpSuccessAction.goToPinScreen,
+        timeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
         registerAccountAfterSuccessfulOtp: true,
       ),
     );

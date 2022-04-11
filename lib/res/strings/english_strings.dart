@@ -147,16 +147,16 @@ class EnglishStrings implements BaseStrings {
   String otherNeeds() => 'Other Needs';
 
   @override
-  String home() => 'Home';
+  String get home => 'Home';
 
   @override
-  String search() => 'search';
+  String get search => 'Search';
 
   @override
-  String promo() => 'Promo';
+  String get promo => 'Promo';
 
   @override
-  String profile() => 'Profile';
+  String get profile => 'Profile';
 
   @override
   String safeYouGetPointsFromTheReferralCodeYouEnter(int points) =>

@@ -45,10 +45,14 @@ abstract class BaseStrings {
   String personalEquipment();
   String houseCleaning();
   String otherNeeds();
-  String home();
-  String search();
-  String promo();
-  String profile();
+  // Main Screen
+  String get home;
+
+  String get search;
+
+  String get promo;
+
+  String get profile;
   String safeYouGetPointsFromTheReferralCodeYouEnter(int points);
   String letSStartShoppingAndCollectMorePoints();
   String ok();

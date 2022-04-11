@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:mockingjay/mockingjay.dart';
 
@@ -84,3 +85,9 @@ void verifyPushNamedAndRemoveUntil(
     ),
   ).called(callCount);
 }
+
+/// AutoRoute Mocks
+class MockStackRouter extends Mock implements StackRouter {}
+
+// ignore: avoid_implementing_value_types
+class FakePageRouteInfo extends Fake implements PageRouteInfo {}

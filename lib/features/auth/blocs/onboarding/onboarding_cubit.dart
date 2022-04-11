@@ -16,9 +16,9 @@ class OnboardingCubit extends Cubit<bool> {
     required bool initialState,
   }) : super(initialState);
 
-  Future<void> finishOnboarding() async {
+  /*Future<void> finishOnboarding() async {
     await sharedPreferences.setIsOnBoarded(true);
 
     emit(true);
-  }
+  }*/
 }

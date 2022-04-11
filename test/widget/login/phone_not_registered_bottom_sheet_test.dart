@@ -1,19 +1,20 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/screens/login/phone_not_registered_bottom_sheet.dart';
 
 import '../../src/mock_navigator.dart';
 
 void main() {
-  late MockNavigator navigator;
+  late StackRouter navigator;
 
   Widget buildWidgetToTest(String phoneNumber) {
     return MaterialApp(
-      home: MockNavigatorProvider(
-        navigator: navigator,
+      home: StackRouterScope(
+        controller: navigator,
+        stateHash: 0,
         child: PhoneNotRegisteredBottomSheet(
           phoneNumberLocalFormat: phoneNumber,
         ),
@@ -22,7 +23,12 @@ void main() {
   }
 
   setUpAll(() {
-    navigator = createStubbedMockNavigator();
+    navigator = MockStackRouter();
+
+    // Router stubs
+    registerFallbackValue(FakePageRouteInfo());
+    when(() => navigator.push(any())).thenAnswer((_) async => null);
+    when(() => navigator.replaceAll(any())).thenAnswer((_) async => {});
   });
 
   group('PhoneNotRegisteredBottomSheet', () {
@@ -35,8 +41,9 @@ void main() {
 
         try {
           await tester.pumpWidget(
-            MockNavigatorProvider(
-              navigator: navigator,
+            StackRouterScope(
+              controller: navigator,
+              stateHash: 0,
               child: PhoneNotRegisteredBottomSheet(
                 phoneNumberLocalFormat: phoneNumber,
               ),
@@ -69,11 +76,15 @@ void main() {
 
         // Should push a route for Registration Screen
         await tester.tap(find.byType(DropezyButton));
-        verifyPushReplacementNamed(
-          navigator,
-          RegistrationScreen.routeName,
-          arguments: '81234567890',
-        );
+
+        final routes =
+            verify(() => navigator.replaceAll(captureAny())).captured;
+
+        expect(routes.length, 1);
+        expect(routes.first.length, 1);
+        expect(routes.first.first, isA<RegistrationRoute>());
+        final route = routes.first.first as RegistrationRoute;
+        expect(route.args?.initialPhoneNumber, '81234567890');
       },
     );
   });

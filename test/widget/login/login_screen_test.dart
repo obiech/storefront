@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
@@ -15,8 +17,11 @@ import '../../src/mock_screen_utils.dart';
 class MockAccountAvailabilityCubit extends MockCubit<AccountAvailabilityState>
     implements AccountAvailabilityCubit {}
 
-void main() {
-  late MockNavigator navigator;
+Future<void> main() async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: 'env/.env');
+
+  late StackRouter navigator;
   late AccountAvailabilityCubit accountAvailabilityCubit;
 
   final finderInputPhoneNumber =
@@ -25,7 +30,7 @@ void main() {
       find.byKey(const Key(LoginScreen.keyVerifyPhoneNumberButton));
 
   setUp(() {
-    navigator = createStubbedMockNavigator();
+    navigator = MockStackRouter();
     accountAvailabilityCubit = MockAccountAvailabilityCubit();
 
     when(
@@ -35,6 +40,11 @@ void main() {
     ).thenAnswer(
       (_) async {},
     );
+
+    // Router stubs
+    registerFallbackValue(FakePageRouteInfo());
+    when(() => navigator.push(any())).thenAnswer((_) async => null);
+    when(() => navigator.replaceAll(any())).thenAnswer((_) async => {});
   });
 
   group('Login Screen', () {
@@ -212,14 +222,14 @@ void main() {
 
           await tester.pumpAndSettle();
 
-          verifyPushNamed(
-            navigator,
-            OtpVerificationScreen.routeName,
-            arguments: const OtpVerificationScreenArgs(
-              phoneNumberIntlFormat: mockPhoneNumber,
-              successAction: OtpSuccessAction.goToHomeScreen,
-            ),
-          );
+          final routes = verify(() => navigator.push(captureAny())).captured;
+
+          expect(routes.length, 1);
+          var route = routes.first;
+          expect(route, isA<OtpVerificationRouteWrapper>());
+          route = route as OtpVerificationRouteWrapper;
+          expect(route.args?.successAction, OtpSuccessAction.goToHomeScreen);
+          expect(route.args?.phoneNumberIntlFormat, mockPhoneNumber);
         },
       );
 
@@ -259,10 +269,10 @@ void main() {
 
 Widget buildMockLoginScreen(
   AccountAvailabilityCubit cubit, [
-  MockNavigator? navigator,
+  StackRouter? navigator,
   String? initialPhoneNumber,
 ]) =>
-    buildMockScreenWithBlocProvider<AccountAvailabilityCubit>(
+    buildMockScreenWithBlocProviderAndAutoRoute<AccountAvailabilityCubit>(
       cubit,
       LoginScreen(initialPhoneNumber: initialPhoneNumber),
       navigator,

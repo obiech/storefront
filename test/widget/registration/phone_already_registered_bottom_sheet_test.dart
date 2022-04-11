@@ -1,19 +1,21 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/screens/registration/phone_already_registered_bottom_sheet.dart';
 
 import '../../src/mock_navigator.dart';
 
 void main() {
   late MockNavigator navigator;
+  late StackRouter mockStackRouter;
 
   Widget buildWidgetToTest(String phoneNumber) {
     return MaterialApp(
-      home: MockNavigatorProvider(
-        navigator: navigator,
+      home: StackRouterScope(
+        controller: mockStackRouter,
+        stateHash: 0,
         child: PhoneAlreadyRegisteredBottomSheet(
           phoneNumberLocalFormat: phoneNumber,
         ),
@@ -23,6 +25,9 @@ void main() {
 
   setUpAll(() {
     navigator = createStubbedMockNavigator();
+    registerFallbackValue(FakePageRouteInfo());
+    mockStackRouter = MockStackRouter();
+    when(() => mockStackRouter.push(any())).thenAnswer((_) async => null);
   });
 
   group('PhoneAlreadyRegisteredBottomSheet', () {
@@ -70,11 +75,15 @@ void main() {
 
         // Should push a route for Registration Screen
         await tester.tap(find.byType(DropezyButton));
-        verifyPushReplacementNamed(
-          navigator,
-          LoginScreen.routeName,
-          arguments: '81234567890',
-        );
+        final routes =
+            verify(() => mockStackRouter.push(captureAny())).captured;
+
+        /// Only single route pushed/ pushReplace
+        expect(routes.length, 1);
+        var route = routes.first;
+        expect(route, isA<LoginRoute>());
+        route = route as LoginRoute;
+        expect(route.args?.initialPhoneNumber, '81234567890');
       },
     );
   });

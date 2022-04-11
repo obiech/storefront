@@ -1,6 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mockingjay/mockingjay.dart';
 
 /// Use this to create a [MaterialApp] instance wrapped with a
 /// [BlocProvider] with a minimal set of external dependencies
@@ -12,10 +12,10 @@ import 'package:mockingjay/mockingjay.dart';
 /// In contrast, when it is null, route pushes will work normally
 /// and will create a new [Widget]. Pass a [navigator] when trying to test
 /// [SnackBar], [Dialog] or [BottomSheet].
-Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
+Widget buildMockScreenWithBlocProviderAndAutoRoute<T extends BlocBase>(
   T bloc,
   Widget screen, [
-  MockNavigator? navigator,
+  StackRouter? navigator,
 ]) {
   if (navigator == null) {
     return BlocProvider<T>(
@@ -29,8 +29,9 @@ Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
   return BlocProvider<T>(
     create: (_) => bloc,
     child: MaterialApp(
-      home: MockNavigatorProvider(
-        navigator: navigator,
+      home: StackRouterScope(
+        controller: navigator,
+        stateHash: 0,
         child: screen,
       ),
     ),
@@ -46,10 +47,10 @@ Widget buildMockScreenWithBlocProvider<T extends BlocBase>(
 /// In contrast, when it is null, route pushes will work normally
 /// and will create a new [Widget]. Pass a [navigator] when trying to test
 /// [SnackBar], [Dialog] or [BottomSheet].
-Widget buildMockScreenWithMultiBlocProvider(
+Widget buildMockScreenWithMultiBlocProviderAndAutoRoute(
   List<BlocProvider> providers,
   Widget screen, [
-  MockNavigator? navigator,
+  StackRouter? navigator,
 ]) {
   if (navigator == null) {
     return MultiBlocProvider(
@@ -63,8 +64,9 @@ Widget buildMockScreenWithMultiBlocProvider(
   return MultiBlocProvider(
     providers: providers,
     child: MaterialApp(
-      home: MockNavigatorProvider(
-        navigator: navigator,
+      home: StackRouterScope(
+        controller: navigator,
+        stateHash: 0,
         child: screen,
       ),
     ),

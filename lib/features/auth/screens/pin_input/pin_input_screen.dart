@@ -1,19 +1,21 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/di/injection.dart';
 
-import '../../../home/screens/home_screen.dart';
+import '../../../home/screens/home_page.dart';
 import '../../blocs/blocs.dart';
 import 'pin_input_field.dart';
 
 class PinInputScreen extends StatefulWidget {
   const PinInputScreen({Key? key}) : super(key: key);
 
-  static const routeName = 'pin-input';
+  static const routeName = '/pin-input';
 
   static const textInstructionsPin =
       'Buat kode PIN baru untuk\nmengamankan akunmu';
@@ -116,16 +118,12 @@ class _PinInputScreenState extends State<PinInputScreen> {
   }
 
   /// Marks onboarding process as finished, removes all previous routes
-  /// and pushes [HomeScreen] route.
+  /// and pushes [HomePage] route.
   ///
   /// Can be called without actually registering PIN, as it's optional
-  void _finishPinRegistrationProcess() {
-    context.read<OnboardingCubit>().finishOnboarding();
-
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      HomeScreen.routeName,
-      (route) => false,
-    );
+  Future<void> _finishPinRegistrationProcess() async {
+    await getIt<IPrefsRepository>().setIsOnBoarded(true);
+    context.router.replaceAll([const MainRoute()]);
   }
 
   void _resetState() {

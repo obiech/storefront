@@ -9,7 +9,7 @@ import '../widgets/widgets.dart';
 
 class CartCheckoutPage extends StatelessWidget {
   const CartCheckoutPage({Key? key}) : super(key: key);
-  static const routeName = 'cart-checkout';
+  static const routeName = '/cart-checkout';
 
   @override
   Widget build(BuildContext context) {

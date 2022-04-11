@@ -145,16 +145,16 @@ class IndonesianStrings implements BaseStrings {
   String otherNeeds() => 'Kebutuhan Lainnya';
 
   @override
-  String home() => 'Home';
+  String get home => 'Home';
 
   @override
-  String search() => 'Cari';
+  String get search => 'Cari';
 
   @override
-  String promo() => 'Promo';
+  String get promo => 'Promo';
 
   @override
-  String profile() => 'Profil';
+  String get profile => 'Profil';
 
   @override
   String safeYouGetPointsFromTheReferralCodeYouEnter(int points) =>

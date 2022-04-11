@@ -81,6 +81,6 @@ class PrefsRepository implements IPrefsRepository {
   @override
   Future<void> setIsOnBoarded(bool isOnBoarded) async {
     await ready;
-    _preferences.setBool(PrefsKeys.kIsOnboarded, isOnBoarded);
+    await _preferences.setBool(PrefsKeys.kIsOnboarded, isOnBoarded);
   }
 }

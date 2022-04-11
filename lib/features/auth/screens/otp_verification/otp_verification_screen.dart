@@ -1,8 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/di/injection.dart';
 
-import '../../../home/screens/home_screen.dart';
+import '../../../home/screens/home_page.dart';
 import '../../blocs/blocs.dart';
 import '../pin_input/pin_input_screen.dart';
 import 'otp_input_field.dart';
@@ -17,21 +19,23 @@ import 'resend_otp_timer.dart';
 /// [OtpSuccessBehavior]:
 ///
 /// - [OtpSuccessBehavior.goToHome]: Pops all current routes and push
-/// [HomeScreen.routeName] as replacement.
+/// [HomePage.routeName] as replacement.
 /// - [OtpSuccessBehavior.goToPinPage]: Pushes [PinInputScreen.routeName].
 class OtpVerificationScreen extends StatefulWidget {
-  static const routeName = 'otp-input';
+  static const routeName = '/otp-input';
 
   const OtpVerificationScreen({
     Key? key,
     required this.phoneNumberIntlFormat,
     required this.successAction,
     required this.timeoutInSeconds,
+    this.registerAccountAfterSuccessfulOtp = false,
   }) : super(key: key);
 
   final String phoneNumberIntlFormat;
   final int timeoutInSeconds;
   final OtpSuccessAction successAction;
+  final bool registerAccountAfterSuccessfulOtp;
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -108,12 +112,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   void _onSuccessfulVerification() {
     switch (widget.successAction) {
       case OtpSuccessAction.goToHomeScreen:
+        getIt<IPrefsRepository>().setIsOnBoarded(true);
         // Removes all previous routes and push HomeScreen as new route
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(HomeScreen.routeName, (route) => false);
+        context.router.replaceAll([const MainRoute()]);
         break;
       case OtpSuccessAction.goToPinScreen:
-        Navigator.of(context).pushNamed(PinInputScreen.routeName);
+        context.router.push(const PinInputRoute());
         break;
     }
   }

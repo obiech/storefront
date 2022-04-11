@@ -8,7 +8,7 @@ import 'button_skip_onboarding.dart';
 import 'triangle_clipper.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  static const routeName = 'onboarding';
+  static const routeName = '/onboarding';
 
   const OnboardingScreen({Key? key}) : super(key: key);
 
