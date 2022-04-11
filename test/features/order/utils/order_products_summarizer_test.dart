@@ -11,10 +11,11 @@ void main() {
       test(
         "should return first product's name if there's only one product ",
         () {
-          const products = [
+          final products = [
             OrderProductModel(
               product: productSeladaRomaine,
               quantity: 3,
+              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
           ];
 
@@ -28,14 +29,16 @@ void main() {
         "should return first and second product's name "
         "if there's are two products",
         () {
-          const products = [
+          final products = [
             OrderProductModel(
               product: productSeladaRomaine,
               quantity: 3,
+              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
               product: productBellPepperYellow,
               quantity: 1,
+              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
           ];
 
@@ -52,22 +55,26 @@ void main() {
         "should return first and second product's name and number of remaining "
         "products if there's are three or more products",
         () {
-          const products = [
+          final products = [
             OrderProductModel(
               product: productSeladaRomaine,
               quantity: 3,
+              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
               product: productBellPepperYellow,
               quantity: 1,
+              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
             OrderProductModel(
               product: productSeladaRomaine,
               quantity: 3,
+              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
               product: productBellPepperYellow,
               quantity: 1,
+              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
           ];
 

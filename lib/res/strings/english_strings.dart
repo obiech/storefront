@@ -303,6 +303,13 @@ class EnglishStrings implements BaseStrings {
   @override
   String get totalSpent => 'Total Spent';
 
+  /// Order Details Page
+  @override
+  String get orderDetails => 'Order Details';
+
+  @override
+  String get yourPurchases => 'Your purchases';
+
   /// Order Status
   @override
   String get arrived => 'Arrived';

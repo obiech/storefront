@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:storefront_app/core/utils/_exporter.dart';
 
 import '../../../../core/shared_widgets/semi_circle_clipped_widget.dart';
+import '../../../../core/utils/_exporter.dart';
 
 part 'parts/row.dart';
 part 'parts/savings_ribbon.dart';
@@ -70,6 +70,7 @@ class OrderPaymentSummary extends StatelessWidget {
     final res = context.res;
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (paymentMethod != null) ...[
           Padding(

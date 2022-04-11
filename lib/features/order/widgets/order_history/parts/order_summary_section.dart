@@ -9,39 +9,34 @@ part of '../list.dart';
 class OrderSummarySection extends StatelessWidget {
   const OrderSummarySection({
     Key? key,
-    required this.onTap,
     required this.order,
   }) : super(key: key);
 
-  final VoidCallback onTap;
   final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Expanded(
-            child: _OrderSummary(
-              orderProducts: order.productsBought,
-              amountPaid: order.total,
-            ),
+    return Row(
+      children: [
+        Expanded(
+          child: _OrderSummary(
+            orderProducts: order.productsBought,
+            amountPaid: order.total,
           ),
-          SizedBox(width: context.res.dimens.spacingMedium),
-          Container(
-            width: 24,
-            height: 24,
-            alignment: Alignment.center,
-            child: SvgPicture.asset(
-              context.res.paths.icChevronRight,
-              color: context.res.colors.grey4,
-              width: 16,
-              height: 12,
-            ),
+        ),
+        SizedBox(width: context.res.dimens.spacingMedium),
+        Container(
+          width: 24,
+          height: 24,
+          alignment: Alignment.center,
+          child: SvgPicture.asset(
+            context.res.paths.icChevronRight,
+            color: context.res.colors.grey4,
+            width: 16,
+            height: 12,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

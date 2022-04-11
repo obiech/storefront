@@ -108,6 +108,10 @@ abstract class BaseStrings {
   String get estimatedArrivalTime;
   String get orderArrivedAt;
 
+  /// Order Details Page
+  String get orderDetails;
+  String get yourPurchases;
+
   // button labels
   String get continuePayment;
   String get orderAgain;

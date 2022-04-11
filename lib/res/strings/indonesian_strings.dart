@@ -290,6 +290,13 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get completePaymentWithin => 'Bayar sebelum';
 
+  /// Order Details Page
+  @override
+  String get orderDetails => 'Detail Pesanan';
+
+  @override
+  String get yourPurchases => 'Belanjaanmu';
+
   // button labels
   @override
   String get continuePayment => 'Lanjut Pembayaran';

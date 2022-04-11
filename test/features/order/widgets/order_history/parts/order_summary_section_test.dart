@@ -22,7 +22,6 @@ void main() {
               otherProductsLabel = context.res.strings.otherProducts;
               return OrderSummarySection(
                 order: sampleOrder,
-                onTap: () {},
               );
             },
           ),

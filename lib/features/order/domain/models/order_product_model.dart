@@ -8,6 +8,7 @@ class OrderProductModel extends Equatable {
   const OrderProductModel({
     required this.product,
     required this.quantity,
+    required this.total,
   });
 
   /// basic information of a product
@@ -15,6 +16,9 @@ class OrderProductModel extends Equatable {
 
   /// amount purchased for [product]
   final int quantity;
+
+  /// total price of [product.price] * [quantity]
+  final String total;
 
   @override
   List<Object?> get props => [product, quantity];

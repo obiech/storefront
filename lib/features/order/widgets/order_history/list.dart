@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,9 +35,17 @@ class OrderHistoryList extends StatelessWidget {
       separatorBuilder: (_, __) => SizedBox(
         height: context.res.dimens.spacingMiddle,
       ),
-      itemBuilder: (_, index) => OrderHistoryListItem(
-        key: ValueKey(OrderHistoryListKeys.listItem(index)),
-        order: orders[index],
+      itemBuilder: (_, index) => GestureDetector(
+        behavior: HitTestBehavior.deferToChild,
+        onTap: () {
+          context.router.push(
+            OrderDetailsRoute(order: orders[index]),
+          );
+        },
+        child: OrderHistoryListItem(
+          key: ValueKey(OrderHistoryListKeys.listItem(index)),
+          order: orders[index],
+        ),
       ),
     );
   }

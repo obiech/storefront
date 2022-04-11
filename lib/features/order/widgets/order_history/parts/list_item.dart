@@ -60,10 +60,7 @@ class OrderHistoryListItem extends StatelessWidget {
               ),
               SizedBox(width: context.res.dimens.spacingMiddle),
               Expanded(
-                child: OrderSummarySection(
-                  onTap: _navigateToOrderDetails,
-                  order: order,
-                ),
+                child: OrderSummarySection(order: order),
               ),
             ],
           ),

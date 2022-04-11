@@ -34,7 +34,8 @@ import '../features/order/index.dart';
     ),
     AutoRoute(page: OrderSuccessfulPage),
     AutoRoute(page: OrderFailurePage),
-    AutoRoute(page: OrderHistoryScreen)
+    AutoRoute(page: OrderHistoryScreen),
+    AutoRoute(page: OrderDetailsPage),
   ],
 )
 class $AppRouter {}

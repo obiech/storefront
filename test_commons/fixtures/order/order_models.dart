@@ -14,10 +14,12 @@ final orderAwaitingPayment = OrderModel(
     OrderProductModel(
       product: productSeladaRomaine,
       quantity: 3,
+      total: '45000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
   ],
   paymentExpiryTime: DateTime.now().add(
@@ -41,22 +43,27 @@ final orderPaid = OrderModel(
     OrderProductModel(
       product: productBellPepperYellow,
       quantity: 3,
+      total: '30000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
     OrderProductModel(
       product: productSeladaRomaine,
       quantity: 3,
+      total: '45000',
     ),
     OrderProductModel(
       product: productBellPepperYellow,
       quantity: 4,
+      total: '40000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 5,
+      total: '350000',
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
@@ -74,22 +81,27 @@ final orderInDelivery = OrderModel(
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
     OrderProductModel(
       product: productSeladaRomaine,
       quantity: 3,
+      total: '45000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
@@ -107,10 +119,12 @@ final orderArrived = OrderModel(
     OrderProductModel(
       product: productSeladaRomaine,
       quantity: 3,
+      total: '45000',
     ),
     OrderProductModel(
       product: productCookingOilSania,
       quantity: 1,
+      total: '70000',
     ),
   ],
   orderCompletionTime: DateTime.now().subtract(

@@ -15,7 +15,7 @@ class DummyOrderRepository extends IOrderRepository {
   static const productSeladaRomaine = ProductModel(
     sku: 'selada-romaine-sku',
     name: 'Selada Romaine',
-    price: '15000',
+    price: '1500000',
     thumbnailUrl:
         'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
   );
@@ -23,7 +23,7 @@ class DummyOrderRepository extends IOrderRepository {
   static const productCookingOilSania = ProductModel(
     sku: 'cooking-oil-sania-sku',
     name: 'Minyak Goreng Sania 2L',
-    price: '70000',
+    price: '7000000',
     thumbnailUrl:
         'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg',
   );
@@ -31,7 +31,7 @@ class DummyOrderRepository extends IOrderRepository {
   static const productBellPepperYellow = ProductModel(
     sku: 'paprika-kuning-sku',
     name: 'Paprika Kuning',
-    price: '10000',
+    price: '1000000',
     thumbnailUrl:
         'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
   );
@@ -43,18 +43,20 @@ class DummyOrderRepository extends IOrderRepository {
         id: '1',
         status: OrderStatus.awaitingPayment,
         orderDate: DateTime.now(),
-        deliveryFee: '15000',
-        discount: '10000',
-        subTotal: '98500',
-        total: '103500',
-        productsBought: const [
+        deliveryFee: '1500000',
+        discount: '1000000',
+        subTotal: '11500000',
+        total: '10500000',
+        productsBought: [
           OrderProductModel(
             product: productSeladaRomaine,
             quantity: 3,
+            total: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
         ],
         paymentExpiryTime: DateTime.now().add(const Duration(hours: 1)),
@@ -63,30 +65,35 @@ class DummyOrderRepository extends IOrderRepository {
         id: '2',
         status: OrderStatus.paid,
         orderDate: DateTime.now(),
-        deliveryFee: '15000',
-        discount: '0',
-        subTotal: '150000',
-        total: '165000',
-        productsBought: const [
+        deliveryFee: '1500000',
+        discount: '1000000',
+        subTotal: '15000000',
+        total: '16500000',
+        productsBought: [
           OrderProductModel(
             product: productBellPepperYellow,
             quantity: 3,
+            total: (int.parse(productBellPepperYellow.price) * 3).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
             product: productSeladaRomaine,
             quantity: 3,
+            total: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 4,
+            total: (int.parse(productCookingOilSania.price) * 4).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 5,
+            total: (int.parse(productCookingOilSania.price) * 5).toString(),
           ),
         ],
         estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
@@ -95,30 +102,35 @@ class DummyOrderRepository extends IOrderRepository {
         id: '3',
         status: OrderStatus.inDelivery,
         orderDate: DateTime.now(),
-        deliveryFee: '15000',
+        deliveryFee: '1500000',
         discount: '0',
-        subTotal: '150000',
-        total: '165000',
-        productsBought: const [
+        subTotal: '15000000',
+        total: '16500000',
+        productsBought: [
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
             product: productSeladaRomaine,
             quantity: 3,
+            total: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
         ],
         estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
@@ -127,18 +139,20 @@ class DummyOrderRepository extends IOrderRepository {
         id: '4',
         status: OrderStatus.arrived,
         orderDate: DateTime.now(),
-        deliveryFee: '15000',
-        discount: '10000',
-        subTotal: '105000',
-        total: '110000',
-        productsBought: const [
+        deliveryFee: '1500000',
+        discount: '1000000',
+        subTotal: '10500000',
+        total: '11000000',
+        productsBought: [
           OrderProductModel(
             product: productSeladaRomaine,
             quantity: 3,
+            total: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
             product: productCookingOilSania,
             quantity: 1,
+            total: (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
         ],
         orderCompletionTime: DateTime.now().subtract(
