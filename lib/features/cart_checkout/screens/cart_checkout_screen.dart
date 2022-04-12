@@ -13,23 +13,27 @@ class CartCheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<PaymentCheckoutCubit>(),
-      child: DropezyScaffold.textTitle(
-        title: 'Konfirmasi Belanja',
-        child: Column(
-          children: const [
-            Expanded(
-              child: Center(child: Text('Checkout')),
+    return DropezyScaffold.textTitle(
+      title: 'Konfirmasi Belanja',
+      childPadding: EdgeInsets.zero,
+      child: Column(
+        children: [
+          Expanded(
+            child: BlocProvider(
+              create: (context) => getIt<CartBodyBloc>(),
+              child: const CartBodyWidget(),
             ),
-            CartCheckout(
+          ),
+          BlocProvider(
+            create: (context) => getIt<PaymentCheckoutCubit>(),
+            child: const CartCheckout(
               price: '10300',
               discount: '12300',
               preferredPayment: 'OVO',
               points: '100',
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

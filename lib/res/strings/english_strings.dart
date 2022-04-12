@@ -369,4 +369,32 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get wowYouManagedToSave => 'Wow! You managed to save';
+
+  /// Cart Page
+  @override
+  String get addProduct => 'Add product';
+
+  @override
+  String get chooseAll => 'Choose all';
+
+  @override
+  String get pilihVoucherPromo => 'Choose Promo Voucher';
+
+  @override
+  String get deliveryDetails => 'Delivery Details';
+
+  @override
+  String get basket => 'Basket';
+
+  @override
+  String get useDropezyPoints => 'Use Dropezy Points';
+
+  @override
+  String get pack => 'pack';
+
+  @override
+  String get remainder => 'Remainder';
+
+  @override
+  String get addNote => 'Add note';
 }

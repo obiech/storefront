@@ -1,2 +1,3 @@
+export 'cart_body/cart_body_widget.dart';
 export 'checkout/cart_checkout.dart';
 export 'order_summary_item.dart';

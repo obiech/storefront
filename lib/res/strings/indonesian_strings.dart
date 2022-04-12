@@ -369,4 +369,32 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get wowYouManagedToSave => 'Wow! Kamu berhasil hemat';
+
+  /// Cart Page
+  @override
+  String get addProduct => 'Tambah produk';
+
+  @override
+  String get chooseAll => 'Choose all';
+
+  @override
+  String get pilihVoucherPromo => 'Pilih Voucher Promo';
+
+  @override
+  String get deliveryDetails => 'Detail Pengiriman';
+
+  @override
+  String get basket => 'Keranjang';
+
+  @override
+  String get useDropezyPoints => 'Pakai Dropezy Points';
+
+  @override
+  String get pack => 'pack';
+
+  @override
+  String get remainder => 'Sisa';
+
+  @override
+  String get addNote => 'Tambah catatan';
 }

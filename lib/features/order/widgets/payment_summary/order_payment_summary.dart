@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/core/shared_widgets/savings_ribbon.dart';
 
-import '../../../../core/shared_widgets/semi_circle_clipped_widget.dart';
 import '../../../../core/utils/_exporter.dart';
 
 part 'parts/row.dart';
-part 'parts/savings_ribbon.dart';
 
 /// A widget for displaying a summary of order payment,
 /// from top to bottom:
@@ -94,7 +93,7 @@ class OrderPaymentSummary extends StatelessWidget {
           ),
         ],
         if (totalSavings != null)
-          _SavingsRibbon(
+          SavingsRibbon(
             totalSavings: totalSavings!,
           ),
         Padding(

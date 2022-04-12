@@ -138,4 +138,15 @@ abstract class BaseStrings {
   String get voucher;
   String get dropezyPoints;
   String get totalPayment;
+
+  /// Cart Page
+  String get addProduct;
+  String get chooseAll;
+  String get pilihVoucherPromo;
+  String get deliveryDetails;
+  String get basket;
+  String get useDropezyPoints;
+  String get pack;
+  String get remainder;
+  String get addNote;
 }
