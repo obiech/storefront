@@ -19,7 +19,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   // Dependency Injection
-  configureInjection(determineEnvironment());
+  await configureInjection(determineEnvironment());
 
   runApp(
     MultiBlocProvider(

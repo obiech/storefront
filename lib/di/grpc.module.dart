@@ -82,6 +82,7 @@ abstract class GrpcModule {
   /// storefront-backend Order Service,
   ///
   /// and registers it to Service Locator [GetIt].
+  @lazySingleton
   OrderServiceClient orderClient(
     ClientChannel channel,
     AuthInterceptor authInterceptor,
