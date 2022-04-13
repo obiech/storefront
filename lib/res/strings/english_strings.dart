@@ -373,6 +373,9 @@ class EnglishStrings implements BaseStrings {
   String get unspecified => 'Unspecified';
 
   @override
+  String get failed => 'Failed';
+
+  @override
   String get orderFailed => 'Order Unsuccessful!';
 
   @override

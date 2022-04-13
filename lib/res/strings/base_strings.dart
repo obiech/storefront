@@ -241,6 +241,8 @@ abstract class BaseStrings {
 
   String get unspecified;
 
+  String get failed;
+
   /// Order Payment Summary
   String get wowYouManagedToSave;
   String get paymentDetails;

@@ -374,6 +374,9 @@ class IndonesianStrings implements BaseStrings {
   String get unspecified => 'Tidak Diketahui';
 
   @override
+  String get failed => 'Gagal';
+
+  @override
   String get orderFailed => 'Pesanan Gagal!';
 
   @override

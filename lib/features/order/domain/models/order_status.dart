@@ -17,6 +17,9 @@ enum OrderStatus {
   /// Cancelled
   cancelled,
 
+  /// Failed
+  failed,
+
   /// Fallback for unknown status
   unspecified,
 }

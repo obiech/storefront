@@ -22,11 +22,13 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
   Future<void> fetchUserOrderHistory() async {
     emit(OrderHistoryLoading());
 
-    try {
-      final orders = await orderRepository.getUserOrders();
-      emit(OrderHistoryLoaded(orders));
-    } catch (_) {
-      emit(const OrderHistoryLoadingError('Error loading Order History'));
-    }
+    final result = await orderRepository.getUserOrders();
+
+    final state = result.fold(
+      (l) => OrderHistoryLoadingError(l.message),
+      (r) => OrderHistoryLoaded(r),
+    );
+
+    emit(state);
   }
 }

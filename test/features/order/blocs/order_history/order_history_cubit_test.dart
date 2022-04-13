@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/errors/_exporter.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../mocks.dart';
@@ -34,8 +36,9 @@ void main() {
             '[OrderHistoryLoaded] with result from '
             '[orderRepository.getUserOrders()]',
             setUp: () {
-              when(() => orderRepository.getUserOrders())
-                  .thenAnswer((_) async => []);
+              when(() => orderRepository.getUserOrders()).thenAnswer(
+                (_) async => right([]),
+              );
             },
             build: () => createCubit(),
             act: (cubit) => cubit.fetchUserOrderHistory(),
@@ -50,16 +53,19 @@ void main() {
 
           blocTest<OrderHistoryCubit, OrderHistoryState>(
             '[OrderHistoryLoadingError] if [orderRepository.getUserOrders()] '
-            'throws an error',
+            'returns a failure',
             setUp: () {
-              when(() => orderRepository.getUserOrders())
-                  .thenThrow(Exception('fake error'));
+              when(() => orderRepository.getUserOrders()).thenAnswer(
+                (_) async => left(
+                  Failure('Failed to load order history'),
+                ),
+              );
             },
             build: () => createCubit(),
             act: (cubit) => cubit.fetchUserOrderHistory(),
             expect: () => [
               OrderHistoryLoading(),
-              const OrderHistoryLoadingError('Error loading Order History'),
+              const OrderHistoryLoadingError('Failed to load order history'),
             ],
             verify: (cubit) {
               verify(() => orderRepository.getUserOrders()).called(1);

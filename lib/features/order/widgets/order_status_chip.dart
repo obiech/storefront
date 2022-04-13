@@ -49,6 +49,12 @@ class OrderStatusChip extends StatelessWidget {
         backgroundColor = context.res.colors.red;
         textColor = context.res.colors.white;
         break;
+      case OrderStatus.failed:
+        //TODO (leovinsen): update with proper colors when available
+        label = context.res.strings.failed;
+        backgroundColor = context.res.colors.red;
+        textColor = context.res.colors.white;
+        break;
       case OrderStatus.unspecified:
         //TODO (leovinsen): update with proper fallback
         label = context.res.strings.unspecified;

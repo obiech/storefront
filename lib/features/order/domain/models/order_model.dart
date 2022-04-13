@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/order/order.pb.dart' as pb;
 import 'package:equatable/equatable.dart';
 
 import 'order_product_model.dart';
@@ -24,6 +25,44 @@ class OrderModel extends Equatable {
     this.driver,
     this.recipient,
   });
+
+  factory OrderModel.fromPb(pb.Order order) {
+    // TODO (leovinsen): Implement mapping to status inDelivery
+    late OrderStatus orderStatus;
+    switch (order.state) {
+      case pb.OrderState.ORDER_STATE_CANCELLED:
+        orderStatus = OrderStatus.cancelled;
+        break;
+      case pb.OrderState.ORDER_STATE_CREATED:
+        orderStatus = OrderStatus.awaitingPayment;
+        break;
+      case pb.OrderState.ORDER_STATE_DONE:
+        orderStatus = OrderStatus.arrived;
+        break;
+      case pb.OrderState.ORDER_STATE_PAID:
+        orderStatus = OrderStatus.paid;
+        break;
+      case pb.OrderState.ORDER_STATE_FAILED:
+        orderStatus = OrderStatus.failed;
+        break;
+      case pb.OrderState.ORDER_STATE_UNSPECIFIED:
+        orderStatus = OrderStatus.unspecified;
+        break;
+    }
+
+    return OrderModel(
+      id: order.orderId,
+      deliveryFee: order.paymentSummary.deliveryFee.num,
+      discount: order.paymentSummary.discount.num,
+      subTotal: order.paymentSummary.subtotal.num,
+      total: order.paymentSummary.total.num,
+      status: orderStatus,
+      orderDate: order.orderDate.toDateTime(),
+      productsBought: order.items.map(OrderProductModel.fromPb).toList(),
+      paymentExpiryTime: order.paymentExpiryTime.toDateTime(),
+      estimatedArrivalTime: order.estimatedDeliveryTime.toDateTime(),
+    );
+  }
 
   /// A unique identifier of an Order
   final String id;

@@ -1,15 +1,13 @@
-import 'package:injectable/injectable.dart';
+import 'package:dartz/dartz.dart';
 
-import '../../../product/domain/models/product_model.dart';
-import '../models/order_model.dart';
-import '../models/order_product_model.dart';
-import '../repository/i_order_repository.dart';
+import '../../../../core/core.dart';
+import '../../../product/domain/domain.dart';
+import '../domains.dart';
 
 /// Dummy [IOrderRepository].
 ///
 /// Returns data for development purposes, hardcoded in class definition.
 /// WARNING: DO NOT use in production!
-@LazySingleton(as: IOrderRepository)
 class DummyOrderRepository extends IOrderRepository {
   /// Dummy Products
   static const productSeladaRomaine = ProductModel(
@@ -43,8 +41,8 @@ class DummyOrderRepository extends IOrderRepository {
   );
 
   @override
-  Future<List<OrderModel>> getUserOrders() async {
-    return [
+  Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
+    final dummyOrders = [
       OrderModel(
         id: '1',
         status: OrderStatus.awaitingPayment,
@@ -186,5 +184,7 @@ class DummyOrderRepository extends IOrderRepository {
         ),
       ),
     ];
+
+    return right(dummyOrders);
   }
 }
