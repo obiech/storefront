@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 
 import '../features/auth/index.dart';
 import '../features/cart_checkout/index.dart';
+import '../features/child_categories/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
 import '../features/product_search/index.dart';
@@ -37,6 +38,9 @@ import '../features/product_search/index.dart';
     AutoRoute(page: OrderFailurePage),
     AutoRoute(page: OrderHistoryScreen),
     AutoRoute(page: OrderDetailsPage),
+
+    /// Categories
+    AutoRoute(page: ChildCategoriesPage)
   ],
 )
 class $AppRouter {}

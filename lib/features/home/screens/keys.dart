@@ -1,14 +1,15 @@
 part of 'home_page.dart';
 
 class HomePageKeys {
-  static const categoryOneBase = 'CategoryOneWidget';
+  static const parentCategoryBase = 'parentCategoryWidget';
 
   /// Widget responsible for displaying Loading UI
-  static const loadingCategoryOneWidget = '${categoryOneBase}_loading';
+  static const loadingparentCategoryWidget = '${parentCategoryBase}_loading';
 
-  /// Widget responsible for displaying List of orders
-  static const categoryOneListWidget = '${categoryOneBase}_categoryOneList';
+  /// Widget responsible for displaying Grid of categories
+  static const parentCategoryGridWidget =
+      '${parentCategoryBase}_parentCategorygrid';
 
   /// Widget responsible for displaying error message to the user
-  static const errorCategoryOneWidget = '${categoryOneBase}_error';
+  static const errorParentCategoryWidget = '${parentCategoryBase}_error';
 }
