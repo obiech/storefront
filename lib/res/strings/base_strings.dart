@@ -251,4 +251,7 @@ abstract class BaseStrings {
   String get clearAll;
 
   String get addToCart;
+
+  /// Products
+  String stockLeft(int stock);
 }

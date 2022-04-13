@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/product/domain/models/market_status.dart';
-import 'package:storefront_app/features/product/domain/models/product_model.dart';
 import 'package:storefront_app/res/resources.dart';
 
+import '../../../features/product/index.dart';
 import '../buttons/pill_button.dart';
 
 part 'product_badge.dart';
@@ -84,6 +83,13 @@ class ProductItemCard extends StatelessWidget {
                       child: product.marketStatus == MarketStatus.FLASH_SALE
                           ? ProductBadge.flash(res)
                           : ProductBadge.bestSeller(res),
+                    ),
+                  ),
+                if (product.stock <= 3)
+                  Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: ProductBadge.stockWarning(res, product.stock),
                     ),
                   )
               ],

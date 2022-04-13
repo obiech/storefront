@@ -7,6 +7,7 @@ export 'dropezy_empty.dart';
 export 'dropezy_scaffold.dart';
 export 'product/product_item_card.dart';
 export 'text_fields/phone_text_field.dart';
+export 'text_fields/search_text_field.dart';
 
 /// TODO - Is this heavily reused, if not move to auth widgets
 /// if it is only used by auth components

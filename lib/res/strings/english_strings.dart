@@ -413,4 +413,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get addToCart => 'Add to Cart';
+
+  @override
+  String stockLeft(int stock) => '$stock left';
 }

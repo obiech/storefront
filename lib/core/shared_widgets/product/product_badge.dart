@@ -40,6 +40,16 @@ class ProductBadge extends StatelessWidget {
     );
   }
 
+  /// When stock drops below 4 items, a warning is displayed
+  /// on the top right hand corner with remaining stock
+  factory ProductBadge.stockWarning(Resources res, int stock) {
+    return ProductBadge(
+      color: res.colors.lightOrange,
+      secondaryColor: res.colors.orange,
+      text: res.strings.stockLeft(stock),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final res = context.res;

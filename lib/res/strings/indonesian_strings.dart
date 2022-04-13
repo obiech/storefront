@@ -414,4 +414,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get addToCart => 'Tambahkan';
+
+  @override
+  String stockLeft(int stock) => 'Sisa $stock';
 }
