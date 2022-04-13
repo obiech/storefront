@@ -40,4 +40,7 @@ abstract class BaseDimensions {
 
   // Widths
   double get leadingWidth;
+
+  // AppBar size
+  double get appBarSize;
 }

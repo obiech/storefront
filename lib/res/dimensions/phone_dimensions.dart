@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'base_dimensions.dart';
 
 class PhoneDimensions implements BaseDimensions {
@@ -60,4 +62,7 @@ class PhoneDimensions implements BaseDimensions {
 
   @override
   double get leadingWidth => 40;
+
+  @override
+  double get appBarSize => AppBar().preferredSize.height;
 }

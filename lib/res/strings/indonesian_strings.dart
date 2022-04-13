@@ -97,10 +97,11 @@ class IndonesianStrings implements BaseStrings {
   String minutes(int minutes) => '$minutes Menit';
 
   @override
-  String hiWhatAreYouShoppingForToday() => 'Hai, mau belanja apa hari ini?';
+  String hiWhatAreYouShoppingForToday(String name) =>
+      'Hai${name.isNotEmpty ? ' $name' : ''}, mau belanja apa hari ini?';
 
   @override
-  String findYourNeeds() => 'Cari kebutuhanmu';
+  String get findYourNeeds => 'Cari kebutuhanmu';
 
   @override
   String dropezyPoint(int points) => 'Dropezy Point';
@@ -397,4 +398,13 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get addNote => 'Tambah catatan';
+
+  @override
+  String get clearAll => 'Kamu Pernah Cari';
+
+  @override
+  String get youPreviouslySearchedFor => 'Hapus Semua';
+
+  @override
+  String get addToCart => 'Tambahkan';
 }

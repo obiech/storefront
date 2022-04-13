@@ -42,6 +42,9 @@ class SearchTextField extends StatefulWidget {
   /// If the search field should be enabled
   final bool isEnabled;
 
+  /// Callback to handle the search action
+  final Function(String)? onSearch;
+
   const SearchTextField({
     Key? key,
     this.leadingIcon = DropezyIcons.search_alt,
@@ -54,6 +57,7 @@ class SearchTextField extends StatefulWidget {
     this.autoFocus = false,
     this.onFocusChanged,
     this.isEnabled = true,
+    this.onSearch,
   }) : super(key: key);
 
   @override
@@ -62,10 +66,12 @@ class SearchTextField extends StatefulWidget {
 
 class _SearchTextFieldState extends State<SearchTextField> {
   late TextEditingController _controller;
+  late ValueNotifier<String> _textNotifier;
 
   @override
   void initState() {
     _controller = TextEditingController();
+    _textNotifier = ValueNotifier<String>('');
     super.initState();
   }
 
@@ -76,6 +82,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
     return Focus(
       onFocusChange: widget.onFocusChanged,
       child: TextField(
+        textInputAction: TextInputAction.search,
         readOnly: !widget.isEnabled,
         enabled: widget.isEnabled,
         controller: _controller,
@@ -87,25 +94,42 @@ class _SearchTextFieldState extends State<SearchTextField> {
           ),
           prefixIcon:
               Icon(widget.leadingIcon, color: res.colors.black, size: 18),
-          suffixIcon: _controller.text.isNotEmpty && widget.showClearButton
-              ? IconButton(
-                  onPressed: () => setState(() => _controller.clear()),
-                  icon: Icon(widget.clearIcon),
-                  iconSize: 18,
-                  color: widget.clearIconColor ?? res.colors.grey6,
-                )
-              : null,
+          suffixIcon: AnimatedBuilder(
+            animation: _textNotifier,
+            builder: (_, __) {
+              return _textNotifier.value.isNotEmpty && widget.showClearButton
+                  ? IconButton(
+                      onPressed: () {
+                        _controller.clear();
+                        _updateValueNotifier();
+                      },
+                      icon: Icon(widget.clearIcon),
+                      iconSize: 18,
+                      color: widget.clearIconColor ?? res.colors.grey6,
+                    )
+                  : const SizedBox();
+            },
+          ),
         ),
         onChanged: (value) {
           if (value.length >= widget.bufferSize) {
             widget.onTextChanged?.call(value);
           }
-          setState(() {});
+          _updateValueNotifier();
+        },
+        onSubmitted: (value) {
+          widget.onSearch?.call(value);
+          _controller.clear();
+          _updateValueNotifier();
         },
         style: res.styles.caption1,
         cursorColor: res.colors.black,
       ),
     );
+  }
+
+  void _updateValueNotifier() {
+    _textNotifier.value = _controller.text;
   }
 
   @override

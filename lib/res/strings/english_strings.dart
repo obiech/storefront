@@ -98,11 +98,11 @@ class EnglishStrings implements BaseStrings {
   String minutes(int minutes) => '$minutes minutes';
 
   @override
-  String hiWhatAreYouShoppingForToday() =>
-      'Hi, what are you shopping for today?';
+  String hiWhatAreYouShoppingForToday(String name) =>
+      'Hi${name.isNotEmpty ? ' $name' : ''}, what are you shopping for today?';
 
   @override
-  String findYourNeeds() => 'Find your needs';
+  String get findYourNeeds => "I'm looking for...";
 
   @override
   String dropezyPoint(int points) => 'Dropezy Point';
@@ -397,4 +397,13 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get addNote => 'Add note';
+
+  @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get youPreviouslySearchedFor => 'Previous searches';
+
+  @override
+  String get addToCart => 'Add to Cart';
 }

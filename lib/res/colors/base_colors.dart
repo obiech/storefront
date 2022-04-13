@@ -4,14 +4,20 @@ import 'package:flutter/material.dart';
 /// Light variants and grey are typically used for backgroundss
 abstract class BaseColors {
   Color get black;
+
   Color get white;
 
   /// From lightest to darkest
   Color get grey1;
+
   Color get grey2;
+
   Color get grey3;
+
   Color get grey4;
+
   Color get grey5;
+
   Color get grey6;
 
   /// Used for [TextField] [BoxDecoration] [Border] color
@@ -22,13 +28,19 @@ abstract class BaseColors {
   /// Pale variants are used for backgrounds e.g. in [OrderStatusChip]
 
   Color get red;
+
   Color get yellow;
+
   Color get paleYellow;
+
   Color get deepYellow;
+
   Color get orange;
+
   Color get lightOrange;
 
   Color get green;
+
   Color get paleGreen;
   Color get savingsRibbonGreen;
 
@@ -38,8 +50,15 @@ abstract class BaseColors {
   /// [altBlue] is alternate
   /// [lightBlue] and [darkBlue] are used for backgrounds
   Color get blue;
+
   Color get altBlue;
+
   Color get paleBlue;
+
   Color get lightBlue;
+
   Color get darkBlue;
+
+  /// Box shadow colors
+  Color get boxShadow;
 }
