@@ -26,6 +26,7 @@ Future<void> main() async {
   // configureInjection(determineEnvironment());
 
   late StackRouter navigator;
+  late IPrefsRepository prefs;
   late AccountVerificationCubit accountVerificationCubit;
 
   const mockPhoneNumberIntl = '+6281234567890';
@@ -40,13 +41,16 @@ Future<void> main() async {
     when(() => navigator.push(any())).thenAnswer((_) async => null);
     when(() => navigator.replaceAll(any())).thenAnswer((_) async => {});
 
-    final prefs = MockIPrefsRepository();
-    if (!getIt.isRegistered<IPrefsRepository>()) {
-      when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
-      when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
+    prefs = MockIPrefsRepository();
 
-      getIt.registerSingleton<IPrefsRepository>(prefs);
+    if (getIt.isRegistered<IPrefsRepository>()) {
+      getIt.unregister<IPrefsRepository>();
     }
+
+    when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
+    when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
+
+    getIt.registerSingleton<IPrefsRepository>(prefs);
   });
 
   group('OTP Verification Screen', () {
@@ -100,10 +104,14 @@ Future<void> main() async {
             ),
           );
 
-          // verifyPushNamedAndRemoveUntil(
-          //   navigator,
-          //   HomePage.routeName,
-          // );
+          final routeStack = verify(() => navigator.replaceAll(captureAny()))
+              .captured
+              .first as List<PageRouteInfo>;
+
+          expect(routeStack.length, 1);
+          expect(routeStack.first, isA<MainRoute>());
+
+          verify(() => prefs.setIsOnBoarded(true)).called(1);
         },
       );
 
@@ -131,10 +139,10 @@ Future<void> main() async {
             ),
           );
 
-          // final routes = verify(() => navigator.push(captureAny())).captured;
-          //
-          // expect(routes.length, 1);
-          // expect(route, isA<PinInputRoute>());
+          final routes = verify(() => navigator.push(captureAny())).captured;
+
+          expect(routes.length, 1);
+          expect(routes.first, isA<PinInputRoute>());
         },
       );
 

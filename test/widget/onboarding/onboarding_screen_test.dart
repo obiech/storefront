@@ -1,105 +1,119 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/app_router.gr.dart';
+import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
+import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/auth/index.dart';
-import 'package:storefront_app/features/auth/screens/onboarding/onboarding_widgets.dart';
 
+import '../../../test_commons/finders/onboarding_screen_finders.dart';
 import '../../src/mock_navigator.dart';
-import '../../src/mock_screen_utils.dart';
 
-class MockOnboardingCubit extends MockCubit<bool> implements OnboardingCubit {}
+class MockPrefsRepository extends Mock implements IPrefsRepository {}
 
 void main() {
-  late StackRouter navigator;
-  late OnboardingCubit onboardingCubit;
+  late StackRouter router;
+  late IPrefsRepository prefsRepository;
 
   setUp(() {
-    navigator = MockStackRouter();
-    onboardingCubit = MockOnboardingCubit();
+    router = MockStackRouter();
+    prefsRepository = MockPrefsRepository();
 
     // Router stubs
     registerFallbackValue(FakePageRouteInfo());
-    when(() => navigator.push(any())).thenAnswer((_) async => null);
-    when(() => navigator.replaceAll(any())).thenAnswer((_) async => {});
+    when(() => router.push(any())).thenAnswer((_) async => null);
+    when(() => router.replaceAll(any())).thenAnswer((_) async => {});
+
+    if (getIt.isRegistered<IPrefsRepository>()) {
+      getIt.unregister<IPrefsRepository>();
+    }
+
+    // PrefsRepository stubs
+    when(() => prefsRepository.setIsOnBoarded(any()))
+        .thenAnswer((_) async => {});
+
+    // OnboardingView has a reference to GetIt
+    getIt.registerSingleton<IPrefsRepository>(prefsRepository);
   });
 
-  group('Onboarding Screen Navigation', () {
-    testWidgets(' -- Ensure Navigation elements are visible',
-        (WidgetTester tester) async {
-      await tester
-          .pumpWidget(buildMockOnboardingScreen(onboardingCubit, navigator));
-
-      expect(find.byType(ButtonLogin), findsOneWidget);
-      expect(find.byType(ButtonRegister), findsOneWidget);
-      expect(find.byType(ButtonSkipOnboarding), findsOneWidget);
-    });
-
-    testWidgets(' -- Tapping on Login button pushes route for HomeScreen',
-        (WidgetTester tester) async {
-      await tester
-          .pumpWidget(buildMockOnboardingScreen(onboardingCubit, navigator));
-
-      await tester.tap(find.byType(ButtonLogin));
-      await tester.pumpAndSettle();
-
-      final routes = verify(() => navigator.push(captureAny())).captured;
-
-      expect(routes.length, 1);
-      final route = routes.first;
-      expect(route, isA<LoginRoute>());
-    });
-
-    testWidgets(
-        ' -- Tapping on Register button pushes route for RegistrationScreen',
-        (WidgetTester tester) async {
-      await tester
-          .pumpWidget(buildMockOnboardingScreen(onboardingCubit, navigator));
-
-      await tester.tap(find.byType(ButtonRegister));
-      await tester.pumpAndSettle();
-
-      final routes = verify(() => navigator.push(captureAny())).captured;
-
-      expect(routes.length, 1);
-      final route = routes.first;
-      expect(route, isA<RegistrationRoute>());
-    });
-
-    testWidgets(
-        ' -- Tapping on Skip calls [OnboardingCubit.finishOnboarding()] once',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(
-        buildMockOnboardingScreen(
-          onboardingCubit,
-          navigator,
+  Future<void> pumpOnboardingScreen(WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: StackRouterScope(
+          controller: router,
+          stateHash: 0,
+          child: const OnboardingScreen(),
         ),
+      ),
+    );
+  }
+
+  group(
+    'OnboardingScreen',
+    () {
+      testWidgets(
+        'should show important navigation elements',
+        (WidgetTester tester) async {
+          await pumpOnboardingScreen(tester);
+
+          expect(finderButtonLogin, findsOneWidget);
+          expect(finderButtonRegister, findsOneWidget);
+          expect(finderButtonSkipOnboarding, findsOneWidget);
+        },
       );
-/*
-TODO - Fix test
-      when(
-        () => onboardingCubit.finishOnboarding(),
-      ).thenAnswer(
-        (_) async {},
+
+      testWidgets(
+        "pushes a route for LoginPage when Button 'Login' is tapped",
+        (WidgetTester tester) async {
+          await pumpOnboardingScreen(tester);
+
+          await tester.tap(finderButtonLogin);
+          await tester.pumpAndSettle();
+
+          final routes = verify(() => router.push(captureAny())).captured;
+
+          expect(routes.length, 1);
+          final route = routes.first;
+          expect(route, isA<LoginRoute>());
+        },
       );
 
-      await tester.tap(find.byType(ButtonSkipOnboarding));
-      await tester.pumpAndSettle();
+      testWidgets(
+        "pushes a route for LoginPage when Button 'Register' is tapped",
+        (WidgetTester tester) async {
+          await pumpOnboardingScreen(tester);
 
-      verify(() => onboardingCubit.finishOnboarding()).called(1);*/
-    });
-  });
-}
+          await tester.tap(finderButtonRegister);
+          await tester.pumpAndSettle();
 
-Widget buildMockOnboardingScreen(
-  OnboardingCubit cubit,
-  StackRouter navigator,
-) {
-  return buildMockScreenWithBlocProviderAndAutoRoute(
-    cubit,
-    const OnboardingScreen(),
-    navigator,
+          final routes = verify(() => router.push(captureAny())).captured;
+
+          expect(routes.length, 1);
+          final route = routes.first;
+          expect(route, isA<RegistrationRoute>());
+        },
+      );
+
+      testWidgets(
+        "replaces route stack with MainScreen when 'Skip Onboarding' is tapped "
+        'and sets onboarding boolean value to true',
+        (WidgetTester tester) async {
+          await pumpOnboardingScreen(tester);
+
+          await tester.tap(finderButtonSkipOnboarding);
+          await tester.pumpAndSettle();
+
+          final routeStack = verify(() => router.replaceAll(captureAny()))
+              .captured
+              .first as List<PageRouteInfo>;
+
+          expect(routeStack.length, 1);
+          expect(routeStack.first, isA<MainRoute>());
+
+          verify(() => prefsRepository.setIsOnBoarded(true)).called(1);
+        },
+      );
+    },
   );
 }

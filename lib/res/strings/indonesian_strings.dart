@@ -5,13 +5,7 @@ class IndonesianStrings implements BaseStrings {
   String shoppingForDailyNecessities() => 'Belanja kebutuhan harian';
 
   @override
-  String superEasyWithDropezy() => 'Super Ezy dengan Dropezy';
-
-  @override
   String enter() => 'Masuk';
-
-  @override
-  String register() => 'Daftar';
 
   @override
   String skip() => 'Lewati';
@@ -277,6 +271,19 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get yourOrderWillArriveIn => 'Pesanan kamu akan tiba dalam';
+
+  /// Onboarding Page
+  @override
+  String get register => 'Daftar';
+
+  @override
+  String get login => 'Masuk';
+
+  @override
+  String get shoppingForDailyNeeds => 'Belanja kebutuhan harian';
+
+  @override
+  String get superEzyWith => 'Super Ezy dengan';
 
   /// Order History Page
   @override

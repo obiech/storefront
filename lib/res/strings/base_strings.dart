@@ -2,10 +2,6 @@
 abstract class BaseStrings {
   String shoppingForDailyNecessities();
 
-  String superEasyWithDropezy();
-
-  String register();
-
   String enter();
 
   String skip();
@@ -159,6 +155,12 @@ abstract class BaseStrings {
   String forgotPinCode();
 
   String oopsWrongPinCode();
+
+  /// Onboarding Page
+  String get shoppingForDailyNeeds;
+  String get superEzyWith;
+  String get register;
+  String get login;
 
   /// Order Successful Page
   String get orderSuccessful;

@@ -5,13 +5,7 @@ class EnglishStrings implements BaseStrings {
   String shoppingForDailyNecessities() => 'Shopping for daily necessities';
 
   @override
-  String superEasyWithDropezy() => 'Super Easy with Dropezy';
-
-  @override
   String enter() => 'Enter';
-
-  @override
-  String register() => 'Register';
 
   @override
   String skip() => 'Skip';
@@ -277,6 +271,19 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get yourOrderWillArriveIn => 'Your order will arrive in';
+
+  /// Onboarding Page
+  @override
+  String get register => 'Register';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get shoppingForDailyNeeds => 'Shopping for daily needs';
+
+  @override
+  String get superEzyWith => 'Super Ezy with';
 
   /// Order History Page
   @override

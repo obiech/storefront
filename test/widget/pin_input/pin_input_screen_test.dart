@@ -17,13 +17,10 @@ import '../../src/mock_screen_utils.dart';
 class MockPinRegistrationCubit extends MockCubit<PinRegistrationState>
     implements PinRegistrationCubit {}
 
-class MockOnboardingCubit extends MockCubit<bool> implements OnboardingCubit {}
-
 void main() {
   late IPrefsRepository prefs;
   late StackRouter mockNavigator;
   late PinRegistrationCubit pinRegistrationCubit;
-  late OnboardingCubit onboardingCubit;
 
   final Finder finderInputFirstPin =
       find.byKey(const Key(PinInputScreen.keyInputPin));
@@ -48,21 +45,20 @@ void main() {
     when(() => pinRegistrationCubit.registerPin(any()))
         .thenAnswer((_) async {});
 
-    onboardingCubit = MockOnboardingCubit();
-
     // Router stubs
     registerFallbackValue(FakePageRouteInfo());
     when(() => mockNavigator.push(any())).thenAnswer((_) async => null);
     when(() => mockNavigator.replaceAll(any())).thenAnswer((_) async => {});
-    //TODO - Restore test when(() => onboardingCubit.finishOnboarding()).thenAnswer((_) async {});
 
     prefs = MockIPrefsRepository();
-    if (!getIt.isRegistered<IPrefsRepository>()) {
-      when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
-      when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
-
-      getIt.registerSingleton<IPrefsRepository>(prefs);
+    if (getIt.isRegistered<IPrefsRepository>()) {
+      getIt.unregister<IPrefsRepository>();
     }
+
+    when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
+    when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
+
+    getIt.registerSingleton<IPrefsRepository>(prefs);
   });
 
   group('PIN Input Screen', () {
@@ -75,7 +71,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -100,7 +95,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -123,7 +117,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -163,7 +156,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -198,7 +190,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -241,17 +232,17 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
 
-        // TODO - Restore test verify(() => onboardingCubit.finishOnboarding()).called(1);
         final routes =
             verify(() => mockNavigator.replaceAll(captureAny())).captured;
         expect(routes.length, 1);
         expect(routes.first.length, 1);
         expect(routes.first.first, isA<MainRoute>());
+
+        verify(() => prefs.setIsOnBoarded(true)).called(1);
       },
     );
 
@@ -273,7 +264,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
             mockNavigator: mockNavigator,
           ),
         );
@@ -281,12 +271,13 @@ void main() {
         await tester.tap(finderButtonSkip);
         await tester.pumpAndSettle();
 
-        //TODO - Restore Test verify(() => onboardingCubit.finishOnboarding()).called(1);
         final routes =
             verify(() => mockNavigator.replaceAll(captureAny())).captured;
         expect(routes.length, 1);
         expect(routes.first.length, 1);
         expect(routes.first.first, isA<MainRoute>());
+
+        verify(() => prefs.setIsOnBoarded(true)).called(1);
       },
     );
 
@@ -305,7 +296,6 @@ void main() {
         await tester.pumpWidget(
           buildMockOtpVerificationScreen(
             pinRegistrationCubit: pinRegistrationCubit,
-            onboardingCubit: onboardingCubit,
           ),
         );
 
@@ -333,14 +323,10 @@ void main() {
 /// Do not pass [mockNavigator] to avoid mocking Navigator.
 Widget buildMockOtpVerificationScreen({
   required PinRegistrationCubit pinRegistrationCubit,
-  required OnboardingCubit onboardingCubit,
   StackRouter? mockNavigator,
 }) =>
     buildMockScreenWithMultiBlocProviderAndAutoRoute(
-      [
-        BlocProvider<PinRegistrationCubit>.value(value: pinRegistrationCubit),
-        BlocProvider<OnboardingCubit>.value(value: onboardingCubit),
-      ],
+      [BlocProvider<PinRegistrationCubit>.value(value: pinRegistrationCubit)],
       const PinInputScreen(),
       mockNavigator,
     );
