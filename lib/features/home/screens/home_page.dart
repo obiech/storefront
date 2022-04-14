@@ -6,55 +6,74 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 
 import '../_exporter.dart';
+import '../widgets/search_header.dart';
 
 part 'keys.dart';
 
 class HomePage extends StatelessWidget {
-  static const routeName = 'home';
-
   const HomePage({Key? key}) : super(key: key);
 
-  //TODO: Implement HomeScreen
   @override
   Widget build(BuildContext context) {
     final res = context.res;
-    return DropezyScaffold.textTitle(
-      title: 'Home',
-      childPadding: const EdgeInsets.all(16),
-      actions: [
-        TextButton(
-          onPressed: () {
-            getIt<IPrefsRepository>().setIsOnBoarded(false);
-            context.router.replaceAll([const OnboardingRoute()]);
-          },
-          child: Text(
-            'Sign out',
-            style: res.styles.caption1.copyWith(
-              color: res.colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              getIt<IPrefsRepository>().setIsOnBoarded(false);
+              context.router.replaceAll([
+                const OnboardingRoute(),
+              ]);
+            },
+            child: const Text(
+              'Sign out',
+              style: TextStyle(color: Colors.white),
             ),
-          ),
-        )
-      ],
-      child: ListView(
-        children: [
-          ListTile(
-            title: const Text('Cart Checkout'),
-            onTap: () {
-              context.router.push(const CartCheckoutRoute());
-            },
-          ),
-          const Divider(),
-          ListTile(
-            title: const Text('Order History'),
-            onTap: () {
-              context.router.push(const OrderHistoryRoute());
-            },
-          ),
-          const Divider(),
-          BlocBuilder<CategoriesOneCubit, CategoriesOneState>(
-            builder: _categoriesOneWidget,
-          ),
+          )
         ],
+      ),
+      body: SafeArea(
+        bottom: false,
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: Column(
+            children: [
+              const SearchHeader(),
+              Container(
+                decoration: res.styles.bottomSheetStyle,
+                padding: EdgeInsets.only(
+                  left: res.dimens.spacingMedium,
+                  right: res.dimens.spacingMedium,
+                  bottom: 80,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: const Text('Cart Checkout'),
+                      onTap: () {
+                        context.router.push(const CartCheckoutRoute());
+                      },
+                    ),
+                    const Divider(),
+                    ListTile(
+                      title: const Text('Order History'),
+                      onTap: () {
+                        context.router.push(const OrderHistoryRoute());
+                      },
+                    ),
+                    const Divider(),
+                    BlocBuilder<CategoriesOneCubit, CategoriesOneState>(
+                      builder: _categoriesOneWidget,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
+
+import '../index.dart';
 
 /// Home search widget that connects to search page
 class SearchHeader extends StatelessWidget {
@@ -34,10 +37,16 @@ class SearchHeader extends StatelessWidget {
                 vertical: res.dimens.spacingMiddle,
                 horizontal: 5,
               ),
-              prefixIcon: const Icon(DropezyIcons.search_alt, size: 18),
+              prefixIcon: Icon(
+                DropezyIcons.search_alt,
+                size: 18,
+                color: res.colors.grey4,
+              ),
             ),
             style: res.styles.caption1,
-          )
+            onTap: () => AutoTabsRouter.of(context)
+                .setActiveIndex(BottomNav.SEARCH.index),
+          ),
         ],
       ),
     );
