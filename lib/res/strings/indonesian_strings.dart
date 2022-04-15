@@ -305,6 +305,26 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get yourPurchases => 'Belanjaanmu';
 
+  @override
+  String get estimation => 'Estimasi';
+
+  @override
+  String get orderStatus => 'Status Pesanan';
+
+  @override
+  String get orderTime => 'Waktu Pemesanan';
+
+  @override
+  String get captionOrderInProcess =>
+      'Tunggu ya, pesananmu sedang diproses untuk pengiriman.';
+
+  @override
+  String get captionOrderInDelivery =>
+      'Woosh, kurir kami sedang OTW ke rumah kamu';
+
+  @override
+  String get captionOrderHasArrived => 'Yay! Pesanan sudah sampai';
+
   // button labels
   @override
   String get continuePayment => 'Lanjut Pembayaran';
@@ -329,7 +349,10 @@ class IndonesianStrings implements BaseStrings {
   String get inDelivery => 'Dikirim';
 
   @override
-  String get arrived => 'Sampai Tujuan';
+  String get arrived => 'Sampai';
+
+  @override
+  String get arrivedAtDestination => 'Sampai Tujuan';
 
   @override
   String get cancelled => 'Dibatalkan';

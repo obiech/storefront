@@ -14,6 +14,8 @@ abstract class BaseStyles {
 
   TextStyle get caption3;
 
+  TextStyle get textSmall;
+
   TextStyle get textFieldContent;
 
   TextStyle get textFieldHint;

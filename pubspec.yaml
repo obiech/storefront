@@ -53,6 +53,7 @@ dependencies:
   intl: ^0.17.0
   modal_bottom_sheet: ^2.0.0
   package_info_plus: ^1.4.0
+  percent_indicator: ^4.0.0
   pin_code_fields: ^7.3.0
   protobuf: ^2.0.1
   shared_preferences: ^2.0.13

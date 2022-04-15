@@ -39,7 +39,7 @@ class OrderStatusChip extends StatelessWidget {
         textColor = context.res.colors.green;
         break;
       case OrderStatus.arrived:
-        label = context.res.strings.arrived;
+        label = context.res.strings.arrivedAtDestination;
         backgroundColor = context.res.colors.paleBlue;
         textColor = context.res.colors.blue;
         break;

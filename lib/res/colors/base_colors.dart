@@ -42,6 +42,9 @@ abstract class BaseColors {
   Color get green;
 
   Color get paleGreen;
+
+  Color get neonGreen;
+
   Color get savingsRibbonGreen;
 
   Color get dividerColor;

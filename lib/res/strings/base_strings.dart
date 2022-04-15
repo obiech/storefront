@@ -193,7 +193,20 @@ abstract class BaseStrings {
 
   /// Order Details Page
   String get orderDetails;
+
+  String get orderStatus;
+
   String get yourPurchases;
+
+  String get estimation;
+
+  String get captionOrderInProcess;
+
+  String get captionOrderInDelivery;
+
+  String get captionOrderHasArrived;
+
+  String get orderTime;
 
   // button labels
   String get continuePayment;
@@ -212,6 +225,8 @@ abstract class BaseStrings {
   String get inDelivery;
 
   String get arrived;
+
+  String get arrivedAtDestination;
 
   String get cancelled;
 

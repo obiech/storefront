@@ -36,6 +36,12 @@ class AppStyles implements BaseStyles {
       );
 
   @override
+  TextStyle get textSmall => TextStyle(
+        color: _colors.black,
+        fontSize: 9,
+      );
+
+  @override
   TextStyle get clickableText => TextStyle(
         color: _colors.blue,
         fontSize: 12,

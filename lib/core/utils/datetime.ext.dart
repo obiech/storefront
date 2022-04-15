@@ -21,17 +21,28 @@ extension DateTimeX on DateTime {
   ) {
     final timeDiff = difference(otherDate);
 
-    final String diffHours = timeDiff.inHours.toString().padLeft(2, '0');
-    final String diffMins =
-        (timeDiff.inMinutes % 60).toString().padLeft(2, '0');
-    final String diffSeconds =
-        (timeDiff.inSeconds % 60).toString().padLeft(2, '0');
-
     switch (format) {
       case TimeDiffFormat.hhmmss:
-        return '$diffHours:$diffMins:$diffSeconds';
+        return timeDiff.toHhMmSs();
       case TimeDiffFormat.mmss:
-        return '$diffMins:$diffSeconds';
+        return timeDiff.toMmSs();
     }
+  }
+}
+
+extension DurationX on Duration {
+  String toHhMmSs() {
+    final String hh = inHours.toString().padLeft(2, '0');
+    final String mm = (inMinutes % 60).toString().padLeft(2, '0');
+    final String ss = (inSeconds % 60).toString().padLeft(2, '0');
+
+    return '$hh:$mm:$ss';
+  }
+
+  String toMmSs() {
+    final String mm = (inMinutes % 60).toString().padLeft(2, '0');
+    final String ss = (inSeconds % 60).toString().padLeft(2, '0');
+
+    return '$mm:$ss';
   }
 }

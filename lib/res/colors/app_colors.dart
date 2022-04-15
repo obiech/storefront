@@ -56,6 +56,10 @@ class AppColors implements BaseColors {
 
   @override
   Color get paleGreen => const Color(0xFFE4F5ED);
+
+  @override
+  Color get neonGreen => const Color(0xFF80DF9D);
+
   @override
   Color get savingsRibbonGreen => const Color(0xFFDAF6E5);
 

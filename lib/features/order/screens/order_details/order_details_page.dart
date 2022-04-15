@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/core.dart';
 import '../../domain/models/order_model.dart';
-import '../../widgets/order_details/section.dart';
-import '../../widgets/payment_summary/order_payment_summary.dart';
+import '../../widgets/order_widgets.dart';
 
 /// Screen for desplaying order details from [OrderModel]
 class OrderDetailsPage extends StatelessWidget {
@@ -23,6 +22,18 @@ class OrderDetailsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            OrderStatusHeader(
+              orderId: order.id,
+              orderCreationTime: order.orderDate,
+              orderStatus: order.status,
+              estimatedArrivalTime: order.estimatedArrivalTime,
+            ),
+            const Divider(
+              color: Color(0xFFEEF0F2),
+              endIndent: 0,
+              indent: 0,
+              thickness: 8,
+            ),
             OrderDetailsSection(products: order.productsBought),
             const Divider(
               color: Color(0xFFEEF0F2),

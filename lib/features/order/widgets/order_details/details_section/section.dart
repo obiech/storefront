@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/core.dart';
-import '../../../../../res/resources.dart';
-import '../../domain/models/order_product_model.dart';
+import '../../../../../../core/core.dart';
+import '../../../../../../res/resources.dart';
+import '../../../domain/models/order_product_model.dart';
 
 part 'parts/products_list.dart';
 

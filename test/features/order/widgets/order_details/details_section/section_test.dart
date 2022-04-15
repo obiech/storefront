@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/utils/build_context.ext.dart';
-import 'package:storefront_app/features/order/widgets/order_details/section.dart';
+import 'package:storefront_app/features/order/widgets/order_details/details_section/section.dart';
 
-import '../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/fixtures/order/order_models.dart';
 
 void main() {
   testWidgets(

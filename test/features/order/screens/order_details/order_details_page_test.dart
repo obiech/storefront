@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/features/order/index.dart';
-import 'package:storefront_app/features/order/widgets/order_details/section.dart';
-import 'package:storefront_app/features/order/widgets/payment_summary/order_payment_summary.dart';
 
 import '../../../../../test_commons/fixtures/order/order_models.dart';
 
