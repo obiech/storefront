@@ -11,4 +11,5 @@ class PrefsKeys {
   static const kUserAuthToken = 'userAuthToken';
   static const kUserPhoneNumber = 'userPhoneNumber';
   static const kDeviceFingerPrint = 'fakeDeviceFingerprint';
+  static const kSearchQueries = 'kSearchQueries';
 }

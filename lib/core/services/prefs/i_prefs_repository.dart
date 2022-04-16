@@ -39,4 +39,7 @@ abstract class IPrefsRepository {
 
   /// Store user's finger print
   Future<void> setFingerPrint(String fingerPrint);
+
+  /// Clear Prefs
+  Future<void> clear();
 }
