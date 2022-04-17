@@ -8,9 +8,16 @@ on:
     branches:
       - '*'
 
+env:
+  _TESTS_FILE: .dart_tool/test_files
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6]
 
     steps:
       - name: Generate dropezy-ci Access Token
@@ -53,5 +60,25 @@ jobs:
       - name: 🕵️ Analyze
         run: flutter analyze lib test
 
+      # First, sort and fetch list of all test files into $_TESTS_FILE.
+      #
+      # Then, partitions the tests evenly for each shard, with each shard
+      # running up to tests_per_shard tests.
+      #
+      # Each partition are stored a unique test file with this format: $_TESTS_FILE<shard_number>
+      # i.e.  .dart_tool/test_files.0, .dart_tool/test_files.1, and so on. 
+      - name: Determine tests for individual shards
+        run: |
+          find test -name "*_test\\.dart" | sort > $_TESTS_FILE
+          (( tests_per_shard = ($(wc -l <$_TESTS_FILE) + 7 - 1) / 7 ))
+          (( offset = 1 + tests_per_shard * ${{ matrix.shard }} ))
+          tail -n+$offset $_TESTS_FILE | head -n$tests_per_shard > $_TESTS_FILE.${{ matrix.shard }}
+          echo 'TEST FILES SELECTED:'
+          cat "$_TESTS_FILE.${{ matrix.shard }}"
+        shell: bash
+
+      # Runs tests exclusively on files predetermined in previous step
       - name: 🧪 Run Tests
-        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
+        run: flutter test --no-pub --coverage --test-randomize-ordering-seed random $(cat $_TESTS_FILE.${{ matrix.shard }})
+        shell: bash
+
