@@ -5,6 +5,9 @@ import 'colors/base_colors.dart';
 import 'dimensions/base_dimensions.dart';
 import 'dimensions/phone_dimensions.dart';
 import 'dimensions/tablet_dimensions.dart';
+import 'links/base_links.dart';
+import 'links/english_links.dart';
+import 'links/indonesian_links.dart';
 import 'paths/base_paths.dart';
 import 'paths/english_paths.dart';
 import 'paths/indonesian_paths.dart';
@@ -43,6 +46,18 @@ class Resources {
     }
 
     return PhoneDimensions();
+  }
+
+  BaseLinks get links {
+    // It could be from the user preferences or even from the current locale
+    final locale = Localizations.localeOf(_context);
+
+    switch (locale.languageCode) {
+      case 'id':
+        return IndonesianLinks();
+      default:
+        return EnglishLinks();
+    }
   }
 
   BasePaths get paths {
