@@ -337,6 +337,15 @@ class EnglishStrings implements BaseStrings {
   @override
   String get captionOrderHasArrived => 'Yay! Your order has arrived';
 
+  @override
+  String get deliveredBy => 'Delivered by';
+
+  @override
+  String get receivedBy => 'Received by';
+
+  @override
+  String get contact => 'Contact';
+
   /// Order Status
   @override
   String get arrived => 'Arrived';

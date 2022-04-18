@@ -80,4 +80,5 @@ class DropezyIcons {
       IconData(0xe833, fontFamily: _kFontFam);
   static const IconData whatsapp = IconData(0xe834, fontFamily: _kFontFam);
   static const IconData voucher = IconData(0xe835, fontFamily: _kFontFam);
+  static const IconData call = IconData(0xe836, fontFamily: _kFontFam);
 }

@@ -208,6 +208,12 @@ abstract class BaseStrings {
 
   String get orderTime;
 
+  String get deliveredBy;
+
+  String get receivedBy;
+
+  String get contact;
+
   // button labels
   String get continuePayment;
 

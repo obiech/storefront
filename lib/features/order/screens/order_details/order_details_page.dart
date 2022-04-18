@@ -28,19 +28,17 @@ class OrderDetailsPage extends StatelessWidget {
               orderStatus: order.status,
               estimatedArrivalTime: order.estimatedArrivalTime,
             ),
-            const Divider(
-              color: Color(0xFFEEF0F2),
-              endIndent: 0,
-              indent: 0,
-              thickness: 8,
-            ),
+            const ThickDivider(),
+            if (order.status == OrderStatus.inDelivery ||
+                order.status == OrderStatus.arrived) ...[
+              DriverAndRecipientSection(
+                driverModel: order.driver!,
+                recipientModel: order.recipient,
+              ),
+              const ThickDivider(),
+            ],
             OrderDetailsSection(products: order.productsBought),
-            const Divider(
-              color: Color(0xFFEEF0F2),
-              endIndent: 0,
-              indent: 0,
-              thickness: 8,
-            ),
+            const ThickDivider(),
             OrderPaymentSummary(
               totalSavings:
                   (int.parse(order.discount) + int.parse(order.deliveryFee))

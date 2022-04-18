@@ -13,3 +13,4 @@ export 'text_fields/search_text_field.dart';
 /// TODO - Is this heavily reused, if not move to auth widgets
 /// if it is only used by auth components
 export 'text_user_agreement.dart';
+export 'thick_divider.dart';

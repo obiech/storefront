@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import 'order_product_model.dart';
 
+part 'order_driver_model.dart';
+part 'order_recipient_model.dart';
 part 'order_status.dart';
 
 /// Representation of an order that contains transaction information such as
@@ -19,6 +21,8 @@ class OrderModel extends Equatable {
     required this.subTotal,
     required this.total,
     required this.productsBought,
+    this.driver,
+    this.recipient,
   });
 
   /// A unique identifier of an Order
@@ -63,6 +67,12 @@ class OrderModel extends Equatable {
 
   /// List of all products bought in this transaction
   final List<OrderProductModel> productsBought;
+
+  /// Driver responsible for delivering the customer's order
+  final OrderDriverModel? driver;
+
+  /// Person that received the order from the driver
+  final OrderRecipientModel? recipient;
 
   @override
   List<Object?> get props => [id];

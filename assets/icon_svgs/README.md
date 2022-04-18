@@ -17,6 +17,7 @@ announcement_outlined | <img height="40" src="announcement_outlined.svg" alt="an
 back | <img height="40" src="back.svg" alt="back"/>
 bell | <img height="40" src="bell.svg" alt="bell"/>
 best_seller | <img height="40" src="best_seller.svg" alt="best_seller"/>
+call | <img height="40" src="call.svg" alt="call"/>
 cart | <img height="40" src="cart.svg" alt="cart"/>
 check | <img height="40" src="check.svg" alt="check"/>
 check_on | <img height="40" src="check_on.svg" alt="check_on"/>

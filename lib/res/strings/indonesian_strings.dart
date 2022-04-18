@@ -325,6 +325,15 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get captionOrderHasArrived => 'Yay! Pesanan sudah sampai';
 
+  @override
+  String get deliveredBy => 'Diantar oleh';
+
+  @override
+  String get receivedBy => 'Diterima oleh';
+
+  @override
+  String get contact => 'Hubungi';
+
   // button labels
   @override
   String get continuePayment => 'Lanjut Pembayaran';
