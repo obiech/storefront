@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/features/home/blocs/categories_one/cubit/categories_one_cubit.dart';
 import 'package:storefront_app/features/home/domain/models/categories_one.dart';
 import 'package:storefront_app/features/home/index.dart';
 
