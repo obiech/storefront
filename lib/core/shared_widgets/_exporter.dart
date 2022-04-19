@@ -6,6 +6,7 @@ export 'dropezy_button.dart';
 export 'dropezy_empty.dart';
 export 'dropezy_scaffold.dart';
 export 'product/product_item_card.dart';
+export 'product/product_item_card_loading.dart';
 export 'text_fields/phone_text_field.dart';
 export 'text_fields/search_text_field.dart';
 

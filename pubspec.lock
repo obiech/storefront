@@ -299,8 +299,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0c4871e"
-      resolved-ref: "0c4871e5d43fe6214faad6fec30fbcf89dc80b87"
+      ref: "58b2502"
+      resolved-ref: "58b2502df7ee58d4166767e4b07dbb1d67d72f9e"
       url: "https://github.com/dropezy/proto.git"
     source: git
     version: "0.0.1"
@@ -1006,6 +1006,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  skeletons:
+    dependency: "direct main"
+    description:
+      name: skeletons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   sky_engine:
     dependency: transitive
     description: flutter

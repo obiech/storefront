@@ -45,6 +45,12 @@ class SearchTextField extends StatefulWidget {
   /// Callback to handle the search action
   final Function(String)? onSearch;
 
+  /// FocusNode to toggle focus
+  final FocusNode? focusNode;
+
+  /// Text Controller
+  final TextEditingController? controller;
+
   const SearchTextField({
     Key? key,
     this.leadingIcon = DropezyIcons.search_alt,
@@ -58,6 +64,8 @@ class SearchTextField extends StatefulWidget {
     this.onFocusChanged,
     this.isEnabled = true,
     this.onSearch,
+    this.focusNode,
+    this.controller,
   }) : super(key: key);
 
   @override
@@ -70,8 +78,11 @@ class _SearchTextFieldState extends State<SearchTextField> {
 
   @override
   void initState() {
-    _controller = TextEditingController();
+    _controller = widget.controller ?? TextEditingController();
     _textNotifier = ValueNotifier<String>('');
+    _controller.addListener(() {
+      _updateValueNotifier();
+    });
     super.initState();
   }
 
@@ -83,6 +94,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
       onFocusChange: widget.onFocusChanged,
       child: TextField(
         textInputAction: TextInputAction.search,
+        focusNode: widget.focusNode,
         readOnly: !widget.isEnabled,
         enabled: widget.isEnabled,
         controller: _controller,
