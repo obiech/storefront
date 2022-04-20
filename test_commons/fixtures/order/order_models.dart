@@ -105,6 +105,12 @@ final orderInDelivery = OrderModel(
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
+  driver: OrderDriverModel(
+    fullName: 'Andi Hardiawan',
+    vehicleLicenseNumber: 'B 1234 EZY',
+    whatsappNumber: '+628123123123',
+    imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
+  ),
 );
 
 final orderArrived = OrderModel(
@@ -133,5 +139,16 @@ final orderArrived = OrderModel(
       hours: 1,
       minutes: 10,
     ),
+  ),
+  driver: OrderDriverModel(
+    fullName: 'Indra',
+    vehicleLicenseNumber: 'B 9999 EZY',
+    whatsappNumber: '+628123123123',
+    imageUrl: 'https://randomuser.me/api/portraits/men/29.jpg',
+  ),
+  recipient: OrderRecipientModel(
+    fullName: 'Indah Kartika',
+    relationToCustomer: 'Customer',
+    imageUrl: 'https://randomuser.me/api/portraits/women/51.jpg',
   ),
 );

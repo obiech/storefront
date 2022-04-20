@@ -4,23 +4,107 @@ import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/fixtures/order/order_models.dart';
 
+/// Helper functions specific to this test
+extension WidgetTesterX on WidgetTester {
+  Future<void> pumpOrderDetailsPage({required OrderModel order}) async {
+    await pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: OrderDetailsPage(order: order),
+        ),
+      ),
+    );
+  }
+}
+
 void main() {
   group(
     'OrderDetailsPage',
     () {
-      testWidgets(
-        'should show list of purchased products and transaction summary',
-        (tester) async {
-          await tester.pumpWidget(
-            MaterialApp(
-              home: OrderDetailsPage(
-                order: orderAwaitingPayment,
-              ),
-            ),
-          );
+      final finderStatusHeader = find.byType(
+        OrderStatusHeader,
+        skipOffstage: false,
+      );
+      final finderDetailsSection = find.byType(
+        OrderDetailsSection,
+        skipOffstage: false,
+      );
+      final finderPaymentSummary = find.byType(
+        OrderPaymentSummary,
+        skipOffstage: false,
+      );
+      final finderDriverAndRecipientSection = find.byType(
+        DriverAndRecipientSection,
+        skipOffstage: false,
+      );
+      final finderContactSupportButton = find.byType(
+        ContactSupportButton,
+        skipOffstage: false,
+      );
+      final finderOrderAgainButton = find.byKey(
+        const ValueKey(OrderDetailsPageKeys.buttonOrderAgain),
+        skipOffstage: false,
+      );
 
-          expect(find.byType(OrderDetailsSection), findsOneWidget);
-          expect(find.byType(OrderPaymentSummary), findsOneWidget);
+      testWidgets(
+        'for [OrderStatus.awaitingPayment] should show order status header, '
+        'list of purchased products, transaction summary, '
+        'and a button to contact support',
+        (tester) async {
+          await tester.pumpOrderDetailsPage(order: orderAwaitingPayment);
+
+          expect(finderStatusHeader, findsOneWidget);
+          expect(finderDetailsSection, findsOneWidget);
+          expect(finderPaymentSummary, findsOneWidget);
+          expect(finderDriverAndRecipientSection, findsNothing);
+          expect(finderContactSupportButton, findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'for [OrderStatus.paid] should show order status header, '
+        'list of purchased products, transaction summary, '
+        'and a button to contact support',
+        (tester) async {
+          await tester.pumpOrderDetailsPage(order: orderPaid);
+
+          expect(finderStatusHeader, findsOneWidget);
+          expect(finderDetailsSection, findsOneWidget);
+          expect(finderPaymentSummary, findsOneWidget);
+          expect(finderDriverAndRecipientSection, findsNothing);
+          expect(finderContactSupportButton, findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'for [OrderStatus.inDelivery] should show order status header, '
+        'list of purchased products, transaction summary, driver information '
+        'and a button to contact support',
+        (tester) async {
+          await tester.pumpOrderDetailsPage(order: orderInDelivery);
+
+          expect(finderStatusHeader, findsOneWidget);
+          expect(finderDetailsSection, findsOneWidget);
+          expect(finderPaymentSummary, findsOneWidget);
+          expect(finderDriverAndRecipientSection, findsOneWidget);
+          expect(finderContactSupportButton, findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'for [OrderStatus.arrived] should show order status header, '
+        'list of purchased products, transaction summary, driver and '
+        'recipient information, a button to contact support, and '
+        'another button to initiate re-order flow',
+        (tester) async {
+          await tester.pumpOrderDetailsPage(order: orderArrived);
+
+          expect(finderStatusHeader, findsOneWidget);
+          expect(finderDetailsSection, findsOneWidget);
+          expect(finderPaymentSummary, findsOneWidget);
+          expect(finderDriverAndRecipientSection, findsOneWidget);
+          expect(finderContactSupportButton, findsOneWidget);
+          expect(finderOrderAgainButton, findsOneWidget);
         },
       );
     },

@@ -272,6 +272,10 @@ class EnglishStrings implements BaseStrings {
   @override
   String get yourOrderWillArriveIn => 'Your order will arrive in';
 
+  /// Commonly used phrases
+  @override
+  String get support => 'Support';
+
   /// Onboarding Page
   @override
   String get register => 'Register';

@@ -272,6 +272,10 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get yourOrderWillArriveIn => 'Pesanan kamu akan tiba dalam';
 
+  /// Commonly used phrases
+  @override
+  String get support => 'Bantuan';
+
   /// Onboarding Page
   @override
   String get register => 'Daftar';

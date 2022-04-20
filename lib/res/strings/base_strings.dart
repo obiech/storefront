@@ -156,6 +156,9 @@ abstract class BaseStrings {
 
   String oopsWrongPinCode();
 
+  /// Commonly used phrases
+  String get support;
+
   /// Onboarding Page
   String get shoppingForDailyNeeds;
   String get superEzyWith;
