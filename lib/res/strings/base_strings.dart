@@ -273,6 +273,8 @@ abstract class BaseStrings {
 
   String get addToCart;
 
+  String get searchForWhatYouNeed;
+
   /// Products
   String stockLeft(int stock);
 }

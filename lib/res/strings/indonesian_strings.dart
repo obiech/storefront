@@ -449,4 +449,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String stockLeft(int stock) => 'Sisa $stock';
+
+  @override
+  String get searchForWhatYouNeed => 'Cari yang kamu butuhkan';
 }

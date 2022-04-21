@@ -1,3 +1,4 @@
+export 'bloc.ext.dart';
 export 'bottom_sheet_utils.dart';
 export 'build_context.ext.dart';
 export 'datetime.ext.dart';

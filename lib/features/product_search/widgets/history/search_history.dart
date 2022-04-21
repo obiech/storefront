@@ -10,7 +10,9 @@ part 'search_history_item.dart';
 /// Display's previous search parameters
 /// for quick access
 class SearchHistory extends StatelessWidget {
-  const SearchHistory({Key? key}) : super(key: key);
+  final Function()? onItemTapped;
+
+  const SearchHistory({Key? key, this.onItemTapped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,12 @@ class SearchHistory extends StatelessWidget {
                       query: state.queries[index],
                       onDelete:
                           context.read<SearchHistoryCubit>().removeSearchQuery,
+                      onSelect: (query) {
+                        context
+                            .read<SearchInventoryCubit>()
+                            .searchInventory(query);
+                        onItemTapped?.call();
+                      },
                     );
                   },
                   itemCount: state.queries.length,
@@ -70,7 +78,7 @@ class SearchHistory extends StatelessWidget {
             ),
           );
         }
-        return const SizedBox();
+        return const DefaultSearchPage();
       },
     );
   }

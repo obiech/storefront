@@ -448,4 +448,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String stockLeft(int stock) => '$stock left';
+
+  @override
+  String get searchForWhatYouNeed => 'Search for your what you need';
 }

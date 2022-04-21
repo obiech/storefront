@@ -4,6 +4,7 @@ import '../features/auth/index.dart';
 import '../features/cart_checkout/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
+import '../features/product_search/index.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen|Page,Route',

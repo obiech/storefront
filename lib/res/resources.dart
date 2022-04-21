@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 import 'colors/app_colors.dart';
 import 'colors/base_colors.dart';
@@ -12,7 +13,6 @@ import 'paths/base_paths.dart';
 import 'paths/english_paths.dart';
 import 'paths/indonesian_paths.dart';
 import 'strings/base_strings.dart';
-import 'strings/english_strings.dart';
 import 'strings/indonesian_strings.dart';
 import 'styles/app_styles.dart';
 import 'styles/base_styles.dart';
