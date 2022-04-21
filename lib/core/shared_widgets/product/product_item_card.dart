@@ -21,12 +21,9 @@ part 'qty_changer.dart';
 /// For an item not in cart it offers a button to add the item to cart
 /// and for one in the cart increment and decrement options for the cart
 /// quantity.
-class ProductItemCard extends StatelessWidget {
+class ProductItemCard extends StatefulWidget {
   /// Inventory product
   final ProductModel product;
-
-  /// If item is in cart
-  final bool isInCart;
 
   /// Current item quantity
   ///
@@ -36,9 +33,26 @@ class ProductItemCard extends StatelessWidget {
   const ProductItemCard({
     Key? key,
     required this.product,
-    this.isInCart = false,
-    this.itemQuantity = 1,
+    this.itemQuantity = 0,
   }) : super(key: key);
+
+  @override
+  State<ProductItemCard> createState() => _ProductItemCardState();
+}
+
+class _ProductItemCardState extends State<ProductItemCard> {
+  // Add to cart / Quantity Changer State
+  late ValueNotifier<bool> _qtyIsGreaterThanZero;
+
+  // Item Quantity
+  int _qty = 0;
+
+  @override
+  void initState() {
+    _qtyIsGreaterThanZero = ValueNotifier(widget.itemQuantity > 0);
+    _qty = widget.itemQuantity;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,26 +84,28 @@ class ProductItemCard extends StatelessWidget {
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: CachedNetworkImage(
-                        imageUrl: product.thumbnailUrl,
+                        imageUrl: widget.product.thumbnailUrl,
                         fit: BoxFit.contain,
                       ),
                     ),
                   ),
                 ),
-                if (product.marketStatus != null)
+                if (widget.product.marketStatus != null)
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.bottomLeft,
-                      child: product.marketStatus == MarketStatus.FLASH_SALE
-                          ? ProductBadge.flash(res)
-                          : ProductBadge.bestSeller(res),
+                      child:
+                          widget.product.marketStatus == MarketStatus.FLASH_SALE
+                              ? ProductBadge.flash(res)
+                              : ProductBadge.bestSeller(res),
                     ),
                   ),
-                if (product.stock <= 3)
+                if (widget.product.stock <= 3)
                   Positioned.fill(
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: ProductBadge.stockWarning(res, product.stock),
+                      child:
+                          ProductBadge.stockWarning(res, widget.product.stock),
                     ),
                   )
               ],
@@ -98,17 +114,17 @@ class ProductItemCard extends StatelessWidget {
               height: res.dimens.spacingMedium,
             ),
             Text(
-              product.price.toCurrency(),
+              widget.product.price.toCurrency(),
               style: res.styles.caption2.copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
-            if (product.discount != null) ...[
+            if (widget.product.discount != null) ...[
               const SizedBox(
                 height: 3,
               ),
               Text(
-                product.discount!.toCurrency(),
+                widget.product.discount!.toCurrency(),
                 style: res.styles.caption3.copyWith(
                   fontWeight: FontWeight.w400,
                   decoration: TextDecoration.lineThrough,
@@ -119,7 +135,7 @@ class ProductItemCard extends StatelessWidget {
               height: 3,
             ),
             Text(
-              product.name,
+              widget.product.name,
               style: res.styles.caption3.copyWith(
                 fontWeight: FontWeight.w400,
                 color: res.colors.black,
@@ -141,26 +157,56 @@ class ProductItemCard extends StatelessWidget {
             SizedBox(
               height: 30,
               width: double.infinity,
-              child: isInCart
-                  ? QtyChanger(
-                      onQtyChanged: (qty) {
-                        /// TODO(obella465) - Update cart quantity
-                      },
-                      value: itemQuantity,
-                      maxValue: product.stock,
-                    )
-                  : PillButton(
-                      text: res.strings.addToCart,
-                      color: res.colors.lightBlue,
-                      textColor: res.colors.blue,
-                      onTap: () {
-                        /// TODO (obella465)- Add to cart
-                      },
+              child: ValueListenableBuilder<bool>(
+                valueListenable: _qtyIsGreaterThanZero,
+                builder: (_, value, __) {
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) => FadeTransition(
+                      opacity: animation,
+                      child: child,
                     ),
+                    child: value
+                        ? QtyChanger(
+                            key: ValueKey(
+                              '${widget.product.productId}_qty_changer',
+                            ),
+                            onQtyChanged: (qty) {
+                              /// TODO(obella465) - Update cart quantity
+                              _qty = qty;
+                              if (_qty == 0) {
+                                _qtyIsGreaterThanZero.value = false;
+                              }
+                            },
+                            value: _qty,
+                            maxValue: widget.product.stock,
+                          )
+                        : PillButton(
+                            key: ValueKey(
+                              '${widget.product.productId}_add_to_cart',
+                            ),
+                            text: res.strings.addToCart,
+                            color: res.colors.lightBlue,
+                            textColor: res.colors.blue,
+                            onTap: () {
+                              /// TODO (obella465)- Add to cart
+                              _qty = 1;
+                              _qtyIsGreaterThanZero.value = true;
+                            },
+                          ),
+                  );
+                },
+              ),
             )
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _qtyIsGreaterThanZero.dispose();
+    super.dispose();
   }
 }

@@ -54,8 +54,9 @@ class _QtyChangerState extends State<QtyChanger> {
               backgroundColor: res.colors.blue,
               elevation: 0,
               onPressed: () {
-                if (_valueNotifier.value >= 2) {
+                if (_valueNotifier.value > 0) {
                   _valueNotifier.value--;
+                  widget.onQtyChanged(_valueNotifier.value);
                 }
               },
               child: Icon(
@@ -84,6 +85,7 @@ class _QtyChangerState extends State<QtyChanger> {
               onPressed: () {
                 if (_valueNotifier.value < widget.maxValue) {
                   _valueNotifier.value++;
+                  widget.onQtyChanged(_valueNotifier.value);
                 }
               },
               child: Icon(
@@ -95,5 +97,11 @@ class _QtyChangerState extends State<QtyChanger> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _valueNotifier.dispose();
+    super.dispose();
   }
 }

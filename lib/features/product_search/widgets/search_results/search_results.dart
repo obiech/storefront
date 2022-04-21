@@ -53,7 +53,6 @@ class _SearchResultsState extends State<SearchResults> {
               return ProductItemCard(
                 key: ValueKey('product_item$index'),
                 product: state.results[index],
-                isInCart: true,
               );
             },
             shrinkWrap: true,
