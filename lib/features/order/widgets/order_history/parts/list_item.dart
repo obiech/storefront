@@ -1,5 +1,14 @@
 part of '../list.dart';
 
+extension OrderStatusX on OrderStatus {
+  bool get isAwaitingPayment => this == OrderStatus.awaitingPayment;
+  bool get isInProgress => [
+        OrderStatus.paid,
+        OrderStatus.inDelivery,
+      ].contains(this);
+  bool get isArrived => this == OrderStatus.arrived;
+}
+
 /// Widget for itemBuilder in [OrderHistoryList]
 ///
 /// Is a card-shaped Container that displays information of an [OrderModel]
@@ -13,9 +22,13 @@ class OrderHistoryListItem extends StatelessWidget {
   const OrderHistoryListItem({
     Key? key,
     required this.order,
+    this.currentTime,
   }) : super(key: key);
 
   final OrderModel order;
+
+  /// Used for mocking current time in tests
+  final DateTime? currentTime;
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +60,44 @@ class OrderHistoryListItem extends StatelessWidget {
         children: [
           Row(
             children: [
-              OrderStatusTimings(order: order),
+              if (order.status.isArrived)
+                TimingText.arrived(
+                  res: context.res,
+                  orderCompletionTime: order.orderCompletionTime!,
+                ),
+              if (order.status.isAwaitingPayment)
+                CountdownBuilder(
+                  countdownDuration: order.paymentExpiryTime!
+                      .difference(currentTime ?? DateTime.now())
+                      .inSeconds,
+                  builder: (seconds) {
+                    return TimingText.awaitingPayment(
+                      res: context.res,
+                      remainingTimeInSeconds: seconds,
+                    );
+                  },
+                ),
+              if (order.status.isInProgress)
+                CountdownBuilder(
+                  countdownDuration: order.estimatedArrivalTime!
+                      .difference(currentTime ?? DateTime.now())
+                      .inSeconds,
+                  builder: (seconds) {
+                    return TimingText.inProgress(
+                      res: context.res,
+                      remainingTimeInSeconds: seconds,
+                    );
+                  },
+                ),
               const Spacer(),
               OrderStatusChip(orderStatus: order.status),
             ],
           ),
-          const _Divider(),
+          Divider(
+            // margin of 12 dp on both vertical sides
+            height: context.res.dimens.spacingMedium * 2,
+            color: context.res.colors.dividerColor,
+          ),
           Row(
             children: [
               _ProductImage(
@@ -64,11 +109,13 @@ class OrderHistoryListItem extends StatelessWidget {
               ),
             ],
           ),
-          if (shouldShowButton) ...[
+          if (order.status.isAwaitingPayment || order.status.isArrived) ...[
             SizedBox(height: context.res.dimens.spacingMedium),
             DropezyButton.primary(
-              label: getButtonLabel(context),
-              onPressed: _navigateToOrderDetails,
+              label: order.status.isAwaitingPayment
+                  ? context.res.strings.continuePayment
+                  : context.res.strings.orderAgain,
+              onPressed: () {},
               padding: EdgeInsets.symmetric(
                 horizontal: context.res.dimens.spacingLarge,
                 vertical: 2,
@@ -84,51 +131,10 @@ class OrderHistoryListItem extends StatelessWidget {
       ),
     );
   }
-
-  void _navigateToOrderDetails() {
-    //TODO (leovinsen): Implement navigation to Order Details page
-  }
-
-  /// whether or not to show additional CTA button
-  bool get shouldShowButton => [
-        OrderStatus.awaitingPayment,
-        OrderStatus.arrived,
-      ].contains(order.status);
-
-  /// returns label for CTA button
-  String getButtonLabel(BuildContext context) {
-    late String label;
-
-    switch (order.status) {
-      case OrderStatus.awaitingPayment:
-        label = context.res.strings.continuePayment;
-        break;
-      case OrderStatus.arrived:
-        label = context.res.strings.orderAgain;
-        break;
-      default:
-        label = '';
-        break;
-    }
-
-    return label;
-  }
 }
 
-class _Divider extends StatelessWidget {
-  const _Divider({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: context.res.colors.dividerColor,
-      height: 1,
-      width: double.infinity,
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-    );
-  }
-}
-
+//TODO (leovinsen): This Widget might not be needed anymore
+// as Order thumbnails will be removed
 class _ProductImage extends StatelessWidget {
   const _ProductImage({
     Key? key,
