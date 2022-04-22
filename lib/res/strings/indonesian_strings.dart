@@ -459,4 +459,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get searchForWhatYouNeed => 'Cari yang kamu butuhkan';
+
+  @override
+  String get thatIsAllTheStockWeHave => 'Hanya itu yang kami miliki saat ini';
 }

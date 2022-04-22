@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpQuantityChanger(
@@ -90,5 +91,59 @@ void main() {
     await tester.tap(incrementButtonFinder);
     await tester.pumpAndSettle();
     expect(find.text((quantity + 1).toString()), findsOneWidget);
+  });
+
+  testWidgets('Initial value/quantity can never be below zero',
+      (WidgetTester tester) async {
+    /// arrange
+    const quantity = -5;
+    await tester.pumpQuantityChanger((p0) => {}, 2, value: quantity);
+
+    /// act
+    expect(find.text(quantity.toString()), findsNothing);
+    expect(find.text(0.toString()), findsOneWidget);
+  });
+
+  testWidgets('When quantity changes, callback is notified',
+      (WidgetTester tester) async {
+    /// arrange
+    const quantity = 5;
+    final callBackResult = [];
+
+    await tester.pumpQuantityChanger(
+      (qty) => callBackResult.add(qty),
+      20,
+      value: quantity,
+    );
+
+    /// act
+    for (int i = 0; i < 6; i++) {
+      if (i % 3 == 0) {
+        // Increment
+        await tester.tap(incrementButtonFinder);
+      } else {
+        // Decrement
+        await tester.tap(decrementButtonFinder);
+      }
+    }
+
+    /// assert
+    expect(callBackResult, [6, 5, 4, 5, 4, 3]);
+  });
+
+  final _strings = EnglishStrings();
+  testWidgets(
+      'When increment button is touched & stock is at max, '
+      'show snackbar to notify user that stock is exceeded',
+      (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpQuantityChanger((p0) => {}, 2, value: 2);
+
+    /// act
+    await tester.tap(incrementButtonFinder);
+    await tester.pump();
+
+    /// assert
+    expect(find.text(_strings.thatIsAllTheStockWeHave), findsOneWidget);
   });
 }

@@ -282,4 +282,6 @@ abstract class BaseStrings {
 
   /// Products
   String stockLeft(int stock);
+
+  String get thatIsAllTheStockWeHave;
 }

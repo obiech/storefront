@@ -33,7 +33,7 @@ class _QtyChangerState extends State<QtyChanger> {
 
   @override
   void initState() {
-    _valueNotifier = ValueNotifier<int>(widget.value);
+    _valueNotifier = ValueNotifier<int>(max(widget.value, 0));
     super.initState();
   }
 
@@ -86,6 +86,8 @@ class _QtyChangerState extends State<QtyChanger> {
                 if (_valueNotifier.value < widget.maxValue) {
                   _valueNotifier.value++;
                   widget.onQtyChanged(_valueNotifier.value);
+                } else {
+                  context.showToast(res.strings.thatIsAllTheStockWeHave);
                 }
               },
               child: Icon(

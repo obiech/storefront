@@ -458,4 +458,8 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get searchForWhatYouNeed => 'Search for your what you need';
+
+  @override
+  String get thatIsAllTheStockWeHave =>
+      "That's all we have in stock at the moment";
 }
