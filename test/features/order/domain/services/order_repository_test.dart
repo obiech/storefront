@@ -3,8 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/domain/services/order_repository.dart';
 
+import '../../../../../test_commons/fixtures/order/order_pb_models.dart'
+    as pb_orders;
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
@@ -15,60 +18,179 @@ void main() {
       late OrderServiceClient orderServiceClient;
       late OrderRepository grpcOrderRepository;
 
+      final mockPbOrders = [
+        pb_orders.orderCreated,
+        pb_orders.orderPaid,
+        pb_orders.orderDone,
+      ];
+
       setUp(() {
         registerFallbackValue(GetOrderHistoryRequest());
+        registerFallbackValue(GetRequest());
         orderServiceClient = MockOrderServiceClient();
         grpcOrderRepository = OrderRepository(orderServiceClient);
       });
 
+      group('[getUserOrders()]', () {
+        test(
+          'should retrieve list of orders from [OrderServiceClient] '
+          'and store them in memory',
+          () async {
+            // ARRANGE
+            when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
+              (_) => MockResponseFuture.value(
+                GetOrderHistoryResponse(
+                  orders: mockPbOrders,
+                ),
+              ),
+            );
+
+            // memory cache should be initially empty
+            expect(grpcOrderRepository.orders, isEmpty);
+
+            // ACT
+            final result = await grpcOrderRepository.getUserOrders();
+
+            // ASSERT
+            verify(() => orderServiceClient.getOrderHistory(any())).called(1);
+
+            result.fold(
+              (l) => throw TestFailure(
+                '[getUserOrders] should map to OrderModels on a '
+                'successful request ',
+              ),
+              (r) {
+                // should have one order model for each protobuf model
+                expect(r.length, mockPbOrders.length);
+
+                // results should be stored in memory
+                expect(grpcOrderRepository.orders, isNotEmpty);
+                expect(r, grpcOrderRepository.orders);
+              },
+            );
+          },
+        );
+
+        test(
+          'should map Exceptions to Failure',
+          () async {
+            // ARRANGE
+            when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
+              (_) => MockResponseFuture.error(
+                GrpcError.notFound('User orders not found'),
+              ),
+            );
+
+            // ACT
+            final result = await grpcOrderRepository.getUserOrders();
+
+            // ASSERT
+            verify(() => orderServiceClient.getOrderHistory(any())).called(1);
+            result.fold(
+              (l) {
+                expect(l, isA<NetworkFailure>());
+                expect(l.message, 'User orders not found');
+              },
+              (r) => throw TestFailure(
+                '[getUserOrders] failed to map exception into Failure',
+              ),
+            );
+          },
+        );
+      });
+
       group(
-        '[getUserOrders()]',
+        '[getOrderById]',
         () {
           test(
-            'should retrieve list of orders from [OrderServiceClient]',
+            'should fetch from memory if an order with requested id exists',
             () async {
-              //TODO (leovinsen): Add fake gRPC Orders once Mehmet's Proto
-              // definitions are merged
-              // arrange
-              when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
+              // ARRANGE
+              grpcOrderRepository.orders =
+                  mockPbOrders.map(OrderModel.fromPb).toList();
+
+              // ACT
+              final result = await grpcOrderRepository
+                  .getOrderById(grpcOrderRepository.orders[0].id);
+
+              // ASSERT
+              // should not fetch from gRPC service
+              verifyNever(() => orderServiceClient.get(any()));
+
+              result.fold(
+                (l) => TestFailure(
+                  '[getOrderById] failed to fetch from memory',
+                ),
+                (r) {
+                  // returned order should be same as the one in memory
+                  expect(r, grpcOrderRepository.orders[0]);
+                },
+              );
+            },
+          );
+
+          test(
+            'should fetch from backend if an order with requested id '
+            'does not exist in memory',
+            () async {
+              // ARRANGE
+              final mockPbOrder = mockPbOrders[0];
+              when(
+                () => orderServiceClient
+                    .get(GetRequest(orderId: mockPbOrder.orderId)),
+              ).thenAnswer(
                 (_) => MockResponseFuture.value(
-                  GetOrderHistoryResponse(
-                    orders: [],
-                  ),
+                  GetResponse(order: mockPbOrder),
                 ),
               );
 
-              // act
-              final result = await grpcOrderRepository.getUserOrders();
+              // ACT
+              final result =
+                  await grpcOrderRepository.getOrderById(mockPbOrder.orderId);
 
-              // assert
-              verify(() => orderServiceClient.getOrderHistory(any())).called(1);
-              expect(result.isRight(), true);
+              // ASSERT
+              // should fetch from gRPC service
+              verify(() => orderServiceClient.get(any())).called(1);
+
+              result.fold(
+                (l) => throw TestFailure(
+                  '[getOrderById] failed to fetch order from backend',
+                ),
+                (r) {
+                  expect(r, OrderModel.fromPb(mockPbOrder));
+                },
+              );
             },
           );
 
           test(
             'should map Exceptions to Failure',
             () async {
-              // arrange
-              when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
+              // ARRANGE
+              const String mockErrorMsg = 'Order not found';
+
+              when(
+                () => orderServiceClient.get(any()),
+              ).thenAnswer(
                 (_) => MockResponseFuture.error(
-                  GrpcError.notFound('User orders not found'),
+                  GrpcError.notFound(mockErrorMsg),
                 ),
               );
 
-              // act
-              final result = await grpcOrderRepository.getUserOrders();
+              // ACT
+              final result = await grpcOrderRepository.getOrderById('order-id');
 
-              // assert
-              verify(() => orderServiceClient.getOrderHistory(any())).called(1);
+              // ASSERT
+              // should fetch from gRPC service
+              verify(() => orderServiceClient.get(any())).called(1);
+
               result.fold(
                 (l) {
                   expect(l, isA<NetworkFailure>());
-                  expect(l.message, 'User orders not found');
+                  expect(l.message, mockErrorMsg);
                 },
                 (r) => throw TestFailure(
-                  '[getUserOrders] failed to map exception into Failure',
+                  '[getOrderById] failed to map exception into Failure',
                 ),
               );
             },

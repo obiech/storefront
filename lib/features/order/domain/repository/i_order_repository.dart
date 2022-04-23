@@ -7,4 +7,7 @@ import '../../../../core/core.dart';
 abstract class IOrderRepository {
   /// Gets a list of user's orders
   Future<Either<Failure, List<OrderModel>>> getUserOrders();
+
+  /// Gets an order by its ID
+  Future<Either<Failure, OrderModel>> getOrderById(String id);
 }

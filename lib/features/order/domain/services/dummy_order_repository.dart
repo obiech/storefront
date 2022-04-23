@@ -40,9 +40,8 @@ class DummyOrderRepository extends IOrderRepository {
         'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
   );
 
-  @override
-  Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
-    final dummyOrders = [
+  DummyOrderRepository() {
+    orders = [
       OrderModel(
         id: '1',
         status: OrderStatus.awaitingPayment,
@@ -184,7 +183,23 @@ class DummyOrderRepository extends IOrderRepository {
         ),
       ),
     ];
+  }
 
-    return right(dummyOrders);
+  late List<OrderModel> orders;
+
+  @override
+  Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
+    return right(orders);
+  }
+
+  @override
+  Future<Either<Failure, OrderModel>> getOrderById(String id) async {
+    final index = orders.indexWhere((o) => o.id == id);
+
+    if (index > -1) {
+      return right(orders[index]);
+    }
+
+    return left(ResourceNotFoundFailure('Order not found.'));
   }
 }

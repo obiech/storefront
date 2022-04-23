@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
@@ -13,7 +14,11 @@ import '../domains.dart';
 class OrderRepository extends IOrderRepository {
   OrderRepository(this.orderServiceClient);
 
+  @visibleForTesting
   final OrderServiceClient orderServiceClient;
+
+  @visibleForTesting
+  List<OrderModel> orders = [];
 
   @override
   Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
@@ -21,7 +26,28 @@ class OrderRepository extends IOrderRepository {
       final response =
           await orderServiceClient.getOrderHistory(GetOrderHistoryRequest());
 
-      return right(response.orders.map(OrderModel.fromPb).toList());
+      orders.addAll(response.orders.map(OrderModel.fromPb).toList());
+
+      return right(orders);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
+  }
+
+  @override
+  Future<Either<Failure, OrderModel>> getOrderById(String id) async {
+    try {
+      final index = orders.indexWhere((o) => o.id == id);
+
+      // Return model from in-memory cache if found
+      if (index > -1) {
+        return right(orders[index]);
+      }
+
+      final req = GetRequest(orderId: id);
+      final response = await orderServiceClient.get(req);
+
+      return right(OrderModel.fromPb(response.order));
     } on Exception catch (e) {
       return left(e.toFailure);
     }
