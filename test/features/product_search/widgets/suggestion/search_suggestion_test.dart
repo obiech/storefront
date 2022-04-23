@@ -54,7 +54,7 @@ void main() {
     bloc.emit(const LoadedAutosuggestions(autosuggestions));
     await tester.pumpSearchSuggestionWidget(bloc);
 
-    expect(find.byType(ListView), findsOneWidget);
+    expect(find.byType(Wrap), findsOneWidget);
 
     final _suggestionWidgets =
         tester.widgetList(find.byType(SearchSuggestionItem));

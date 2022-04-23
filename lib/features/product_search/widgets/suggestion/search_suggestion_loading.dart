@@ -8,19 +8,19 @@ class SearchSuggestionLoading extends StatelessWidget {
     final res = context.res;
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: res.dimens.spacingLarge,
         vertical: res.dimens.spacingLarge,
       ),
-      child: SkeletonParagraph(
-        style: SkeletonParagraphStyle(
-          lines: 5,
-          spacing: 15,
-          lineStyle: SkeletonLineStyle(
-            randomLength: false,
-            height: 15,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+      child: Wrap(
+        spacing: res.dimens.spacingMedium,
+        runSpacing: res.dimens.spacingMedium,
+        children: [
+          for (int i = 0; i < 6; i++)
+            LoadingItem(
+              height: 35,
+              width: randomBetween(50, 100).toDouble(),
+              borderRadius: 8,
+            )
+        ],
       ),
     );
   }
