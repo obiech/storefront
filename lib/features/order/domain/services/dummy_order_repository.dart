@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
+import '../../../../di/di_environment.dart';
 import '../../../product/domain/domain.dart';
 import '../domains.dart';
 
@@ -8,6 +10,7 @@ import '../domains.dart';
 ///
 /// Returns data for development purposes, hardcoded in class definition.
 /// WARNING: DO NOT use in production!
+@LazySingleton(as: IOrderRepository, env: [DiEnvironment.dummy])
 class DummyOrderRepository extends IOrderRepository {
   /// Dummy Products
   static const productSeladaRomaine = ProductModel(

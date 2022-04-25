@@ -3,11 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:injectable/injectable.dart';
+import 'package:storefront_app/di/config/di_config.dart';
 import 'package:storefront_app/features/home/blocs/categories_one/cubit/categories_one_cubit.dart';
 
 import 'app.dart';
 import 'core/core.dart';
+import 'di/di_environment.dart';
 import 'di/injection.dart';
 import 'features/auth/index.dart';
 import 'features/cart_checkout/index.dart';
@@ -63,13 +64,17 @@ Future<void> main() async {
 }
 
 String determineEnvironment() {
+  if (DiConfig.enableDummyRepos) {
+    return DiEnvironment.dummy;
+  }
+
   if (kTestMode) {
-    return Environment.test;
+    return DiEnvironment.test;
   }
 
   if (kReleaseMode || TestConfig.isEndToEndTest) {
-    return Environment.prod;
+    return DiEnvironment.prod;
   }
 
-  return Environment.dev;
+  return DiEnvironment.dev;
 }

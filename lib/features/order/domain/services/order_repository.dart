@@ -4,13 +4,14 @@ import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/di/di_environment.dart';
 
 import '../../../../core/core.dart';
 import '../domains.dart';
 
 /// Repository for fetching order from storefront-backend
 /// using gRPC connection.
-@LazySingleton(as: IOrderRepository)
+@LazySingleton(as: IOrderRepository, env: DiEnvironment.grpcEnvs)
 class OrderRepository extends IOrderRepository {
   OrderRepository(this.orderServiceClient);
 
