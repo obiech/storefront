@@ -7,6 +7,50 @@ import 'package:storefront_app/di/injection.dart';
 import '../../home/index.dart';
 import '../index.dart';
 
+/// The inventory and product discovery page.
+/// [PRD](https://dropezy.atlassian.net/wiki/spaces/STOR/pages/7897122/Discovery+Through+Search)
+///
+/// Search page has mainly two states :-
+///
+/// * [SearchPageState.DEFAULT] - This is when no search has been done or when
+/// the search text field is focused for the first time.
+/// It acts as a placeholder state during search.
+///
+/// This state displays search history [SearchHistory] if a search has been done
+/// before and default search [DefaultSearchPage] message (now)/
+/// recommendations (In future)
+///
+/// * [SearchPageState.PRODUCT_SEARCH] - This serves as the search state during
+/// an active search, it involves mainly two actions,
+/// autosuggestions [SearchSuggestion] and inventory search [SearchResults].
+///
+/// This page state is triggered when the [SearchTextField] text is changed or
+/// when the [SearchTextField] search button is tapped on the keyboard.
+///
+/// During search, two consecutive queries are sent to the [AutosuggestionBloc]
+/// for autosuggestions and [SearchInventoryCubit] for inventory search and
+/// displayed concurrently as their responses are received.
+///
+/// ## [SearchTextField]
+/// This is the most integral trigger for search other than tapping on
+/// [SearchHistory] or autosuggestions. It triggers search page state change
+/// in mainly three scenarios :-
+///
+/// * FOCUS - When it's focused, the [SearchPageState.DEFAULT] should be
+/// triggered showing the [SearchHistory] if any.
+///
+/// * TEXT CHANGED - When it's text is changed at a buffer of 3 characters and above
+/// a search query should be made for autosuggestions and inventory search.
+///
+/// * SUBMITTED - When the **Search Button** is tapped on the keyboard, this
+/// scenario should be triggered and search queries above sent.
+///
+/// ## Return States
+///
+/// - When a user is returning to the search page, if a search was done before,
+/// it should be displayed instantly.
+///
+/// - However, if no search was made before, proceed as a fresh search.
 class SearchPage extends StatefulWidget implements AutoRouteWrapper {
   const SearchPage({Key? key}) : super(key: key);
 
@@ -37,12 +81,6 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   late ValueNotifier<SearchPageState> _pageState;
   late TextEditingController _controller;
 
-  /// States
-  /// * Default State
-  /// * Empty state
-  /// * Autocomplete
-  /// * Product Search
-
   @override
   Widget build(BuildContext context) {
     final res = context.res;
@@ -51,6 +89,8 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
           prevState.route != SearchRoute.name &&
           currentState.route == SearchRoute.name,
       listener: (context, state) {
+        /// Trigger fresh [SearchPageState] when user
+        /// is returning to Search bottom sheet tab.
         _setUpPage();
       },
       child: DropezyScaffold(
@@ -71,8 +111,11 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             }
           },
           onTextChanged: (query) {
-            _pageState.value = SearchPageState.AUTO_SUGGESTIONS;
+            _pageState.value = SearchPageState.PRODUCT_SEARCH;
             context.read<AutosuggestionBloc>().add(GetSuggestions(query));
+
+            /// Set-off search to search service
+            context.read<SearchInventoryCubit>().searchInventory(query);
           },
           onSearch: (query) {
             _pageState.value = SearchPageState.PRODUCT_SEARCH;
@@ -84,7 +127,8 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
         ),
         // bodyAlignment: Alignment.topCenter,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - 200,
+          height:
+              MediaQuery.of(context).size.height - (res.dimens.appBarSize + 20),
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: ValueListenableBuilder<SearchPageState>(
@@ -95,12 +139,20 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
                     return SearchHistory(
                       onItemTapped: _searchItemTapped,
                     );
-                  case SearchPageState.AUTO_SUGGESTIONS:
-                    return SearchSuggestion(
-                      onItemTapped: _searchItemTapped,
-                    );
                   case SearchPageState.PRODUCT_SEARCH:
-                    return const SearchResults();
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SearchSuggestion(
+                          onItemTapped: _searchItemTapped,
+                        ),
+                        const SearchResults(),
+                        // Cater for bottom sheet overflow
+                        const SizedBox(
+                          height: 85,
+                        )
+                      ],
+                    );
                 }
               },
             ),
@@ -110,6 +162,8 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
     );
   }
 
+  /// When [SearchHistory] or [SearchSuggestion] item
+  /// is tapped, reset [SearchTextField]
   void _searchItemTapped() {
     _focusNode.unfocus();
     _controller.clear();
@@ -119,11 +173,15 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   /// Manage conditions when focus should be requested
   void _setUpPage({bool reqFocus = true}) {
     final searchInventoryState = context.read<SearchInventoryCubit>().state;
+
+    // Returning User who already has some search results
     if (searchInventoryState is InventoryItemResults &&
         searchInventoryState.results.isNotEmpty) {
       _pageState.value = SearchPageState.PRODUCT_SEARCH;
       _focusNode.unfocus();
-    } else {
+    }
+    // Fresh search, with no previous search in current session
+    else {
       if (reqFocus) _focusNode.requestFocus();
     }
   }
@@ -144,4 +202,15 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   }
 }
 
-enum SearchPageState { DEFAULT, AUTO_SUGGESTIONS, PRODUCT_SEARCH }
+/// Search Page States
+///
+/// Can change in future when more use cases are required
+enum SearchPageState {
+  /// Fresh search, no search has been done before or [SearchTextField]
+  /// has been focused
+  DEFAULT,
+
+  /// Search is currently being done, [SearchTextField] text has changed or
+  /// search button has been tapped
+  PRODUCT_SEARCH
+}

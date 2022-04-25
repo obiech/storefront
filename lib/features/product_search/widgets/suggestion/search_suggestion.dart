@@ -24,6 +24,7 @@ class SearchSuggestion extends StatelessWidget {
           return Padding(
             padding: EdgeInsets.symmetric(
               vertical: res.dimens.spacingLarge,
+              horizontal: res.dimens.spacingLarge,
             ),
             child: Wrap(
               spacing: res.dimens.spacingMedium,

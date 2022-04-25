@@ -65,8 +65,7 @@ void main() {
     expect(find.byType(DefaultSearchPage), findsOneWidget);
   });
 
-  testWidgets(
-      'When Page State is AUTO_SUGGESTIONS, show autosuggestions widget',
+  testWidgets('When Page State is PRODUCT_SEARCH, show autosuggestions widget',
       (WidgetTester tester) async {
     /// arrange
     await tester.pumpSearchPage(
