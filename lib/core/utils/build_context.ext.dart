@@ -5,8 +5,11 @@ import '../../res/resources.dart';
 extension BuildContextX on BuildContext {
   Resources get res => Resources.of(this);
 
-  void showToast(String message, {Color? color}) {
-    ScaffoldMessenger.of(this).showSnackBar(
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showToast(
+    String message, {
+    Color? color,
+  }) {
+    return ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Container(
           decoration: BoxDecoration(

@@ -24,6 +24,9 @@ class PillButton extends StatelessWidget {
   /// Size of the progress loader
   final double progressSize;
 
+  /// Widget, Scale factor
+  final double scaleFactor;
+
   const PillButton({
     Key? key,
     this.onTap,
@@ -33,6 +36,7 @@ class PillButton extends StatelessWidget {
     this.isLoading = false,
     this.progressColor,
     this.progressSize = 18,
+    this.scaleFactor = 1,
   }) : super(key: key);
 
   @override
@@ -44,17 +48,20 @@ class PillButton extends StatelessWidget {
         primary: color ?? res.colors.blue,
         textStyle: res.styles.subtitle.copyWith(
           fontSize: 11,
+          fontFamily: 'Montserrat',
         ),
+        minimumSize: Size.fromHeight(50 * scaleFactor),
         onPrimary: textColor ?? res.colors.white,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(res.dimens.spacingLarge),
+          borderRadius:
+              BorderRadius.circular(res.dimens.spacingLarge * scaleFactor),
         ),
       ),
       child: isLoading
           ? SizedBox(
-              height: progressSize,
-              width: progressSize,
+              height: progressSize * scaleFactor,
+              width: progressSize * scaleFactor,
               child: CircularProgressIndicator(
                 color: progressColor ?? res.colors.blue,
                 strokeWidth: 2,

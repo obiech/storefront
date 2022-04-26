@@ -131,30 +131,32 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
               MediaQuery.of(context).size.height - (res.dimens.appBarSize + 20),
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
-            child: ValueListenableBuilder<SearchPageState>(
-              valueListenable: _pageState,
-              builder: (_, state, __) {
-                switch (state) {
-                  case SearchPageState.DEFAULT:
-                    return SearchHistory(
-                      onItemTapped: _searchItemTapped,
-                    );
-                  case SearchPageState.PRODUCT_SEARCH:
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SearchSuggestion(
-                          onItemTapped: _searchItemTapped,
-                        ),
-                        const SearchResults(),
-                        // Cater for bottom sheet overflow
-                        const SizedBox(
-                          height: 85,
-                        )
-                      ],
-                    );
-                }
-              },
+            child: Padding(
+              ///Bottom Nav Padding
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              child: ValueListenableBuilder<SearchPageState>(
+                valueListenable: _pageState,
+                builder: (_, state, __) {
+                  switch (state) {
+                    case SearchPageState.DEFAULT:
+                      return SearchHistory(
+                        onItemTapped: _searchItemTapped,
+                      );
+                    case SearchPageState.PRODUCT_SEARCH:
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SearchSuggestion(
+                            onItemTapped: _searchItemTapped,
+                          ),
+                          const SearchResults(),
+                        ],
+                      );
+                  }
+                },
+              ),
             ),
           ),
         ),

@@ -14,6 +14,8 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   final _scrollController = ScrollController();
+  late double scaleFactor;
+  late int columns;
 
   @override
   void initState() {
@@ -30,6 +32,15 @@ class _SearchResultsState extends State<SearchResults> {
   Widget build(BuildContext context) {
     final res = context.res;
 
+    columns = MediaQuery.of(context).size.width < 600 ? 3 : 4;
+
+    /// Product Card Scale factor for X columns
+    /// * 12 margin between columns
+    /// * 0.008 scale factor from figma
+    scaleFactor =
+        ((MediaQuery.of(context).size.width - (12 * columns)) / columns) *
+            0.008;
+
     return BlocConsumer<SearchInventoryCubit, SearchInventoryState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -41,10 +52,7 @@ class _SearchResultsState extends State<SearchResults> {
               vertical: res.dimens.spacingLarge,
             ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  MediaQuery.of(context).orientation == Orientation.portrait
-                      ? 3
-                      : 4,
+              crossAxisCount: columns,
               childAspectRatio: 13 / 25,
               crossAxisSpacing: 12,
               mainAxisSpacing: 12,
@@ -53,6 +61,7 @@ class _SearchResultsState extends State<SearchResults> {
               return ProductItemCard(
                 key: ValueKey('product_item$index'),
                 product: state.results[index],
+                scaleFactor: scaleFactor,
               );
             },
             shrinkWrap: true,

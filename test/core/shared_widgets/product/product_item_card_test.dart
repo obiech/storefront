@@ -98,4 +98,24 @@ void main() {
     expect(addToCartFinder, findsOneWidget);
     expect(qtyChangerFinder, findsNothing);
   });
+
+  testWidgets('When a product is out of stock, gray it out',
+      (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpProductItemCard(
+      const ProductModel(
+        productId: 'selada-romaine-id',
+        sku: 'selada-romaine-sku',
+        name: 'Selada Romaine',
+        price: '15000',
+        discount: '20000',
+        stock: 100,
+        status: ProductStatus.OUT_OF_STOCK,
+        thumbnailUrl:
+            'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
+      ),
+    );
+
+    expect(find.byType(OutOfStockOverdraw), findsOneWidget);
+  });
 }

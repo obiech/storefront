@@ -16,12 +16,16 @@ class QtyChanger extends StatefulWidget {
   /// The increment and decrement icon size
   final double iconSize;
 
+  /// Widget, Scale factor
+  final double scaleFactor;
+
   const QtyChanger({
     Key? key,
     required this.onQtyChanged,
     this.value = 1,
     required this.maxValue,
     this.iconSize = 20,
+    this.scaleFactor = 1,
   }) : super(key: key);
 
   @override
@@ -42,7 +46,8 @@ class _QtyChangerState extends State<QtyChanger> {
     final res = context.res;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(res.dimens.spacingLarge),
+        borderRadius:
+            BorderRadius.circular(res.dimens.spacingLarge * widget.scaleFactor),
         border: Border.all(color: const Color(0xFFE5E5E7)),
       ),
       padding: const EdgeInsets.all(3),
@@ -61,7 +66,7 @@ class _QtyChangerState extends State<QtyChanger> {
               },
               child: Icon(
                 DropezyIcons.minus,
-                size: widget.iconSize,
+                size: widget.iconSize * widget.scaleFactor,
               ),
             ),
           ),
@@ -87,12 +92,17 @@ class _QtyChangerState extends State<QtyChanger> {
                   _valueNotifier.value++;
                   widget.onQtyChanged(_valueNotifier.value);
                 } else {
-                  context.showToast(res.strings.thatIsAllTheStockWeHave);
+                  context
+                      .showToast(res.strings.thatIsAllTheStockWeHave)
+                      .closed
+                      .then(
+                        (_) => ScaffoldMessenger.of(context).clearSnackBars(),
+                      );
                 }
               },
               child: Icon(
                 DropezyIcons.plus,
-                size: widget.iconSize,
+                size: widget.iconSize * widget.scaleFactor,
               ),
             ),
           ),

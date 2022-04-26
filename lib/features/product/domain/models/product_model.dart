@@ -15,6 +15,9 @@ class ProductModel extends Equatable {
     this.discount,
     required this.stock,
     this.marketStatus,
+
+    /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
+    this.status = ProductStatus.ACTIVE,
   });
 
   /// Maps a [pb.Product] object into [ProductModel]
@@ -44,9 +47,23 @@ class ProductModel extends Equatable {
 
   final MarketStatus? marketStatus;
 
+  final ProductStatus status;
+
   /// URL for product thumbnail image
   final String thumbnailUrl;
 
   @override
   List<Object?> get props => [sku, price];
+}
+
+/// https://dropezy.slack.com/archives/C038EPQGJLR/p1650423774792949?thread_ts=1650422527.075119&cid=C038EPQGJLR
+enum ProductStatus {
+  /// Product is currently available for purchase
+  ACTIVE,
+
+  /// Product is depleted but will be restocked soon
+  OUT_OF_STOCK,
+
+  /// Product is no-longer available for purchase
+  DEACTIVATED
 }
