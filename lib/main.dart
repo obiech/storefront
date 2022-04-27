@@ -10,6 +10,7 @@ import 'app.dart';
 import 'core/core.dart';
 import 'di/di_environment.dart';
 import 'di/injection.dart';
+import 'features/address/index.dart';
 import 'features/auth/index.dart';
 import 'features/cart_checkout/index.dart';
 import 'features/order/index.dart';
@@ -54,7 +55,12 @@ Future<void> main() async {
         ),
         BlocProvider<CategoriesOneCubit>(
           create: (_) => getIt<CategoriesOneCubit>()..fetchCategoriesOne(),
-        )
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (_) =>
+              getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
+        ),
       ],
       child: AppWidget(
         router: getIt<AppRouter>(),

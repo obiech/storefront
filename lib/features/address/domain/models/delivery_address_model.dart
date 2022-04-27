@@ -1,7 +1,10 @@
+import 'package:equatable/equatable.dart';
+
 import 'address_details_model.dart';
 
-class DeliveryAddressModel {
+class DeliveryAddressModel extends Equatable {
   const DeliveryAddressModel({
+    required this.id,
     required this.title,
     this.notes,
     required this.isPrimaryAddress,
@@ -10,7 +13,11 @@ class DeliveryAddressModel {
     required this.recipientName,
     required this.recipientPhoneNumber,
     this.details,
+    required this.dateCreated,
   });
+
+  /// Unique identifier for this address
+  final String id;
 
   /// Identifier for this address
   /// e.g. Home, Work
@@ -39,4 +46,11 @@ class DeliveryAddressModel {
   ///
   /// i.e. the result of Reverse Geocoding
   final AddressDetailsModel? details;
+
+  /// Date & Time at which this address
+  /// was first created
+  final DateTime dateCreated;
+
+  @override
+  List<Object?> get props => [id];
 }
