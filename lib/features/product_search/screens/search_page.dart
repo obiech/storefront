@@ -39,11 +39,14 @@ import '../index.dart';
 /// * FOCUS - When it's focused, the [SearchPageState.DEFAULT] should be
 /// triggered showing the [SearchHistory] if any.
 ///
-/// * TEXT CHANGED - When it's text is changed at a buffer of 3 characters and above
-/// a search query should be made for autosuggestions and inventory search.
+/// * TEXT CHANGED - When it's text is changed at a buffer of 3 characters
+/// and above a search query should be made for autosuggestions and inventory search.
 ///
 /// * SUBMITTED - When the **Search Button** is tapped on the keyboard, this
 /// scenario should be triggered and search queries above sent.
+///
+/// * CLEARED - When the **Clear Button** is tapped, reset the page to default
+/// state & focus the search field.
 ///
 /// ## Return States
 ///
@@ -124,8 +127,12 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             /// Set-off search to search service
             context.read<SearchInventoryCubit>().searchInventory(query);
           },
+          onCleared: () {
+            /// Reset State
+            _pageState.value = SearchPageState.DEFAULT;
+            _focusNode.requestFocus();
+          },
         ),
-        // bodyAlignment: Alignment.topCenter,
         child: SizedBox(
           height:
               MediaQuery.of(context).size.height - (res.dimens.appBarSize + 20),

@@ -39,6 +39,9 @@ class SearchTextField extends StatefulWidget {
   /// Callback for focus change
   final Function(bool)? onFocusChanged;
 
+  /// Callback for page clearing
+  final Function()? onCleared;
+
   /// If the search field should be enabled
   final bool isEnabled;
 
@@ -66,6 +69,7 @@ class SearchTextField extends StatefulWidget {
     this.onSearch,
     this.focusNode,
     this.controller,
+    this.onCleared,
   }) : super(key: key);
 
   @override
@@ -114,6 +118,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
                       onPressed: () {
                         _controller.clear();
                         _updateValueNotifier();
+                        widget.onCleared?.call();
                       },
                       icon: Icon(widget.clearIcon),
                       iconSize: 18,
