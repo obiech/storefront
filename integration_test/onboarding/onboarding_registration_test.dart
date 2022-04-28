@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:storefront_app/main.dart' as app;
 
-import '../robots/home_screen_robot.dart';
+import '../robots/address/request_location_access_page_robot.dart';
 import '../robots/onboarding_screen_robot.dart';
 import '../robots/otp_verification_screen_robot.dart';
 import '../robots/pin_input_screen_robot.dart';
@@ -20,19 +20,20 @@ void main() {
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
 
   testWidgets(
-    'On the onboarding screen, if user taps on Register button they will be '
-    'taken to Registration Screen wherein they can submit their phone number. '
-    'After clicking on Submit, they will be brought to OTP Verification screen '
-    'where they can input an OTP sent to their phone. Once OTP is verified and '
-    'their account is registered to our backend, they will be taken to PIN '
-    'registration screen where they have to input their PIN twice.',
+    'Registration Flow -- on Onboarding Screen user can tap on Register button '
+    'to access Registration Screen wherein they can submit their phone number. '
+    'After clicking on Submit, they need to enter an OTP sent to their phone '
+    'in OTP Verification Screen. Once OTP is verified and their account is '
+    'registered to storefront-backend, they can register a new PIN in PIN '
+    'registration screen. Then they will be asked to grant location access. ',
     (WidgetTester tester) async {
       // Setup robots
       final onboardingRobot = OnboardingScreenRobot(tester);
       final registrationRobot = RegistrationScreenRobot(tester);
       final otpVerificationRobot = OtpVerificationScreenRobot(tester);
       final pinInputRobot = PinInputScreenRobot(tester);
-      final homeRobot = HomeScreenRobot(tester);
+      final requestLocationAccessPageRobot =
+          RequestLocationAccessPageRobot(tester);
 
       // Bootstrap the app
       await app.main();
@@ -64,8 +65,10 @@ void main() {
       // Enter PIN and Confirm PIN and wait for PIN registration
       await pinInputRobot.enterPinAndConfirmPin(mockPin, mockPin);
 
-      // User should be redirected to Home Screen
-      await homeRobot.expectScreenIsShown();
+      // User should be redirected to grant request Location Access page
+      await requestLocationAccessPageRobot.expectScreenIsShown();
+
+      // TODO (leovinsen): grant location access and proceed
     },
   );
 }

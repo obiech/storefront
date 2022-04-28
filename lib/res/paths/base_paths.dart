@@ -6,4 +6,7 @@ abstract class BasePaths {
   String get icChevronRight;
   String get icDiscount;
   String get icCoin;
+
+  /// Image assets (typically large images)
+  String get imageLocationAccess;
 }

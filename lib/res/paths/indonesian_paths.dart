@@ -19,4 +19,7 @@ class IndonesianPaths implements BasePaths {
 
   @override
   String get icCoin => 'assets/icons/ic_coin.svg';
+
+  @override
+  String get imageLocationAccess => 'assets/images/location_access.svg';
 }

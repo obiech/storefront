@@ -44,14 +44,6 @@ abstract class BaseStrings {
 
   String createANewPINCodeToSecureYourAccount();
 
-  String locationAccess();
-
-  String letSActivateLocationAccessSoWeCanSendYourShoppingEasily();
-
-  String activateNow();
-
-  String later();
-
   String minutes(int minutes);
 
   String dropezyPoint(int points);
@@ -293,4 +285,16 @@ abstract class BaseStrings {
   String get thatIsAllTheStockWeHave;
 
   String get outOfStock;
+
+  /// Location Access Page
+  String get locationAccess;
+
+  String get locationAccessRationale;
+
+  String get activateNow;
+
+  String get later;
+
+  /// Search Location page
+  String get whereIsYourAddress;
 }

@@ -216,7 +216,7 @@ void main() {
 
     testWidgets(
       'on receiving a success State, pop all routes and push route for Homepage '
-      'and call [OnboardingCubit.finishOnboarding()]',
+      'and Request Location Access page',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
@@ -239,8 +239,11 @@ void main() {
         final routes =
             verify(() => mockNavigator.replaceAll(captureAny())).captured;
         expect(routes.length, 1);
-        expect(routes.first.length, 1);
-        expect(routes.first.first, isA<MainRoute>());
+
+        final capturedRoutes = routes.first as List<PageRouteInfo>;
+        expect(capturedRoutes.length, 2);
+        expect(capturedRoutes[0], isA<MainRoute>());
+        expect(capturedRoutes[1], isA<RequestLocationAccessRoute>());
 
         verify(() => prefs.setIsOnBoarded(true)).called(1);
       },
@@ -248,7 +251,7 @@ void main() {
 
     testWidgets(
       'when user chooses skip option, pop all routes and push route for Homepage '
-      'and call [OnboardingCubit.finishOnboarding()]',
+      'and Request Location Access page',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
             .thenReturn(const PinRegistrationState());
@@ -274,8 +277,11 @@ void main() {
         final routes =
             verify(() => mockNavigator.replaceAll(captureAny())).captured;
         expect(routes.length, 1);
-        expect(routes.first.length, 1);
-        expect(routes.first.first, isA<MainRoute>());
+
+        final capturedRoutes = routes.first as List<PageRouteInfo>;
+        expect(capturedRoutes.length, 2);
+        expect(capturedRoutes[0], isA<MainRoute>());
+        expect(capturedRoutes[1], isA<RequestLocationAccessRoute>());
 
         verify(() => prefs.setIsOnBoarded(true)).called(1);
       },

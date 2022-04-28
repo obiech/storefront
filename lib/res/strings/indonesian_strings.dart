@@ -75,19 +75,6 @@ class IndonesianStrings implements BaseStrings {
       'Buat kode PIN baru untuk mengamankan akunmu';
 
   @override
-  String locationAccess() => 'Akses Lokasi';
-
-  @override
-  String letSActivateLocationAccessSoWeCanSendYourShoppingEasily() =>
-      'Yuk aktifkan akses lokasi agar kami bisa mengirimkan belanjaanmu dengan mudah';
-
-  @override
-  String activateNow() => 'Aktifkan Sekarang';
-
-  @override
-  String later() => 'Nanti Saja';
-
-  @override
   String minutes(int minutes) => '$minutes Menit';
 
   @override
@@ -479,4 +466,22 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get searchForAnotherProduct => 'Mohon coba cari produk yang lainnya';
+
+  /// Location Access page
+  @override
+  String get locationAccess => 'Akses Lokasi';
+
+  @override
+  String get locationAccessRationale =>
+      'Yuk aktifkan akses lokasi agar kami bisa mengirimkan belanjaanmu dengan mudah';
+
+  @override
+  String get activateNow => 'Aktifkan Sekarang';
+
+  @override
+  String get later => 'Nanti Saja';
+
+  /// Search Location page
+  @override
+  String get whereIsYourAddress => 'Dimana Alamat Kamu?';
 }

@@ -76,19 +76,6 @@ class EnglishStrings implements BaseStrings {
       'Create a new PIN code to secure your account';
 
   @override
-  String locationAccess() => 'Location Access';
-
-  @override
-  String letSActivateLocationAccessSoWeCanSendYourShoppingEasily() =>
-      "Let's activate location access so we can send your shopping easily";
-
-  @override
-  String activateNow() => 'Activate Now';
-
-  @override
-  String later() => 'Later';
-
-  @override
   String minutes(int minutes) => '$minutes minutes';
 
   @override
@@ -479,4 +466,22 @@ class EnglishStrings implements BaseStrings {
   @override
   String get searchForAnotherProduct =>
       'Kindly try searching for another product';
+
+  /// Location Access page
+  @override
+  String get locationAccess => 'Location Access';
+
+  @override
+  String get locationAccessRationale =>
+      "Let's activate location access so we can send your shopping easily";
+
+  @override
+  String get activateNow => 'Activate Now';
+
+  @override
+  String get later => 'Later';
+
+  /// Search Location page
+  @override
+  String get whereIsYourAddress => 'Where is Your Address?';
 }

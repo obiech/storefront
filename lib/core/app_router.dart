@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 
+import '../features/address/index.dart';
 import '../features/auth/index.dart';
 import '../features/cart_checkout/index.dart';
 import '../features/child_categories/index.dart';
@@ -40,7 +41,11 @@ import '../features/product_search/index.dart';
     AutoRoute(page: OrderDetailsPage),
 
     /// Categories
-    AutoRoute(page: ChildCategoriesPage)
+    AutoRoute(page: ChildCategoriesPage),
+
+    /// Address related
+    AutoRoute(page: RequestLocationAccessPage),
+    AutoRoute(page: SearchLocationPage),
   ],
 )
 class $AppRouter {}
