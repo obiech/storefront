@@ -10,9 +10,82 @@ env:
   _TESTS_FILE: .dart_tool/test_files
 
 jobs:
+  build-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate dropezy-ci Access Token
+        uses: tibdex/github-app-token@v1.5.0
+        id: generate_ci_token
+        with:
+          app_id: ${{ secrets.DROPEZY_CI_APP_ID }}
+          private_key: ${{ secrets.DROPEZY_CI_PRIVATE_KEY }}
+
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure Git to use dropezy-ci Access Token
+        env:
+          CI_TOKEN: ${{ steps.generate_ci_token.outputs.token }}
+        run: |
+          git config --global url."https://dropezy:${CI_TOKEN}@github.com".insteadOf "https://github.com"
+
+      - name: Create '.env' File from Secret
+        run: echo $SECRETS_FILE_CONTENTS | base64 -d > env/.env
+        env:
+          SECRETS_FILE_CONTENTS: ${{ secrets.ENV_BASE64 }}
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 2.10.4
+          channel: stable
+          cache: true
+      
+      # Cache flutter pubspec dependencies
+      - name: Cache pubspec dependencies
+        id: cache-pubspec-dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key: ${{ runner.os }}-build-pubspec-${{ hashFiles('**/pubspec.lock') }}
+
+      # Cache flutter build runner
+      - name: Cache build runner
+        id: cache-build-runner
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/lib
+            **/.dart_tool
+            **/*.g.dart
+            **/*.mocks.dart
+            **/*.config.dart
+          key: ${{ runner.os }}-build-runner-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Download pub dependencies
+        if: steps.cache-pubspec-dependencies.outputs.cache-hit != 'true'
+        run: flutter pub get
+
+      - name: Build generated code
+        if: steps.cache-build-runner.outputs.cache-hit != 'true'
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: ✨ Check Formatting
+        run: flutter format --set-exit-if-changed lib test
+
+      - name: 🕵️ Analyze
+        run: flutter analyze lib test
+
   test:
     if: ${{ github.event.pull_request.merged }}
     runs-on: ubuntu-latest
+    needs: build-dependencies
     strategy:
       fail-fast: false
       matrix:
@@ -47,17 +120,31 @@ jobs:
           channel: stable
           cache: true
 
-      - name: Download pub dependencies
-        run: flutter pub get
+      # Cache flutter pubspec dependencies
+      - name: Cache pubspec dependencies
+        id: cache-pubspec-dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ env.PUB_CACHE }}
+            **/.packages
+            **/.flutter-plugins
+            **/.flutter-plugin-dependencies
+            **/.dart_tool/package_config.json
+          key: ${{ runner.os }}-build-pubspec-${{ hashFiles('**/pubspec.lock') }}
 
-      - name: Build generated code
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-
-      - name: ✨ Check Formatting
-        run: flutter format --set-exit-if-changed lib test
-
-      - name: 🕵️ Analyze
-        run: flutter analyze lib test
+      # Cache flutter build runner
+      - name: Cache build runner
+        id: cache-build-runner
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/lib
+            **/.dart_tool
+            **/*.g.dart
+            **/*.mocks.dart
+            **/*.config.dart
+          key: ${{ runner.os }}-build-runner-${{ hashFiles('**/pubspec.lock') }}
 
       # First, sort and fetch list of all test files into $_TESTS_FILE.
       #
