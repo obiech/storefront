@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductItemCard(
@@ -99,8 +100,9 @@ void main() {
     expect(qtyChangerFinder, findsNothing);
   });
 
-  testWidgets('When a product is out of stock, gray it out',
-      (WidgetTester tester) async {
+  testWidgets(
+      'When a product is out of stock, gray it out '
+      'and show out of stock label', (WidgetTester tester) async {
     /// arrange
     await tester.pumpProductItemCard(
       const ProductModel(
@@ -117,5 +119,16 @@ void main() {
     );
 
     expect(find.byType(OutOfStockOverdraw), findsOneWidget);
+    final outOfStockFinder = find.text(EnglishStrings().outOfStock);
+    expect(outOfStockFinder, findsOneWidget);
+
+    final outOfStockButton = tester.widget<ElevatedButton>(
+      find.ancestor(
+        of: outOfStockFinder,
+        matching: find.byType(ElevatedButton),
+      ),
+    );
+
+    expect(outOfStockButton.enabled, false);
   });
 }

@@ -284,4 +284,6 @@ abstract class BaseStrings {
   String stockLeft(int stock);
 
   String get thatIsAllTheStockWeHave;
+
+  String get outOfStock;
 }

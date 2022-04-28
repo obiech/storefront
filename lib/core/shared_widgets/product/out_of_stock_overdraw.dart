@@ -16,7 +16,7 @@ class OutOfStockOverdraw extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
         child: Container(
-          color: res.colors.grey3.withOpacity(0.5),
+          color: res.colors.grey6.withOpacity(0.5),
           alignment: Alignment.center,
           child: const SizedBox(),
         ),

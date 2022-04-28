@@ -1,6 +1,7 @@
 import 'package:dropezy_proto/meta/meta.pb.dart';
 import 'package:dropezy_proto/v1/search/search.pb.dart';
 import 'package:equatable/equatable.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
 
 extension SearchInventoryResultX on SearchInventoryResult {
@@ -9,8 +10,9 @@ extension SearchInventoryResultX on SearchInventoryResult {
         sku: sku,
         name: name,
         price: price.num,
-        thumbnailUrl: imageUrl,
+        thumbnailUrl: '${AssetsConfig.assetsUrl}$imageUrl',
         stock: stock,
+        status: stock > 0 ? ProductStatus.ACTIVE : ProductStatus.OUT_OF_STOCK,
       );
 }
 

@@ -67,3 +67,11 @@ enum ProductStatus {
   /// Product is no-longer available for purchase
   DEACTIVATED
 }
+
+/// Product Extension methods
+extension ProductX on ProductModel {
+  bool get isOutOfStock => status == ProductStatus.OUT_OF_STOCK;
+
+  /// Show stock left warning
+  bool get isAlmostDepleted => !isOutOfStock && stock <= 3;
+}

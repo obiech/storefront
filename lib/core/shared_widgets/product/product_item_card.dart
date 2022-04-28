@@ -104,6 +104,10 @@ class _ProductItemCardState extends State<ProductItemCard> {
                             child: CachedNetworkImage(
                               imageUrl: widget.product.thumbnailUrl,
                               fit: BoxFit.contain,
+                              errorWidget: (_, __, ___) => Icon(
+                                DropezyIcons.logo,
+                                size: 65 * widget.scaleFactor,
+                              ),
                             ),
                           ),
                         ),
@@ -124,7 +128,9 @@ class _ProductItemCardState extends State<ProductItemCard> {
                                   ),
                           ),
                         ),
-                      if (widget.product.stock <= 3)
+
+                      /// Stock is almost over
+                      if (widget.product.isAlmostDepleted)
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.topRight,
@@ -167,7 +173,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                     height: 3 * widget.scaleFactor,
                   ),
                   Text(
-                    widget.product.name,
+                    widget.product.name.capitalize(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: res.styles.caption3.copyWith(
@@ -222,14 +228,18 @@ class _ProductItemCardState extends State<ProductItemCard> {
                                     '${widget.product.productId}_add_to_cart',
                                   ),
                                   scaleFactor: widget.scaleFactor,
-                                  text: res.strings.addToCart,
+                                  text: widget.product.isOutOfStock
+                                      ? res.strings.outOfStock
+                                      : res.strings.addToCart,
                                   color: res.colors.lightBlue,
                                   textColor: res.colors.blue,
-                                  onTap: () {
-                                    /// TODO (obella465)- Add to cart
-                                    _qty = 1;
-                                    _qtyIsGreaterThanZero.value = true;
-                                  },
+                                  onTap: !widget.product.isOutOfStock
+                                      ? () {
+                                          /// TODO (obella465)- Add to cart
+                                          _qty = 1;
+                                          _qtyIsGreaterThanZero.value = true;
+                                        }
+                                      : null,
                                 ),
                         );
                       },
@@ -239,8 +249,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
               ),
             ),
           ),
-          if (widget.product.status == ProductStatus.OUT_OF_STOCK)
-            const OutOfStockOverdraw(),
+          if (widget.product.isOutOfStock) const OutOfStockOverdraw(),
         ],
       ),
     );

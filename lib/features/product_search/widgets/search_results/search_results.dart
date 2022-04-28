@@ -32,7 +32,7 @@ class _SearchResultsState extends State<SearchResults> {
   Widget build(BuildContext context) {
     final res = context.res;
 
-    columns = MediaQuery.of(context).size.width < 600 ? 3 : 4;
+    columns = MediaQuery.of(context).size.width < 600 ? 2 : 4;
 
     /// Product Card Scale factor for X columns
     /// * 12 margin between columns

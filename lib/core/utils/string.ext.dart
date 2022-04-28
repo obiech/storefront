@@ -56,4 +56,8 @@ extension StringX on String {
   bool isNumeric() {
     return double.tryParse(this) != null;
   }
+
+  /// Take any string and capitalize it
+  String capitalize() =>
+      isNotEmpty ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
 }

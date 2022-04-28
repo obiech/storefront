@@ -461,5 +461,9 @@ class IndonesianStrings implements BaseStrings {
   String get searchForWhatYouNeed => 'Cari yang kamu butuhkan';
 
   @override
-  String get thatIsAllTheStockWeHave => 'Hanya itu yang kami miliki saat ini';
+  String get thatIsAllTheStockWeHave =>
+      'Hanya ini stock produk yang tersedia pada saat ini';
+
+  @override
+  String get outOfStock => 'Stok kosong';
 }

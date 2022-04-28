@@ -72,4 +72,14 @@ void main() {
       expect('2570500'.formatNumber(separator), '2.570.500');
     });
   });
+
+  group('[String].capitalize()', () {
+    test('should capitalize any string without fail', () async {
+      expect(''.capitalize(), '');
+      expect('some stuff'.capitalize(), 'Some stuff');
+      expect('SOME STUFF'.capitalize(), 'Some stuff');
+      expect('Some Stuff'.capitalize(), 'Some stuff');
+      expect('SoMe STuFf'.capitalize(), 'Some stuff');
+    });
+  });
 }

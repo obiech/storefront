@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
@@ -7,21 +6,7 @@ import 'package:storefront_app/features/product_search/widgets/search_results/se
 
 import '../../fixtures.dart';
 import '../../mocks.dart';
-
-extension WidgetTesterX on WidgetTester {
-  Future<void> pumpSearchResultsWidget(SearchInventoryCubit cubit) async {
-    await pumpWidget(
-      BlocProvider(
-        create: (context) => cubit,
-        child: const MaterialApp(
-          home: Scaffold(
-            body: SearchResults(),
-          ),
-        ),
-      ),
-    );
-  }
-}
+import 'test.ext.dart';
 
 void main() {
   late SearchInventoryCubit cubit;
