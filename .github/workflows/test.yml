@@ -68,7 +68,7 @@ jobs:
             **/*.g.dart
             **/*.mocks.dart
             **/*.config.dart
-          key: ${{ runner.os }}-build-runner-${{ hashFiles('**/pubspec.lock') }}
+          key: ${{ runner.os }}-build-runner-${{ github.run_number }}
 
       - name: Download pub dependencies
         if: steps.cache-pubspec-dependencies.outputs.cache-hit != 'true'
@@ -145,7 +145,7 @@ jobs:
             **/*.g.dart
             **/*.mocks.dart
             **/*.config.dart
-          key: ${{ runner.os }}-build-runner-${{ hashFiles('**/pubspec.lock') }}
+          key: ${{ runner.os }}-build-runner-${{ github.run_number }}
 
       # First, sort and fetch list of all test files into $_TESTS_FILE.
       #
