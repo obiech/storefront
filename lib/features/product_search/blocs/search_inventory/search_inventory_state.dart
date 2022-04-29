@@ -1,4 +1,4 @@
-part of 'search_inventory_cubit.dart';
+part of 'search_inventory_bloc.dart';
 
 abstract class SearchInventoryState extends Equatable {
   const SearchInventoryState();

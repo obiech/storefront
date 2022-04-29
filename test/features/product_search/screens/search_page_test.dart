@@ -11,7 +11,7 @@ import '../mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpSearchPage(
-    SearchInventoryCubit inventoryCubit,
+    SearchInventoryBloc inventoryCubit,
     AutosuggestionBloc autosuggestionBloc,
     SearchHistoryCubit historyCubit,
     HomeNavCubit homeNavCubit,
@@ -35,7 +35,7 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
-  late SearchInventoryCubit searchInventoryCubit;
+  late SearchInventoryBloc searchInventoryCubit;
   late AutosuggestionBloc autosuggestionBloc;
   late SearchHistoryCubit historyCubit;
   late HomeNavCubit homeNavCubit;
@@ -45,7 +45,8 @@ void main() {
   setUp(() {
     repository = MockProductSearchRepository();
     searchHistoryRepository = MockSearchHistoryRepository();
-    searchInventoryCubit = SearchInventoryCubit(repository);
+    searchInventoryCubit =
+        SearchInventoryBloc(repository, searchHistoryRepository);
     autosuggestionBloc = AutosuggestionBloc(repository);
     historyCubit = SearchHistoryCubit(searchHistoryRepository);
     homeNavCubit = HomeNavCubit();
@@ -109,20 +110,25 @@ void main() {
 
     await tester.pumpAndSettle();
 
+    const query = 'query';
     await tester.enterText(
       find.descendant(
         of: find.byType(SearchTextField),
         matching: find.byType(TextField),
       ),
-      'query',
+      query,
     );
 
-    await tester.testTextInput.receiveAction(TextInputAction.search);
-    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      await Future.delayed(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
 
-    expect(find.byType(SearchResults), findsOneWidget);
+      verify(() => repository.searchInventoryForItems(query)).called(1);
 
-    final _productWidgets = tester.widgetList(find.byType(ProductItemCard));
-    expect(_productWidgets.length, pageInventory.length);
+      await expectLater(find.byType(SearchResults), findsOneWidget);
+
+      final _productWidgets = tester.widgetList(find.byType(ProductItemCard));
+      expect(_productWidgets.length, pageInventory.length);
+    });
   });
 }

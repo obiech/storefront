@@ -39,8 +39,8 @@ class SearchSuggestion extends StatelessWidget {
                     onSelect: (query) {
                       onItemTapped?.call();
                       context
-                          .read<SearchInventoryCubit>()
-                          .searchInventory(query);
+                          .read<SearchInventoryBloc>()
+                          .add(SearchInventory(query));
                       context
                           .read<AutosuggestionBloc>()
                           .add(ResetSuggestions());

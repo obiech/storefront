@@ -7,6 +7,7 @@ import 'package:storefront_app/di/config/di_config.dart';
 
 import 'app.dart';
 import 'core/core.dart';
+import 'di/config/di_config.dart';
 import 'di/di_environment.dart';
 import 'di/injection.dart';
 import 'features/address/index.dart';

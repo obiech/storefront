@@ -71,7 +71,7 @@ class SearchPage extends StatefulWidget implements AutoRouteWrapper {
           create: (_) => getIt<AutosuggestionBloc>(),
         ),
         BlocProvider(
-          create: (_) => getIt<SearchInventoryCubit>(),
+          create: (_) => getIt<SearchInventoryBloc>(),
         ),
       ],
       child: this,
@@ -118,14 +118,14 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             context.read<AutosuggestionBloc>().add(GetSuggestions(query));
 
             /// Set-off search to search service
-            context.read<SearchInventoryCubit>().searchInventory(query);
+            context.read<SearchInventoryBloc>().add(SearchInventory(query));
           },
           onSearch: (query) {
             _pageState.value = SearchPageState.PRODUCT_SEARCH;
             context.read<SearchHistoryCubit>().addSearchQuery(query);
 
             /// Set-off search to search service
-            context.read<SearchInventoryCubit>().searchInventory(query);
+            context.read<SearchInventoryBloc>().add(SearchInventory(query));
           },
           onCleared: () {
             /// Reset State
@@ -181,7 +181,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
 
   /// Manage conditions when focus should be requested
   void _setUpPage({bool reqFocus = true}) {
-    final searchInventoryState = context.read<SearchInventoryCubit>().state;
+    final searchInventoryState = context.read<SearchInventoryBloc>().state;
 
     // Returning User who already has some search results
     if (searchInventoryState is InventoryItemResults &&

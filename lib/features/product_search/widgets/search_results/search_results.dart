@@ -23,7 +23,7 @@ class _SearchResultsState extends State<SearchResults> {
     _scrollController.addListener(() {
       if (_scrollController.position.maxScrollExtent ==
           _scrollController.offset) {
-        context.read<SearchInventoryCubit>().loadMoreItems();
+        context.read<SearchInventoryBloc>().add(LoadMoreItems());
       }
     });
   }
@@ -41,8 +41,7 @@ class _SearchResultsState extends State<SearchResults> {
         ((MediaQuery.of(context).size.width - (12 * columns)) / columns) *
             0.008;
 
-    return BlocConsumer<SearchInventoryCubit, SearchInventoryState>(
-      listener: (context, state) {},
+    return BlocBuilder<SearchInventoryBloc, SearchInventoryState>(
       builder: (context, state) {
         if (state is InventoryItemResults) {
           return GridView.builder(

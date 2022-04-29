@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/product_search/domain/services/product_search_service.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../../../src/mock_response_future.dart';
@@ -15,16 +14,22 @@ Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'env/.env');
 
-  late SearchInventoryCubit cubit;
-  late IProductSearchRepository repository;
+  late SearchInventoryBloc searchInventoryBloc;
+  late IProductSearchRepository productSearchService;
+  late ISearchHistoryRepository searchHistoryRepository;
   late SearchServiceClient searchServiceClient;
 
   setUp(() {
     searchServiceClient = MockSearchServiceClient();
-    repository = ProductSearchService(searchServiceClient);
-    cubit = SearchInventoryCubit(repository);
+    productSearchService = ProductSearchService(searchServiceClient);
+    searchHistoryRepository = MockSearchHistoryRepository();
+    searchInventoryBloc =
+        SearchInventoryBloc(productSearchService, searchHistoryRepository);
 
     registerFallbackValue(SearchInventoryRequest(query: 'susu'));
+
+    when(() => searchHistoryRepository.addSearchQuery(any()))
+        .thenAnswer((_) async => []);
   });
 
   testWidgets('When stock is zero, gray out card', (WidgetTester tester) async {
@@ -49,21 +54,26 @@ Future<void> main() async {
         .thenAnswer((_) => MockResponseFuture.value(inventoryResponse));
 
     /// act
-    await tester.pumpSearchResultsWidget(cubit);
-    await cubit.searchInventory('susu');
-    await tester.pumpAndSettle();
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    searchInventoryBloc.add(SearchInventory('susu'));
 
-    expect(find.byType(GridView), findsOneWidget);
+    await tester.runAsync(() async {
+      await Future.delayed(const Duration(milliseconds: 400));
 
-    final productItemFinder = find.byKey(const ValueKey('product_item0'));
+      await tester.pumpAndSettle();
 
-    expect(productItemFinder, findsOneWidget);
-    expect(
-      find.descendant(
-        of: productItemFinder,
-        matching: find.byType(OutOfStockOverdraw),
-      ),
-      findsOneWidget,
-    );
+      expect(find.byType(GridView), findsOneWidget);
+
+      final productItemFinder = find.byKey(const ValueKey('product_item0'));
+
+      expect(productItemFinder, findsOneWidget);
+      expect(
+        find.descendant(
+          of: productItemFinder,
+          matching: find.byType(OutOfStockOverdraw),
+        ),
+        findsOneWidget,
+      );
+    });
   });
 }

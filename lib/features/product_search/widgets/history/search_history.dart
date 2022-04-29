@@ -65,8 +65,9 @@ class SearchHistory extends StatelessWidget {
                           context.read<SearchHistoryCubit>().removeSearchQuery,
                       onSelect: (query) {
                         context
-                            .read<SearchInventoryCubit>()
-                            .searchInventory(query);
+                            .read<SearchInventoryBloc>()
+                            .add(SearchInventory(query));
+
                         onItemTapped?.call();
                       },
                     );

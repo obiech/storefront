@@ -7,15 +7,17 @@ import '../../fixtures.dart';
 import '../../mocks.dart';
 
 void main() {
-  late SearchInventoryCubit cubit;
+  late SearchInventoryBloc bloc;
   late IProductSearchRepository repository;
+  late ISearchHistoryRepository searchHistoryRepository;
 
   String _query = '';
   const limitPerPage = 5;
 
   setUp(() {
     repository = MockProductSearchRepository();
-    cubit = SearchInventoryCubit(repository);
+    searchHistoryRepository = MockSearchHistoryRepository();
+    bloc = SearchInventoryBloc(repository, searchHistoryRepository);
 
     when(
       () => repository.searchInventoryForItems(
@@ -33,83 +35,86 @@ void main() {
           .take(limitPerPage)
           .toList();
     });
+
+    when(() => searchHistoryRepository.addSearchQuery(any()))
+        .thenAnswer((_) async => []);
   });
 
   test(
       'Default state is [SearchInventoryInitial], '
       'page count is zero, query is empty '
       'and inventory list is empty', () async {
-    expect(cubit.state, isA<SearchInventoryInitial>());
-    expect(cubit.page, 0);
-    expect(cubit.query.isEmpty, true);
-    expect(cubit.inventory.isEmpty, true);
+    expect(bloc.state, isA<SearchInventoryInitial>());
+    expect(bloc.page, 0);
+    expect(bloc.query.isEmpty, true);
+    expect(bloc.inventory.isEmpty, true);
   });
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When [searchInventory] is called, page, query & inventory are reset '
     'then loading shown and if successful a full list of inventory results emitted',
-    build: () => cubit,
-    act: (cubit) => cubit.searchInventory('beans'),
-    expect: () {
+    build: () => bloc,
+    act: (cubit) => cubit.add(SearchInventory('beans')),
+    expect: () => [
+      isA<SearchingForItemInInventory>(),
+      InventoryItemResults(pageInventory.take(limitPerPage).toList())
+    ],
+    verify: (bloc) {
       verify(
         () => repository.searchInventoryForItems(any()),
       ).called(1);
 
-      expect(cubit.query, _query);
-      expect(cubit.page, 0);
+      expect(bloc.query, _query);
+      expect(bloc.page, 0);
 
-      final pageZeroResults = pageInventory.take(limitPerPage).toList();
-      expect(cubit.inventory, pageZeroResults);
-
-      return [
-        isA<SearchingForItemInInventory>(),
-        InventoryItemResults(pageZeroResults)
-      ];
+      expect(bloc.inventory, pageInventory.take(limitPerPage).toList());
     },
   );
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When no results are returned during [searchInventory], an error state is emitted',
     setUp: () {
       when(() => repository.searchInventoryForItems(any()))
           .thenAnswer((_) async => []);
     },
-    build: () => cubit,
-    act: (cubit) => cubit.searchInventory('beans'),
+    build: () => bloc,
+    act: (cubit) => cubit.add(SearchInventory('beans')),
     expect: () => [
       isA<SearchingForItemInInventory>(),
       isA<ErrorOccurredSearchingForItem>(),
     ],
   );
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When an error occurs during [searchInventory], an error state is emitted',
     setUp: () {
       when(() => repository.searchInventoryForItems(any()))
           .thenThrow(Exception('Some error has occurred'));
     },
-    build: () => cubit,
-    act: (cubit) => cubit.searchInventory('beans'),
+    build: () => bloc,
+    act: (cubit) => cubit.add(SearchInventory('beans')),
     expect: () => [
       isA<SearchingForItemInInventory>(),
       isA<ErrorOccurredSearchingForItem>(),
     ],
   );
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When [loadMoreItems] is called, the existing query is used to query more items from the repository',
-    build: () => cubit,
+    build: () => bloc,
     act: (cubit) async {
-      await cubit.searchInventory('beans');
-      await cubit.loadMoreItems();
+      cubit.add(SearchInventory('beans'));
+      await Future.delayed(const Duration(milliseconds: 400));
+      cubit.add(LoadMoreItems());
+      await Future.delayed(const Duration(milliseconds: 400));
     },
     expect: () {
       verify(() => repository.searchInventoryForItems(any())).called(1);
       verify(() => repository.searchInventoryForItems(any(), page: 1))
           .called(1);
 
-      expect(cubit.query, _query);
-      expect(cubit.page, 1);
+      expect(bloc.query, _query);
+      expect(bloc.page, 1);
 
       /// Page One
       final pageOneResults = pageInventory.take(limitPerPage).toList();
@@ -118,7 +123,7 @@ void main() {
       final pageTwoResults =
           pageInventory.skip(limitPerPage).take(limitPerPage).toList();
 
-      expect(cubit.inventory, pageOneResults + pageTwoResults);
+      expect(bloc.inventory, pageOneResults + pageTwoResults);
 
       return [
         isA<SearchingForItemInInventory>(),
@@ -128,70 +133,71 @@ void main() {
     },
   );
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  /// Page One
+  final pageOneResults = pageInventory.take(limitPerPage).toList();
+
+  /// Page two
+  final pageTwoResults =
+      pageInventory.skip(limitPerPage).take(limitPerPage).toList();
+
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When no items are returned during [loadMoreItems], we assume that the last page has been reached',
-    build: () => cubit,
+    build: () => bloc,
     act: (cubit) async {
-      await cubit.searchInventory('beans');
-      await cubit.loadMoreItems();
-      await cubit.loadMoreItems();
+      cubit.add(SearchInventory('beans'));
+      await Future.delayed(const Duration(milliseconds: 400));
+      cubit.add(LoadMoreItems());
+      await Future.delayed(const Duration(milliseconds: 400));
+      cubit.add(LoadMoreItems());
     },
-    expect: () {
+    expect: () => [
+      isA<SearchingForItemInInventory>(),
+      InventoryItemResults(pageOneResults),
+      InventoryItemResults(pageOneResults + pageTwoResults),
+
+      /// TODO - Handle isAtEnd
+    ],
+    verify: (bloc) {
       verify(() => repository.searchInventoryForItems(any())).called(1);
       verify(() => repository.searchInventoryForItems(any(), page: 1))
           .called(1);
       verify(() => repository.searchInventoryForItems(any(), page: 2))
           .called(1);
 
-      expect(cubit.query, _query);
-      expect(cubit.page, 1);
-
-      /// Page One
-      final pageOneResults = pageInventory.take(limitPerPage).toList();
-
-      /// Page two
-      final pageTwoResults =
-          pageInventory.skip(limitPerPage).take(limitPerPage).toList();
-      expect(cubit.inventory, pageOneResults + pageTwoResults);
-
-      return [
-        isA<SearchingForItemInInventory>(),
-        InventoryItemResults(pageOneResults),
-        InventoryItemResults(pageOneResults + pageTwoResults),
-
-        /// TODO - Handle isAtEnd
-      ];
+      expect(bloc.query, _query);
+      expect(bloc.page, 1);
+      expect(bloc.inventory, pageOneResults + pageTwoResults);
     },
   );
 
-  blocTest<SearchInventoryCubit, SearchInventoryState>(
+  blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When an error occurs during loading, more items nothing should happen',
     setUp: () {
       when(() => repository.searchInventoryForItems(any(), page: 1))
           .thenThrow(Exception('Some weird error'));
     },
-    build: () => cubit,
+    build: () => bloc,
     act: (cubit) async {
-      await cubit.searchInventory('beans');
-      await cubit.loadMoreItems();
+      cubit.add(SearchInventory('beans'));
+      await Future.delayed(const Duration(milliseconds: 300));
+      cubit.add(LoadMoreItems());
     },
-    expect: () {
+    expect: () => [
+      isA<SearchingForItemInInventory>(),
+      InventoryItemResults(pageOneResults),
+    ],
+    verify: (bloc) {
       verify(() => repository.searchInventoryForItems(any())).called(1);
       verify(() => repository.searchInventoryForItems(any(), page: 1))
           .called(1);
 
-      expect(cubit.query, _query);
-      expect(cubit.page, 0);
+      expect(bloc.query, _query);
+      expect(bloc.page, 0);
 
       /// Page One
       final pageOneResults = pageInventory.take(limitPerPage).toList();
 
-      expect(cubit.inventory, pageOneResults);
-
-      return [
-        isA<SearchingForItemInInventory>(),
-        InventoryItemResults(pageOneResults),
-      ];
+      expect(bloc.inventory, pageOneResults);
     },
   );
 }

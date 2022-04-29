@@ -9,17 +9,21 @@ import '../../mocks.dart';
 import 'test.ext.dart';
 
 void main() {
-  late SearchInventoryCubit cubit;
+  late SearchInventoryBloc searchInventoryBloc;
   late IProductSearchRepository repository;
+  late ISearchHistoryRepository searchHistoryRepository;
 
   setUp(() {
     repository = MockProductSearchRepository();
-    cubit = SearchInventoryCubit(repository);
+    searchHistoryRepository = MockSearchHistoryRepository();
+
+    searchInventoryBloc =
+        SearchInventoryBloc(repository, searchHistoryRepository);
   });
 
   testWidgets('When loading, a shimmer is shown', (WidgetTester tester) async {
-    cubit.emit(SearchingForItemInInventory());
-    await tester.pumpSearchResultsWidget(cubit);
+    searchInventoryBloc.emit(SearchingForItemInInventory());
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
 
     for (int i = 0; i < 5; i++) {
       await tester.pump();
@@ -30,8 +34,8 @@ void main() {
 
   testWidgets('When no state is available nothing is shown',
       (WidgetTester tester) async {
-    cubit.emit(SearchInventoryInitial());
-    await tester.pumpSearchResultsWidget(cubit);
+    searchInventoryBloc.emit(SearchInventoryInitial());
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
 
     expect(find.byType(SizedBox), findsNWidgets(1));
   });
@@ -39,8 +43,8 @@ void main() {
   testWidgets(
       'When inventory items are available, show GridList  list of items',
       (WidgetTester tester) async {
-    cubit.emit(const InventoryItemResults(pageInventory));
-    await tester.pumpSearchResultsWidget(cubit);
+    searchInventoryBloc.emit(const InventoryItemResults(pageInventory));
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
 
     expect(find.byType(GridView), findsOneWidget);
 
