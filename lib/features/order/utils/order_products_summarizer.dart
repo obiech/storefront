@@ -12,10 +12,10 @@ String summarizeOrderProducts(
 ) {
   if (orderProducts.isEmpty) return '';
 
-  String summary = orderProducts[0].product.name;
+  String summary = orderProducts[0].productName;
 
   if (orderProducts.length >= 2) {
-    summary += ', ${orderProducts[1].product.name}';
+    summary += ', ${orderProducts[1].productName}';
   }
 
   if (orderProducts.length >= 3) {

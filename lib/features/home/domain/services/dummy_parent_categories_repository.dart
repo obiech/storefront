@@ -1,7 +1,10 @@
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/features/home/domain/models/category_model.dart';
 import 'package:storefront_app/features/home/domain/repository/i_parent_categories_repository.dart';
 
+import '../../../../core/core.dart';
+import '../../../../di/di_environment.dart';
 import '../../../child_categories/domain/services/dummy_child_category_repository.dart';
 
 /// Dummy [IParentCategoriesRepository].
@@ -9,7 +12,7 @@ import '../../../child_categories/domain/services/dummy_child_category_repositor
 /// Returns data for development purposes, hardcoded in class definition.
 /// WARNING: DO NOT use in production!
 
-@LazySingleton(as: IParentCategoriesRepository)
+@LazySingleton(as: IParentCategoriesRepository, env: [DiEnvironment.dummy])
 class DummyParentCategoryRepository extends IParentCategoriesRepository {
   static const parentCategoryList = [
     ParentCategoryModel(
@@ -103,8 +106,9 @@ class DummyParentCategoryRepository extends IParentCategoriesRepository {
   ];
 
   @override
-  Future<List<ParentCategoryModel>> getParentCategories() async {
+  Future<Either<Failure, List<ParentCategoryModel>>>
+      getParentCategories() async {
     await Future.delayed(const Duration(seconds: 1));
-    return parentCategoryList;
+    return right(parentCategoryList);
   }
 }

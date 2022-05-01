@@ -101,7 +101,7 @@ class OrderHistoryListItem extends StatelessWidget {
           Row(
             children: [
               _ProductImage(
-                thumbnail: order.productsBought[0].product.thumbnailUrl,
+                thumbnail: order.productsBought[0].thumbnailUrl,
               ),
               SizedBox(width: context.res.dimens.spacingMiddle),
               Expanded(

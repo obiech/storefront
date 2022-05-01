@@ -52,7 +52,7 @@ void main() {
 
         expect(
           orderThumbnail.imageUrl,
-          o.productsBought[0].product.thumbnailUrl,
+          o.productsBought[0].thumbnailUrl,
         );
       }
     },

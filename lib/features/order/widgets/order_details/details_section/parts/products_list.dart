@@ -26,10 +26,8 @@ class ProductsList extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (_, index) {
         final product = products[index];
-        final productName = product.product.name;
-        final unitPrice = product.product.price;
         final quantity = product.quantity;
-        final totalPrice = product.total;
+        final totalPrice = product.grandTotal;
 
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +39,7 @@ class ProductsList extends StatelessWidget {
                 child: CachedNetworkImage(
                   height: 50,
                   width: 50,
-                  imageUrl: product.product.thumbnailUrl,
+                  imageUrl: product.thumbnailUrl,
                 ),
               ),
             ),
@@ -52,14 +50,14 @@ class ProductsList extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    productName,
+                    product.productName,
                     style: res.styles.caption2.copyWith(
                       fontWeight: FontWeight.w500,
                       height: 1.7, // 12 * 1.7 = 20dp
                     ),
                   ),
                   Text(
-                    '$quantity x ${unitPrice.toCurrency()}',
+                    '$quantity x ${product.price.toCurrency()}',
                     style: res.styles.caption2.copyWith(
                       height: 1.5, // 12 * 1.5 = 18dp
                     ),

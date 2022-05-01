@@ -3,37 +3,66 @@ import 'package:equatable/equatable.dart';
 
 import '../../../product/domain/models/product_model.dart';
 
-/// contains product information as represented by [ProductModel]
-/// and the quantity purchased for this particular product
+/// Representation of a Product Variant that has been purchased by a customer
+/// in one of their transactions.
+///
+/// Similar to [ProductModel] but the key differences are:
+/// - having [quantity] instead of stock
+/// - no information such as best seller, flash sale
+///
+/// For representation of a product available in Search Results,
+/// see [ProductModel].
 class OrderProductModel extends Equatable {
   const OrderProductModel({
-    required this.product,
+    required this.productId,
+    required this.productName,
+    required this.thumbnailUrl,
+    required this.price,
+    this.discount,
+    required this.finalPrice,
     required this.quantity,
-    required this.total,
+    required this.grandTotal,
   });
 
   /// Maps a [pb.Item] into [OrderProductModel]
-  ///
-  /// If you do not need the quantity purchased,
-  /// see [ProductModel.fromPb]
   factory OrderProductModel.fromPb(pb.Item item) {
+    // TODO (leovinsen): Add missing fields once Item proto is updated
     return OrderProductModel(
-      product: ProductModel.fromPb(item.product),
+      productId: item.product.productId,
+      productName: item.product.name,
+      thumbnailUrl: item.product.imagesUrls[0],
       quantity: item.quantity,
-      // TODO (leovinsen): total should come from backend
-      total: (item.quantity * int.parse(item.product.price.num)).toString(),
+      price: '1500000',
+      discount: '100000',
+      finalPrice: '1400000',
+      grandTotal: (item.quantity * 1500000).toString(),
     );
   }
 
-  /// basic information of a product
-  final ProductModel product;
+  /// ID of the Product Variant in Dropezy database.
+  final String productId;
 
-  /// amount purchased for [product]
+  /// name of the Product Variant in Dropezy database.
+  final String productName;
+
+  /// URL to product's thumbnail
+  final String thumbnailUrl;
+
+  /// price of the Product Variant in Dropezy database.
+  final String price;
+
+  /// discount applied during time of purchase
+  final String? discount;
+
+  /// price after [discount] is applied
+  final String finalPrice;
+
+  /// amount purchased
   final int quantity;
 
-  /// total price of [product.price] * [quantity]
-  final String total;
+  /// result of [finalPrice] * [quantity]
+  final String grandTotal;
 
   @override
-  List<Object?> get props => [product, quantity];
+  List<Object?> get props => [productId, quantity, grandTotal];
 }

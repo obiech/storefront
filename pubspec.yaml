@@ -36,7 +36,7 @@ dependencies:
   dropezy_proto:
     git:
       url: https://github.com/dropezy/proto.git
-      ref: 64a9698
+      ref: 45334a8
   equatable: ^2.0.3
   firebase_auth: ^3.3.7
   firebase_core: ^1.12.0

@@ -20,14 +20,12 @@ void main() {
       id: '0',
       name: 'Daun',
       thumbnailUrl: 'https://pngimg.com/uploads/spinach/spinach_PNG65.png',
-      parentCategoryId: '1',
     ),
     ChildCategoryModel(
       id: '1',
       name: 'Bunga',
       thumbnailUrl:
           'https://pngimg.com/uploads/cauliflower/small/cauliflower_PNG12683.png',
-      parentCategoryId: '1',
     ),
   ];
 

@@ -20,7 +20,8 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
       providers: [
         /// Add another Bloc Provider here
         BlocProvider<ParentCategoriesCubit>(
-          create: (_) => getIt<ParentCategoriesCubit>()..fetchCategoriesOne(),
+          create: (_) =>
+              getIt<ParentCategoriesCubit>()..fetchParentCategories(),
         ),
       ],
       child: this,

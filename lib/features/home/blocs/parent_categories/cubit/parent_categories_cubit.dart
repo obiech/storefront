@@ -13,15 +13,16 @@ class ParentCategoriesCubit extends Cubit<ParentCategoriesState> {
 
   final IParentCategoriesRepository categoriesOneRepository;
 
-  Future<void> fetchCategoriesOne() async {
+  Future<void> fetchParentCategories() async {
     emit(LoadingParentCategoriesState());
 
-    try {
-      final parentCategory =
-          await categoriesOneRepository.getParentCategories();
-      emit(LoadedParentCategoriesState(parentCategory));
-    } catch (_) {
-      emit(const ErrorLoadingParentCategoriesState('Error loading page'));
-    }
+    final result = await categoriesOneRepository.getParentCategories();
+
+    final state = result.fold(
+      (categories) => ErrorLoadingParentCategoriesState(categories.message),
+      (failure) => LoadedParentCategoriesState(failure),
+    );
+
+    emit(state);
   }
 }

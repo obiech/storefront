@@ -1,4 +1,3 @@
-import 'package:dropezy_proto/v1/product/product.pb.dart' as pb;
 import 'package:equatable/equatable.dart';
 import 'package:storefront_app/features/product/domain/models/market_status.dart';
 
@@ -19,19 +18,6 @@ class ProductModel extends Equatable {
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
     this.status = ProductStatus.ACTIVE,
   });
-
-  /// Maps a [pb.Product] object into [ProductModel]
-  factory ProductModel.fromPb(pb.Product product) {
-    return ProductModel(
-      productId: product.productId,
-      sku: product.sku,
-      name: product.name,
-      price: product.price.num,
-      thumbnailUrl: product.imagesUrls[0],
-      // TODO (leovinsen): add mapping for Stock once it's available
-      stock: 0,
-    );
-  }
 
   /// A unique identifier of a Product
   /// Stands for Stock Keeping Unit

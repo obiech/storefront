@@ -13,15 +13,20 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              product: productSeladaRomaine,
+              productId: productSeladaRomaine.productId,
+              productName: productSeladaRomaine.name,
+              thumbnailUrl: productSeladaRomaine.thumbnailUrl,
+              price: productSeladaRomaine.price,
+              finalPrice: productSeladaRomaine.price,
               quantity: 3,
-              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
+              grandTotal:
+                  (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
           ];
 
           final summary = summarizeOrderProducts(products, 'lainnya');
 
-          expect(summary, products[0].product.name);
+          expect(summary, products[0].productName);
         },
       );
 
@@ -31,21 +36,31 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              product: productSeladaRomaine,
+              productId: productSeladaRomaine.productId,
+              productName: productSeladaRomaine.name,
+              thumbnailUrl: productSeladaRomaine.thumbnailUrl,
+              price: productSeladaRomaine.price,
+              finalPrice: productSeladaRomaine.price,
               quantity: 3,
-              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
+              grandTotal:
+                  (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              product: productBellPepperYellow,
+              productId: productBellPepperYellow.productId,
+              productName: productBellPepperYellow.name,
+              thumbnailUrl: productBellPepperYellow.thumbnailUrl,
+              price: productBellPepperYellow.price,
+              finalPrice: productBellPepperYellow.price,
               quantity: 1,
-              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
+              grandTotal:
+                  (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
           ];
 
           final summary = summarizeOrderProducts(products, 'lainnya');
 
-          final firstName = products[0].product.name;
-          final secondName = products[1].product.name;
+          final firstName = products[0].productName;
+          final secondName = products[1].productName;
 
           expect(summary, '$firstName, $secondName');
         },
@@ -57,31 +72,51 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              product: productSeladaRomaine,
+              productId: productSeladaRomaine.productId,
+              productName: productSeladaRomaine.name,
+              thumbnailUrl: productSeladaRomaine.thumbnailUrl,
+              price: productSeladaRomaine.price,
+              finalPrice: productSeladaRomaine.price,
               quantity: 3,
-              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
+              grandTotal:
+                  (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              product: productBellPepperYellow,
+              productId: productBellPepperYellow.productId,
+              productName: productBellPepperYellow.name,
+              thumbnailUrl: productBellPepperYellow.thumbnailUrl,
+              price: productBellPepperYellow.price,
+              finalPrice: productBellPepperYellow.price,
               quantity: 1,
-              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
+              grandTotal:
+                  (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
             OrderProductModel(
-              product: productSeladaRomaine,
+              productId: productSeladaRomaine.productId,
+              productName: productSeladaRomaine.name,
+              thumbnailUrl: productSeladaRomaine.thumbnailUrl,
+              price: productSeladaRomaine.price,
+              finalPrice: productSeladaRomaine.price,
               quantity: 3,
-              total: (int.parse(productSeladaRomaine.price) * 3).toString(),
+              grandTotal:
+                  (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              product: productBellPepperYellow,
+              productId: productBellPepperYellow.productId,
+              productName: productBellPepperYellow.name,
+              thumbnailUrl: productBellPepperYellow.thumbnailUrl,
+              price: productBellPepperYellow.price,
+              finalPrice: productBellPepperYellow.price,
               quantity: 1,
-              total: (int.parse(productBellPepperYellow.price) * 1).toString(),
+              grandTotal:
+                  (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
           ];
 
           final summary = summarizeOrderProducts(products, 'lainnya');
 
-          final firstName = products[0].product.name;
-          final secondName = products[1].product.name;
+          final firstName = products[0].productName;
+          final secondName = products[1].productName;
 
           expect(summary, '$firstName, $secondName, +2 lainnya');
         },

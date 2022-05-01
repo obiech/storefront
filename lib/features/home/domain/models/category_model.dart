@@ -35,15 +35,14 @@ class ParentCategoryModel extends CategoryModel {
   final String color; //TODO (Jonathan): Remove the color
   final List<ChildCategoryModel> childCategories;
 
-  factory ParentCategoryModel.fromPb(LeveledCategories parentCategory) {
+  factory ParentCategoryModel.fromPb(Category category) {
     return ParentCategoryModel(
-      id: parentCategory.category.categoryId,
-      name: parentCategory.category.name,
-      thumbnailUrl: parentCategory.category.imagesUrls[0],
+      id: category.categoryId,
+      name: category.name,
+      thumbnailUrl: category.imagesUrls[0],
       color: '91bbff',
-      childCategories: parentCategory.childCategories
-          .map(ChildCategoryModel.fromPb)
-          .toList(),
+      childCategories:
+          category.childCategories.map(ChildCategoryModel.fromPb).toList(),
     );
   }
 }
@@ -54,21 +53,17 @@ class ChildCategoryModel extends CategoryModel {
     required String id,
     required String name,
     required String thumbnailUrl,
-    required this.parentCategoryId,
   }) : super(
           categoryId: id,
           name: name,
           thumbnailUrl: thumbnailUrl,
         );
 
-  final String parentCategoryId;
-
   factory ChildCategoryModel.fromPb(Category category) {
     return ChildCategoryModel(
       id: category.categoryId,
       name: category.name,
       thumbnailUrl: category.imagesUrls[0],
-      parentCategoryId: category.parentCategoryId,
     );
   }
 }

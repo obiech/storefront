@@ -9,13 +9,11 @@ void main() {
       id: '0',
       name: 'Daun',
       thumbnailUrl: 'https://pngimg.com/uploads/spinach/spinach_PNG65.png',
-      parentCategoryId: '1',
     ),
     ChildCategoryModel(
       id: '1',
       name: 'Citrus',
       thumbnailUrl: 'https://pngimg.com/uploads/orange/orange_PNG803.png',
-      parentCategoryId: '1',
     ),
   ];
 
