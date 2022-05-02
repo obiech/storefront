@@ -82,8 +82,12 @@ class EnglishStrings implements BaseStrings {
   String hiWhatAreYouShoppingForToday(String name) =>
       'Hi${name.isNotEmpty ? ' $name' : ''}, what are you shopping for today?';
 
+  /// Home Page
   @override
   String get findYourNeeds => "I'm looking for...";
+
+  @override
+  String get promptLoginOrRegister => 'Login or Register';
 
   @override
   String dropezyPoint(int points) => 'Dropezy Point';

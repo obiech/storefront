@@ -8,5 +8,6 @@ abstract class BasePaths {
   String get icCoin;
 
   /// Image assets (typically large images)
+  String get imageDropezyLogo;
   String get imageLocationAccess;
 }

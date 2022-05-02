@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/features/address/index.dart';
+import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/home/domain/repository/i_parent_categories_repository.dart';
 import 'package:storefront_app/features/home/index.dart';
 
@@ -10,3 +12,8 @@ class MockIParentCategoriesRepository extends Mock
 class MockParentCategoriesCubit extends Mock implements ParentCategoriesCubit {}
 
 class MockHttpClient extends Mock implements HttpClient {}
+
+class MockDeliveryAddressCubit extends Mock implements DeliveryAddressCubit {}
+
+class MockUserCredentialsStorage extends Mock
+    implements UserCredentialsStorage {}

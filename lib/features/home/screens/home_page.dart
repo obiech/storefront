@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/di/injection.dart';
 
+import '../../../core/core.dart';
+import '../../../di/injection.dart';
+import '../../auth/domain/services/user_credentials_storage.dart';
 import '../index.dart';
-import '../widgets/widgets.dart';
 
 part 'keys.dart';
 
@@ -31,22 +31,8 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
   Widget build(BuildContext context) {
     final res = context.res;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              getIt<IPrefsRepository>().setIsOnBoarded(false);
-              context.router.replaceAll([
-                const OnboardingRoute(),
-              ]);
-            },
-            child: const Text(
-              'Sign out',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
-        ],
+      appBar: HomeAppBar(
+        userCredentialsStream: getIt<UserCredentialsStorage>().stream,
       ),
       body: SafeArea(
         bottom: false,
@@ -76,6 +62,16 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
                       title: const Text('Order History'),
                       onTap: () {
                         context.router.push(const OrderHistoryRoute());
+                      },
+                    ),
+                    const Divider(),
+                    ListTile(
+                      title: const Text('Delete All Data'),
+                      onTap: () {
+                        getIt<IPrefsRepository>().clear();
+                        context.router.replaceAll([
+                          const OnboardingRoute(),
+                        ]);
                       },
                     ),
                     const Divider(),

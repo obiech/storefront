@@ -261,6 +261,8 @@ abstract class BaseStrings {
   /// Home Page
   String hiWhatAreYouShoppingForToday(String name);
 
+  String get promptLoginOrRegister;
+
   String get findYourNeeds;
 
   /// Search Page

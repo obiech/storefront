@@ -17,7 +17,10 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
   @visibleForTesting
   final IPrefsRepository prefs;
 
+  @visibleForTesting
   UserCredentials? creds;
+
+  @visibleForTesting
   bool credsIsCached = false;
 
   /// Fetches user token and phone number from [SharedPreferences]
@@ -36,6 +39,7 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
         : UserCredentials(authToken: token, phoneNumber: phoneNumber!);
 
     credsIsCached = true;
+    addToStream(creds);
 
     return creds;
   }
@@ -47,6 +51,7 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
 
     creds = UserCredentials(authToken: authToken, phoneNumber: phoneNumber);
     credsIsCached = true;
+    addToStream(creds);
   }
 
   @override
@@ -56,5 +61,6 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
 
     creds = null;
     credsIsCached = false;
+    addToStream(creds);
   }
 }

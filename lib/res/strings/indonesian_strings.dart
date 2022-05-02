@@ -81,8 +81,12 @@ class IndonesianStrings implements BaseStrings {
   String hiWhatAreYouShoppingForToday(String name) =>
       'Hai${name.isNotEmpty ? ' $name' : ''}, mau belanja apa hari ini?';
 
+  /// Home page
   @override
   String get findYourNeeds => 'Cari kebutuhanmu';
+
+  @override
+  String get promptLoginOrRegister => 'Masuk atau daftar, yuk!';
 
   @override
   String dropezyPoint(int points) => 'Dropezy Point';
