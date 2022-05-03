@@ -46,6 +46,104 @@ class DropezyChip extends StatelessWidget {
     );
   }
 
+  /// Displays text 'Awaiting Payment'
+  factory DropezyChip.awaitingPayment({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.awaitingPayment,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.orange,
+      ),
+      backgroundColor: res.colors.lightOrange,
+    );
+  }
+
+  /// Displays text 'In Process'
+  factory DropezyChip.inProcess({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.inProcess,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.deepYellow,
+      ),
+      backgroundColor: res.colors.paleYellow,
+    );
+  }
+
+  /// Displays text 'In Delivery'
+  factory DropezyChip.inDelivery({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.inDelivery,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.green,
+      ),
+      backgroundColor: res.colors.paleGreen,
+    );
+  }
+
+  /// Displays text 'Arrived At Destination'
+  factory DropezyChip.arrivedAtDestination({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.arrivedAtDestination,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.blue,
+      ),
+      backgroundColor: res.colors.paleBlue,
+    );
+  }
+
+  /// Displays text 'Cancelled'
+  factory DropezyChip.cancelled({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.cancelled,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.white,
+      ),
+      backgroundColor: res.colors.red,
+    );
+  }
+
+  /// Displays text 'Cancelled'
+  factory DropezyChip.failed({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.failed,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.white,
+      ),
+      backgroundColor: res.colors.red,
+    );
+  }
+
+  /// Displays text 'Unspecified'
+  factory DropezyChip.unspecified({
+    required Resources res,
+  }) {
+    return DropezyChip(
+      label: res.strings.unspecified,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.white,
+      ),
+      backgroundColor: res.colors.black,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
