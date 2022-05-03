@@ -41,23 +41,21 @@ class SearchInventoryBloc
   ) async {
     _page = 0;
     _query = event.query;
-    try {
-      emit(SearchingForItemInInventory());
 
-      final _result = await repository.searchInventoryForItems(_query);
+    emit(SearchingForItemInInventory());
 
-      if (_result.isNotEmpty) {
-        _inventory.clear();
-        _inventory.addAll(_result);
-        emit(InventoryItemResults(List.of(_inventory)));
-      } else {
-        emit(const ErrorOccurredSearchingForItem('No Results'));
-      }
+    final _failureOrResult = await repository.searchInventoryForItems(_query);
 
-      searchHistoryRepository.addSearchQuery(_query);
-    } catch (e) {
-      emit(const ErrorOccurredSearchingForItem('Error loading results'));
-    }
+    _failureOrResult.fold((failure) {
+      emit(ErrorOccurredSearchingForItem(failure));
+    }, (inventory) {
+      _inventory.clear();
+      _inventory.addAll(inventory);
+      emit(InventoryItemResults(List.of(_inventory)));
+    });
+
+    // Add query to search history
+    searchHistoryRepository.addSearchQuery(_query);
   }
 
   /// Load more items
@@ -67,22 +65,21 @@ class SearchInventoryBloc
   ) async {
     if (state is InventoryItemResults &&
         !(state as InventoryItemResults).isAtEnd) {
-      try {
-        final _result = await repository.searchInventoryForItems(
-          _query,
-          page: _page + 1,
-        );
+      final _resultOrFailure = await repository.searchInventoryForItems(
+        _query,
+        page: _page + 1,
+      );
 
-        if (_result.isNotEmpty) {
-          _page++;
-          _inventory.addAll(_result);
-          emit(InventoryItemResults(List.of(_inventory)));
-        } else {
+      _resultOrFailure.fold((failure) {
+        if (failure is NoInventoryResults) {
           emit(InventoryItemResults(List.of(_inventory), isAtEnd: true));
         }
-      } catch (e) {
-        if (kDebugMode) print(e);
-      }
+      }, (inventory) {
+        _page++;
+        _inventory.addAll(inventory);
+        emit(InventoryItemResults(List.of(_inventory)));
+        // TODO(obella465): If results are less than limit, end of page reached
+      });
     }
   }
 

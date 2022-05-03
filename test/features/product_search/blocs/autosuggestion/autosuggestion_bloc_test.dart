@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../fixtures.dart';
@@ -32,7 +34,7 @@ void main() {
       when(() => repository.getSearchSuggestions(any()))
           .thenAnswer((invocation) async {
         _repoRequests.add(invocation.positionalArguments[0].toString());
-        return autosuggestions;
+        return right(autosuggestions);
       });
     },
     build: () => bloc,
@@ -60,7 +62,7 @@ void main() {
     setUp: () {
       /// arrange
       when(() => repository.getSearchSuggestions(any()))
-          .thenThrow(Exception('Error loading suggestions'));
+          .thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
     act: (bloc) => bloc.add(GetSuggestions('beans')),

@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,6 +70,15 @@ void main() {
   testWidgets('When Page State is PRODUCT_SEARCH, show autosuggestions widget',
       (WidgetTester tester) async {
     /// arrange
+    when(() => repository.getSearchSuggestions(any()))
+        .thenAnswer((_) async => right(['bea']));
+
+    when(() => repository.searchInventoryForItems(any()))
+        .thenAnswer((_) async => right(pageInventory));
+
+    when(() => searchHistoryRepository.addSearchQuery(any()))
+        .thenAnswer((_) async => ['bea']);
+
     await tester.pumpSearchPage(
       searchInventoryCubit,
       autosuggestionBloc,
@@ -95,11 +105,11 @@ void main() {
       (WidgetTester tester) async {
     /// arrange
     when(() => repository.getSearchSuggestions(any()))
-        .thenAnswer((_) async => autosuggestions);
+        .thenAnswer((_) async => right(autosuggestions));
     when(() => searchHistoryRepository.addSearchQuery(any()))
         .thenAnswer((_) async => [_.positionalArguments.first.toString()]);
     when(() => repository.searchInventoryForItems(any()))
-        .thenAnswer((_) async => pageInventory);
+        .thenAnswer((_) async => right(pageInventory));
 
     await tester.pumpSearchPage(
       searchInventoryCubit,

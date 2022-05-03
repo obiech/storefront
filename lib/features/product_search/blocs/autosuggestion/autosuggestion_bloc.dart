@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
@@ -35,17 +34,15 @@ class AutosuggestionBloc
   ) async {
     emit(GettingAutosuggestions());
 
-    try {
-      final suggestions = await repository.getSearchSuggestions(event.query);
-      if (kDebugMode) {
-        print(suggestions);
-      }
-      emit(LoadedAutosuggestions(suggestions));
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      emit(const ErrorGettingAutosuggestions('Failed to load autosuggestions'));
-    }
+    final suggestionsFailureOrResult =
+        await repository.getSearchSuggestions(event.query);
+
+    emit(
+      suggestionsFailureOrResult.fold(
+        (_) =>
+            const ErrorGettingAutosuggestions('Failed to load autosuggestions'),
+        (suggestions) => LoadedAutosuggestions(suggestions),
+      ),
+    );
   }
 }

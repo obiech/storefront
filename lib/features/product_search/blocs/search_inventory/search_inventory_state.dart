@@ -18,12 +18,12 @@ class SearchingForItemInInventory extends SearchInventoryState {}
 /// this state will be activated with
 /// a meaningful message to the user
 class ErrorOccurredSearchingForItem extends SearchInventoryState {
-  final String message;
+  final SearchFailure failure;
 
-  const ErrorOccurredSearchingForItem(this.message);
+  const ErrorOccurredSearchingForItem(this.failure);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [failure];
 }
 
 /// When inventory items are returned from the network request,

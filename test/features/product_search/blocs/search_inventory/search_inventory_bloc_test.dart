@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../fixtures.dart';
@@ -30,10 +32,12 @@ void main() {
       final page = invocation.namedArguments[const Symbol('page')] as int;
       // final limit = invocation.namedArguments[const Symbol('limit')] as int;
 
-      return pageInventory
-          .skip(page * limitPerPage)
-          .take(limitPerPage)
-          .toList();
+      final pageResults =
+          pageInventory.skip(page * limitPerPage).take(limitPerPage).toList();
+
+      return pageResults.isEmpty
+          ? left(NoInventoryResults())
+          : right(pageResults);
     });
 
     when(() => searchHistoryRepository.addSearchQuery(any()))
@@ -75,7 +79,7 @@ void main() {
     'When no results are returned during [searchInventory], an error state is emitted',
     setUp: () {
       when(() => repository.searchInventoryForItems(any()))
-          .thenAnswer((_) async => []);
+          .thenAnswer((_) async => left(NoInventoryResults()));
     },
     build: () => bloc,
     act: (cubit) => cubit.add(SearchInventory('beans')),
@@ -89,7 +93,7 @@ void main() {
     'When an error occurs during [searchInventory], an error state is emitted',
     setUp: () {
       when(() => repository.searchInventoryForItems(any()))
-          .thenThrow(Exception('Some error has occurred'));
+          .thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
     act: (cubit) => cubit.add(SearchInventory('beans')),
@@ -174,7 +178,7 @@ void main() {
     'When an error occurs during loading, more items nothing should happen',
     setUp: () {
       when(() => repository.searchInventoryForItems(any(), page: 1))
-          .thenThrow(Exception('Some weird error'));
+          .thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
     act: (cubit) async {
