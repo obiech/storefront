@@ -179,8 +179,9 @@ void main() {
     build: () => bloc,
     act: (cubit) async {
       cubit.add(SearchInventory('beans'));
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 400));
       cubit.add(LoadMoreItems());
+      await Future.delayed(const Duration(milliseconds: 400));
     },
     expect: () => [
       isA<SearchingForItemInInventory>(),
