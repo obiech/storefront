@@ -15,7 +15,7 @@ class SearchSuggestionLoading extends StatelessWidget {
         spacing: res.dimens.spacingMedium,
         runSpacing: res.dimens.spacingMedium,
         children: [
-          for (int i = 0; i < 6; i++)
+          for (int i = 0; i < 3; i++)
             LoadingItem(
               height: 35,
               width: randomBetween(50, 100).toDouble(),
