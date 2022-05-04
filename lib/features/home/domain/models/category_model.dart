@@ -1,22 +1,17 @@
+import 'package:dropezy_proto/v1/category/category.pb.dart';
 import 'package:equatable/equatable.dart';
 
 //Enum for category level
-enum Level {
-  CATEGORY_ONE,
-  CATEGORY_TWO,
-}
 
 /// Models for product Category
 abstract class CategoryModel extends Equatable {
   const CategoryModel({
     required this.categoryId,
-    required this.level,
     required this.name,
     required this.thumbnailUrl,
   });
 
   final String categoryId;
-  final Level level;
   final String name;
   final String thumbnailUrl;
 
@@ -34,26 +29,48 @@ class ParentCategoryModel extends CategoryModel {
     required this.childCategories,
   }) : super(
           categoryId: id,
-          level: Level.CATEGORY_ONE,
           name: name,
           thumbnailUrl: thumbnailUrl,
         );
   final String color; //TODO (Jonathan): Remove the color
   final List<ChildCategoryModel> childCategories;
+
+  factory ParentCategoryModel.fromPb(LeveledCategories parentCategory) {
+    return ParentCategoryModel(
+      id: parentCategory.category.categoryId,
+      name: parentCategory.category.name,
+      thumbnailUrl: parentCategory.category.imagesUrls[0],
+      color: '91bbff',
+      childCategories: parentCategory.childCategories
+          .map(ChildCategoryModel.fromPb)
+          .toList(),
+    );
+  }
 }
 
-// Model for C2
+/// Model for C2
 class ChildCategoryModel extends CategoryModel {
   const ChildCategoryModel({
     required String id,
     required String name,
     required String thumbnailUrl,
+    required this.parentCategoryId,
   }) : super(
           categoryId: id,
-          level: Level.CATEGORY_TWO,
           name: name,
           thumbnailUrl: thumbnailUrl,
         );
+
+  final String parentCategoryId;
+
+  factory ChildCategoryModel.fromPb(Category category) {
+    return ChildCategoryModel(
+      id: category.categoryId,
+      name: category.name,
+      thumbnailUrl: category.imagesUrls[0],
+      parentCategoryId: category.parentCategoryId,
+    );
+  }
 }
 
 // For sorting the child category alphabetically
