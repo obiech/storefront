@@ -5,6 +5,7 @@ export 'buttons/text_button_skip.dart';
 export 'dropezy_button.dart';
 export 'dropezy_chip.dart';
 export 'dropezy_empty.dart';
+export 'dropezy_error.dart';
 export 'dropezy_scaffold.dart';
 export 'loading/loading_item.dart';
 export 'product/product_item_card.dart';
