@@ -37,11 +37,15 @@ class ProductItemCard extends StatefulWidget {
   /// Widget Scale factor for button & text
   final double scaleFactor;
 
+  /// Border Radius for card
+  final double borderRadius;
+
   const ProductItemCard({
     Key? key,
     required this.product,
     this.itemQuantity = 0,
     this.scaleFactor = 1,
+    this.borderRadius = 18,
   }) : super(key: key);
 
   @override
@@ -82,7 +86,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                 ),
               ],
               borderRadius: BorderRadius.circular(
-                res.dimens.spacingLarge,
+                widget.borderRadius,
               ),
               color: res.colors.white,
             ),
@@ -95,7 +99,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                     children: [
                       ClipRRect(
                         borderRadius:
-                            BorderRadius.circular(res.dimens.spacingLarge),
+                            BorderRadius.circular(widget.borderRadius),
                         child: Container(
                           color: res.colors.lightBlue,
                           padding: EdgeInsets.all(res.dimens.spacingMiddle),
@@ -249,7 +253,10 @@ class _ProductItemCardState extends State<ProductItemCard> {
               ),
             ),
           ),
-          if (widget.product.isOutOfStock) const OutOfStockOverdraw(),
+          if (widget.product.isOutOfStock)
+            OutOfStockOverdraw(
+              borderRadius: widget.borderRadius,
+            ),
         ],
       ),
     );

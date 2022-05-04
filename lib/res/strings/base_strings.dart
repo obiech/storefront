@@ -280,6 +280,13 @@ abstract class BaseStrings {
 
   String get searchForWhatYouNeed;
 
+  String get cantFindYourProduct;
+  String get searchForAnotherProduct;
+
+  // Internet status
+  String get lostInternetConnection;
+  String get checkConnectionSettings;
+
   /// Products
   String stockLeft(int stock);
 

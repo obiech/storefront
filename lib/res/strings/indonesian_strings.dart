@@ -446,10 +446,10 @@ class IndonesianStrings implements BaseStrings {
   String get addNote => 'Tambah catatan';
 
   @override
-  String get clearAll => 'Kamu Pernah Cari';
+  String get clearAll => 'Hapus Semua';
 
   @override
-  String get youPreviouslySearchedFor => 'Hapus Semua';
+  String get youPreviouslySearchedFor => 'Kamu Pernah Cari';
 
   @override
   String get addToCart => 'Tambahkan';
@@ -466,4 +466,17 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get outOfStock => 'Stok kosong';
+
+  @override
+  String get cantFindYourProduct => 'Oops, produknya tidak ditemukan';
+
+  @override
+  String get checkConnectionSettings =>
+      'Tolong coba cek pengaturan koneksi internet kamu';
+
+  @override
+  String get lostInternetConnection => 'Koneksi internet hilang?';
+
+  @override
+  String get searchForAnotherProduct => 'Mohon coba cari produk yang lainnya';
 }

@@ -14,8 +14,12 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   final _scrollController = ScrollController();
+  late double aspectRatio;
+  late double horizontalSpacing;
+  late double verticalSpacing;
   late double scaleFactor;
   late int columns;
+  late double cardBorderRadius;
 
   @override
   void initState() {
@@ -26,6 +30,12 @@ class _SearchResultsState extends State<SearchResults> {
         context.read<SearchInventoryBloc>().add(LoadMoreItems());
       }
     });
+
+    horizontalSpacing = 12;
+    verticalSpacing = 12;
+
+    aspectRatio = 13 / 25;
+    cardBorderRadius = 25;
   }
 
   @override
@@ -52,22 +62,42 @@ class _SearchResultsState extends State<SearchResults> {
             ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
-              childAspectRatio: 13 / 25,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
+              childAspectRatio: aspectRatio,
+              crossAxisSpacing: horizontalSpacing,
+              mainAxisSpacing: verticalSpacing,
             ),
             itemBuilder: (BuildContext context, int index) {
               return ProductItemCard(
                 key: ValueKey('product_item$index'),
                 product: state.results[index],
                 scaleFactor: scaleFactor,
+                borderRadius: cardBorderRadius,
               );
             },
             shrinkWrap: true,
             itemCount: state.results.length,
           );
         } else if (state is SearchingForItemInInventory) {
-          return const SearchResultsLoading();
+          return SearchResultsLoading(
+            aspectRatio: aspectRatio,
+            horizontalSpacing: horizontalSpacing,
+            verticalSpacing: verticalSpacing,
+            scaleFactor: scaleFactor,
+            columns: columns,
+            borderRadius: cardBorderRadius,
+          );
+        } else if (state is ErrorOccurredSearchingForItem) {
+          if (state.failure is NetworkError) {
+            return DropezyError(
+              title: res.strings.lostInternetConnection,
+              message: res.strings.checkConnectionSettings,
+            );
+          } else {
+            return DropezyError(
+              title: res.strings.cantFindYourProduct,
+              message: res.strings.searchForAnotherProduct,
+            );
+          }
         }
 
         return const SizedBox();

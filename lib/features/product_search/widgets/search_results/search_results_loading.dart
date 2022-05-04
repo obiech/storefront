@@ -2,7 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
 class SearchResultsLoading extends StatelessWidget {
-  const SearchResultsLoading({Key? key}) : super(key: key);
+  /// Number of loading columns
+  final int columns;
+
+  /// Loading card aspect ratio
+  final double aspectRatio;
+
+  /// Grid vertical spacing
+  final double verticalSpacing;
+
+  /// Grid horizontal spacing
+  final double horizontalSpacing;
+
+  /// Screen scale factor
+  final double scaleFactor;
+
+  /// Product Item card border radius
+  final double borderRadius;
+
+  const SearchResultsLoading({
+    Key? key,
+    required this.columns,
+    required this.aspectRatio,
+    required this.verticalSpacing,
+    required this.horizontalSpacing,
+    required this.scaleFactor,
+    required this.borderRadius,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +41,19 @@ class SearchResultsLoading extends StatelessWidget {
         vertical: res.dimens.spacingLarge,
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount:
-            MediaQuery.of(context).orientation == Orientation.portrait ? 3 : 4,
-        childAspectRatio: 13 / 25,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        crossAxisCount: columns,
+        childAspectRatio: aspectRatio,
+        crossAxisSpacing: horizontalSpacing,
+        mainAxisSpacing: verticalSpacing,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return const ProductItemCardLoading();
+        return ProductItemCardLoading(
+          scaleFactor: scaleFactor,
+          borderRadius: borderRadius,
+        );
       },
       shrinkWrap: true,
-      itemCount:
-          MediaQuery.of(context).orientation == Orientation.portrait ? 6 : 4,
+      itemCount: columns * 2,
     );
   }
 }

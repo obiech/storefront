@@ -4,8 +4,16 @@ import 'package:storefront_app/core/core.dart';
 
 /// Loading status for product tem card.
 class ProductItemCardLoading extends StatelessWidget {
+  /// Product Item Card scale factor
+  final double scaleFactor;
+
+  /// Product Item card border radius
+  final double borderRadius;
+
   const ProductItemCardLoading({
     Key? key,
+    this.scaleFactor = 1,
+    required this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -20,17 +28,17 @@ class ProductItemCardLoading extends StatelessWidget {
             spreadRadius: 3,
           ),
         ],
-        borderRadius: BorderRadius.circular(res.dimens.spacingLarge),
+        borderRadius: BorderRadius.circular(borderRadius),
         color: res.colors.white,
       ),
       child: Padding(
-        padding: EdgeInsets.all(res.dimens.spacingSmall),
+        padding: EdgeInsets.all(res.dimens.spacingSmall * scaleFactor),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SkeletonItem(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(res.dimens.spacingLarge),
+                borderRadius: BorderRadius.circular(borderRadius),
                 child: Container(
                   color: res.colors.lightBlue,
                   padding: EdgeInsets.all(res.dimens.spacingMiddle),
@@ -42,14 +50,14 @@ class ProductItemCardLoading extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: res.dimens.spacingSmall,
+              height: res.dimens.spacingSmall * scaleFactor,
             ),
             SkeletonParagraph(
               style: SkeletonParagraphStyle(
                 lines: 4,
-                spacing: 4,
+                spacing: 4 * scaleFactor,
                 lineStyle: SkeletonLineStyle(
-                  height: 9,
+                  height: 9 * scaleFactor,
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
@@ -59,7 +67,8 @@ class ProductItemCardLoading extends StatelessWidget {
               style: SkeletonParagraphStyle(
                 lines: 1,
                 lineStyle: SkeletonLineStyle(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(borderRadius),
+                  height: 30 * scaleFactor,
                 ),
               ),
             )

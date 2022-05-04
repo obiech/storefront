@@ -465,4 +465,18 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get outOfStock => 'Out of Stock';
+
+  @override
+  String get cantFindYourProduct => 'Oops, we can’t find your product';
+
+  @override
+  String get checkConnectionSettings =>
+      'Please check your internet connection settings';
+
+  @override
+  String get lostInternetConnection => 'Lost your internet connection?';
+
+  @override
+  String get searchForAnotherProduct =>
+      'Kindly try searching for another product';
 }

@@ -2,8 +2,12 @@ part of 'product_item_card.dart';
 
 /// Filter to dim/gray out product item card
 class OutOfStockOverdraw extends StatelessWidget {
+  /// Filter border radius
+  final double borderRadius;
+
   const OutOfStockOverdraw({
     Key? key,
+    required this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -11,7 +15,7 @@ class OutOfStockOverdraw extends StatelessWidget {
     final res = context.res;
     return ClipRRect(
       borderRadius: BorderRadius.circular(
-        res.dimens.spacingLarge,
+        borderRadius,
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: .5, sigmaY: .5),
