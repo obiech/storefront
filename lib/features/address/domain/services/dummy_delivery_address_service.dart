@@ -1,12 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:storefront_app/di/di_environment.dart';
 
 import '../../../../core/core.dart';
 import '../domains.dart';
 
 /// Contains dummy data for [DeliveryAddressModel]
-@LazySingleton(as: IDeliveryAddressRepository, env: [DiEnvironment.dummy])
+@LazySingleton(as: IDeliveryAddressRepository)
 class DummyDeliveryAddressService extends IDeliveryAddressRepository {
   static final addressList = [
     DeliveryAddressModel(
