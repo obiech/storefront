@@ -1,17 +1,18 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/shared_widgets/_exporter.dart';
 import '../../../../core/utils/build_context.ext.dart';
+import '../../../../di/injection.dart';
 import '../../blocs/blocs.dart';
 import '../../widgets/order_history/list.dart';
 
 part 'keys.dart';
+part 'wrapper.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
   const OrderHistoryScreen({Key? key}) : super(key: key);
-
-  static const routeName = '/order-history';
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
@@ -6,10 +7,13 @@ import 'package:storefront_app/di/injection.dart';
 
 import '../../../home/screens/home_page.dart';
 import '../../blocs/blocs.dart';
+import '../../domain/services/auth_service.dart';
 import '../pin_input/pin_input_screen.dart';
 import 'otp_input_field.dart';
 import 'otp_success_action.dart';
 import 'resend_otp_timer.dart';
+
+part 'wrapper.dart';
 
 /// Screen for performing OTP verification for given [phoneNumberIntlFormat].
 /// Supports resending OTP with a delay before user is able to request a new OTP

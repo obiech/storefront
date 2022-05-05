@@ -12,6 +12,8 @@ import '../../../home/screens/home_page.dart';
 import '../../blocs/blocs.dart';
 import 'pin_input_field.dart';
 
+part 'wrapper.dart';
+
 class PinInputScreen extends StatefulWidget {
   const PinInputScreen({Key? key}) : super(key: key);
 

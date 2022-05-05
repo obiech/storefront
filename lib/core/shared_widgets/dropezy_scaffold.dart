@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/build_context.ext.dart';
+import '../utils/_exporter.dart';
 
 /// Includes a Dropezy-themed [Scaffold] with [AppBar]
 /// And a body that uses a rounded rectangle by default
@@ -77,8 +78,22 @@ class DropezyScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
-    final bool canPop = parentRoute?.canPop ?? false;
+    late bool canPop;
+    if (kTestMode) {
+      // Some tests do not wrap a StackRouter around the Page
+      // Hence we are using te default Flutter ModalRoute to avoid
+      // breaking the tests.
+      final ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
+      canPop = parentRoute?.canPop ?? false;
+    } else {
+      final routeController = RouterScope.of(context).controller;
+
+      // routeController.canNavigateBack still returns true if we are in MainScreen
+      // so we need to explicitly disable pop on Tabs inside MainScreen
+      canPop =
+          routeController is! TabsRouter && routeController.canNavigateBack;
+    }
+
     final res = context.res;
 
     return Scaffold(
@@ -122,6 +137,6 @@ class DropezyScaffold extends StatelessWidget {
   Widget _backButton(BuildContext context) => IconButton(
         icon: const Icon(Icons.arrow_back_ios),
         tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        onPressed: () => Navigator.maybePop(context),
+        onPressed: () => context.router.pop(),
       );
 }

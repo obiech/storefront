@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 
+import '../../address/blocs/delivery_address/delivery_address_cubit.dart';
 import '../index.dart';
 
 class MainScreen extends StatefulWidget implements AutoRouteWrapper {
@@ -16,8 +17,17 @@ class MainScreen extends StatefulWidget implements AutoRouteWrapper {
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<HomeNavCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<HomeNavCubit>(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (_) =>
+              getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
+        ),
+      ],
       child: this,
     );
   }

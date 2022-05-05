@@ -9,7 +9,7 @@ import '../features/order/index.dart';
 import '../features/product_search/index.dart';
 
 @AdaptiveAutoRouter(
-  replaceInRouteName: 'Screen|Page,Route',
+  replaceInRouteName: 'Page|ScreenWrapper|Screen,Route',
   routes: <AutoRoute>[
     AutoRoute(
       page: MainScreen,
@@ -23,10 +23,10 @@ import '../features/product_search/index.dart';
       ],
     ),
     AutoRoute(page: OnboardingScreen),
-    AutoRoute(page: RegistrationScreen),
-    AutoRoute(page: LoginScreen),
+    AutoRoute(page: RegistrationScreenWrapper),
+    AutoRoute(page: LoginScreenWrapper),
     AutoRoute(page: OtpVerificationScreenWrapper),
-    AutoRoute(page: PinInputScreen),
+    AutoRoute(page: PinInputScreenWrapper),
 
     /// Cart checkout
     AutoRoute(page: CartCheckoutPage),
@@ -37,8 +37,14 @@ import '../features/product_search/index.dart';
     ),
     AutoRoute(page: OrderSuccessfulPage),
     AutoRoute(page: OrderFailurePage),
-    AutoRoute(page: OrderHistoryScreen),
-    AutoRoute(page: OrderDetailsPage),
+    AutoRoute(
+      page: EmptyRouterPage,
+      name: 'OrderRouter',
+      children: [
+        AutoRoute(page: OrderHistoryScreen),
+        AutoRoute(page: OrderDetailsPage),
+      ],
+    ),
 
     /// Categories
     AutoRoute(page: ChildCategoriesPage),

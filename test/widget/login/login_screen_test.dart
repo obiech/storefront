@@ -226,8 +226,8 @@ Future<void> main() async {
 
           expect(routes.length, 1);
           var route = routes.first;
-          expect(route, isA<OtpVerificationRouteWrapper>());
-          route = route as OtpVerificationRouteWrapper;
+          expect(route, isA<OtpVerificationRoute>());
+          route = route as OtpVerificationRoute;
           expect(route.args?.successAction, OtpSuccessAction.goToHomeScreen);
           expect(route.args?.phoneNumberIntlFormat, mockPhoneNumber);
         },

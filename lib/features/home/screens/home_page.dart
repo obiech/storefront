@@ -61,7 +61,11 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
                     ListTile(
                       title: const Text('Order History'),
                       onTap: () {
-                        context.router.push(const OrderHistoryRoute());
+                        context.pushRoute(
+                          const OrderRouter(
+                            children: [OrderHistoryRoute()],
+                          ),
+                        );
                       },
                     ),
                     const Divider(),

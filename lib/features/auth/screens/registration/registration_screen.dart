@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/core.dart';
+import '../../../../di/injection.dart';
 import '../../blocs/blocs.dart';
 import '../otp_verification/otp_success_action.dart';
 import 'phone_already_registered_bottom_sheet.dart';
+
+part 'wrapper.dart';
 
 class RegistrationScreen extends StatefulWidget {
   /// setting [initialPhoneNumber] pre-fills [PhoneTextField] with
@@ -119,7 +122,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   void _navigateToOtpScreen() {
     context.router.push(
-      OtpVerificationRouteWrapper(
+      OtpVerificationRoute(
         phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
         successAction: OtpSuccessAction.goToPinScreen,
         timeoutInSeconds: AuthConfig.otpTimeoutInSeconds,

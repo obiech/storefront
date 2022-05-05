@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../../../di/injection.dart';
 import '../../index.dart';
 import '../otp_verification/otp_verification.dart';
 import 'phone_not_registered_bottom_sheet.dart';
+
+part 'wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
   /// setting [initialPhoneNumber] pre-fills [PhoneTextField] with
@@ -128,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToOtpPage() {
     context.router.push(
-      OtpVerificationRouteWrapper(
+      OtpVerificationRoute(
         phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
         successAction: OtpSuccessAction.goToHomeScreen,
         timeoutInSeconds: AuthConfig.otpTimeoutInSeconds,

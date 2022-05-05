@@ -10,10 +10,7 @@ import 'core/core.dart';
 import 'di/config/di_config.dart';
 import 'di/di_environment.dart';
 import 'di/injection.dart';
-import 'features/address/index.dart';
-import 'features/auth/index.dart';
 import 'features/cart_checkout/index.dart';
-import 'features/order/index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,37 +24,9 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        // BlocProvider<OnboardingCubit>(
-        //   create: (_) => OnboardingCubit(
-        //     sharedPreferences: prefs,
-        //     initialState: isOnboarded,
-        //   ),
-        // ),
-        // BlocProvider<AccountVerificationCubit>(
-        //   create: (context) => AccountVerificationCubit(
-        //     authService,
-        //     customerServiceClient,
-        //     widget.registerAccountAfterSuccessfulOtp,
-        //   )..sendOtp(widget.phoneNumberIntlFormat)
         BlocProvider(
           lazy: true,
           create: (context) => getIt<PaymentMethodCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<AccountAvailabilityCubit>(),
-        ),
-        BlocProvider(
-          lazy: true,
-          create: (_) => getIt<PinRegistrationCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<OrderHistoryCubit>()..fetchUserOrderHistory(),
-        ),
-
-        BlocProvider(
-          lazy: false,
-          create: (_) =>
-              getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
         ),
       ],
       child: AppWidget(
