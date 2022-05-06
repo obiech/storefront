@@ -85,7 +85,7 @@ class _PinInputScreenState extends State<PinInputScreen> {
         useWhiteBody: false,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: Dimensions.pagePadding),
+            padding: EdgeInsets.only(right: context.res.dimens.pagePadding),
             child: TextButtonSkip(
               key: const Key(PinInputScreen.keyButtonSkip),
               onPressed: _finishPinRegistrationProcess,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../core/constants/dimensions.dart';
-import '../../../core/constants/dropezy_text_styles.dart';
-import '../dropezy_button.dart';
+import '../../core.dart';
 import 'drag_handle.dart';
 
 /// Dropezy-themed [BottomSheet]
@@ -23,11 +21,13 @@ import 'drag_handle.dart';
 class DropezyBottomSheet extends StatelessWidget {
   final Widget child;
   final double marginTop;
+  final EdgeInsets? padding;
 
   const DropezyBottomSheet({
     Key? key,
     required this.child,
     this.marginTop = 32,
+    this.padding,
   }) : super(key: key);
 
   /// Bottom Sheet structure (from top to bottom):
@@ -106,11 +106,12 @@ class DropezyBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(
-        left: Dimensions.bottomSheetHorizontalPadding,
-        right: Dimensions.bottomSheetHorizontalPadding,
-        bottom: Dimensions.pagePadding,
-      ),
+      padding: padding ??
+          EdgeInsets.only(
+            left: context.res.dimens.bottomSheetHorizontalPadding,
+            right: context.res.dimens.bottomSheetHorizontalPadding,
+            bottom: context.res.dimens.pagePadding,
+          ),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
