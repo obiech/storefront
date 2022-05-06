@@ -41,7 +41,7 @@ import '../features/product_search/index.dart';
       page: EmptyRouterPage,
       name: 'OrderRouter',
       children: [
-        AutoRoute(page: OrderHistoryScreen),
+        AutoRoute(page: OrderHistoryScreenWrapper),
         AutoRoute(page: OrderDetailsPage),
       ],
     ),
