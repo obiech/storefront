@@ -7,6 +7,7 @@ import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
 import '../../../../core/core.dart';
 import '../../../address/blocs/delivery_address/delivery_address_cubit.dart';
 import '../../../auth/domain/repository/user_credentials.dart';
+import '../address_selection_bottom_sheet/address_selection_bottom_sheet.dart';
 
 part 'parts/address_selection.dart';
 part 'parts/keys.dart';
@@ -37,7 +38,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               stream: userCredentialsStream,
               builder: (context, snapshot) {
                 final creds = snapshot.data;
-
                 if (creds == null) {
                   return PromptLoginOrRegister(
                     onTap: () {
@@ -47,12 +47,19 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                     },
                   );
                 }
-
                 return Row(
                   children: [
                     Expanded(
                       child: AddressSelection(
                         onTap: () {
+                          showDropezyBottomSheet(context, (_) {
+                            return BlocProvider.value(
+                              value: BlocProvider.of<DeliveryAddressCubit>(
+                                context,
+                              ),
+                              child: const AddressSelectionBottomSheet(),
+                            );
+                          });
                           //TODO (leovinsen): Implement Address Selection
                         },
                       ),

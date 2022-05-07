@@ -32,4 +32,16 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
 
     emit(newState);
   }
+
+  void setActiveAddress(
+    DeliveryAddressModel activeAddress,
+  ) {
+    if (state is! DeliveryAddressLoaded) return;
+    emit(
+      DeliveryAddressLoaded(
+        activeAddress: activeAddress,
+        addressList: (state as DeliveryAddressLoaded).addressList,
+      ),
+    );
+  }
 }

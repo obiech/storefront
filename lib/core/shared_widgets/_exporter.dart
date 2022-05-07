@@ -10,6 +10,7 @@ export 'dropezy_image.dart';
 export 'dropezy_scaffold.dart';
 export 'loading/loading_item.dart';
 export 'product/product_item_card.dart';
+export 'radio_icon.dart';
 export 'text_fields/phone_text_field.dart';
 export 'text_fields/search_text_field.dart';
 

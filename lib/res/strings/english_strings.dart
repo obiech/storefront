@@ -530,4 +530,11 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get signOut => 'Sign Out';
+
+  /// Address Selection Bottom sheet
+  @override
+  String get addAddress => 'Add Address';
+
+  @override
+  String get chooseAddress => 'Choose Address';
 }

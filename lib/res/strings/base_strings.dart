@@ -316,4 +316,9 @@ abstract class BaseStrings {
   String get howItWorks;
   String get aboutUs;
   String get signOut;
+
+  /// Address Selection Bottom sheet
+  String get addAddress;
+
+  String get chooseAddress;
 }

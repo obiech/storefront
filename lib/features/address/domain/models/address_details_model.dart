@@ -46,3 +46,19 @@ class AddressDetailsModel extends Equatable {
         country,
       ];
 }
+
+extension AddressDetailsModelX on AddressDetailsModel {
+  /// Function to join all non-null address components
+  /// with a comma separator
+  String get toPrettyAddress {
+    return <String?>[
+      street,
+      district,
+      subDistrict,
+      municipality,
+      zipCode,
+      province,
+      country
+    ].where((x) => x != null).join(', ');
+  }
+}

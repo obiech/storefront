@@ -70,6 +70,23 @@ void main() {
           );
 
           blocTest<DeliveryAddressCubit, DeliveryAddressState>(
+            'Change selected address into the active one',
+            build: () => cubit,
+            seed: () => DeliveryAddressLoaded(
+              addressList: fixtures.sampleDeliveryAddressList,
+              activeAddress: fixtures.sampleDeliveryAddressList[0],
+            ),
+            act: (cubit) =>
+                cubit.setActiveAddress(fixtures.sampleDeliveryAddressList[1]),
+            expect: () => [
+              DeliveryAddressLoaded(
+                addressList: fixtures.sampleDeliveryAddressList,
+                activeAddress: fixtures.sampleDeliveryAddressList[1],
+              ),
+            ],
+          );
+
+          blocTest<DeliveryAddressCubit, DeliveryAddressState>(
             'should emit Loading state followed by Error state if '
             'a Failure is returned',
             setUp: () {

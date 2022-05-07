@@ -10,6 +10,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
 import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
+import 'package:storefront_app/features/home/widgets/address_selection_bottom_sheet/address_selection_bottom_sheet.dart';
 import 'package:storefront_app/features/home/widgets/appbar/appbar.dart';
 
 import '../../mocks.dart';
@@ -137,6 +138,28 @@ void main() {
           await tester.pumpAndSettle();
 
           expect(find.byType(AuthBottomSheet), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'should open AddressSelectionBottomSheet '
+        'when user is logged in and address selection is tapped',
+        (tester) async {
+          final streamCtrl = StreamController<UserCredentials?>();
+          await tester.pumpHomeAppBar(stream: streamCtrl.stream);
+
+          streamCtrl.add(
+            const UserCredentials(
+              authToken: 'acdef',
+              phoneNumber: '+628123123123',
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.byType(AddressSelection), findsOneWidget);
+          await tester.tap(find.byType(AddressSelection));
+          await tester.pumpAndSettle();
+
+          expect(find.byType(AddressSelectionBottomSheet), findsOneWidget);
         },
       );
     },

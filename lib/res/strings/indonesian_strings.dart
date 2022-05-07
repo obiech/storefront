@@ -530,4 +530,11 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get signOut => 'Keluar';
+
+  /// Address Selection Bottom sheet
+  @override
+  String get addAddress => 'Tambah Alamat';
+
+  @override
+  String get chooseAddress => 'Pilih Alamat';
 }
