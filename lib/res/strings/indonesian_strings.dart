@@ -267,6 +267,11 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get support => 'Bantuan';
 
+  /// Auth
+  @override
+  String get letsLoginOrRegister =>
+      'Yuk, masuk atau daftar dulu biar belanjanya lebih nyaman';
+
   /// Onboarding Page
   @override
   String get register => 'Daftar';

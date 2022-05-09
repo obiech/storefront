@@ -65,6 +65,40 @@ class DropezyBottomSheet extends StatelessWidget {
       ),
     );
   }
+
+  factory DropezyBottomSheet.twoButtons({
+    required Widget image,
+    required Widget content,
+    required Widget primaryButton,
+    required Widget secondaryButton,
+    double marginTop = 32,
+  }) {
+    return DropezyBottomSheet(
+      marginTop: marginTop,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          image,
+          const SizedBox(height: 16),
+          content,
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: secondaryButton,
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: primaryButton,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   factory DropezyBottomSheet.genericError({
     required BuildContext context,
     required String message,

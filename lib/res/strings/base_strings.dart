@@ -151,6 +151,9 @@ abstract class BaseStrings {
   /// Commonly used phrases
   String get support;
 
+  /// Auth
+  String get letsLoginOrRegister;
+
   /// Onboarding Page
   String get shoppingForDailyNeeds;
   String get superEzyWith;

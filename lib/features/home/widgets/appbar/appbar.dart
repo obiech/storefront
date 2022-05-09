@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:skeletons/skeletons.dart';
+import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
 
 import '../../../../core/core.dart';
 import '../../../address/blocs/delivery_address/delivery_address_cubit.dart';
@@ -40,7 +41,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (creds == null) {
                   return PromptLoginOrRegister(
                     onTap: () {
-                      //TODO: Implement Bottom Sheet for Login / Register
+                      showDropezyBottomSheet(context, (_) {
+                        return const AuthBottomSheet();
+                      });
                     },
                   );
                 }

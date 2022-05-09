@@ -58,6 +58,28 @@ class DropezyButton extends StatelessWidget {
     );
   }
 
+  factory DropezyButton.blueTint({
+    Key? key,
+    required String label,
+    required VoidCallback? onPressed,
+    bool isLoading = false,
+    TextStyle? textStyle,
+    EdgeInsets? padding,
+  }) {
+    return DropezyButton(
+      key: key,
+      label: label,
+      backgroundColor: DropezyColors.lightBlue,
+      onPressed: onPressed,
+      textStyle: textStyle ??
+          DropezyTextStyles.button.copyWith(
+            color: DropezyColors.blue,
+          ),
+      padding: padding,
+      isLoading: isLoading,
+    );
+  }
+
   final String label;
   final TextStyle? textStyle;
   final Color backgroundColor;

@@ -9,6 +9,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
+import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
 import 'package:storefront_app/features/home/widgets/appbar/appbar.dart';
 
 import '../../mocks.dart';
@@ -78,6 +79,7 @@ void main() {
           expect((notificationButton.icon as Icon).icon, DropezyIcons.bell);
         },
       );
+
       testWidgets(
         'should display a prompt to login or register or address selection '
         'based on whether or not user is logged in',
@@ -115,6 +117,26 @@ void main() {
           await tester.pumpAndSettle();
           expect(find.byType(PromptLoginOrRegister), findsOneWidget);
           expect(find.byType(AddressSelection), findsNothing);
+        },
+      );
+
+      testWidgets(
+        'should open AuthBottomSheet '
+        'when user is not logged in '
+        'and prompt is pressed',
+        (tester) async {
+          final streamCtrl = StreamController<UserCredentials?>();
+          await tester.pumpHomeAppBar(stream: streamCtrl.stream);
+
+          // user not logged in
+          streamCtrl.add(null);
+          await tester.pumpAndSettle();
+          expect(find.byType(PromptLoginOrRegister), findsOneWidget);
+
+          await tester.tap(find.byType(PromptLoginOrRegister));
+          await tester.pumpAndSettle();
+
+          expect(find.byType(AuthBottomSheet), findsOneWidget);
         },
       );
     },
