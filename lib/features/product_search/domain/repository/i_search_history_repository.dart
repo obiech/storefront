@@ -2,15 +2,18 @@
 ///
 /// For product search query history management
 abstract class ISearchHistoryRepository {
-  /// Get all previous user searches
-  Future<List<String>> getSearchQueries();
+  /// Observe search history queries
+  Stream<List<String>> get observeHistoryStream;
 
   /// Add a query to search list
-  Future<List<String>> addSearchQuery(String query);
+  Future<void> addSearchQuery(String query);
 
   /// Remove a query from search list
-  Future<List<String>> removeSearchQuery(String query);
+  Future<void> removeSearchQuery(String query);
 
   /// Clear search history
-  Future<List<String>> clearSearchQueries();
+  Future<void> clearSearchQueries();
+
+  /// Dispose any subscriptions
+  void dispose();
 }

@@ -65,7 +65,7 @@ class SearchPage extends StatefulWidget implements AutoRouteWrapper {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => getIt<SearchHistoryCubit>()..getSearchQueries(),
+          create: (_) => getIt<SearchHistoryCubit>(),
         ),
         BlocProvider(
           create: (_) => getIt<AutosuggestionBloc>(),

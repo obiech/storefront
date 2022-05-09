@@ -1,55 +1,92 @@
-import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:storefront_app/core/core.dart';
+import 'dart:async';
 
-import '../../config.dart';
-import '../repository/i_search_history_repository.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
+import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
+
+import '../../index.dart';
 
 @LazySingleton(as: ISearchHistoryRepository)
 class SearchHistoryRepository implements ISearchHistoryRepository {
-  final SharedPreferences _preferences;
+  /// Hive [Box] with key as search history query
+  /// and value as the time the query was created
+  final Box<DateTime> searchHistoryBox;
 
-  SearchHistoryRepository(this._preferences);
+  /// List of all search events like deletion, insertion and update
+  /// from Hive [Box] watch [Stream]
+  late final List<SearchHistoryEvent> _queries;
 
-  @override
-  Future<List<String>> addSearchQuery(String query) async {
-    var _queries = await getSearchQueries();
+  /// Listenable [Stream] with all changes and updates
+  /// to the search history data
+  late final BehaviorSubject<List<String>> _queryStream;
 
-    final index = _queries.indexOf(query);
-    if (index > -1) _queries.removeAt(index);
-    _queries.insert(0, query);
+  /// [Stream] subscription to the Hive [Box] to be cancelled
+  /// on dispose
+  late final StreamSubscription<BoxEvent> _querySubscription;
 
-    _queries = _queries.take(maxSearchHistory).toList();
+  SearchHistoryRepository(this.searchHistoryBox) {
+    _queries = searchHistoryBox.keys
+        .map((key) => SearchHistoryEvent(key, searchHistoryBox.get(key)!))
+        .toList();
 
-    await _preferences.setStringList(
-      PrefsKeys.kSearchQueries,
-      _queries,
-    );
+    _queryStream = BehaviorSubject.seeded(_queries.getLatest);
 
-    return _queries;
+    _querySubscription = searchHistoryBox.watch().listen(_handleBoxEvent);
   }
 
-  @override
-  Future<List<String>> clearSearchQueries() async {
-    await _preferences.remove(PrefsKeys.kSearchQueries);
-    return [];
-  }
+  /// Handle and transform box event
+  void _handleBoxEvent(BoxEvent event) {
+    if (event.deleted) {
+      _queries.removeWhere((element) => element.query == event.key);
+    } else {
+      final historyEvent = SearchHistoryEvent(event.key, event.value!);
 
-  @override
-  Future<List<String>> getSearchQueries() async {
-    final _queries = _preferences.getStringList(PrefsKeys.kSearchQueries);
-    return _queries ?? [];
-  }
+      final _index = _queries.indexWhere(
+        (element) => element.query == event.key,
+      );
 
-  @override
-  Future<List<String>> removeSearchQuery(String query) async {
-    final _queries = await getSearchQueries();
-
-    if (_queries.contains(query)) {
-      _queries.remove(query);
+      if (_index > -1) {
+        _queries[_index] = historyEvent;
+      } else {
+        _queries.add(historyEvent);
+      }
     }
 
-    await _preferences.setStringList(PrefsKeys.kSearchQueries, _queries);
-    return _queries;
+    _queryStream.add(_queries.getLatest);
   }
+
+  @override
+  Future<void> addSearchQuery(String query) async {
+    await searchHistoryBox.put(query, DateTime.now());
+  }
+
+  @override
+  Future<void> clearSearchQueries() => searchHistoryBox.clear();
+
+  @override
+  Future<void> removeSearchQuery(String query) async {
+    await searchHistoryBox.delete(query);
+  }
+
+  @disposeMethod
+  @override
+  void dispose() {
+    _querySubscription.cancel();
+
+    _cleanQueries().then((value) => searchHistoryBox.close());
+  }
+
+  /// Clean unused queries
+  Future<void> _cleanQueries() async {
+    for (final event in _queries.getExcess) {
+      await searchHistoryBox.delete(event.query);
+    }
+  }
+
+  @override
+  Stream<List<String>> get observeHistoryStream => _queryStream;
+
+  @visibleForTesting
+  List<SearchHistoryEvent> get queries => _queries;
 }

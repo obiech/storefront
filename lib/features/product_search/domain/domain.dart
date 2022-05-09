@@ -1,3 +1,4 @@
+export 'models/search_history_event.dart';
 export 'models/search_inventory_result.ext.dart';
 export 'repository/failures.dart';
 export 'repository/i_product_search_repository.dart';

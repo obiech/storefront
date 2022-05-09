@@ -1,7 +1,10 @@
 import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
+
+import '../../config.dart';
 
 @module
 abstract class ServiceModule {
@@ -23,4 +26,9 @@ abstract class ServiceModule {
       ],
     );
   }
+
+  /// Search History Box
+  @preResolve
+  Future<Box<DateTime>> get searchHistoryBox =>
+      Hive.openBox<DateTime>(searchHistoryBoxKey);
 }

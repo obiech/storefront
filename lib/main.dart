@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:storefront_app/di/config/di_config.dart';
 
 import 'app.dart';
@@ -17,6 +18,7 @@ Future<void> main() async {
 
   await dotenv.load(fileName: 'env/.env');
   await Firebase.initializeApp();
+  await Hive.initFlutter();
 
   // Dependency Injection
   await configureInjection(determineEnvironment());

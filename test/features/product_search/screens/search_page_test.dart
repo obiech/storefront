@@ -45,7 +45,13 @@ void main() {
 
   setUp(() {
     repository = MockProductSearchRepository();
+
+    // Search history
     searchHistoryRepository = MockSearchHistoryRepository();
+    when(() => searchHistoryRepository.observeHistoryStream).thenAnswer(
+      (_) => Stream.fromIterable([[]]),
+    );
+
     searchInventoryCubit =
         SearchInventoryBloc(repository, searchHistoryRepository);
     autosuggestionBloc = AutosuggestionBloc(repository);

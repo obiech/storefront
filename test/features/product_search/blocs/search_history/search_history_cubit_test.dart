@@ -1,9 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive/hive.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../mocks.dart';
+
 void main() {
-  late ISearchHistoryRepository _repository;
+  late Box<DateTime> _box;
+  late SearchHistoryRepository _repository;
   late SearchHistoryCubit cubit;
 
   const List<String> queries = [
@@ -14,11 +19,44 @@ void main() {
     'paprika'
   ];
 
-  setUp(() async {
-    SharedPreferences.setMockInitialValues({});
+  late Map<String, DateTime> _store;
+  late BehaviorSubject<BoxEvent> _hiveWatch;
 
-    _repository =
-        SearchHistoryRepository(await SharedPreferences.getInstance());
+  setUp(() async {
+    _box = MockDateTimeHiveBox();
+    _hiveWatch = BehaviorSubject();
+    _store = {};
+
+    /// Box stubs
+    when(() => _box.keys).thenAnswer((_) => _store.keys);
+    when(() => _box.watch()).thenAnswer((_) => _hiveWatch);
+
+    when(() => _box.put(any(), any())).thenAnswer((invocation) async {
+      final _key = invocation.positionalArguments.first as String;
+      final _value = invocation.positionalArguments[1] as DateTime;
+
+      _store[_key] = _value;
+      _hiveWatch.add(BoxEvent(_key, _value, false));
+    });
+
+    when(() => _box.delete(any())).thenAnswer((invocation) async {
+      final _key = invocation.positionalArguments.first as String;
+
+      _store.remove(_key);
+      _hiveWatch.add(BoxEvent(_key, DateTime.now(), true));
+    });
+
+    when(() => _box.clear()).thenAnswer((_) async {
+      for (final _key in _store.keys) {
+        _hiveWatch.add(BoxEvent(_key, _store[_key], true));
+      }
+      final _size = _store.length;
+      _store.clear();
+
+      return _size;
+    });
+
+    _repository = SearchHistoryRepository(_box);
 
     cubit = SearchHistoryCubit(_repository);
     for (final query in queries) {
@@ -26,13 +64,14 @@ void main() {
     }
   });
 
+  tearDown(() {
+    _hiveWatch.close();
+  });
+
   group('[getSearchQueries]', () {
     test(
-        'When "getSearchQueries" is called, '
-        'the _searchQueries is updated and '
+        'When cubit is created, '
         'LoadedQueries is emitted with all search history', () async {
-      await cubit.getSearchQueries();
-
       expect(cubit.state, isA<LoadedSearchQueries>());
 
       final state = cubit.state as LoadedSearchQueries;
@@ -46,14 +85,19 @@ void main() {
         'If we have maximum number of history queries, '
         'the oldest will be overridden', () async {
       const _newQuery = 'beans';
-      final before = await _repository.getSearchQueries();
+
       await cubit.addSearchQuery(_newQuery);
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(cubit.state, isA<LoadedSearchQueries>());
 
       final state = cubit.state as LoadedSearchQueries;
+
       expect(state.queries.first, _newQuery);
-      expect(state.queries.last, before[maxSearchHistory - 2]);
+      expect(
+        state.queries.last,
+        _repository.queries.getLatest[maxSearchHistory - 1],
+      );
     });
 
     test(
@@ -62,6 +106,7 @@ void main() {
         'and the query is added as the latest', () async {
       const _newQuery = 'beans';
       await cubit.addSearchQuery(_newQuery);
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(cubit.state, isA<LoadedSearchQueries>());
       final state = cubit.state as LoadedSearchQueries;
@@ -75,6 +120,7 @@ void main() {
       const _newQuery = 'beans';
       await cubit.addSearchQuery(_newQuery);
       await cubit.addSearchQuery(_newQuery);
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(cubit.state, isA<LoadedSearchQueries>());
       final state = cubit.state as LoadedSearchQueries;
@@ -86,13 +132,13 @@ void main() {
     test(
         'When "removeSearchQuery" is called,the provided query is LoadedQueries is emitted without the removed query',
         () async {
-      await cubit.getSearchQueries();
       expect(cubit.state, isA<LoadedSearchQueries>());
       var state = cubit.state as LoadedSearchQueries;
       final initialLength = state.queries.length;
       final remove = state.queries.first;
 
       await cubit.removeSearchQuery(remove);
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(cubit.state, isA<LoadedSearchQueries>());
       state = cubit.state as LoadedSearchQueries;
@@ -103,8 +149,7 @@ void main() {
 
   test('Queries will always have a maximum [maxSearchHistory] results',
       () async {
-    await cubit.getSearchQueries();
-
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(cubit.state, isA<LoadedSearchQueries>());
     var state = cubit.state as LoadedSearchQueries;
     expect(state.queries.length, maxSearchHistory);
@@ -113,6 +158,7 @@ void main() {
     for (final val in _newQueries) {
       await cubit.addSearchQuery(val);
     }
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(cubit.state, isA<LoadedSearchQueries>());
     state = cubit.state as LoadedSearchQueries;
@@ -123,14 +169,14 @@ void main() {
     test(
         'When "clearSearchQueries" is called, LoadedQueries is emitted with no query',
         () async {
-      await cubit.getSearchQueries();
-
+      await Future.delayed(const Duration(milliseconds: 100));
       expect(cubit.state, isA<LoadedSearchQueries>());
       var state = cubit.state as LoadedSearchQueries;
       expect(state.queries.isNotEmpty, true);
       expect(state.queries.length, queries.length);
 
       await cubit.clearSearchQueries();
+      await Future.delayed(const Duration(milliseconds: 100));
 
       expect(cubit.state, isA<LoadedSearchQueries>());
       state = cubit.state as LoadedSearchQueries;

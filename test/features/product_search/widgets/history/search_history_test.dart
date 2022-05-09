@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
@@ -24,8 +26,13 @@ extension WidgetX on WidgetTester {
 }
 
 void main() {
-  late ISearchHistoryRepository _repository;
+  late Box<DateTime> _box;
+  late SearchHistoryRepository _repository;
   late SearchHistoryCubit cubit;
+
+  late Map<String, DateTime> _store;
+  late BehaviorSubject<BoxEvent> _hiveWatch;
+
   final strings = EnglishStrings();
 
   const List<String> queries = [
@@ -37,7 +44,41 @@ void main() {
   ];
 
   setUp(() async {
-    _repository = MockSearchHistoryRepository();
+    _box = MockDateTimeHiveBox();
+    _hiveWatch = BehaviorSubject();
+    _store = {};
+
+    /// Box stubs
+    when(() => _box.keys).thenAnswer((_) => _store.keys);
+    when(() => _box.watch()).thenAnswer((_) => _hiveWatch);
+
+    when(() => _box.put(any(), any())).thenAnswer((invocation) async {
+      final _key = invocation.positionalArguments.first as String;
+      final _value = invocation.positionalArguments[1] as DateTime;
+
+      _store[_key] = _value;
+      _hiveWatch.add(BoxEvent(_key, _value, false));
+    });
+
+    when(() => _box.delete(any())).thenAnswer((invocation) async {
+      final _key = invocation.positionalArguments.first as String;
+
+      _store.remove(_key);
+      _hiveWatch.add(BoxEvent(_key, DateTime.now(), true));
+    });
+
+    when(() => _box.clear()).thenAnswer((_) async {
+      for (final _key in _store.keys) {
+        _hiveWatch.add(BoxEvent(_key, _store[_key], true));
+      }
+      final _size = _store.length;
+      _store.clear();
+
+      return _size;
+    });
+
+    _repository = SearchHistoryRepository(_box);
+
     cubit = SearchHistoryCubit(_repository);
   });
 
@@ -53,11 +94,12 @@ void main() {
       'When search history is loaded, '
       'show search history header with clear options',
       (WidgetTester tester) async {
-    when(() => _repository.getSearchQueries()).thenAnswer((_) async => queries);
+    await _loadDefaultQueries(queries, cubit);
 
-    await tester.pumpSearchHistory(cubit);
-    await cubit.getSearchQueries();
-    verify(() => _repository.getSearchQueries()).called(1);
+    await tester.runAsync(() async {
+      await tester.pumpSearchHistory(cubit);
+    });
+
     await tester.pumpAndSettle();
 
     /// Title
@@ -75,11 +117,13 @@ void main() {
       'When search history is loaded, '
       'show search history with list of all queries',
       (WidgetTester tester) async {
-    when(() => _repository.getSearchQueries()).thenAnswer((_) async => queries);
+    await _loadDefaultQueries(queries, cubit);
 
-    await tester.pumpSearchHistory(cubit);
-    await cubit.getSearchQueries();
-    verify(() => _repository.getSearchQueries()).called(1);
+    await tester.runAsync(() async {
+      await tester.pumpSearchHistory(cubit);
+      await Future.delayed(Duration.zero);
+    });
+
     await tester.pumpAndSettle();
 
     final _queryWidgets = tester.widgetList(
@@ -88,6 +132,7 @@ void main() {
         matching: find.byType(SearchHistoryItem),
       ),
     );
+
     expect(_queryWidgets.length, queries.length);
 
     for (final query in queries) {
@@ -109,17 +154,13 @@ void main() {
       'When search history item is deleted, '
       'ListView items get refreshed with item removed',
       (WidgetTester tester) async {
-    when(() => _repository.getSearchQueries()).thenAnswer((_) async => queries);
-    when(() => _repository.removeSearchQuery(any()))
-        .thenAnswer((invocation) async {
-      final _queries = List.of(queries);
-      _queries.remove(invocation.positionalArguments[0].toString());
-      return _queries;
+    await _loadDefaultQueries(queries, cubit);
+
+    await tester.runAsync(() async {
+      await tester.pumpSearchHistory(cubit);
+      await Future.delayed(Duration.zero);
     });
 
-    await tester.pumpSearchHistory(cubit);
-    await cubit.getSearchQueries();
-    verify(() => _repository.getSearchQueries()).called(1);
     await tester.pumpAndSettle();
 
     expect(find.byType(ListView), findsOneWidget);
@@ -141,12 +182,17 @@ void main() {
     expect(searchHistoryItem.query, remove);
 
     // Delete first item
-    await tester.tap(
-      find.descendant(
-        of: searchHistoryItemFinder,
-        matching: find.byIcon(DropezyIcons.cross),
-      ),
-    );
+    await tester.runAsync(() async {
+      await tester.tap(
+        find.descendant(
+          of: searchHistoryItemFinder,
+          matching: find.byIcon(DropezyIcons.cross),
+        ),
+      );
+
+      await Future.delayed(Duration.zero);
+    });
+
     await tester.pumpAndSettle();
 
     _queryWidgets = tester.widgetList(
@@ -163,18 +209,23 @@ void main() {
   testWidgets(
       'When search history is cleared, '
       'nothing is displayed', (WidgetTester tester) async {
-    when(() => _repository.getSearchQueries()).thenAnswer((_) async => queries);
-    when(() => _repository.clearSearchQueries()).thenAnswer((_) async => []);
+    await _loadDefaultQueries(queries, cubit);
 
-    await tester.pumpSearchHistory(cubit);
-    await cubit.getSearchQueries();
-    verify(() => _repository.getSearchQueries()).called(1);
+    await tester.runAsync(() async {
+      await tester.pumpSearchHistory(cubit);
+      await Future.delayed(Duration.zero);
+    });
+
     await tester.pumpAndSettle();
 
     expect(find.byType(ListView), findsOneWidget);
 
     // Clear search history
-    await tester.tap(find.byIcon(DropezyIcons.trash));
+    await tester.runAsync(() async {
+      await tester.tap(find.byIcon(DropezyIcons.trash));
+      await Future.delayed(Duration.zero);
+    });
+
     await tester.pumpAndSettle();
 
     expect(find.byType(ListView), findsNothing);
@@ -185,20 +236,14 @@ void main() {
       'When search history item is added, '
       'ListView items get refreshed with item included',
       (WidgetTester tester) async {
-    final _sampleQueries = queries.take(maxSearchHistory - 1).toList();
+    await _loadDefaultQueries(queries, cubit);
     const _addedQuery = 'meat';
-    when(() => _repository.getSearchQueries())
-        .thenAnswer((_) async => _sampleQueries);
-    when(() => _repository.addSearchQuery(any()))
-        .thenAnswer((invocation) async {
-      final _queries = List.of(_sampleQueries);
-      _queries.add(invocation.positionalArguments[0].toString());
-      return _queries;
+
+    await tester.runAsync(() async {
+      await tester.pumpSearchHistory(cubit);
+      await Future.delayed(Duration.zero);
     });
 
-    await tester.pumpSearchHistory(cubit);
-    await cubit.getSearchQueries();
-    verify(() => _repository.getSearchQueries()).called(1);
     await tester.pumpAndSettle();
 
     expect(find.byType(ListView), findsOneWidget);
@@ -209,9 +254,13 @@ void main() {
         matching: find.byType(SearchHistoryItem),
       ),
     );
-    expect(_queryWidgets.length, _sampleQueries.length);
+    expect(_queryWidgets.length, queries.length);
 
-    await cubit.addSearchQuery(_addedQuery);
+    await tester.runAsync(() async {
+      await cubit.addSearchQuery(_addedQuery);
+      await Future.delayed(Duration.zero);
+    });
+
     await tester.pumpAndSettle();
 
     _queryWidgets = tester.widgetList(
@@ -220,7 +269,6 @@ void main() {
         matching: find.byType(SearchHistoryItem),
       ),
     );
-    expect(_queryWidgets.length, _sampleQueries.length + 1);
 
     final searchHistoryItemFinder = find.byKey(
       ValueKey('${SearchHistoryKeys.searchHistoryItemKey}_$_addedQuery'),
@@ -230,4 +278,13 @@ void main() {
         tester.firstWidget(searchHistoryItemFinder) as SearchHistoryItem;
     expect(searchHistoryItem.query, _addedQuery);
   });
+}
+
+Future<void> _loadDefaultQueries(
+  List<String> queries,
+  SearchHistoryCubit cubit,
+) async {
+  for (final query in queries) {
+    await cubit.addSearchQuery(query);
+  }
 }

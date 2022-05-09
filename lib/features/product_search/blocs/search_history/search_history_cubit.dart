@@ -1,47 +1,40 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:storefront_app/features/product_search/domain/repository/i_search_history_repository.dart';
+
+import '../../index.dart';
 
 part 'search_history_state.dart';
 
 @injectable
 class SearchHistoryCubit extends Cubit<SearchHistoryState> {
-  final ISearchHistoryRepository _prefs;
+  final ISearchHistoryRepository _searchHistoryRepo;
 
-  SearchHistoryCubit(this._prefs) : super(SearchHistoryInitial());
+  late final StreamSubscription _subscription;
 
-  final List<String> _searchQueries = [];
-
-  /// Load Search Queries
-  Future<void> getSearchQueries() async {
-    if (_searchQueries.isEmpty) {
-      _searchQueries.addAll(await _prefs.getSearchQueries());
-    }
-    emit(LoadedSearchQueries(List.of(_searchQueries)));
+  SearchHistoryCubit(this._searchHistoryRepo) : super(SearchHistoryInitial()) {
+    _subscription = _searchHistoryRepo.observeHistoryStream.listen((event) {
+      emit(LoadedSearchQueries(List.of(event)));
+    });
   }
 
   /// Add search query
-  Future<void> addSearchQuery(String query) async {
-    _searchQueries.clear();
-    _searchQueries.addAll(await _prefs.addSearchQuery(query));
-
-    emit(LoadedSearchQueries(List.of(_searchQueries)));
-  }
+  Future<void> addSearchQuery(String query) async =>
+      _searchHistoryRepo.addSearchQuery(query);
 
   /// Remove search query
-  Future<void> removeSearchQuery(String query) async {
-    _searchQueries.clear();
-    _searchQueries.addAll(await _prefs.removeSearchQuery(query));
-
-    emit(LoadedSearchQueries(List.of(_searchQueries)));
-  }
+  Future<void> removeSearchQuery(String query) async =>
+      _searchHistoryRepo.removeSearchQuery(query);
 
   /// Clear Search Query
-  Future<void> clearSearchQueries() async {
-    _searchQueries.clear();
-    _searchQueries.addAll(await _prefs.clearSearchQueries());
+  Future<void> clearSearchQueries() async =>
+      _searchHistoryRepo.clearSearchQueries();
 
-    emit(LoadedSearchQueries(List.of(_searchQueries)));
+  @override
+  Future<void> close() {
+    _subscription.cancel();
+    return super.close();
   }
 }
