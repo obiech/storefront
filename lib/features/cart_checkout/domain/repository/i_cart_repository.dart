@@ -1,15 +1,14 @@
-import 'package:dropezy_proto/v1/cart/cart.pb.dart';
+import '../../../../core/core.dart';
+import '../../../product/domain/models/product_model.dart';
+import '../models/cart_model.dart';
 
-import '../domains.dart';
-
-/// Repo structure for cart methods repository
+/// Defines communication behavior with data source that is
+/// responsible for Cart.
 abstract class ICartRepository {
-  /// Add adds new cart item to existing cart session, or new cart session.
-  Future<AddResponse> add(AddRequest request);
+  /// Loads cart data from remote or local data source.
+  RepoResult<CartModel> loadCart();
 
-  /// Update updates the content of existing cart session.
-  Future<UpdateResponse> update(UpdateRequest method);
-
-  /// Summary will return cart summary for the existing cart session
-  Future<CartPaymentSummaryModel> summary(SummaryRequest request);
+  /// Adds a new cart item [product] to a cart session
+  /// at a store identified with [storeId].
+  RepoResult<CartModel> addItem(String storeId, ProductModel product);
 }

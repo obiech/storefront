@@ -1,5 +1,4 @@
-import 'package:dropezy_proto/v1/payment/payment.pb.dart';
-import 'package:equatable/equatable.dart';
+part of 'cart_model.dart';
 
 /// Representation of payment summary for each cart
 class CartPaymentSummaryModel extends Equatable {

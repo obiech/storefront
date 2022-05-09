@@ -18,11 +18,8 @@ class CartCheckoutPage extends StatelessWidget {
       childPadding: EdgeInsets.zero,
       child: Column(
         children: [
-          Expanded(
-            child: BlocProvider(
-              create: (context) => getIt<CartBodyBloc>(),
-              child: const CartBodyWidget(),
-            ),
+          const Expanded(
+            child: CartBodyWidget(),
           ),
           BlocProvider(
             create: (context) => getIt<PaymentCheckoutCubit>(),

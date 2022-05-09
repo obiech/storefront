@@ -24,11 +24,17 @@ Future<void> main() async {
   await configureInjection(determineEnvironment());
 
   runApp(
+    /// Reserved for BLocs that are needed by various pages
+    /// but are difficult to scope
     MultiBlocProvider(
       providers: [
         BlocProvider(
           lazy: true,
           create: (context) => getIt<PaymentMethodCubit>(),
+        ),
+        BlocProvider(
+          lazy: false,
+          create: (context) => getIt<CartBloc>()..add(const LoadCart()),
         ),
       ],
       child: AppWidget(

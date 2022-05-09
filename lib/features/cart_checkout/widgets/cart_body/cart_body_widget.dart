@@ -1,8 +1,6 @@
-import 'package:dropezy_proto/v1/cart/cart.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../order/widgets/payment_summary/order_payment_summary.dart';
 import '../../index.dart';
@@ -18,32 +16,33 @@ class CartBodyWidget extends StatelessWidget {
     return ListView(
       children: [
         Center(
-          child: BlocBuilder<CartBodyBloc, CartBodyState>(
+          child: BlocBuilder<CartBloc, CartState>(
             builder: (context, state) {
-              if (state is CartBodyStarted) {
-                final request = SummaryRequest(storeId: const Uuid().v4());
-                context.read<CartBodyBloc>().add(OnLoadCartBody(request));
-
-                return const CircularProgressIndicator();
-              } else if (state is CartSummaryLoaded) {
+              if (state is CartLoaded) {
                 return Column(
                   children: [
                     SizedBox(height: res.dimens.spacingXxlarge),
-                    OrderPaymentSummary(
-                      totalSavings: '8000000',
-                      subtotal: state.summary.subTotal,
-                      discountFromItems: state.summary.discount,
-                      isFreeDelivery: state.summary.isFreeDelivery,
-                      deliveryFee: state.summary.deliveryFee,
-                      grandTotal: state.summary.total,
-                    ),
+                    if (state.cart.items.isEmpty)
+                      const DropezyEmptyState(
+                        message: 'Cart is empty',
+                      )
+                    else
+                      OrderPaymentSummary(
+                        //TODO (leovinsen): Have a separate field for savings once other
+                        // discounts are added in backend
+                        totalSavings: state.cart.paymentSummary.discount,
+                        subtotal: state.cart.paymentSummary.subTotal,
+                        discountFromItems: state.cart.paymentSummary.discount,
+                        isFreeDelivery:
+                            state.cart.paymentSummary.isFreeDelivery,
+                        deliveryFee: state.cart.paymentSummary.deliveryFee,
+                        grandTotal: state.cart.paymentSummary.total,
+                      ),
                   ],
                 );
-              } else if (state is CartBodyFailed) {
-                return Text(state.exception.toString());
-              } else {
-                return const CircularProgressIndicator();
               }
+
+              return const SizedBox.shrink();
             },
           ),
         )

@@ -52,9 +52,10 @@ app.*.map.json
 google-services.json
 GoogleService-Info.plist
 
-# Freezed files
+# Generated Files
 *.freezed.dart
 *.gr.dart
+*.g.dart
 injection.config.dart
 
 # VSCode
