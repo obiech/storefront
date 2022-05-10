@@ -53,27 +53,30 @@ class SearchHistory extends StatelessWidget {
                     )
                   ],
                 ),
-                ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    return SearchHistoryItem(
-                      key: ValueKey(
-                        '${SearchHistoryKeys.searchHistoryItemKey}_${state.queries[index]}',
-                      ),
-                      query: state.queries[index],
-                      onDelete:
-                          context.read<SearchHistoryCubit>().removeSearchQuery,
-                      onSelect: (query) {
-                        context
-                            .read<SearchInventoryBloc>()
-                            .add(SearchInventory(query));
+                Expanded(
+                  child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      return SearchHistoryItem(
+                        key: ValueKey(
+                          '${SearchHistoryKeys.searchHistoryItemKey}_${state.queries[index]}',
+                        ),
+                        query: state.queries[index],
+                        onDelete: context
+                            .read<SearchHistoryCubit>()
+                            .removeSearchQuery,
+                        onSelect: (query) {
+                          context
+                              .read<SearchInventoryBloc>()
+                              .add(SearchInventory(query));
 
-                        onItemTapped?.call();
-                      },
-                    );
-                  },
-                  itemCount: state.queries.length,
-                  shrinkWrap: true,
+                          onItemTapped?.call();
+                        },
+                      );
+                    },
+                    itemCount: state.queries.length,
+                  ),
                 )
               ],
             ),

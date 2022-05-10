@@ -35,11 +35,15 @@ class InventoryItemResults extends SearchInventoryState {
   /// If inventory has reached last page
   final bool isAtEnd;
 
+  /// If inventory is loading more items
+  final bool isLoadingMore;
+
   const InventoryItemResults(
     this.results, {
     this.isAtEnd = false,
+    this.isLoadingMore = false,
   });
 
   @override
-  List<Object> get props => [results];
+  List<Object> get props => [results, isAtEnd, isLoadingMore];
 }

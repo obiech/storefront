@@ -19,6 +19,20 @@ class ProductModel extends Equatable {
     this.status = ProductStatus.ACTIVE,
   });
 
+  /// Creates an empty [ProductModel] with
+  /// loading status
+  factory ProductModel.loading() {
+    return const ProductModel(
+      productId: '',
+      sku: '',
+      name: '',
+      price: '',
+      thumbnailUrl: '',
+      stock: 0,
+      status: ProductStatus.LOADING,
+    );
+  }
+
   /// A unique identifier of a Product
   /// Stands for Stock Keeping Unit
   final String sku;
@@ -39,7 +53,7 @@ class ProductModel extends Equatable {
   final String thumbnailUrl;
 
   @override
-  List<Object?> get props => [sku, price];
+  List<Object?> get props => [sku, price, status];
 }
 
 /// https://dropezy.slack.com/archives/C038EPQGJLR/p1650423774792949?thread_ts=1650422527.075119&cid=C038EPQGJLR
@@ -51,7 +65,10 @@ enum ProductStatus {
   OUT_OF_STOCK,
 
   /// Product is no-longer available for purchase
-  DEACTIVATED
+  DEACTIVATED,
+
+  /// Placeholder status for loading
+  LOADING
 }
 
 /// Product Extension methods

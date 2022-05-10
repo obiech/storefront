@@ -82,6 +82,7 @@ class SearchPage extends StatefulWidget implements AutoRouteWrapper {
 class _SearchPageState extends State<SearchPage> with RouteAware {
   late FocusNode _focusNode;
   late ValueNotifier<SearchPageState> _pageState;
+  late ValueNotifier<bool> _focusState;
   late TextEditingController _controller;
 
   @override
@@ -112,6 +113,8 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             } else {
               _setUpPage(reqFocus: false);
             }
+
+            _focusState.value = focused;
           },
           onTextChanged: (query) {
             _pageState.value = SearchPageState.PRODUCT_SEARCH;
@@ -136,34 +139,49 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
         child: SizedBox(
           height:
               MediaQuery.of(context).size.height - (res.dimens.appBarSize + 20),
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: Padding(
-              ///Bottom Nav Padding
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).padding.bottom,
-              ),
-              child: ValueListenableBuilder<SearchPageState>(
-                valueListenable: _pageState,
-                builder: (_, state, __) {
-                  switch (state) {
-                    case SearchPageState.DEFAULT:
-                      return SearchHistory(
-                        onItemTapped: _searchItemTapped,
-                      );
-                    case SearchPageState.PRODUCT_SEARCH:
-                      return Column(
+          child: Padding(
+            ///Bottom Nav Padding
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
+            child: ValueListenableBuilder<SearchPageState>(
+              valueListenable: _pageState,
+              builder: (_, state, __) {
+                switch (state) {
+                  case SearchPageState.DEFAULT:
+                    return SearchHistory(
+                      onItemTapped: _searchItemTapped,
+                    );
+                  case SearchPageState.PRODUCT_SEARCH:
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onPanDown: (_) {
+                        // Hide keyboard on scroll down
+                        if (_focusNode.hasFocus) _focusNode.unfocus();
+                      },
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SearchSuggestion(
-                            onItemTapped: _searchItemTapped,
+                          ValueListenableBuilder<bool>(
+                            valueListenable: _focusState,
+                            builder: (_, isFocused, __) {
+                              // Hide autosuggestions when focus is lost
+                              return AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 400),
+                                child: isFocused
+                                    ? SearchSuggestion(
+                                        onItemTapped: _searchItemTapped,
+                                      )
+                                    : const SizedBox(),
+                              );
+                            },
                           ),
-                          const SearchResults(),
+                          const Expanded(child: SearchResults()),
                         ],
-                      );
-                  }
-                },
-              ),
+                      ),
+                    );
+                }
+              },
             ),
           ),
         ),
@@ -200,6 +218,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
     _focusNode = FocusNode();
     _controller = TextEditingController();
     _pageState = ValueNotifier(SearchPageState.DEFAULT);
+    _focusState = ValueNotifier(false);
     _setUpPage();
     super.initState();
   }
@@ -207,6 +226,8 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   @override
   void dispose() {
     _focusNode.dispose();
+    _focusState.dispose();
+    _pageState.dispose();
     super.dispose();
   }
 }

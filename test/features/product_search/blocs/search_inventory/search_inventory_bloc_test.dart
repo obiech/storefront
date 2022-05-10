@@ -65,7 +65,10 @@ void main() {
     ],
     verify: (bloc) {
       verify(
-        () => repository.searchInventoryForItems(any()),
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+        ),
       ).called(1);
 
       expect(bloc.query, _query);
@@ -78,8 +81,12 @@ void main() {
   blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When no results are returned during [searchInventory], an error state is emitted',
     setUp: () {
-      when(() => repository.searchInventoryForItems(any()))
-          .thenAnswer((_) async => left(NoInventoryResults()));
+      when(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => left(NoInventoryResults()));
     },
     build: () => bloc,
     act: (cubit) => cubit.add(SearchInventory('beans')),
@@ -92,8 +99,12 @@ void main() {
   blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When an error occurs during [searchInventory], an error state is emitted',
     setUp: () {
-      when(() => repository.searchInventoryForItems(any()))
-          .thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
+      when(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+        ),
+      ).thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
     act: (cubit) => cubit.add(SearchInventory('beans')),
@@ -104,7 +115,8 @@ void main() {
   );
 
   blocTest<SearchInventoryBloc, SearchInventoryState>(
-    'When [loadMoreItems] is called, the existing query is used to query more items from the repository',
+    'When [loadMoreItems] is called, the existing query is used to query more items from the repository and '
+    'When no items are returned during [loadMoreItems], we assume that the last page has been reached',
     build: () => bloc,
     act: (cubit) async {
       cubit.add(SearchInventory('beans'));
@@ -113,10 +125,6 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 400));
     },
     expect: () {
-      verify(() => repository.searchInventoryForItems(any())).called(1);
-      verify(() => repository.searchInventoryForItems(any(), page: 1))
-          .called(1);
-
       expect(bloc.query, _query);
       expect(bloc.page, 1);
 
@@ -132,53 +140,41 @@ void main() {
       return [
         isA<SearchingForItemInInventory>(),
         InventoryItemResults(pageOneResults),
-        InventoryItemResults(pageOneResults + pageTwoResults),
+        InventoryItemResults(pageOneResults, isLoadingMore: true),
+        InventoryItemResults(pageOneResults + pageTwoResults, isAtEnd: true),
       ];
+    },
+    verify: (_) {
+      verify(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+        ),
+      ).called(1);
+
+      verify(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+          page: 1,
+        ),
+      ).called(1);
     },
   );
 
   /// Page One
   final pageOneResults = pageInventory.take(limitPerPage).toList();
 
-  /// Page two
-  final pageTwoResults =
-      pageInventory.skip(limitPerPage).take(limitPerPage).toList();
-
-  blocTest<SearchInventoryBloc, SearchInventoryState>(
-    'When no items are returned during [loadMoreItems], we assume that the last page has been reached',
-    build: () => bloc,
-    act: (cubit) async {
-      cubit.add(SearchInventory('beans'));
-      await Future.delayed(const Duration(milliseconds: 400));
-      cubit.add(LoadMoreItems());
-      await Future.delayed(const Duration(milliseconds: 400));
-      cubit.add(LoadMoreItems());
-    },
-    expect: () => [
-      isA<SearchingForItemInInventory>(),
-      InventoryItemResults(pageOneResults),
-      InventoryItemResults(pageOneResults + pageTwoResults),
-
-      /// TODO - Handle isAtEnd
-    ],
-    verify: (bloc) {
-      verify(() => repository.searchInventoryForItems(any())).called(1);
-      verify(() => repository.searchInventoryForItems(any(), page: 1))
-          .called(1);
-      verify(() => repository.searchInventoryForItems(any(), page: 2))
-          .called(1);
-
-      expect(bloc.query, _query);
-      expect(bloc.page, 1);
-      expect(bloc.inventory, pageOneResults + pageTwoResults);
-    },
-  );
-
   blocTest<SearchInventoryBloc, SearchInventoryState>(
     'When an error occurs during loading, more items nothing should happen',
     setUp: () {
-      when(() => repository.searchInventoryForItems(any(), page: 1))
-          .thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
+      when(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+          page: 1,
+        ),
+      ).thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
     act: (cubit) async {
@@ -190,11 +186,23 @@ void main() {
     expect: () => [
       isA<SearchingForItemInInventory>(),
       InventoryItemResults(pageOneResults),
+      InventoryItemResults(pageOneResults, isLoadingMore: true),
+      InventoryItemResults(pageOneResults),
     ],
     verify: (bloc) {
-      verify(() => repository.searchInventoryForItems(any())).called(1);
-      verify(() => repository.searchInventoryForItems(any(), page: 1))
-          .called(1);
+      verify(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+        ),
+      ).called(1);
+      verify(
+        () => repository.searchInventoryForItems(
+          any(),
+          limit: any(named: 'limit'),
+          page: 1,
+        ),
+      ).called(1);
 
       expect(bloc.query, _query);
       expect(bloc.page, 0);

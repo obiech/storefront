@@ -30,6 +30,7 @@ class SearchInventoryBloc
     );
   }
 
+  final int _pageSize = 4;
   int _page = 0;
   String _query = '';
   final List<ProductModel> _inventory = [];
@@ -44,14 +45,22 @@ class SearchInventoryBloc
 
     emit(SearchingForItemInInventory());
 
-    final _failureOrResult = await repository.searchInventoryForItems(_query);
+    final _failureOrResult = await repository.searchInventoryForItems(
+      _query,
+      limit: _pageSize,
+    );
 
     _failureOrResult.fold((failure) {
       emit(ErrorOccurredSearchingForItem(failure));
     }, (inventory) {
       _inventory.clear();
       _inventory.addAll(inventory);
-      emit(InventoryItemResults(List.of(_inventory)));
+      emit(
+        InventoryItemResults(
+          List.of(_inventory),
+          isAtEnd: inventory.length < _pageSize,
+        ),
+      );
     });
 
     // Add query to search history
@@ -65,20 +74,31 @@ class SearchInventoryBloc
   ) async {
     if (state is InventoryItemResults &&
         !(state as InventoryItemResults).isAtEnd) {
+      // Show loading more cards
+      final currentState = state as InventoryItemResults;
+      emit(InventoryItemResults(currentState.results, isLoadingMore: true));
+
       final _resultOrFailure = await repository.searchInventoryForItems(
         _query,
         page: _page + 1,
+        limit: _pageSize,
       );
 
       _resultOrFailure.fold((failure) {
         if (failure is NoInventoryResults) {
           emit(InventoryItemResults(List.of(_inventory), isAtEnd: true));
+        } else {
+          emit(InventoryItemResults(List.of(_inventory)));
         }
       }, (inventory) {
         _page++;
         _inventory.addAll(inventory);
-        emit(InventoryItemResults(List.of(_inventory)));
-        // TODO(obella465): If results are less than limit, end of page reached
+        emit(
+          InventoryItemResults(
+            List.of(_inventory),
+            isAtEnd: inventory.length < _pageSize,
+          ),
+        );
       });
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/product/index.dart';
 import 'package:storefront_app/features/product_search/widgets/search_results/search_results_loading.dart';
 
 import '../../index.dart';
@@ -24,12 +25,7 @@ class _SearchResultsState extends State<SearchResults> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (_scrollController.position.maxScrollExtent ==
-          _scrollController.offset) {
-        context.read<SearchInventoryBloc>().add(LoadMoreItems());
-      }
-    });
+    _scrollController.addListener(_loadMoreItemsFromInventory);
 
     horizontalSpacing = 12;
     verticalSpacing = 12;
@@ -54,11 +50,22 @@ class _SearchResultsState extends State<SearchResults> {
     return BlocBuilder<SearchInventoryBloc, SearchInventoryState>(
       builder: (context, state) {
         if (state is InventoryItemResults) {
+          final inventoryProducts = state.results;
+
+          if (state.isLoadingMore) {
+            // Add loading more indicators
+            inventoryProducts.addAll(
+              List.generate(columns, (_) => ProductModel.loading()),
+            );
+          }
+
           return GridView.builder(
             physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.symmetric(
-              horizontal: res.dimens.spacingLarge,
-              vertical: res.dimens.spacingLarge,
+            padding: EdgeInsets.only(
+              right: res.dimens.spacingLarge,
+              left: res.dimens.spacingLarge,
+              top: res.dimens.spacingLarge,
+              bottom: res.dimens.spacingLarge,
             ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
@@ -67,15 +74,21 @@ class _SearchResultsState extends State<SearchResults> {
               mainAxisSpacing: verticalSpacing,
             ),
             itemBuilder: (BuildContext context, int index) {
-              return ProductItemCard(
-                key: ValueKey('product_item$index'),
-                product: state.results[index],
-                scaleFactor: scaleFactor,
-                borderRadius: cardBorderRadius,
-              );
+              final productModel = inventoryProducts[index];
+
+              if (productModel.status != ProductStatus.LOADING) {
+                return ProductItemCard(
+                  key: ValueKey('product_item$index'),
+                  product: productModel,
+                  scaleFactor: scaleFactor,
+                  borderRadius: cardBorderRadius,
+                );
+              } else {
+                return ProductItemCardLoading(borderRadius: cardBorderRadius);
+              }
             },
-            shrinkWrap: true,
-            itemCount: state.results.length,
+            itemCount: inventoryProducts.length,
+            controller: _scrollController,
           );
         } else if (state is SearchingForItemInInventory) {
           return SearchResultsLoading(
@@ -103,6 +116,31 @@ class _SearchResultsState extends State<SearchResults> {
         return const SizedBox();
       },
     );
+  }
+
+  /// Checks if bottom of inventory list is reached
+  ///
+  /// * If end of inventory not reached and not already loading more,
+  /// load more items from inventory.
+  ///
+  /// * Else skip loading more.
+  void _loadMoreItemsFromInventory() {
+    /// Load more items once bottom is almost reached
+    final scrollOffset =
+        _scrollController.position.maxScrollExtent - _scrollController.offset;
+
+    if (scrollOffset < INVENTORY_SCROLL_OFFSET) {
+      final inventoryBloc = context.read<SearchInventoryBloc>();
+
+      // Only load more items if inventory end is not reached
+      if (inventoryBloc.state is! InventoryItemResults) return;
+
+      final currentState = inventoryBloc.state as InventoryItemResults;
+
+      if (!currentState.isAtEnd && !currentState.isLoadingMore) {
+        inventoryBloc.add(LoadMoreItems());
+      }
+    }
   }
 
   @override

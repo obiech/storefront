@@ -79,8 +79,12 @@ void main() {
     when(() => repository.getSearchSuggestions(any()))
         .thenAnswer((_) async => right(['bea']));
 
-    when(() => repository.searchInventoryForItems(any()))
-        .thenAnswer((_) async => right(pageInventory));
+    when(
+      () => repository.searchInventoryForItems(
+        any(),
+        limit: any(named: 'limit'),
+      ),
+    ).thenAnswer((_) async => right(pageInventory));
 
     when(() => searchHistoryRepository.addSearchQuery(any()))
         .thenAnswer((_) async => ['bea']);
@@ -110,12 +114,22 @@ void main() {
   testWidgets('When Page State is PRODUCT_SEARCH, show inventory list',
       (WidgetTester tester) async {
     /// arrange
-    when(() => repository.getSearchSuggestions(any()))
-        .thenAnswer((_) async => right(autosuggestions));
+    when(
+      () => repository.getSearchSuggestions(
+        any(),
+        limit: any(named: 'limit'),
+      ),
+    ).thenAnswer((_) async => right(autosuggestions));
+
     when(() => searchHistoryRepository.addSearchQuery(any()))
         .thenAnswer((_) async => [_.positionalArguments.first.toString()]);
-    when(() => repository.searchInventoryForItems(any()))
-        .thenAnswer((_) async => right(pageInventory));
+
+    when(
+      () => repository.searchInventoryForItems(
+        any(),
+        limit: any(named: 'limit'),
+      ),
+    ).thenAnswer((_) async => right(pageInventory));
 
     await tester.pumpSearchPage(
       searchInventoryCubit,
@@ -139,7 +153,12 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 400));
       await tester.pumpAndSettle();
 
-      verify(() => repository.searchInventoryForItems(query)).called(1);
+      verify(
+        () => repository.searchInventoryForItems(
+          query,
+          limit: any(named: 'limit'),
+        ),
+      ).called(1);
 
       await expectLater(find.byType(SearchResults), findsOneWidget);
 

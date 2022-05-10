@@ -3,3 +3,6 @@ const maxSearchHistory = 5;
 
 /// Search history box
 const searchHistoryBoxKey = 'SEARCH_HISTORY_BOX_KEY';
+
+/// Inventory scroll offset
+const INVENTORY_SCROLL_OFFSET = 300.0;
