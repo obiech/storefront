@@ -14,7 +14,7 @@ class ProductSearchService implements IProductSearchRepository {
   ProductSearchService(this.searchService);
 
   @override
-  Future<Either<SearchFailure, List<String>>> getSearchSuggestions(
+  RepoResult<List<String>> getSearchSuggestions(
     String query, {
     int limit = 3,
   }) async {
@@ -34,7 +34,7 @@ class ProductSearchService implements IProductSearchRepository {
   }
 
   @override
-  Future<Either<SearchFailure, List<ProductModel>>> searchInventoryForItems(
+  RepoResult<List<ProductModel>> searchInventoryForItems(
     String query, {
     int page = 0,
     int limit = 10,

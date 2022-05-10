@@ -257,12 +257,12 @@ class DummyOrderRepository extends IOrderRepository {
   late List<OrderModel> orders;
 
   @override
-  Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
+  RepoResult<List<OrderModel>> getUserOrders() async {
     return right(orders);
   }
 
   @override
-  Future<Either<Failure, OrderModel>> getOrderById(String id) async {
+  RepoResult<OrderModel> getOrderById(String id) async {
     final index = orders.indexWhere((o) => o.id == id);
 
     if (index > -1) {

@@ -51,7 +51,7 @@ class SearchInventoryBloc
     );
 
     _failureOrResult.fold((failure) {
-      emit(ErrorOccurredSearchingForItem(failure));
+      emit(ErrorOccurredSearchingForItem(failure as SearchFailure));
     }, (inventory) {
       _inventory.clear();
       _inventory.addAll(inventory);

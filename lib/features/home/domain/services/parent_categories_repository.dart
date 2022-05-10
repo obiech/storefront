@@ -20,8 +20,7 @@ class ParentCategoriesRepository extends IParentCategoriesRepository {
   List<ParentCategoryModel> parentCategoryModels = [];
 
   @override
-  Future<Either<Failure, List<ParentCategoryModel>>>
-      getParentCategories() async {
+  RepoResult<List<ParentCategoryModel>> getParentCategories() async {
     try {
       final response = await categoryServiceClient.get(GetRequest());
 

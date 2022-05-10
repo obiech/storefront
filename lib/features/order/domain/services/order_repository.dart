@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,7 @@ class OrderRepository extends IOrderRepository {
   List<OrderModel> orders = [];
 
   @override
-  Future<Either<Failure, List<OrderModel>>> getUserOrders() async {
+  RepoResult<List<OrderModel>> getUserOrders() async {
     try {
       final response =
           await orderServiceClient.getOrderHistory(GetOrderHistoryRequest());
@@ -36,7 +34,7 @@ class OrderRepository extends IOrderRepository {
   }
 
   @override
-  Future<Either<Failure, OrderModel>> getOrderById(String id) async {
+  RepoResult<OrderModel> getOrderById(String id) async {
     try {
       final index = orders.indexWhere((o) => o.id == id);
 

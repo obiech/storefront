@@ -106,8 +106,7 @@ class DummyParentCategoryRepository extends IParentCategoriesRepository {
   ];
 
   @override
-  Future<Either<Failure, List<ParentCategoryModel>>>
-      getParentCategories() async {
+  RepoResult<List<ParentCategoryModel>> getParentCategories() async {
     await Future.delayed(const Duration(seconds: 1));
     return right(parentCategoryList);
   }

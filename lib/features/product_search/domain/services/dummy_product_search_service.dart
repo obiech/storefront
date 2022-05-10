@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
 
 import '../../../product/index.dart';
@@ -10,7 +11,7 @@ class DummyProductSearchService implements IProductSearchRepository {
   DummyProductSearchService();
 
   @override
-  Future<Either<SearchFailure, List<String>>> getSearchSuggestions(
+  RepoResult<List<String>> getSearchSuggestions(
     String query, {
     int limit = 3,
   }) async {
@@ -22,7 +23,7 @@ class DummyProductSearchService implements IProductSearchRepository {
   }
 
   @override
-  Future<Either<SearchFailure, List<ProductModel>>> searchInventoryForItems(
+  RepoResult<List<ProductModel>> searchInventoryForItems(
     String query, {
     int page = 0,
     int limit = 10,

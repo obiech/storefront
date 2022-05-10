@@ -1,13 +1,12 @@
-import 'package:dartz/dartz.dart';
-import 'package:storefront_app/features/order/domain/models/order_model.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/core.dart';
+import '../models/order_model.dart';
 
 // TODO: Implement pagination
 abstract class IOrderRepository {
   /// Gets a list of user's orders
-  Future<Either<Failure, List<OrderModel>>> getUserOrders();
+  RepoResult<List<OrderModel>> getUserOrders();
 
   /// Gets an order by its ID
-  Future<Either<Failure, OrderModel>> getOrderById(String id);
+  RepoResult<OrderModel> getOrderById(String id);
 }

@@ -49,8 +49,7 @@ class DummyDeliveryAddressService extends IDeliveryAddressRepository {
   ];
 
   @override
-  Future<Either<Failure, List<DeliveryAddressModel>>>
-      getDeliveryAddresses() async {
+  RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses() async {
     //  Simulate network loading
     await Future.delayed(const Duration(seconds: 1));
     return right(addressList);
