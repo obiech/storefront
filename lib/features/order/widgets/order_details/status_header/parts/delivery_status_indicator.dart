@@ -8,6 +8,7 @@ class _DeliveryStatusIndicator extends StatelessWidget {
     required this.iconData,
     this.size = 24,
     required this.label,
+    this.time,
   }) : super(key: key);
 
   /// When [isActive] is true, the color will be green.
@@ -22,6 +23,9 @@ class _DeliveryStatusIndicator extends StatelessWidget {
 
   /// Label shown below the icon
   final String label;
+
+  /// Timestamp when status is completed
+  final String? time;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,17 @@ class _DeliveryStatusIndicator extends StatelessWidget {
           style: context.res.styles.caption3.copyWith(
             color: color,
             fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(height: context.res.dimens.spacingSmall),
+        Visibility(
+          visible: time != null,
+          child: Text(
+            '$time',
+            style: context.res.styles.caption3.copyWith(
+              color: color,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],

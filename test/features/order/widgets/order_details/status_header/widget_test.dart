@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:storefront_app/core/utils/_exporter.dart';
 import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_details/status_header/widget.dart';
 
 void main() {
   final dateFormat = DateFormat('d MMM y, HH:mm');
   final orderCreationTime = DateTime(2022, 1, 1, 12, 30, 5);
+  final paymentCompletedTime =
+      orderCreationTime.add(const Duration(minutes: 5));
+  final pickupTime = paymentCompletedTime.add(const Duration(minutes: 5));
+  final orderCompletedTime = pickupTime.add(const Duration(minutes: 5));
 
   group(
     'OrderStatusHeader',
@@ -17,6 +22,9 @@ void main() {
         required DateTime orderCreationTime,
         required OrderStatus orderStatus,
         DateTime? estimatedArrivalTime,
+        required DateTime? paymentCompletedTime,
+        required DateTime? pickupTime,
+        required DateTime? orderCompletedTime,
       }) async {
         await tester.pumpWidget(
           MaterialApp(
@@ -26,6 +34,9 @@ void main() {
                 orderCreationTime: orderCreationTime,
                 orderStatus: orderStatus,
                 estimatedArrivalTime: estimatedArrivalTime,
+                paymentCompletedTime: paymentCompletedTime,
+                pickupTime: pickupTime,
+                orderCompletedTime: orderCompletedTime,
               ),
             ),
           ),
@@ -46,6 +57,9 @@ void main() {
               const Duration(minutes: 10),
             ),
             orderStatus: orderStatus,
+            paymentCompletedTime: paymentCompletedTime,
+            pickupTime: null,
+            orderCompletedTime: null,
           );
 
           expect(find.text(orderId), findsOneWidget);
@@ -55,6 +69,11 @@ void main() {
           );
           expect(find.byType(DeliveryProgressBar), findsOneWidget);
           expect(find.byType(DeliveryTimeRemaining), findsOneWidget);
+
+          // expect timestamp
+          expect(find.text(paymentCompletedTime.formatHm()), findsOneWidget);
+          expect(find.text(pickupTime.formatHm()), findsNothing);
+          expect(find.text(orderCompletedTime.formatHm()), findsNothing);
         },
       );
 
@@ -72,6 +91,9 @@ void main() {
               const Duration(minutes: 10),
             ),
             orderStatus: orderStatus,
+            paymentCompletedTime: paymentCompletedTime,
+            pickupTime: pickupTime,
+            orderCompletedTime: null,
           );
 
           expect(find.text(orderId), findsOneWidget);
@@ -82,6 +104,11 @@ void main() {
           expect(find.byType(DeliveryProgressBar), findsOneWidget);
           expect(find.byType(OrderStatusCaption), findsOneWidget);
           expect(find.byType(DeliveryTimeRemaining), findsOneWidget);
+
+          // expect timestamp
+          expect(find.text(paymentCompletedTime.formatHm()), findsOneWidget);
+          expect(find.text(pickupTime.formatHm()), findsOneWidget);
+          expect(find.text(orderCompletedTime.formatHm()), findsNothing);
         },
       );
 
@@ -99,6 +126,9 @@ void main() {
               const Duration(minutes: 10),
             ),
             orderStatus: orderStatus,
+            paymentCompletedTime: paymentCompletedTime,
+            pickupTime: pickupTime,
+            orderCompletedTime: orderCompletedTime,
           );
 
           expect(find.text(orderId), findsOneWidget);
@@ -109,9 +139,15 @@ void main() {
           expect(find.byType(DeliveryProgressBar), findsOneWidget);
           expect(find.byType(OrderStatusCaption), findsOneWidget);
           expect(find.byType(DeliveryTimeRemaining), findsNothing);
+
+          // expect timestamp
+          expect(find.text(paymentCompletedTime.formatHm()), findsOneWidget);
+          expect(find.text(pickupTime.formatHm()), findsOneWidget);
+          expect(find.text(orderCompletedTime.formatHm()), findsOneWidget);
         },
       );
 
+      // TODO: split into different test cases. Not recommended to have control flow inside test
       testWidgets(
         'should only display order ID and creation date for other statuses',
         (tester) async {
@@ -129,6 +165,9 @@ void main() {
               orderId: orderId,
               orderCreationTime: orderCreationTime,
               orderStatus: status,
+              paymentCompletedTime: null,
+              pickupTime: null,
+              orderCompletedTime: null,
             );
 
             expect(find.text(orderId), findsOneWidget);
@@ -139,6 +178,11 @@ void main() {
             expect(find.byType(DeliveryProgressBar), findsNothing);
             expect(find.byType(OrderStatusCaption), findsNothing);
             expect(find.byType(DeliveryTimeRemaining), findsNothing);
+
+            // expect timestamp
+            expect(find.text(paymentCompletedTime.formatHm()), findsNothing);
+            expect(find.text(pickupTime.formatHm()), findsNothing);
+            expect(find.text(orderCompletedTime.formatHm()), findsNothing);
           }
         },
       );

@@ -69,6 +69,16 @@ void main() {
           );
         },
       );
+
+      group('formatHm', () {
+        final time1 = DateTime(2022, 05, 11, 13, 50);
+        final time2 = DateTime(2022, 05, 11, 02, 09);
+
+        test('should format time to HH:mm correctly', () {
+          expect(time1.formatHm(), '13:50');
+          expect(time2.formatHm(), '02:09');
+        });
+      });
     },
   );
 }

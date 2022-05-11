@@ -21,6 +21,9 @@ class OrderStatusHeader extends StatelessWidget {
     required this.orderStatus,
     this.estimatedArrivalTime,
     this.currentTime,
+    required this.paymentCompletedTime,
+    required this.pickupTime,
+    required this.orderCompletedTime,
   }) : super(key: key);
 
   final String orderId;
@@ -36,6 +39,12 @@ class OrderStatusHeader extends StatelessWidget {
 
   /// Estimated order arrival time
   final DateTime? estimatedArrivalTime;
+
+  final DateTime? paymentCompletedTime;
+
+  final DateTime? pickupTime;
+
+  final DateTime? orderCompletedTime;
 
   /// Display [DeliveryTimeRemaining] for the following statuses
   bool get showTimeRemaining => [
@@ -78,7 +87,12 @@ class OrderStatusHeader extends StatelessWidget {
             SizedBox(height: context.res.dimens.spacingLarge),
           ],
           if (showProgressBar) ...[
-            DeliveryProgressBar(orderStatus: orderStatus),
+            DeliveryProgressBar(
+              orderStatus: orderStatus,
+              paymentCompletedTime: paymentCompletedTime,
+              pickupTime: pickupTime,
+              orderCompletedTime: orderCompletedTime,
+            ),
             SizedBox(height: context.res.dimens.spacingMiddle),
             OrderStatusCaption(orderStatus: orderStatus),
           ],

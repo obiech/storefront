@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 enum TimeDiffFormat {
   /// hh:mm:ss
   hhmmss,
@@ -27,6 +29,10 @@ extension DateTimeX on DateTime {
       case TimeDiffFormat.mmss:
         return timeDiff.toMmSs();
     }
+  }
+
+  String formatHm() {
+    return DateFormat.Hm().format(this);
   }
 }
 

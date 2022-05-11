@@ -12,9 +12,16 @@ class DeliveryProgressBar extends StatelessWidget {
   const DeliveryProgressBar({
     Key? key,
     required this.orderStatus,
+    this.paymentCompletedTime,
+    this.pickupTime,
+    this.orderCompletedTime,
   }) : super(key: key);
 
   final OrderStatus orderStatus;
+
+  final DateTime? paymentCompletedTime;
+  final DateTime? pickupTime;
+  final DateTime? orderCompletedTime;
 
   /// maps statuses to integers between [0..2]
   /// to avoid excessive switch cases in build method
@@ -44,6 +51,7 @@ class DeliveryProgressBar extends StatelessWidget {
           iconData: DropezyIcons.package,
           isActive: true, // always active
           label: context.res.strings.inProcess,
+          time: paymentCompletedTime?.formatHm(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10.0),
@@ -53,6 +61,7 @@ class DeliveryProgressBar extends StatelessWidget {
           iconData: DropezyIcons.delivery,
           isActive: statusAsIndex >= 1,
           label: context.res.strings.inDelivery,
+          time: pickupTime?.formatHm(),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 10.0),
@@ -62,6 +71,7 @@ class DeliveryProgressBar extends StatelessWidget {
           iconData: DropezyIcons.pin,
           isActive: statusAsIndex >= 2,
           label: context.res.strings.arrived,
+          time: orderCompletedTime?.formatHm(),
         ),
       ],
     );

@@ -92,6 +92,7 @@ class DummyOrderRepository extends IOrderRepository {
         id: '2',
         status: OrderStatus.paid,
         orderDate: DateTime.now(),
+        paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
         deliveryFee: '1500000',
         discount: '1000000',
         subTotal: '15000000',
@@ -153,6 +154,8 @@ class DummyOrderRepository extends IOrderRepository {
         id: '3',
         status: OrderStatus.inDelivery,
         orderDate: DateTime.now(),
+        paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
+        pickupTime: DateTime.now().add(const Duration(minutes: 10)),
         deliveryFee: '1500000',
         discount: '0',
         subTotal: '15000000',
@@ -245,6 +248,8 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
         ],
+        paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
+        pickupTime: DateTime.now().add(const Duration(minutes: 10)),
         orderCompletionTime: DateTime.now().subtract(
           const Duration(
             days: 1,

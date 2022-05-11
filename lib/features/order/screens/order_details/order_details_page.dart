@@ -19,75 +19,81 @@ class OrderDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: context.res.strings.orderDetails,
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  OrderStatusHeader(
-                    orderId: order.id,
-                    orderCreationTime: order.orderDate,
-                    orderStatus: order.status,
-                    estimatedArrivalTime: order.estimatedArrivalTime,
-                  ),
-                  const ThickDivider(),
-                  if (order.status == OrderStatus.inDelivery ||
-                      order.status == OrderStatus.arrived) ...[
-                    DriverAndRecipientSection(
-                      driverModel: order.driver!,
-                      recipientModel: order.recipient,
+      child: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    OrderStatusHeader(
+                      orderId: order.id,
+                      orderCreationTime: order.orderDate,
+                      orderStatus: order.status,
+                      estimatedArrivalTime: order.estimatedArrivalTime,
+                      paymentCompletedTime: order.paymentCompletedTime,
+                      pickupTime: order.pickupTime,
+                      orderCompletedTime: order.orderCompletionTime,
                     ),
                     const ThickDivider(),
+                    if (order.status == OrderStatus.inDelivery ||
+                        order.status == OrderStatus.arrived) ...[
+                      DriverAndRecipientSection(
+                        driverModel: order.driver!,
+                        recipientModel: order.recipient,
+                      ),
+                      const ThickDivider(),
+                    ],
+                    OrderDetailsSection(products: order.productsBought),
+                    const ThickDivider(),
+                    OrderPaymentSummary(
+                      totalSavings: (int.parse(order.discount) +
+                              int.parse(order.deliveryFee))
+                          .toString(),
+                      discountFromItems: order.discount,
+                      subtotal: order.subTotal,
+                      deliveryFee: order.deliveryFee,
+                      isFreeDelivery: true,
+                      paymentMethod: 'Gopay',
+                      grandTotal: order.total,
+                    ),
                   ],
-                  OrderDetailsSection(products: order.productsBought),
-                  const ThickDivider(),
-                  OrderPaymentSummary(
-                    totalSavings: (int.parse(order.discount) +
-                            int.parse(order.deliveryFee))
-                        .toString(),
-                    discountFromItems: order.discount,
-                    subtotal: order.subTotal,
-                    deliveryFee: order.deliveryFee,
-                    isFreeDelivery: true,
-                    paymentMethod: 'Gopay',
-                    grandTotal: order.total,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            width: double.infinity,
-            decoration: context.res.styles.bottomSheetStyle,
-            child: order.status == OrderStatus.arrived
-                ? Row(
-                    children: [
-                      Expanded(
-                        child: ContactSupportButton(onPressed: _contactSupport),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: DropezyButton.primary(
-                          key: const ValueKey(
-                            OrderDetailsPageKeys.buttonOrderAgain,
-                          ),
-                          label: context.res.strings.orderAgain,
-                          onPressed: _initiateReorderFlow,
-                          textStyle: context.res.styles.caption1.copyWith(
-                            color: context.res.colors.white,
-                            fontWeight: FontWeight.bold,
+            Container(
+              padding: const EdgeInsets.all(8),
+              width: double.infinity,
+              decoration: context.res.styles.bottomSheetStyle,
+              child: order.status == OrderStatus.arrived
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child:
+                              ContactSupportButton(onPressed: _contactSupport),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: DropezyButton.primary(
+                            key: const ValueKey(
+                              OrderDetailsPageKeys.buttonOrderAgain,
+                            ),
+                            label: context.res.strings.orderAgain,
+                            onPressed: _initiateReorderFlow,
+                            textStyle: context.res.styles.caption1.copyWith(
+                              color: context.res.colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                : ContactSupportButton(onPressed: _contactSupport),
-          )
-        ],
+                      ],
+                    )
+                  : ContactSupportButton(onPressed: _contactSupport),
+            )
+          ],
+        ),
       ),
     );
   }

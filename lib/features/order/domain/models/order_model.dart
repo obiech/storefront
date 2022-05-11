@@ -16,6 +16,8 @@ class OrderModel extends Equatable {
     required this.orderDate,
     this.paymentExpiryTime,
     this.estimatedArrivalTime,
+    this.paymentCompletedTime,
+    this.pickupTime,
     this.orderCompletionTime,
     required this.deliveryFee,
     required this.discount,
@@ -50,6 +52,7 @@ class OrderModel extends Equatable {
         break;
     }
 
+    // TODO (widy): Add new properties related to order timestamp
     return OrderModel(
       id: order.orderId,
       deliveryFee: order.paymentSummary.deliveryFee.num,
@@ -85,6 +88,16 @@ class OrderModel extends Equatable {
   /// Will be null if status is not
   /// [OrderStatus.paid] or [OrderStatus.inDelivery]
   final DateTime? estimatedArrivalTime;
+
+  /// Date & Time at which payment is completed
+  ///
+  /// Will not be null if status is  [OrderStatus.paid] or after
+  final DateTime? paymentCompletedTime;
+
+  /// Date & Time at which item is being delivered
+  ///
+  /// Will not be null if status is  [OrderStatus.inDelivery] or after
+  final DateTime? pickupTime;
 
   /// Date & Time at which items are successfully
   /// delivered to customer's address
