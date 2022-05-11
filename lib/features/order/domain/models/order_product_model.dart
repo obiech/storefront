@@ -28,7 +28,7 @@ class OrderProductModel extends Equatable {
   factory OrderProductModel.fromPb(pb.Item item) {
     // TODO (leovinsen): Add missing fields once Item proto is updated
     return OrderProductModel(
-      productId: item.product.productId,
+      productId: item.product.variantId,
       productName: item.product.name,
       thumbnailUrl: item.product.imagesUrls[0],
       quantity: item.quantity,

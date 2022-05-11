@@ -42,6 +42,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         price: '1500000',
         discount: '2000000',
         stock: 2,
+        categoryOneId: '',
+        categoryTwoId: '',
+        variants: [],
+        defaultProduct: '',
         thumbnailUrl:
             'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
       ),
@@ -51,6 +55,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         name: 'Sweet Mangoes',
         price: '3000000',
         stock: 15,
+        categoryOneId: '',
+        categoryTwoId: '',
+        variants: [],
+        defaultProduct: '',
         thumbnailUrl:
             'https://pngimg.com/uploads/mango/small/mango_PNG9171.png',
       ),
@@ -60,6 +68,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         name: 'Irish Potatoes',
         price: '1000000',
         stock: 50,
+        categoryOneId: '',
+        categoryTwoId: '',
+        variants: [],
+        defaultProduct: '',
         thumbnailUrl: 'https://pngimg.com/uploads/potato/potato_PNG435.png',
       ),
       ProductModel(
@@ -68,6 +80,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         name: 'Strawberry',
         price: '4000000',
         stock: 50,
+        categoryOneId: '',
+        categoryTwoId: '',
+        variants: [],
+        defaultProduct: '',
         thumbnailUrl:
             'https://pngimg.com/uploads/strawberry/small/strawberry_PNG2615.png',
       ),
@@ -77,6 +93,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         name: 'Melon',
         price: '6000000',
         stock: 50,
+        categoryOneId: '',
+        categoryTwoId: '',
+        variants: [],
+        defaultProduct: '',
         thumbnailUrl: 'https://pngimg.com/uploads/melon/melon_PNG14387.png',
       )
     ];

@@ -4,6 +4,8 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
 
+import '../../../../test_commons/fixtures/product/product_models.dart';
+
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductItemCard(
     ProductModel productModel, {
@@ -26,16 +28,7 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
-  const product = ProductModel(
-    productId: 'selada-romaine-id',
-    sku: 'selada-romaine-sku',
-    name: 'Selada Romaine',
-    price: '15000',
-    discount: '20000',
-    stock: 100,
-    thumbnailUrl:
-        'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
-  );
+  const product = seledaRomaine;
 
   final addToCartFinder =
       find.byKey(ValueKey('${product.productId}_add_to_cart'));
@@ -105,16 +98,9 @@ void main() {
       'and show out of stock label', (WidgetTester tester) async {
     /// arrange
     await tester.pumpProductItemCard(
-      const ProductModel(
-        productId: 'selada-romaine-id',
-        sku: 'selada-romaine-sku',
-        name: 'Selada Romaine',
-        price: '15000',
-        discount: '20000',
-        stock: 100,
+      product.copyWith(
+        stock: 0,
         status: ProductStatus.OUT_OF_STOCK,
-        thumbnailUrl:
-            'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
       ),
     );
 

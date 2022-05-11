@@ -3,16 +3,30 @@ import 'package:dropezy_proto/v1/search/search.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
+import 'package:storefront_app/features/product/domain/models/variant_model.dart';
 
 extension SearchInventoryResultX on SearchInventoryResult {
   ProductModel get toProduct => ProductModel(
         productId: productId,
-        sku: sku,
         name: name,
+        categoryOneId: '',
+        categoryTwoId: '',
         price: price.num,
-        thumbnailUrl: '${AssetsConfig.assetsUrl}$imageUrl',
         stock: stock,
-        status: stock > 0 ? ProductStatus.ACTIVE : ProductStatus.OUT_OF_STOCK,
+        sku: sku,
+        thumbnailUrl: '${AssetsConfig.assetsUrl}$imageUrl',
+        status: stock < 1 ? ProductStatus.OUT_OF_STOCK : ProductStatus.ACTIVE,
+        variants: [
+          VariantModel(
+            variantId: 'default',
+            name: name,
+            imagesUrls: ['${AssetsConfig.assetsUrl}$imageUrl'],
+            price: price.num,
+            sku: sku,
+            stock: stock,
+          )
+        ],
+        defaultProduct: 'default',
       );
 }
 
