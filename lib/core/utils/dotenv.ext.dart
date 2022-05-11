@@ -2,12 +2,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 typedef EnvParser<T> = T Function(String);
 
-/// Use this extension on classes that will load value from [DotEnv]
+/// Wrapper methods for typecasting values from [DotEnv]
+/// and supports an optional fallback value when value is not found.
 ///
-/// Contains wrapper function for casting [String] into [int], [double] and
-/// [bool]
-///
-/// To support other types, use [tryGet]
+/// For unsupported types, you can use [tryGet] to write a
+/// new wrapper.
 extension DotEnvX on DotEnv {
   /// Wrapper function for getting a [String] value from [DotEnv].
   String getString(String keyName, {String? fallback}) {
@@ -48,7 +47,7 @@ extension DotEnvX on DotEnv {
   bool getBool(String keyName, {bool? fallback}) {
     return tryGet<bool>(
       keyName,
-      (value) => value == 'true',
+      (value) => value.toLowerCase().trim() == 'true',
       fallback: fallback,
     );
   }

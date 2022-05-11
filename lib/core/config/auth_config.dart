@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../utils/dotenv_extension.dart';
+import '../utils/dotenv.ext.dart';
 
 /// Contains configuration related to Authentication services
 ///

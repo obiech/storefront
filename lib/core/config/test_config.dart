@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../utils/dotenv_extension.dart';
+import '../utils/dotenv.ext.dart';
 import '../utils/is_test_mode.dart';
 
 /// Contains configuration for Tests.

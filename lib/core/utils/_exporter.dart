@@ -2,7 +2,7 @@ export 'bloc.ext.dart';
 export 'bottom_sheet_utils.dart';
 export 'build_context.ext.dart';
 export 'datetime.ext.dart';
-export 'dotenv_extension.dart';
+export 'dotenv.ext.dart';
 export 'is_test_mode.dart';
 export 'phone_number_transformer.dart';
 export 'random.ext.dart';
