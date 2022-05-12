@@ -7,3 +7,4 @@ export 'is_test_mode.dart';
 export 'phone_number_transformer.dart';
 export 'random.ext.dart';
 export 'string.ext.dart';
+export 'text_style.ext.dart';

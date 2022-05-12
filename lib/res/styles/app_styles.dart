@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/res/dimensions/base_dimensions.dart';
 
+import '../../core/utils/text_style.ext.dart';
 import '../colors/base_colors.dart';
 import 'base_styles.dart';
 
@@ -54,16 +55,15 @@ class AppStyles implements BaseStyles {
         fontSize: 13,
         fontWeight: FontWeight.w600,
         color: _colors.black,
-        height: 16 / 13, // delta to achieve a line height of 16
-      );
+      ).withLineHeight(16);
+
   @override
   TextStyle get productTileSlashedPrice => const TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w400,
         color: Color(0xFF787C8F),
-        height: 13.5 / 11, // delta to achieve line height of 13.5
         decoration: TextDecoration.lineThrough,
-      );
+      ).withLineHeight(13.5);
 
   @override
   TextStyle get subtitle => TextStyle(
