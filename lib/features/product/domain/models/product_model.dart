@@ -160,6 +160,7 @@ class ProductModel extends Equatable {
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
         status: status ?? this.status,
         marketStatus: marketStatus ?? this.marketStatus,
+        discount: discount ?? this.discount,
       );
 }
 

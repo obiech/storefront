@@ -24,6 +24,11 @@ abstract class BaseStyles {
 
   TextStyle get clickableText;
 
+  /// [ProductTile] specific
+  TextStyle get productTileProductName;
+
+  TextStyle get productTileSlashedPrice;
+
   BorderRadius get topBorderRadius;
   BoxDecoration get bottomSheetStyle;
   InputDecoration get roundedInputStyle;

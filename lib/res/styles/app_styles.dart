@@ -48,6 +48,23 @@ class AppStyles implements BaseStyles {
         fontWeight: FontWeight.w500,
       );
 
+  /// [ProductTile] specific
+  @override
+  TextStyle get productTileProductName => TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: _colors.black,
+        height: 16 / 13, // delta to achieve a line height of 16
+      );
+  @override
+  TextStyle get productTileSlashedPrice => const TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.w400,
+        color: Color(0xFF787C8F),
+        height: 13.5 / 11, // delta to achieve line height of 13.5
+        decoration: TextDecoration.lineThrough,
+      );
+
   @override
   TextStyle get subtitle => TextStyle(
         color: _colors.black,
