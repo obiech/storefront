@@ -7,6 +7,7 @@ import '../features/child_categories/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
 import '../features/product_search/index.dart';
+import '../features/profile/index.dart';
 
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Page|ScreenWrapper|Screen,Route',

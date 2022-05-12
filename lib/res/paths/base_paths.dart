@@ -9,5 +9,6 @@ abstract class BasePaths {
 
   /// Image assets (typically large images)
   String get imageDropezyLogo;
+  String get imageDropezyLogoBlack;
   String get imageLocationAccess;
 }

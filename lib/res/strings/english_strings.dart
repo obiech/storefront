@@ -493,4 +493,38 @@ class EnglishStrings implements BaseStrings {
   /// Search Location page
   @override
   String get whereIsYourAddress => 'Where is Your Address?';
+
+  /// Profile Page
+  @override
+  String get aboutUs => 'About Us';
+
+  @override
+  String get changeAddress => 'Change Address';
+
+  @override
+  String get changePin => 'Change PIN';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get howItWorks => 'How It Works';
+
+  @override
+  String get myVoucher => 'My Voucher';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get termsOfUse => 'Terms of Use';
+
+  @override
+  String get signOut => 'Sign Out';
 }

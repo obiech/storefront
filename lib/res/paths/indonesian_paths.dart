@@ -25,4 +25,7 @@ class IndonesianPaths implements BasePaths {
 
   @override
   String get imageDropezyLogo => 'assets/images/dropezy_logo.svg';
+
+  @override
+  String get imageDropezyLogoBlack => 'assets/images/dropezy_logo_black.svg';
 }

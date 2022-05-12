@@ -302,4 +302,17 @@ abstract class BaseStrings {
 
   /// Search Location page
   String get whereIsYourAddress;
+
+  /// Profile Page
+  String get changeAddress;
+  String get changePin;
+  String get myVoucher;
+  String get selectLanguage;
+  String get general;
+  String get privacyPolicy;
+  String get help;
+  String get termsOfUse;
+  String get howItWorks;
+  String get aboutUs;
+  String get signOut;
 }

@@ -493,4 +493,38 @@ class IndonesianStrings implements BaseStrings {
   /// Search Location page
   @override
   String get whereIsYourAddress => 'Dimana Alamat Kamu?';
+
+  /// Profile Page
+  @override
+  String get aboutUs => 'Tentang Kami';
+
+  @override
+  String get changeAddress => 'Ubah Alamat';
+
+  @override
+  String get changePin => 'Ubah PIN';
+
+  @override
+  String get general => 'Umum';
+
+  @override
+  String get help => 'Bantuan';
+
+  @override
+  String get howItWorks => 'Cara Kerja';
+
+  @override
+  String get myVoucher => 'Voucherku';
+
+  @override
+  String get privacyPolicy => 'Kebijakan & Privasi';
+
+  @override
+  String get selectLanguage => 'Pilih Bahasa';
+
+  @override
+  String get termsOfUse => 'Ketentuan Layanan';
+
+  @override
+  String get signOut => 'Keluar';
 }
