@@ -30,6 +30,9 @@ class ChildCategoriesList extends StatelessWidget {
                 childCategoryCubit.setActiveChildCategory(
                   childCategory,
                 );
+                context
+                    .read<CategoryProductCubit>()
+                    .fetchCategoryProduct(childCategory.categoryId);
               },
               child: Column(
                 children: [

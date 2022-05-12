@@ -19,8 +19,8 @@ class ParentCategoriesCubit extends Cubit<ParentCategoriesState> {
     final result = await categoriesOneRepository.getParentCategories();
 
     final state = result.fold(
-      (categories) => ErrorLoadingParentCategoriesState(categories.message),
-      (failure) => LoadedParentCategoriesState(failure),
+      (failure) => ErrorLoadingParentCategoriesState(failure.message),
+      (categories) => LoadedParentCategoriesState(categories),
     );
 
     emit(state);

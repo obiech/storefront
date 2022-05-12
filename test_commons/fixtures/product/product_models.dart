@@ -48,3 +48,8 @@ const seledaRomaine = ProductModel(
   thumbnailUrl:
       'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
 );
+
+final fakeCategoryProductList = [
+  productSeladaRomaine,
+  productBellPepperYellow,
+];

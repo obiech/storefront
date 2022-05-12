@@ -8,11 +8,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/child_categories/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 
+import '../../../../test_commons/fixtures/product/product_models.dart'
+    as fixtures;
 import '../utils/mocks.dart';
 import 'child_category_page_finder.dart';
 
 void main() {
   late ChildCategoryCubit childCategoryCubit;
+  late CategoryProductCubit categoryProductCubit;
   late HttpClient httpClient;
 
   const mockChildCategoryList = [
@@ -40,6 +43,7 @@ void main() {
 
   setUp(() {
     childCategoryCubit = MockChildCategoryCubit();
+    categoryProductCubit = MockCategoryProductCubit();
     httpClient = MockHttpClient();
   });
 
@@ -47,9 +51,14 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: BlocProvider<ChildCategoryCubit>(
-            create: (_) =>
-                ChildCategoryCubit(mockParentCategoryList.childCategories),
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider<ChildCategoryCubit>(
+                create: (_) =>
+                    ChildCategoryCubit(mockParentCategoryList.childCategories),
+              ),
+              BlocProvider(create: (_) => categoryProductCubit),
+            ],
             child: const ChildCategoriesPage(
               parentCategoryModel: mockParentCategoryList,
             ),
@@ -60,7 +69,9 @@ void main() {
   }
 
   group('Child Categories Page', () {
-    testWidgets('display grid of List Categories', (tester) async {
+    testWidgets(
+        'display grid of List Categories '
+        'and Product Category', (tester) async {
       HttpOverrides.runZoned(
         () async {
           whenListen(
@@ -74,8 +85,18 @@ void main() {
               ],
             ),
           );
+          whenListen(
+            categoryProductCubit,
+            Stream.fromIterable([
+              LoadedCategoryProductState(
+                fixtures.fakeCategoryProductList,
+              ),
+            ]),
+          );
 
           when(() => childCategoryCubit.close()).thenAnswer((_) async {});
+
+          when(() => categoryProductCubit.close()).thenAnswer((_) async {});
 
           when(() => childCategoryCubit.state).thenAnswer(
             (invocation) => ChildCategoryState(
@@ -84,9 +105,16 @@ void main() {
             ),
           );
 
+          when(() => categoryProductCubit.state).thenAnswer(
+            (invocation) => LoadedCategoryProductState(
+              fixtures.fakeCategoryProductList,
+            ),
+          );
+
           await pumpChildCategoriesPage(tester);
 
           expect(ChildCategoryFinders.listChildCategoryWidget, findsOneWidget);
+          // TODO (Jonathan) : Add expect for CategoryProduct in STOR-398
         },
         createHttpClient: (securityContext) => httpClient,
       );

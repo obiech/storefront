@@ -2,9 +2,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/di/injection.dart';
 
 import '../../home/index.dart';
-import '../../product/index.dart';
 import '../index.dart';
 import '../widgets/widgets.dart';
 
@@ -27,6 +27,12 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
           create: (_) =>
               ChildCategoryCubit(parentCategoryModel.sortChildrenByName),
         ),
+        BlocProvider<CategoryProductCubit>(
+          create: (_) => getIt<CategoryProductCubit>()
+            ..fetchCategoryProduct(
+              parentCategoryModel.sortChildrenByName[0].categoryId,
+            ),
+        ),
       ],
       child: this,
     );
@@ -34,63 +40,6 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
 
   @override
   Widget build(BuildContext context) {
-    const products = [
-      ProductModel(
-        productId: 'selada-romaine-id',
-        sku: 'selada-romaine-sku',
-        name: 'Selada Romaine',
-        price: '1500000',
-        discount: '2000000',
-        stock: 2,
-        variants: [],
-        defaultProduct: '',
-        thumbnailUrl:
-            'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
-      ),
-      ProductModel(
-        productId: 'mango-id',
-        sku: 'mango-sku',
-        name: 'Sweet Mangoes',
-        price: '3000000',
-        stock: 15,
-        variants: [],
-        defaultProduct: '',
-        thumbnailUrl:
-            'https://pngimg.com/uploads/mango/small/mango_PNG9171.png',
-      ),
-      ProductModel(
-        productId: 'irish-id',
-        sku: 'irish-sku',
-        name: 'Irish Potatoes',
-        price: '1000000',
-        stock: 50,
-        variants: [],
-        defaultProduct: '',
-        thumbnailUrl: 'https://pngimg.com/uploads/potato/potato_PNG435.png',
-      ),
-      ProductModel(
-        productId: 'strawberry-id',
-        sku: 'strawberry-sku',
-        name: 'Strawberry',
-        price: '4000000',
-        stock: 50,
-        variants: [],
-        defaultProduct: '',
-        thumbnailUrl:
-            'https://pngimg.com/uploads/strawberry/small/strawberry_PNG2615.png',
-      ),
-      ProductModel(
-        productId: 'melon-id',
-        sku: 'melon-sku',
-        name: 'Melon',
-        price: '6000000',
-        stock: 50,
-        variants: [],
-        defaultProduct: '',
-        thumbnailUrl: 'https://pngimg.com/uploads/melon/melon_PNG14387.png',
-      )
-    ];
-
     return DropezyScaffold.textTitle(
       title: parentCategoryModel.name,
       child: Row(
@@ -117,23 +66,47 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    MediaQuery.of(context).orientation == Orientation.portrait
-                        ? 2
-                        : 3,
-                childAspectRatio: 13 / 25,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return ProductItemCard(
-                  product: products[index],
-                );
+            child: BlocBuilder<CategoryProductCubit, CategoryProductState>(
+              builder: (context, state) {
+                if (state is LoadedCategoryProductState) {
+                  // TODO (Jonathan) : Move to its own Widget in STOR-398
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: MediaQuery.of(context).orientation ==
+                              Orientation.portrait
+                          ? 2
+                          : 3,
+                      childAspectRatio: 13 / 25,
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return ProductItemCard(
+                        product: state.productModelList[index],
+                      );
+                    },
+                    shrinkWrap: true,
+                    itemCount: state.productModelList.length,
+                  );
+                } else if (state is LoadingCategoryProductState) {
+                  // TODO (Jonathan) : Use card loading in search page for STOR-398
+                  return const Text('Loading');
+                } else if (state is ErrorCategoryProductState) {
+                  // TODO (Jonathan) : Use search error Widget in STOR-398
+                  return Text(
+                    state.message,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: context.res.colors.red,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  );
+                }
+
+                return const SizedBox();
               },
-              shrinkWrap: true,
-              itemCount: products.length,
             ),
           )
         ],
