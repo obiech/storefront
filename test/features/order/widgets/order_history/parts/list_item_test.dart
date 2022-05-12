@@ -191,24 +191,18 @@ void main() {
   );
 
   testWidgets(
-    '[OrderHistoryListItem] should also display '
-    'order completion date and a button to re-order '
-    'if status is arrived ',
+    '[OrderHistoryListItem] should display order completion date '
+    'when status is arrived ',
     (tester) async {
       // arrange
       final order = orderArrived;
 
       // act
-      final context = await tester.pumpListItem(
+      await tester.pumpListItem(
         order: order,
       );
 
       // assert
-      expect(find.byType(DropezyButton), findsOneWidget);
-
-      final btn = tester.widget<DropezyButton>(find.byType(DropezyButton));
-      expect(btn.label, context.res.strings.orderAgain);
-
       // should show TimingText, but not wrapped in CountdownBuilder
       expect(find.byType(CountdownBuilder), findsNothing);
       expect(find.byType(TimingText), findsOneWidget);

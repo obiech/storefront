@@ -109,12 +109,10 @@ class OrderHistoryListItem extends StatelessWidget {
               ),
             ],
           ),
-          if (order.status.isAwaitingPayment || order.status.isArrived) ...[
+          if (order.status.isAwaitingPayment) ...[
             SizedBox(height: context.res.dimens.spacingMedium),
             DropezyButton.primary(
-              label: order.status.isAwaitingPayment
-                  ? context.res.strings.continuePayment
-                  : context.res.strings.orderAgain,
+              label: context.res.strings.continuePayment,
               onPressed: () {},
               padding: EdgeInsets.symmetric(
                 horizontal: context.res.dimens.spacingLarge,

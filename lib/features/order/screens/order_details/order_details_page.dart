@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/core.dart';
 import '../../domain/models/order_model.dart';
+import '../../widgets/order_details/order_actions/order_actions.dart';
 import '../../widgets/order_widgets.dart';
 
 part 'keys.dart';
@@ -63,46 +64,10 @@ class OrderDetailsPage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              width: double.infinity,
-              decoration: context.res.styles.bottomSheetStyle,
-              child: order.status == OrderStatus.arrived
-                  ? Row(
-                      children: [
-                        Expanded(
-                          child:
-                              ContactSupportButton(onPressed: _contactSupport),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: DropezyButton.primary(
-                            key: const ValueKey(
-                              OrderDetailsPageKeys.buttonOrderAgain,
-                            ),
-                            label: context.res.strings.orderAgain,
-                            onPressed: _initiateReorderFlow,
-                            textStyle: context.res.styles.caption1.copyWith(
-                              color: context.res.colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  : ContactSupportButton(onPressed: _contactSupport),
-            )
+            const OrderActions(),
           ],
         ),
       ),
     );
-  }
-
-  void _contactSupport() {
-    // TODO (leovinsen): add contact support method
-  }
-
-  void _initiateReorderFlow() {
-    // TODO (leovinsen): add re-order flow
   }
 }

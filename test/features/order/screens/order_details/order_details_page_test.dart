@@ -41,10 +41,6 @@ void main() {
         ContactSupportButton,
         skipOffstage: false,
       );
-      final finderOrderAgainButton = find.byKey(
-        const ValueKey(OrderDetailsPageKeys.buttonOrderAgain),
-        skipOffstage: false,
-      );
 
       testWidgets(
         'for [OrderStatus.awaitingPayment] should show order status header, '
@@ -94,8 +90,7 @@ void main() {
       testWidgets(
         'for [OrderStatus.arrived] should show order status header, '
         'list of purchased products, transaction summary, driver and '
-        'recipient information, a button to contact support, and '
-        'another button to initiate re-order flow',
+        'recipient information, and a button to contact support',
         (tester) async {
           await tester.pumpOrderDetailsPage(order: orderArrived);
 
@@ -104,7 +99,6 @@ void main() {
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsOneWidget);
           expect(finderContactSupportButton, findsOneWidget);
-          expect(finderOrderAgainButton, findsOneWidget);
         },
       );
     },
