@@ -18,12 +18,22 @@ class PaymentCheckoutCubit extends Cubit<PaymentCheckoutState> {
   Future<void> checkoutPayment(PaymentMethodDetails paymentMethod) async {
     emit(LoadingPaymentCheckout());
 
-    try {
-      final checkoutLink =
-          await paymentRepository.checkoutPayment(paymentMethod.method);
-      emit(LoadedPaymentCheckout(checkoutLink));
-    } catch (_) {
-      emit(const ErrorLoadingPaymentCheckout('Error checking out'));
-    }
+    final checkoutLinkResponse =
+        await paymentRepository.checkoutPayment(paymentMethod.method);
+
+    emit(
+      checkoutLinkResponse.fold(
+        (failure) {
+          if (failure is PaymentMethodNotSupported) {
+            return const ErrorLoadingPaymentCheckout(
+              'Payment method not supported',
+            );
+          }
+
+          return const ErrorLoadingPaymentCheckout('Error checking out');
+        },
+        (checkoutLink) => LoadedPaymentCheckout(checkoutLink),
+      ),
+    );
   }
 }

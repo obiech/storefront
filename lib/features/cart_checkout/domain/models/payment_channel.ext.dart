@@ -32,3 +32,7 @@ extension PaymentChannelsX on List<PaymentChannel> {
     return map((channel) => channel.paymentInfo()).toList();
   }
 }
+
+/// Comparator for active [PaymentChannel]
+bool channelIsActive(PaymentChannel paymentChannel) =>
+    paymentChannel.status == PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE;

@@ -8,5 +8,10 @@ List<PaymentChannel> get samplePaymentMethods => [
         paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
         paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_DEEPLINK,
         status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
+      ),
+      PaymentChannel(
+        paymentMethod: PaymentMethod.PAYMENT_METHOD_UNSPECIFIED,
+        paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_DEEPLINK,
+        status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
       )
     ];

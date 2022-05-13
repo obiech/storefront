@@ -21,8 +21,16 @@ class CartCheckoutPage extends StatelessWidget {
           const Expanded(
             child: CartBodyWidget(),
           ),
-          BlocProvider(
-            create: (context) => getIt<PaymentCheckoutCubit>(),
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<PaymentCheckoutCubit>(),
+              ),
+              BlocProvider(
+                create: (context) =>
+                    getIt<PaymentMethodCubit>()..queryPaymentMethods(),
+              )
+            ],
             child: const CartCheckout(
               price: '10300',
               discount: '12300',

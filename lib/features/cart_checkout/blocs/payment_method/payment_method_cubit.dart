@@ -11,36 +11,39 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
   final IPaymentRepository paymentMethodRepository;
 
   PaymentMethodCubit(this.paymentMethodRepository)
-      : super(InitialPaymentMethodState()) {
-    queryPaymentMethods();
-  }
+      : super(InitialPaymentMethodState());
 
   /// Query [PaymentMethodDetails]s from cache or end-point
   Future<void> queryPaymentMethods() async {
     emit(LoadingPaymentMethods());
 
-    try {
-      final methods = await paymentMethodRepository.getPaymentMethods();
-      if (methods.isNotEmpty) {
-        final paymentMethods = methods.toPaymentDetails();
-        emit(LoadedPaymentMethods(paymentMethods, paymentMethods.first));
-      } else {
-        emit(const ErrorLoadingPaymentMethods('No Payment Methods'));
-      }
-    } catch (_) {
-      emit(const ErrorLoadingPaymentMethods('Error loading payment methods'));
-    }
+    final paymentMethodsResponse =
+        await paymentMethodRepository.getPaymentMethods();
+
+    final paymentMethodState = paymentMethodsResponse.fold(
+      (failure) {
+        if (failure is NoPaymentMethods) {
+          return const ErrorLoadingPaymentMethods('No Payment Methods');
+        }
+
+        return const ErrorLoadingPaymentMethods(
+          'Error loading payment methods',
+        );
+      },
+      (paymentMethods) =>
+          LoadedPaymentMethods(paymentMethods, paymentMethods.first),
+    );
+
+    emit(paymentMethodState);
   }
 
   /// Set the active [PaymentMethodDetails]
   void setPaymentMethod(PaymentMethodDetails paymentMethod) {
-    if (state is LoadedPaymentMethods) {
-      emit(
-        LoadedPaymentMethods(
-          (state as LoadedPaymentMethods).methods,
-          paymentMethod,
-        ),
-      );
-    }
+    if (state is! LoadedPaymentMethods) return;
+
+    emit(
+      (state as LoadedPaymentMethods)
+          .copyWith(activePaymentMethod: paymentMethod),
+    );
   }
 }

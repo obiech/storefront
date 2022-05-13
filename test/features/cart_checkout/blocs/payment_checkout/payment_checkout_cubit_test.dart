@@ -1,4 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
@@ -35,7 +37,7 @@ void main() {
           () => _repository.checkoutPayment(
             _paymentMethods.first.method,
           ),
-        ).thenAnswer((_) async => link);
+        ).thenAnswer((_) async => right(link));
       },
       build: () => _cubit,
       act: (cubit) => cubit.checkoutPayment(_paymentMethods.first),
@@ -50,7 +52,11 @@ void main() {
         /// arrange
         when(
           () => _repository.checkoutPayment(_paymentMethods.first.method),
-        ).thenThrow(Exception('No such payment method'));
+        ).thenAnswer(
+          (_) async => left(
+            PaymentMethodNotSupported(PaymentMethod.PAYMENT_METHOD_UNSPECIFIED),
+          ),
+        );
       },
       build: () => _cubit,
       act: (cubit) => cubit.checkoutPayment(_paymentMethods.first),

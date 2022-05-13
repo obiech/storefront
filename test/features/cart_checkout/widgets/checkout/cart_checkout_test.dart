@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -166,8 +167,9 @@ void main() {
           /// Load sample payment methods
           paymentMethods = samplePaymentMethods;
 
-          when(() => _paymentMethodsRepository.getPaymentMethods())
-              .thenAnswer((_) async => paymentMethods);
+          when(() => _paymentMethodsRepository.getPaymentMethods()).thenAnswer(
+            (_) async => right(paymentMethods.toPaymentDetails()),
+          );
         });
 
         testWidgets('should display first payment method as default',

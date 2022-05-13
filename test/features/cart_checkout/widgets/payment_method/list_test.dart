@@ -1,7 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
@@ -43,7 +45,7 @@ void main() {
           'should display empty state ', (WidgetTester tester) async {
         /// Load Payment Methods List
         when(() => _paymentMethodsRepository.getPaymentMethods())
-            .thenAnswer((_) async => []);
+            .thenAnswer((_) async => left(NoPaymentMethods()));
 
         await _pumpTestWidget(
           tester,
@@ -58,7 +60,7 @@ void main() {
           'When an exception occurs while loading payment methods are loaded '
           'display error state', (WidgetTester tester) async {
         when(() => _paymentMethodsRepository.getPaymentMethods())
-            .thenThrow(Exception('No Network Connection'));
+            .thenAnswer((_) async => left(NetworkFailure()));
 
         /// Load Payment Methods List
         await _pumpTestWidget(tester);
@@ -75,7 +77,7 @@ void main() {
           'display full list of all payment methods availed',
           (WidgetTester tester) async {
         when(() => _paymentMethodsRepository.getPaymentMethods())
-            .thenAnswer((_) async => paymentMethods);
+            .thenAnswer((_) async => right(paymentMethods.toPaymentDetails()));
 
         /// Load Payment Methods List
         await _pumpTestWidget(tester);

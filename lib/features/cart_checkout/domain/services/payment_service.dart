@@ -1,82 +1,65 @@
-import 'dart:convert';
-
+import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
-import 'package:uuid/uuid.dart';
+import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/di/di_environment.dart';
 
 import '../domains.dart';
 
-@LazySingleton(as: IPaymentRepository)
+/// The gRPC payment handling service
+///
+/// * [IPaymentRepository.getPaymentMethods] - Since all payment
+/// methods will be provided by the backend, this method hits the
+/// gRPC end-point that returns a list of payment methods from which
+/// active ones signified by the
+/// [PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE] status can be filtered.
+///
+/// * [IPaymentRepository.checkoutPayment] - Currently this method is
+/// buggy and will always fail since the app has to pass product variants
+/// [ProductVariant] which in a security & design perspective is a huge flaw.
+///
+/// Once the proto request for checkout has been trimmed down to hopefully only
+/// the *store_id* and *customer_id* (Which can be accessed via `Bearer token`)
+/// meaning only *store_id* in this case. This can be refactored.
+@LazySingleton(as: IPaymentRepository, env: DiEnvironment.grpcEnvs)
 class PaymentService implements IPaymentRepository {
-  final Uuid uuid;
   final OrderServiceClient orderServiceClient;
 
-  PaymentService(this.uuid, this.orderServiceClient);
+  PaymentService(this.orderServiceClient);
 
   @override
-  Future<List<PaymentChannel>> getPaymentMethods() async {
-    final paymentMethods = await orderServiceClient
-        .getAvailablePaymentMethod(GetAvailablePaymentMethodRequest());
+  RepoResult<List<PaymentMethodDetails>> getPaymentMethods() async {
+    try {
+      final paymentMethodsResponse = await orderServiceClient
+          .getAvailablePaymentMethod(GetAvailablePaymentMethodRequest());
 
-    return paymentMethods.paymentMethods
-        .where(
-          (channel) =>
-              channel.status ==
-              PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
-        )
-        .toList();
+      final activePaymentMethods =
+          paymentMethodsResponse.paymentMethods.where(channelIsActive).toList();
+
+      if (activePaymentMethods.isEmpty) return left(NoPaymentMethods());
+
+      return right(activePaymentMethods.toPaymentDetails());
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
   }
 
   @override
-  Future<String> checkoutPayment(PaymentMethod method) async {
-    if (method == PaymentMethod.PAYMENT_METHOD_GOPAY) {
-      // TODO - Replace with grpc call for checkout
-      final resp = await http.post(
-        Uri.parse('https://api.sandbox.midtrans.com/v2/charge'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-              'Basic ${dotenv.get('MIDTRANS_SANDBOX_API_KEY', fallback: '')}'
-        },
-        body: jsonEncode({
-          'payment_type': 'gopay',
-          'transaction_details': {'order_id': uuid.v4(), 'gross_amount': 1000},
-          'item_details': {
-            'id': 'test-item-1',
-            'price': 1000,
-            'quantity': 1,
-            'name': 'test-item'
-          },
-          'customer_details': {
-            'first_name': 'Test',
-            'last_name': 'Customer',
-            'email': 'customer@test.com',
-            'phone': '+82888888888'
-          },
-          'gopay': {
-            'enable_callback': true,
-            'callback_url': 'dropezy://storefront/order/gopay/finish'
-          }
-        }),
+  RepoResult<String> checkoutPayment(PaymentMethod method) async {
+    try {
+      // TODO(obella465): Fix once minimal submission details are provided
+
+      final checkoutRequest = CheckoutRequest(
+        storeId: 'store_11',
+        paymentMethod: method,
       );
 
-      if (resp.statusCode == 200) {
-        final data = jsonDecode(resp.body) as Map<String, dynamic>;
+      final checkoutResponse =
+          await orderServiceClient.checkout(checkoutRequest);
 
-        if (data.containsKey('actions')) {
-          final deepLink = (data['actions'] as List<dynamic>)
-              .map((action) => action as Map<String, dynamic>)
-              .firstWhere(
-                (action) => action['name'] == 'deeplink-redirect',
-              )['url'] as String;
-
-          return deepLink;
-        }
-      }
+      return right(checkoutResponse.deeplink);
+    } on Exception catch (e) {
+      return left(e.toFailure);
     }
-
-    throw Exception('Could not complete payment');
   }
 }

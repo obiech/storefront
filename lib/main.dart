@@ -29,10 +29,6 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          lazy: true,
-          create: (context) => getIt<PaymentMethodCubit>(),
-        ),
-        BlocProvider(
           lazy: false,
           create: (context) => getIt<CartBloc>()..add(const LoadCart()),
         ),

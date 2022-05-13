@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -51,7 +52,8 @@ void main() {
         'When there is no selected payment method '
         'should be disabled', (WidgetTester tester) async {
       /// arrange
-      when(() => _repository.getPaymentMethods()).thenAnswer((_) async => []);
+      when(() => _repository.getPaymentMethods())
+          .thenAnswer((_) async => left(NoPaymentMethods()));
 
       /// act
       await _pumpTestWidget(tester);
@@ -70,12 +72,13 @@ void main() {
         'When checkout is initiated '
         'should show loading', (WidgetTester tester) async {
       /// arrange
-      when(() => _repository.getPaymentMethods())
-          .thenAnswer((_) async => samplePaymentMethods);
+      when(() => _repository.getPaymentMethods()).thenAnswer(
+        (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      );
 
       when(() => _repository.checkoutPayment(any())).thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 2));
-        return '';
+        return right('');
       });
 
       /// act
@@ -112,10 +115,12 @@ void main() {
         'When there is an error checking out '
         'should show error snackbar', (WidgetTester tester) async {
       /// arrange
-      when(() => _repository.getPaymentMethods())
-          .thenAnswer((_) async => samplePaymentMethods);
+      when(() => _repository.getPaymentMethods()).thenAnswer(
+        (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      );
+
       when(() => _repository.checkoutPayment(any()))
-          .thenThrow(Exception('Error checking out'));
+          .thenAnswer((_) async => left(NetworkFailure('')));
 
       /// act
       await _pumpTestWidget(tester);
@@ -123,7 +128,7 @@ void main() {
       await _paymentMethodsCubit.queryPaymentMethods();
       await tester.pumpAndSettle();
 
-      verify(() => _repository.getPaymentMethods()).called(2);
+      verify(() => _repository.getPaymentMethods()).called(1);
 
       /// assert
       expect(CartCheckoutScreenFinders.buyButton, findsOneWidget);

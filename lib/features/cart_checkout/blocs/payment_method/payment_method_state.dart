@@ -27,6 +27,17 @@ class LoadedPaymentMethods extends PaymentMethodState {
 
   @override
   List<Object> get props => [methods, activePaymentMethod];
+
+  /// Create copy
+  LoadedPaymentMethods copyWith({
+    List<PaymentMethodDetails>? methods,
+    PaymentMethodDetails? activePaymentMethod,
+  }) {
+    return LoadedPaymentMethods(
+      methods ?? this.methods,
+      activePaymentMethod ?? this.activePaymentMethod,
+    );
+  }
 }
 
 /// When an error has occurred while loading [PaymentMethodDetails]s
