@@ -17,7 +17,7 @@ class ProductInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          product.price.toCurrency(),
+          product.priceAfterDiscount.toCurrency(),
           style: context.res.styles.productTileProductName,
         ),
         const SizedBox(height: 4),
@@ -25,10 +25,7 @@ class ProductInformation extends StatelessWidget {
           Row(
             children: [
               Text(
-                // TODO: Replace with discount from backend when available
-                (int.parse(product.price) - int.parse(product.discount!))
-                    .toString()
-                    .toCurrency(),
+                product.price.toCurrency(),
                 style: context.res.styles.productTileSlashedPrice,
               ),
               const SizedBox(width: 8),

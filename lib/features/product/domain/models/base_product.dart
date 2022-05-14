@@ -35,6 +35,15 @@ abstract class BaseProduct extends Equatable {
   /// it holds the default variant's discount
   final String? discount;
 
+  // TODO: Fetch this value from backend when discount module is available
+  /// Result of [price] subtracted by [discount].
+  ///
+  /// Returns [price] if [discount] is null.
+  String get priceAfterDiscount => discount == null
+      ? price
+      : ((int.tryParse(price) ?? 0) - (int.tryParse(discount!) ?? 0))
+          .toString();
+
   /// Image URL of product/variant.
   ///
   /// For the case of the product,

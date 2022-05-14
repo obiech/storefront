@@ -43,6 +43,7 @@ void main() {
           tester.assertCommonWidgets(product);
 
           expect(find.byType(DiscountTag), findsOneWidget);
+          expect(find.text(product.price.toCurrency()), findsOneWidget);
           expect(find.byType(ProductBadge), findsNothing);
         },
       );
@@ -116,7 +117,10 @@ extension WidgetTesterX on WidgetTester {
       findsOneWidget,
     );
     expect(find.text(product.name), findsOneWidget);
-    expect(find.text(product.price.toCurrency()), findsOneWidget);
+    expect(
+      find.text(product.priceAfterDiscount.toCurrency()),
+      findsOneWidget,
+    );
 
     // TODO: Replace with proper tests once UoM is added into model
     expect(find.text('Unit of Measurement'), findsOneWidget);
