@@ -414,6 +414,9 @@ class EnglishStrings implements BaseStrings {
 
   /// Cart Page
   @override
+  String get shoppingConfirmation => 'Shopping Confirmation';
+
+  @override
   String get addProduct => 'Add product';
 
   @override
@@ -426,7 +429,7 @@ class EnglishStrings implements BaseStrings {
   String get deliveryDetails => 'Delivery Details';
 
   @override
-  String get basket => 'Basket';
+  String get cart => 'Cart';
 
   @override
   String get useDropezyPoints => 'Use Dropezy Points';

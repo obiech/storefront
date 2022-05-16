@@ -1,42 +1,34 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 
-import '../../../core/shared_widgets/dropezy_scaffold.dart';
+import '../../../core/core.dart';
 import '../../../di/injection.dart';
+import '../../../features/cart_checkout/blocs/blocs.dart';
 import '../widgets/widgets.dart';
 
+part 'wrapper.dart';
+
+// TODO: rename file to Page
 class CartCheckoutPage extends StatelessWidget {
   const CartCheckoutPage({Key? key}) : super(key: key);
-  static const routeName = '/cart-checkout';
 
   @override
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
-      title: 'Konfirmasi Belanja',
+      title: context.res.strings.shoppingConfirmation,
       childPadding: EdgeInsets.zero,
       child: Column(
-        children: [
-          const Expanded(
+        children: const [
+          Expanded(
             child: CartBodyWidget(),
           ),
-          MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => getIt<PaymentCheckoutCubit>(),
-              ),
-              BlocProvider(
-                create: (context) =>
-                    getIt<PaymentMethodCubit>()..queryPaymentMethods(),
-              )
-            ],
-            child: const CartCheckout(
-              price: '10300',
-              discount: '12300',
-              preferredPayment: 'OVO',
-              points: '100',
-            ),
+          CartCheckout(
+            price: '10300',
+            discount: '12300',
+            preferredPayment: 'OVO',
+            points: '100',
           ),
         ],
       ),

@@ -30,7 +30,7 @@ import '../features/profile/index.dart';
     AutoRoute(page: PinInputScreenWrapper),
 
     /// Cart checkout
-    AutoRoute(page: CartCheckoutPage),
+    AutoRoute(page: CartCheckoutScreenWrapper),
     AutoRoute(
       page: OrderStatusWrapperScreen,
       path: OrderStatusWrapperScreen.routeName,

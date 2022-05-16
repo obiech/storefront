@@ -415,6 +415,9 @@ class IndonesianStrings implements BaseStrings {
 
   /// Cart Page
   @override
+  String get shoppingConfirmation => 'Konfirmasi Belanja';
+
+  @override
   String get addProduct => 'Tambah produk';
 
   @override
@@ -427,7 +430,7 @@ class IndonesianStrings implements BaseStrings {
   String get deliveryDetails => 'Detail Pengiriman';
 
   @override
-  String get basket => 'Keranjang';
+  String get cart => 'Keranjang';
 
   @override
   String get useDropezyPoints => 'Pakai Dropezy Points';

@@ -13,21 +13,42 @@ import '../domains.dart';
 class DummyCartService implements ICartRepository {
   late CartModel _cart;
 
+  static const deliveryFee = 1500000;
+
+  static const initialVariant = VariantModel(
+    variantId: 'mango-id',
+    sku: 'mango-sku',
+    name: 'Sweet Mangoes',
+    price: '3000000',
+    stock: 3,
+    discount: '1000000',
+    defaultImageUrl: 'image-url',
+    imagesUrls: ['image-url'],
+    unit: '500g',
+  );
+
   @override
   RepoResult<CartModel> loadCart() async {
     await Future.delayed(const Duration(seconds: 1));
 
-    _cart = const CartModel(
+    _cart = CartModel(
       id: 'cart-id-1',
       storeId: 'store-id-1',
-      items: [],
+      items: const [
+        CartItemModel(
+          variant: initialVariant,
+          quantity: 1,
+        )
+      ],
       paymentSummary: CartPaymentSummaryModel(
         discount: '000',
-        deliveryFee: '1500000',
+        deliveryFee: deliveryFee.toString(),
         subTotal: '000',
         total: '000',
       ),
     );
+
+    _calculatePaymentSummary();
 
     return right(_cart);
   }
@@ -53,12 +74,19 @@ class DummyCartService implements ICartRepository {
           prev + item.quantity * (int.tryParse(item.variant.price) ?? 0),
     );
 
+    final newDiscount = _cart.items.fold<int>(
+      0,
+      (prev, item) =>
+          prev +
+          item.quantity * (int.tryParse(item.variant.discount ?? '000') ?? 0),
+    );
+
     _cart = _cart.copyWith(
       paymentSummary: CartPaymentSummaryModel(
-        discount: '000',
-        deliveryFee: '1500000',
+        discount: newDiscount.toString(),
+        deliveryFee: deliveryFee.toString(),
         subTotal: newTotal.toString(),
-        total: newTotal.toString(),
+        total: (newTotal + deliveryFee - newDiscount).toString(),
       ),
     );
   }
