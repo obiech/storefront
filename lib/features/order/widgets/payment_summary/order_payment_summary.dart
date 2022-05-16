@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/shared_widgets/savings_ribbon.dart';
 
 import '../../../../core/utils/_exporter.dart';
 
 part 'parts/row.dart';
+part 'parts/skeleton.dart';
 
 /// A widget for displaying a summary of order payment,
 /// from top to bottom:
