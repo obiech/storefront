@@ -53,6 +53,9 @@ import '../features/profile/index.dart';
     /// Address related
     AutoRoute(page: RequestLocationAccessPage),
     AutoRoute(page: SearchLocationPage),
+
+    /// Profile related
+    AutoRoute(page: EditProfilePage),
   ],
 )
 class $AppRouter {}

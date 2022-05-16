@@ -26,13 +26,37 @@ void main() {
 
   group('[ProfilePage]', () {
     testWidgets(
-      'should display Account and General section',
+      'should display Header, Account, and General section '
+      'when page is loaded',
       (tester) async {
         final context = await tester.pumpProfilePage(stackRouter);
 
+        expect(find.byType(ProfileHeader), findsOneWidget);
         expect(find.byType(ProfileAccountSection), findsOneWidget);
         expect(find.byType(ProfileGeneralSection), findsOneWidget);
         expect(find.text(context.res.strings.signOut), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'should navigate to Edit Profile Page '
+      'when edit icon is tapped',
+      (tester) async {
+        await tester.pumpProfilePage(stackRouter);
+
+        await tester.tap(find.byKey(ProfilePageKeys.editProfileButton));
+        await tester.pumpAndSettle();
+
+        final capturedRoutes =
+            verify(() => stackRouter.push(captureAny())).captured;
+
+        // there should only be one route that's being pushed
+        expect(capturedRoutes.length, 1);
+
+        final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+        // expecting the right route being pushed
+        expect(routeInfo, isA<EditProfileRoute>());
       },
     );
 
@@ -74,22 +98,22 @@ void main() {
         },
       );
     });
-  });
 
-  group('ProfileGeneralSection', () {
-    testWidgets(
-      'should display all correct menu tiles '
-      'when page is rendered',
-      (tester) async {
-        final context = await tester.pumpProfilePage(stackRouter);
+    group('ProfileGeneralSection', () {
+      testWidgets(
+        'should display all correct menu tiles '
+        'when page is rendered',
+        (tester) async {
+          final context = await tester.pumpProfilePage(stackRouter);
 
-        expect(find.text(context.res.strings.privacyPolicy), findsOneWidget);
-        expect(find.text(context.res.strings.help), findsOneWidget);
-        expect(find.text(context.res.strings.termsOfUse), findsOneWidget);
-        expect(find.text(context.res.strings.howItWorks), findsOneWidget);
-        expect(find.text(context.res.strings.aboutUs), findsOneWidget);
-      },
-    );
+          expect(find.text(context.res.strings.privacyPolicy), findsOneWidget);
+          expect(find.text(context.res.strings.help), findsOneWidget);
+          expect(find.text(context.res.strings.termsOfUse), findsOneWidget);
+          expect(find.text(context.res.strings.howItWorks), findsOneWidget);
+          expect(find.text(context.res.strings.aboutUs), findsOneWidget);
+        },
+      );
+    });
   });
 }
 

@@ -496,6 +496,9 @@ class EnglishStrings implements BaseStrings {
 
   /// Profile Page
   @override
+  String hiUser(String user) => 'Hi, $user';
+
+  @override
   String get aboutUs => 'About Us';
 
   @override

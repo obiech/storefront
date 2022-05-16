@@ -304,6 +304,7 @@ abstract class BaseStrings {
   String get whereIsYourAddress;
 
   /// Profile Page
+  String hiUser(String name);
   String get changeAddress;
   String get changePin;
   String get myVoucher;

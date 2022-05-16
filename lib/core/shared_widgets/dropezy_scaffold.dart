@@ -31,10 +31,12 @@ class DropezyScaffold extends StatelessWidget {
     this.bodyColor = Colors.white,
     this.toolbarHeight,
     this.bodyAlignment,
+    this.header,
   }) : super(key: key);
 
   /// uses [Text] widget as AppBar title
   factory DropezyScaffold.textTitle({
+    Widget? header,
     required Widget child,
     required String title,
     bool useWhiteBody = true,
@@ -54,6 +56,7 @@ class DropezyScaffold extends StatelessWidget {
       actions: actions,
       toolbarHeight: toolBarHeight,
       bodyAlignment: bodyAlignment,
+      header: header,
       child: child,
     );
   }
@@ -69,6 +72,10 @@ class DropezyScaffold extends StatelessWidget {
   final double? toolbarHeight;
 
   final Alignment? bodyAlignment;
+
+  /// Widget that will be shown below app bar
+  /// and above the white rounded body
+  final Widget? header;
 
   final bool useRoundedBody;
   final Widget child;
@@ -114,21 +121,30 @@ class DropezyScaffold extends StatelessWidget {
       ),
       resizeToAvoidBottomInset: true,
       body: useRoundedBody
-          ? ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft:
-                    Radius.circular(res.dimens.bottomSheetHorizontalPadding),
-                topRight:
-                    Radius.circular(res.dimens.bottomSheetHorizontalPadding),
-              ),
-              child: Container(
-                color: bodyColor,
-                width: double.infinity,
-                height: double.infinity,
-                alignment: bodyAlignment ?? Alignment.center,
-                padding: childPadding,
-                child: child,
-              ),
+          ? Column(
+              children: [
+                header ?? const SizedBox.shrink(),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(
+                        res.dimens.bottomSheetHorizontalPadding,
+                      ),
+                      topRight: Radius.circular(
+                        res.dimens.bottomSheetHorizontalPadding,
+                      ),
+                    ),
+                    child: Container(
+                      color: bodyColor,
+                      width: double.infinity,
+                      height: double.infinity,
+                      alignment: bodyAlignment ?? Alignment.center,
+                      padding: childPadding,
+                      child: child,
+                    ),
+                  ),
+                ),
+              ],
             )
           : child,
     );

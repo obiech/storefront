@@ -496,6 +496,9 @@ class IndonesianStrings implements BaseStrings {
 
   /// Profile Page
   @override
+  String hiUser(String username) => 'Hai, $username';
+
+  @override
   String get aboutUs => 'Tentang Kami';
 
   @override
