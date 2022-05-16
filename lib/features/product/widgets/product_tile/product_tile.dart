@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../domain/models/product_model.dart';
 
 part 'parts/discount_tag.dart';
 part 'parts/product_information.dart';
+part 'parts/skeleton.dart';
 
 /// Widget for displaying product variant information such as:
 /// - Product Image (left side)
