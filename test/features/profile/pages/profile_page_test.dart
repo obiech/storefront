@@ -69,9 +69,6 @@ void main() {
 
           expect(find.text(context.res.strings.myOrders), findsOneWidget);
           expect(find.text(context.res.strings.changeAddress), findsOneWidget);
-          expect(find.text(context.res.strings.changePin), findsOneWidget);
-          expect(find.text(context.res.strings.dropezyPoints), findsOneWidget);
-          expect(find.text(context.res.strings.myVoucher), findsOneWidget);
           expect(find.text(context.res.strings.selectLanguage), findsOneWidget);
         },
       );

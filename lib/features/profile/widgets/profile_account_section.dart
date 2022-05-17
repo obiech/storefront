@@ -36,21 +36,6 @@ class ProfileAccountSection extends StatelessWidget {
             onTap: () {},
           ),
           ProfileMenuTile.icon(
-            icon: DropezyIcons.lock,
-            title: context.res.strings.changePin,
-            onTap: () {},
-          ),
-          ProfileMenuTile.svgImage(
-            assetPath: context.res.paths.icCoin,
-            title: context.res.strings.dropezyPoints,
-            onTap: () {},
-          ),
-          ProfileMenuTile.icon(
-            icon: DropezyIcons.voucher_outlined,
-            title: context.res.strings.myVoucher,
-            onTap: () {},
-          ),
-          ProfileMenuTile.icon(
             icon: DropezyIcons.language,
             title: context.res.strings.selectLanguage,
             onTap: () {},
