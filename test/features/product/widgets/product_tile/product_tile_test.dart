@@ -7,15 +7,15 @@ import 'package:storefront_app/features/product/index.dart';
 void main() {
   /// Base model for test has to have a null discount
   /// because it affects the outcome
-  const mockProduct = ProductModel(
-    productId: 'selada-romaine-id',
+  const mockVariant = VariantModel(
+    variantId: 'selada-romaine-id',
     sku: 'selada-romaine-sku',
     name: 'Selada Romaine',
     price: '15000',
-    variants: [],
-    defaultProduct: '',
     stock: 100,
-    thumbnailUrl: 'some-url',
+    unit: '250g',
+    defaultImageUrl: 'image-url-1',
+    imagesUrls: ['image-url-1', 'image-url-2'],
   );
 
   group(
@@ -24,8 +24,8 @@ void main() {
       testWidgets(
         'should display only necessary product information',
         (tester) async {
-          const product = mockProduct;
-          await tester.pumpProductTile(product: product);
+          const product = mockVariant;
+          await tester.pumpProductTile(variant: product);
 
           tester.assertCommonWidgets(product);
 
@@ -37,8 +37,8 @@ void main() {
       testWidgets(
         'Should display discount information if available',
         (tester) async {
-          final product = mockProduct.copyWith(discount: '100000');
-          await tester.pumpProductTile(product: product);
+          final product = mockVariant.copyWith(discount: '100000');
+          await tester.pumpProductTile(variant: product);
 
           tester.assertCommonWidgets(product);
 
@@ -51,8 +51,8 @@ void main() {
       testWidgets(
         'Should display stock warning if stock is low',
         (tester) async {
-          final product = mockProduct.copyWith(stock: 1);
-          await tester.pumpProductTile(product: product);
+          final product = mockVariant.copyWith(stock: 1);
+          await tester.pumpProductTile(variant: product);
 
           tester.assertCommonWidgets(product);
 
@@ -65,10 +65,10 @@ void main() {
       testWidgets(
         'should display Widget that is passed in [trailing]',
         (tester) async {
-          const product = mockProduct;
+          const product = mockVariant;
           const trailing = Icon(Icons.plus_one);
           await tester.pumpProductTile(
-            product: product,
+            variant: product,
             trailing: trailing,
           );
 
@@ -82,7 +82,7 @@ void main() {
 
 extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpProductTile({
-    required ProductModel product,
+    required VariantModel variant,
     Widget? trailing,
   }) async {
     late BuildContext ctx;
@@ -93,7 +93,7 @@ extension WidgetTesterX on WidgetTester {
             builder: (context) {
               ctx = context;
               return ProductTile(
-                product: product,
+                variant: variant,
                 trailing: trailing,
               );
             },
@@ -107,22 +107,21 @@ extension WidgetTesterX on WidgetTester {
 
   /// Assert that product image, name and price
   /// are always present
-  void assertCommonWidgets(ProductModel product) {
+  void assertCommonWidgets(VariantModel variant) {
     expect(
       find.byWidgetPredicate(
         (widget) =>
             widget is CachedNetworkImage &&
-            widget.imageUrl == product.thumbnailUrl,
+            widget.imageUrl == variant.thumbnailUrl,
       ),
       findsOneWidget,
     );
-    expect(find.text(product.name), findsOneWidget);
+    expect(find.text(variant.name), findsOneWidget);
     expect(
-      find.text(product.priceAfterDiscount.toCurrency()),
+      find.text(variant.priceAfterDiscount.toCurrency()),
       findsOneWidget,
     );
 
-    // TODO: Replace with proper tests once UoM is added into model
-    expect(find.text('Unit of Measurement'), findsOneWidget);
+    expect(find.text(variant.unit), findsOneWidget);
   }
 }

@@ -5,10 +5,10 @@ class ProductInformation extends StatelessWidget {
   @visibleForTesting
   const ProductInformation({
     Key? key,
-    required this.product,
+    required this.variant,
   }) : super(key: key);
 
-  final BaseProduct product;
+  final VariantModel variant;
 
   @override
   Widget build(BuildContext context) {
@@ -17,45 +17,44 @@ class ProductInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          product.priceAfterDiscount.toCurrency(),
+          variant.priceAfterDiscount.toCurrency(),
           style: context.res.styles.productTileProductName,
         ),
         const SizedBox(height: 4),
-        if (product.discount != null)
+        if (variant.discount != null)
           Row(
             children: [
               Text(
-                product.price.toCurrency(),
+                variant.price.toCurrency(),
                 style: context.res.styles.productTileSlashedPrice,
               ),
               const SizedBox(width: 8),
               // TODO: Replace with discount from backend when available
               DiscountTag(
-                discountPercentage: (int.parse(product.discount!) /
-                        int.parse(product.price) *
+                discountPercentage: (int.parse(variant.discount!) /
+                        int.parse(variant.price) *
                         100)
                     .ceil(),
               ),
             ],
           ),
         Text(
-          product.name,
+          variant.name,
           style: context.res.styles.caption2,
         ),
         Row(
           children: [
             Text(
-              // TODO: Replace with UoM when property is added
-              'Unit of Measurement',
+              variant.unit,
               style: context.res.styles.caption3.copyWith(
                 color: const Color(0xFF70717D),
               ),
             ),
-            if (product.isAlmostDepleted) ...[
+            if (variant.isAlmostDepleted) ...[
               const SizedBox(width: 8),
               ProductBadge.stockWarning(
                 context.res,
-                product.stock,
+                variant.stock,
               ),
             ]
           ],

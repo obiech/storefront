@@ -22,13 +22,13 @@ part 'parts/skeleton.dart';
 class ProductTile extends StatelessWidget {
   const ProductTile({
     Key? key,
-    required this.product,
+    required this.variant,
     this.trailing,
     this.imageSize = 60,
   }) : super(key: key);
 
-  /// Product information.
-  final ProductModel product;
+  /// Product variant information.
+  final VariantModel variant;
 
   /// An optional widget at the end. For example:
   /// - Add to Cart button
@@ -50,12 +50,12 @@ class ProductTile extends StatelessWidget {
                 width: imageSize,
                 height: imageSize,
                 child: DropezyImage(
-                  url: product.thumbnailUrl,
+                  url: variant.thumbnailUrl,
                   borderRadius: 8,
                 ),
               ),
               const SizedBox(width: 8),
-              ProductInformation(product: product),
+              ProductInformation(variant: variant),
             ],
           ),
         ),
