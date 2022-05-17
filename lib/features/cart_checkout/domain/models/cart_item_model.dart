@@ -4,16 +4,16 @@ part of 'cart_model.dart';
 /// customer's shopping cart
 class CartItemModel extends Equatable {
   const CartItemModel({
-    required this.product,
+    required this.variant,
     required this.quantity,
   });
 
   /// The product variant information
-  final ProductModel product;
+  final VariantModel variant;
 
-  /// The quantity of [product] inside this cart
+  /// The quantity of [variant] inside this cart
   final int quantity;
 
   @override
-  List<Object?> get props => [product, quantity];
+  List<Object?> get props => [variant, quantity];
 }

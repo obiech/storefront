@@ -1,12 +1,12 @@
 import 'package:storefront_app/features/cart_checkout/domain/models/cart_model.dart';
 
-import '../product/product_models.dart';
+import '../product/variant_models.dart';
 
 const mockCartModel = CartModel(
   id: 'cart-1',
   storeId: 'store-1',
   items: [
-    CartItemModel(product: productSeladaRomaine, quantity: 1),
+    CartItemModel(variant: variantMango, quantity: 1),
   ],
   paymentSummary: CartPaymentSummaryModel(
     deliveryFee: '1500000',

@@ -2,7 +2,7 @@ import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:dropezy_proto/v1/payment/payment.pb.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../product/domain/models/product_model.dart';
+import '../../../product/domain/domain.dart';
 
 part 'cart_item_model.dart';
 part 'cart_model.g.dart';
@@ -48,5 +48,5 @@ extension CartModelX on CartModel {
   ///
   /// Returns -1 if a [CartItemModel] with [productId] is not found.
   int indexOfProduct(String productId) =>
-      items.indexWhere((item) => item.product.id == productId);
+      items.indexWhere((item) => item.variant.id == productId);
 }

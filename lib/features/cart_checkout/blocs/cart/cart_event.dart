@@ -14,11 +14,11 @@ class LoadCart extends CartEvent {
 /// When user adds a product variant into the cart
 /// by tapping on 'Add To Cart' button.
 class AddCartItem extends CartEvent {
-  const AddCartItem(this.product);
+  const AddCartItem(this.variant);
 
   /// Product variant being added to cart
-  final ProductModel product;
+  final VariantModel variant;
 
   @override
-  List<Object?> get props => [product];
+  List<Object?> get props => [variant];
 }

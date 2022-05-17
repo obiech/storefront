@@ -7,8 +7,8 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/cart_models.dart'
     as cart_fixtures;
-import '../../../../../test_commons/fixtures/product/product_models.dart'
-    as product_fixtures;
+import '../../../../../test_commons/fixtures/product/variant_models.dart'
+    as variant_fixtures;
 import '../../mocks.dart';
 
 void main() {
@@ -21,7 +21,7 @@ void main() {
       setUp(() {
         cartRepository = MockCartService();
         bloc = CartBloc(cartRepository);
-        registerFallbackValue(product_fixtures.productBellPepperYellow);
+        registerFallbackValue(variant_fixtures.variantMango);
       });
 
       test(
@@ -76,18 +76,18 @@ void main() {
         'when [AddToCart] event is added',
         () {
           final initialCart = cart_fixtures.mockCartModel.copyWith(items: []);
-          const mockProduct = product_fixtures.productSeladaRomaine;
+          const mockVariant = variant_fixtures.variantMango;
 
           final resultCart = initialCart.copyWith(
             items: [
               const CartItemModel(
-                product: mockProduct,
+                variant: mockVariant,
                 quantity: 1,
               ),
             ],
           );
 
-          const event = AddCartItem(mockProduct);
+          const event = AddCartItem(mockVariant);
 
           final seedState = CartLoaded(
             cart: initialCart,
@@ -102,7 +102,7 @@ void main() {
           void verifyFn(CartBloc bloc) => verify(
                 () => bloc.cartRepository.addItem(
                   initialCart.storeId,
-                  event.product,
+                  event.variant,
                 ),
               ).called(1);
 
@@ -114,7 +114,7 @@ void main() {
               when(
                 () => cartRepository.addItem(
                   any(),
-                  event.product,
+                  event.variant,
                 ),
               ).thenAnswer((_) async {
                 return right(resultCart);
@@ -138,7 +138,7 @@ void main() {
               when(
                 () => cartRepository.addItem(
                   any(),
-                  event.product,
+                  event.variant,
                 ),
               ).thenAnswer((_) async {
                 return left(Failure('Failed to add item'));

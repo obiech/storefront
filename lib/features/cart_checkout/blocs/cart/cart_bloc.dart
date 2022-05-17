@@ -4,9 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:storefront_app/features/cart_checkout/index.dart';
 
-import '../../../product/domain/models/product_model.dart';
+import '../../../product/domain/domain.dart';
+import '../../domain/domains.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -39,7 +39,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  /// Adds product [event.product] into cart.
+  /// Adds product [event.variant] into cart.
   ///
   /// Can only be used when [state] is [CartLoaded].
   FutureOr<void> _addCartItem(
@@ -54,7 +54,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final currState = state as CartLoaded;
 
-    final index = currState.cart.indexOfProduct(event.product.id);
+    final index = currState.cart.indexOfProduct(event.variant.id);
 
     // Ensure item is not yet added
     if (index > -1) {
@@ -63,7 +63,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       return;
     }
 
-    final newItem = CartItemModel(product: event.product, quantity: 1);
+    final newItem = CartItemModel(variant: event.variant, quantity: 1);
 
     // Trigger loading to signal we're waiting for cart summary
     // while still maintaining current cart state
@@ -76,7 +76,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final result = await cartRepository.addItem(
       currState.cart.storeId,
-      event.product,
+      event.variant,
     );
 
     result.fold(
