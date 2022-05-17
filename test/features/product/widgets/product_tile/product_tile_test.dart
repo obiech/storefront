@@ -2,8 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/product/domain/models/product_model.dart';
-import 'package:storefront_app/features/product/widgets/product_tile/product_tile.dart';
+import 'package:storefront_app/features/product/index.dart';
 
 void main() {
   /// Base model for test has to have a null discount
@@ -13,8 +12,6 @@ void main() {
     sku: 'selada-romaine-sku',
     name: 'Selada Romaine',
     price: '15000',
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     stock: 100,

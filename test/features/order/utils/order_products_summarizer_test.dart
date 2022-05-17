@@ -13,7 +13,7 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              productId: productSeladaRomaine.productId,
+              productId: productSeladaRomaine.id,
               productName: productSeladaRomaine.name,
               thumbnailUrl: productSeladaRomaine.thumbnailUrl,
               price: productSeladaRomaine.price,
@@ -36,7 +36,7 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              productId: productSeladaRomaine.productId,
+              productId: productSeladaRomaine.id,
               productName: productSeladaRomaine.name,
               thumbnailUrl: productSeladaRomaine.thumbnailUrl,
               price: productSeladaRomaine.price,
@@ -46,7 +46,7 @@ void main() {
                   (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              productId: productBellPepperYellow.productId,
+              productId: productBellPepperYellow.id,
               productName: productBellPepperYellow.name,
               thumbnailUrl: productBellPepperYellow.thumbnailUrl,
               price: productBellPepperYellow.price,
@@ -72,7 +72,7 @@ void main() {
         () {
           final products = [
             OrderProductModel(
-              productId: productSeladaRomaine.productId,
+              productId: productSeladaRomaine.id,
               productName: productSeladaRomaine.name,
               thumbnailUrl: productSeladaRomaine.thumbnailUrl,
               price: productSeladaRomaine.price,
@@ -82,7 +82,7 @@ void main() {
                   (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              productId: productBellPepperYellow.productId,
+              productId: productBellPepperYellow.id,
               productName: productBellPepperYellow.name,
               thumbnailUrl: productBellPepperYellow.thumbnailUrl,
               price: productBellPepperYellow.price,
@@ -92,7 +92,7 @@ void main() {
                   (int.parse(productBellPepperYellow.price) * 1).toString(),
             ),
             OrderProductModel(
-              productId: productSeladaRomaine.productId,
+              productId: productSeladaRomaine.id,
               productName: productSeladaRomaine.name,
               thumbnailUrl: productSeladaRomaine.thumbnailUrl,
               price: productSeladaRomaine.price,
@@ -102,7 +102,7 @@ void main() {
                   (int.parse(productSeladaRomaine.price) * 3).toString(),
             ),
             OrderProductModel(
-              productId: productBellPepperYellow.productId,
+              productId: productBellPepperYellow.id,
               productName: productBellPepperYellow.name,
               thumbnailUrl: productBellPepperYellow.thumbnailUrl,
               price: productBellPepperYellow.price,

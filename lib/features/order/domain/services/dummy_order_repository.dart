@@ -19,8 +19,6 @@ class DummyOrderRepository extends IOrderRepository {
     name: 'Selada Romaine',
     price: '1500000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -33,8 +31,6 @@ class DummyOrderRepository extends IOrderRepository {
     name: 'Minyak Goreng Sania 2L',
     price: '7000000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -47,8 +43,6 @@ class DummyOrderRepository extends IOrderRepository {
     name: 'Paprika Kuning',
     price: '1000000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -67,7 +61,7 @@ class DummyOrderRepository extends IOrderRepository {
         total: '10500000',
         productsBought: [
           OrderProductModel(
-            productId: productSeladaRomaine.productId,
+            productId: productSeladaRomaine.id,
             productName: productSeladaRomaine.name,
             thumbnailUrl: productSeladaRomaine.thumbnailUrl,
             price: productSeladaRomaine.price,
@@ -76,7 +70,7 @@ class DummyOrderRepository extends IOrderRepository {
             grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -99,7 +93,7 @@ class DummyOrderRepository extends IOrderRepository {
         total: '16500000',
         productsBought: [
           OrderProductModel(
-            productId: productBellPepperYellow.productId,
+            productId: productBellPepperYellow.id,
             productName: productBellPepperYellow.name,
             thumbnailUrl: productBellPepperYellow.thumbnailUrl,
             price: productBellPepperYellow.price,
@@ -109,7 +103,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productBellPepperYellow.price) * 3).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -119,7 +113,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
-            productId: productSeladaRomaine.productId,
+            productId: productSeladaRomaine.id,
             productName: productSeladaRomaine.name,
             thumbnailUrl: productSeladaRomaine.thumbnailUrl,
             price: productSeladaRomaine.price,
@@ -128,7 +122,7 @@ class DummyOrderRepository extends IOrderRepository {
             grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -138,7 +132,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 4).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -162,7 +156,7 @@ class DummyOrderRepository extends IOrderRepository {
         total: '16500000',
         productsBought: [
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -172,7 +166,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
-            productId: productSeladaRomaine.productId,
+            productId: productSeladaRomaine.id,
             productName: productSeladaRomaine.name,
             thumbnailUrl: productSeladaRomaine.thumbnailUrl,
             price: productSeladaRomaine.price,
@@ -181,7 +175,7 @@ class DummyOrderRepository extends IOrderRepository {
             grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -191,7 +185,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -201,7 +195,7 @@ class DummyOrderRepository extends IOrderRepository {
                 (int.parse(productCookingOilSania.price) * 1).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,
@@ -229,7 +223,7 @@ class DummyOrderRepository extends IOrderRepository {
         total: '11000000',
         productsBought: [
           OrderProductModel(
-            productId: productSeladaRomaine.productId,
+            productId: productSeladaRomaine.id,
             productName: productSeladaRomaine.name,
             thumbnailUrl: productSeladaRomaine.thumbnailUrl,
             price: productSeladaRomaine.price,
@@ -238,7 +232,7 @@ class DummyOrderRepository extends IOrderRepository {
             grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
           ),
           OrderProductModel(
-            productId: productCookingOilSania.productId,
+            productId: productCookingOilSania.id,
             productName: productCookingOilSania.name,
             thumbnailUrl: productCookingOilSania.thumbnailUrl,
             price: productCookingOilSania.price,

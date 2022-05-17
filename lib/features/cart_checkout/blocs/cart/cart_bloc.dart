@@ -54,7 +54,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final currState = state as CartLoaded;
 
-    final index = currState.cart.indexOfProduct(event.product.productId);
+    final index = currState.cart.indexOfProduct(event.product.id);
 
     // Ensure item is not yet added
     if (index > -1) {

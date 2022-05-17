@@ -1,6 +1,6 @@
 import 'package:dropezy_proto/v1/inventory/inventory.pbgrpc.dart';
-import 'package:equatable/equatable.dart';
 
+import 'base_product.dart';
 import 'market_status.dart';
 import 'variant_model.dart';
 
@@ -15,26 +15,24 @@ import 'variant_model.dart';
 ///
 /// Variants can also be derived from varying units of the same product
 /// e.g Olive oil with variants of 3 litre bottle & 5 litre bottle.
-class ProductModel extends Equatable {
+class ProductModel extends BaseProduct {
   const ProductModel({
-    required this.productId,
-    required this.name,
-    required this.categoryOneId,
-    required this.categoryTwoId,
+    required String productId,
+    required String name,
     required this.variants,
-    required this.sku,
-    required this.stock,
-    required this.price,
-    required this.thumbnailUrl,
+    required String sku,
+    required int stock,
+    required String price,
+    required String thumbnailUrl,
 
     // TODO(obella465): Fix once fields below are confirmed
-    this.discount,
+    String? discount,
     this.marketStatus,
     required this.defaultProduct,
 
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
     this.status = ProductStatus.ACTIVE,
-  });
+  }) : super(productId, name, sku, stock, price, discount, thumbnailUrl);
 
   /// Creates a [ProductModel] from gRPC [Product]
   factory ProductModel.fromPb(Product inventoryProduct) {
@@ -43,8 +41,6 @@ class ProductModel extends Equatable {
     return ProductModel(
       productId: inventoryProduct.productId,
       name: inventoryProduct.name,
-      categoryOneId: inventoryProduct.category1Id,
-      categoryTwoId: inventoryProduct.category2Id,
       variants: inventoryProduct.variants.map(VariantModel.fromPb).toList(),
       // TODO(obella465): Request backend to include default product that will
       // provide imageUrl, price & discount
@@ -65,8 +61,6 @@ class ProductModel extends Equatable {
     return const ProductModel(
       productId: '',
       name: '',
-      categoryOneId: '',
-      categoryTwoId: '',
       variants: [],
       defaultProduct: '',
       stock: 0,
@@ -77,24 +71,9 @@ class ProductModel extends Equatable {
     );
   }
 
-  // Unique identifier of the product
-  final String productId;
-
-  // Derived fields from default variant
-  final String sku;
-  final int stock;
-  final String price;
-  final String? discount;
-
   final MarketStatus? marketStatus;
 
   final ProductStatus status;
-
-  // Id of product's category 1
-  final String categoryOneId;
-
-  // Id of the product's category 2
-  final String categoryTwoId;
 
   /// TODO(obella465): Retire once default flow confirmed
   /// @Iyo
@@ -106,12 +85,6 @@ class ProductModel extends Equatable {
   // Default product variant Id
   final String defaultProduct;
 
-  // name is the name of the product.
-  final String name;
-
-  /// URL for product thumbnail image
-  final String thumbnailUrl;
-
   /// List of product variants.
   ///
   /// variants can be derived from units or flavours
@@ -120,23 +93,17 @@ class ProductModel extends Equatable {
 
   @override
   List<Object?> get props => [
-        productId,
-        name,
-        categoryOneId,
-        categoryTwoId,
+        ...super.props,
         variants,
         defaultProduct,
-        discount,
         status,
         marketStatus,
       ];
 
   /// Create copy of object
   ProductModel copyWith({
-    String? productId,
+    String? id,
     String? name,
-    String? categoryOneId,
-    String? categoryTwoId,
     List<VariantModel>? variants,
     String? sku,
     int? stock,
@@ -148,10 +115,8 @@ class ProductModel extends Equatable {
     MarketStatus? marketStatus,
   }) =>
       ProductModel(
-        productId: productId ?? this.productId,
+        productId: id ?? this.id,
         name: name ?? this.name,
-        categoryOneId: categoryOneId ?? this.categoryOneId,
-        categoryTwoId: categoryTwoId ?? this.categoryTwoId,
         variants: variants ?? this.variants,
         defaultProduct: defaultProduct ?? this.defaultProduct,
         stock: stock ?? this.stock,
@@ -183,16 +148,9 @@ enum ProductStatus {
 extension ProductX on ProductModel {
   /// Default variant will be used for product image, price & discount
   VariantModel get defaultVariant => variants.firstWhere(
-        (variant) => variant.variantId == defaultProduct,
+        (variant) => variant.id == defaultProduct,
         orElse: () => variants.first,
       );
-
-  /// Product is out of stock if all variants are out of stock
-  bool get isOutOfStock => status == ProductStatus.OUT_OF_STOCK;
-
-  /// Show stock left warning
-  /// TODO(obella465): Affirm implementation with @Iyo for variants
-  bool get isAlmostDepleted => !isOutOfStock && stock <= 3;
 }
 
 /// gRPC [Product] extension methods

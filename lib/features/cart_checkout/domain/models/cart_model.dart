@@ -48,5 +48,5 @@ extension CartModelX on CartModel {
   ///
   /// Returns -1 if a [CartItemModel] with [productId] is not found.
   int indexOfProduct(String productId) =>
-      items.indexWhere((item) => item.product.productId == productId);
+      items.indexWhere((item) => item.product.id == productId);
 }

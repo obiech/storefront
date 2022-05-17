@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
-import 'package:storefront_app/features/product/domain/models/variant_model.dart';
 
 import '../../../product/index.dart';
 import '../../index.dart';
@@ -16,6 +15,9 @@ class DummyProductSearchService implements IProductSearchRepository {
     String query, {
     int limit = 3,
   }) async {
+    // Simulate network wait
+    await Future.delayed(const Duration(seconds: 1));
+
     return right(
       ['Beanos', 'Red Beans', 'White Beans', 'Green Beans', 'Coffee Beans']
           .take(limit)
@@ -30,7 +32,7 @@ class DummyProductSearchService implements IProductSearchRepository {
     int limit = 10,
   }) async {
     // Simulate network wait
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 1));
 
     return right(
       _dummyInventory.skip(page * limit).take(limit).toList(),
@@ -45,8 +47,6 @@ const _dummyInventory = [
     name: 'Selada Romaine',
     discount: '20000',
     price: '30000',
-    categoryOneId: '',
-    categoryTwoId: '',
     stock: 2,
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
@@ -58,10 +58,26 @@ const _dummyInventory = [
         imagesUrls: [
           'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png'
         ],
+        defaultImageUrl:
+            'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
         price: '30000',
         sku: 'selada-romaine-sku',
         stock: 2,
-      )
+        unit: '500g',
+      ),
+      VariantModel(
+        variantId: 'selada-romaine-variant-2-id',
+        name: 'Selada Romaine 2',
+        imagesUrls: [
+          'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png'
+        ],
+        defaultImageUrl:
+            'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
+        price: '35000',
+        sku: 'selada-romaine-2-sku',
+        stock: 0,
+        unit: '500g',
+      ),
     ],
   ),
   ProductModel(
@@ -70,20 +86,21 @@ const _dummyInventory = [
     name: 'Sweet Mangoes',
     price: '30000',
     stock: 15,
-    categoryOneId: '',
-    categoryTwoId: '',
     defaultProduct: 'mango-variant-id',
     marketStatus: MarketStatus.FLASH_SALE,
     variants: [
       VariantModel(
         variantId: 'mango-variant-id',
         name: 'Sweet Mangoes',
+        defaultImageUrl:
+            'https://png2.cleanpng.com/sh/7680fbe8a6c4a90575503c3f3feefe81/L0KzQYm3WMIyN5p1g5H0aYP2gLBuTgBweqVmet5uLX7ohMj2kvsub6NmiNpyY4OwhMPojwNxaaNqhtVELXPvecG0ggJ1NZpyRd9qbnfyPcX5gf50eJJ3fdD9LXbsfLa0kP5oNZ9mhdd8LUXlR7S5VPM5PpY3UaYCLkK8Q4SBV8Y2OWY4TKoBMkW2RoW8UcIveJ9s/kisspng-portable-network-graphics-transparency-clip-art-im-mango-transparent-file-png-names-5b7c24c86e2947.2933876515348625364512.png',
         imagesUrls: [
           'https://png2.cleanpng.com/sh/7680fbe8a6c4a90575503c3f3feefe81/L0KzQYm3WMIyN5p1g5H0aYP2gLBuTgBweqVmet5uLX7ohMj2kvsub6NmiNpyY4OwhMPojwNxaaNqhtVELXPvecG0ggJ1NZpyRd9qbnfyPcX5gf50eJJ3fdD9LXbsfLa0kP5oNZ9mhdd8LUXlR7S5VPM5PpY3UaYCLkK8Q4SBV8Y2OWY4TKoBMkW2RoW8UcIveJ9s/kisspng-portable-network-graphics-transparency-clip-art-im-mango-transparent-file-png-names-5b7c24c86e2947.2933876515348625364512.png'
         ],
         price: '30000',
         sku: 'mango-variant-sku',
         stock: 15,
+        unit: '500g',
       )
     ],
     thumbnailUrl:
@@ -94,8 +111,6 @@ const _dummyInventory = [
     sku: 'irish-sku',
     name: 'Irish Potatoes',
     price: '10000',
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     stock: 50,
@@ -110,8 +125,6 @@ const _dummyInventory = [
     name: 'Sweet Pepper',
     price: '15000',
     discount: '20000',
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     stock: 2,
@@ -125,8 +138,6 @@ const _dummyInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -139,8 +150,6 @@ const _dummyInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -152,8 +161,6 @@ const _dummyInventory = [
     name: 'Irish Potatoes',
     price: '10000',
     stock: 50,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     marketStatus: MarketStatus.BEST_SELLER,
@@ -167,8 +174,6 @@ const _dummyInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -181,8 +186,6 @@ const _dummyInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -195,8 +198,6 @@ const _dummyInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:

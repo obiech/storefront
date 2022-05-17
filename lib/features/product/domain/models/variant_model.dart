@@ -1,36 +1,28 @@
 import 'package:dropezy_proto/v1/inventory/inventory.pb.dart';
-import 'package:equatable/equatable.dart';
+
+import 'base_product.dart';
 
 /// Representation of a product variant sold in Dropezy.
 ///
 /// TODO: add other information such as unit
-class VariantModel extends Equatable {
-  // product variant's unique identifier.
-  final String variantId;
-
-  // name of the product variant.
-  final String name;
-
+class VariantModel extends BaseProduct {
   // product variant's image urls.
   final List<String> imagesUrls;
 
-  // product variant price.
-  final String price;
-
-  // sku of product variant.
-  final String sku;
-
-  // available stock for this product.
-  final int stock;
+  // product variant unit.
+  final String unit;
 
   const VariantModel({
-    required this.variantId,
-    required this.name,
+    required String variantId,
+    required String name,
     required this.imagesUrls,
-    required this.price,
-    required this.sku,
-    required this.stock,
-  });
+    required String defaultImageUrl,
+    required String price,
+    String? discount,
+    required String sku,
+    required int stock,
+    required this.unit,
+  }) : super(variantId, name, sku, stock, price, discount, defaultImageUrl);
 
   /// Creates a [VariantModel] from gRPC [Variant]
   factory VariantModel.fromPb(Variant productVariant) {
@@ -38,12 +30,16 @@ class VariantModel extends Equatable {
       variantId: productVariant.variantId,
       name: productVariant.name,
       imagesUrls: productVariant.imagesUrls,
+      defaultImageUrl: productVariant.imagesUrls.first,
       price: productVariant.price.num,
       sku: productVariant.sku,
       stock: productVariant.stock,
+
+      // TODO(obella465) - Restore to required when added to proto
+      unit: '500g',
     );
   }
 
   @override
-  List<Object?> get props => [variantId, name, imagesUrls, price, sku, stock];
+  List<Object?> get props => [...super.props, unit, imagesUrls];
 }

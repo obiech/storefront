@@ -12,7 +12,7 @@ final orderAwaitingPayment = OrderModel(
   total: '103500',
   productsBought: [
     OrderProductModel(
-      productId: productSeladaRomaine.productId,
+      productId: productSeladaRomaine.id,
       productName: productSeladaRomaine.name,
       thumbnailUrl: productSeladaRomaine.thumbnailUrl,
       price: productSeladaRomaine.price,
@@ -21,7 +21,7 @@ final orderAwaitingPayment = OrderModel(
       grandTotal: '45000',
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -49,7 +49,7 @@ final orderPaid = OrderModel(
   total: '16500000',
   productsBought: [
     OrderProductModel(
-      productId: productBellPepperYellow.productId,
+      productId: productBellPepperYellow.id,
       productName: productBellPepperYellow.name,
       thumbnailUrl: productBellPepperYellow.thumbnailUrl,
       price: productBellPepperYellow.price,
@@ -58,7 +58,7 @@ final orderPaid = OrderModel(
       grandTotal: (int.parse(productBellPepperYellow.price) * 3).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -67,7 +67,7 @@ final orderPaid = OrderModel(
       grandTotal: (int.parse(productCookingOilSania.price) * 1).toString(),
     ),
     OrderProductModel(
-      productId: productSeladaRomaine.productId,
+      productId: productSeladaRomaine.id,
       productName: productSeladaRomaine.name,
       thumbnailUrl: productSeladaRomaine.thumbnailUrl,
       price: productSeladaRomaine.price,
@@ -76,7 +76,7 @@ final orderPaid = OrderModel(
       grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -85,7 +85,7 @@ final orderPaid = OrderModel(
       grandTotal: (int.parse(productCookingOilSania.price) * 4).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -107,7 +107,7 @@ final orderInDelivery = OrderModel(
   total: '16500000',
   productsBought: [
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -116,7 +116,7 @@ final orderInDelivery = OrderModel(
       grandTotal: (int.parse(productCookingOilSania.price) * 1).toString(),
     ),
     OrderProductModel(
-      productId: productSeladaRomaine.productId,
+      productId: productSeladaRomaine.id,
       productName: productSeladaRomaine.name,
       thumbnailUrl: productSeladaRomaine.thumbnailUrl,
       price: productSeladaRomaine.price,
@@ -125,7 +125,7 @@ final orderInDelivery = OrderModel(
       grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -134,7 +134,7 @@ final orderInDelivery = OrderModel(
       grandTotal: (int.parse(productCookingOilSania.price) * 1).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -143,7 +143,7 @@ final orderInDelivery = OrderModel(
       grandTotal: (int.parse(productCookingOilSania.price) * 1).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,
@@ -171,7 +171,7 @@ final orderArrived = OrderModel(
   total: '11000000',
   productsBought: [
     OrderProductModel(
-      productId: productSeladaRomaine.productId,
+      productId: productSeladaRomaine.id,
       productName: productSeladaRomaine.name,
       thumbnailUrl: productSeladaRomaine.thumbnailUrl,
       price: productSeladaRomaine.price,
@@ -180,7 +180,7 @@ final orderArrived = OrderModel(
       grandTotal: (int.parse(productSeladaRomaine.price) * 3).toString(),
     ),
     OrderProductModel(
-      productId: productCookingOilSania.productId,
+      productId: productCookingOilSania.id,
       productName: productCookingOilSania.name,
       thumbnailUrl: productCookingOilSania.thumbnailUrl,
       price: productCookingOilSania.price,

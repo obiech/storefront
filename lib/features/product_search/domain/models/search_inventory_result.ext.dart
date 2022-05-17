@@ -3,14 +3,11 @@ import 'package:dropezy_proto/v1/search/search.pb.dart';
 import 'package:equatable/equatable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
-import 'package:storefront_app/features/product/domain/models/variant_model.dart';
 
 extension SearchInventoryResultX on SearchInventoryResult {
   ProductModel get toProduct => ProductModel(
         productId: productId,
         name: name,
-        categoryOneId: '',
-        categoryTwoId: '',
         price: price.num,
         stock: stock,
         sku: sku,
@@ -20,10 +17,12 @@ extension SearchInventoryResultX on SearchInventoryResult {
           VariantModel(
             variantId: 'default',
             name: name,
+            defaultImageUrl: '${AssetsConfig.assetsUrl}$imageUrl',
             imagesUrls: ['${AssetsConfig.assetsUrl}$imageUrl'],
             price: price.num,
             sku: sku,
             stock: stock,
+            unit: '500g',
           )
         ],
         defaultProduct: 'default',

@@ -30,10 +30,8 @@ extension WidgetTesterX on WidgetTester {
 void main() {
   const product = seledaRomaine;
 
-  final addToCartFinder =
-      find.byKey(ValueKey('${product.productId}_add_to_cart'));
-  final qtyChangerFinder =
-      find.byKey(ValueKey('${product.productId}_qty_changer'));
+  final addToCartFinder = find.byKey(ValueKey('${product.id}_add_to_cart'));
+  final qtyChangerFinder = find.byKey(ValueKey('${product.id}_qty_changer'));
 
   final incrementButtonFinder = find.byIcon(DropezyIcons.plus);
   final decrementButtonFinder = find.byIcon(DropezyIcons.minus);

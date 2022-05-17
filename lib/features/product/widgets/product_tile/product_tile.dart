@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../../domain/models/product_model.dart';
+import '../../index.dart';
 
 part 'parts/discount_tag.dart';
 part 'parts/product_information.dart';

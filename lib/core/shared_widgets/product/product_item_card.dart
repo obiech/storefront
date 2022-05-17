@@ -214,7 +214,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                           child: value
                               ? QtyChanger(
                                   key: ValueKey(
-                                    '${widget.product.productId}_qty_changer',
+                                    '${widget.product.id}_qty_changer',
                                   ),
                                   scaleFactor: widget.scaleFactor,
                                   onQtyChanged: (qty) {
@@ -229,7 +229,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                                 )
                               : PillButton(
                                   key: ValueKey(
-                                    '${widget.product.productId}_add_to_cart',
+                                    '${widget.product.id}_add_to_cart',
                                   ),
                                   scaleFactor: widget.scaleFactor,
                                   text: widget.product.isOutOfStock

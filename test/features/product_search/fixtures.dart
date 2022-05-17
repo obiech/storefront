@@ -17,8 +17,6 @@ const pageInventory = [
     name: 'Selada Romaine',
     price: '15000',
     discount: '20000',
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     stock: 2,
@@ -32,8 +30,6 @@ const pageInventory = [
     price: '30000',
     stock: 15,
     marketStatus: MarketStatus.FLASH_SALE,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -45,8 +41,6 @@ const pageInventory = [
     name: 'Irish Potatoes',
     price: '10000',
     stock: 50,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     marketStatus: MarketStatus.BEST_SELLER,
@@ -60,8 +54,6 @@ const pageInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -74,8 +66,6 @@ const pageInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
@@ -88,8 +78,6 @@ const pageInventory = [
     price: '15000',
     discount: '20000',
     stock: 2,
-    categoryOneId: '',
-    categoryTwoId: '',
     variants: [],
     defaultProduct: '',
     thumbnailUrl:
