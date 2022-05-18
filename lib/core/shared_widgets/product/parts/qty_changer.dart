@@ -1,4 +1,4 @@
-part of 'product_item_card.dart';
+part of '../product_item_card.dart';
 
 /// Increment & Decrement product quantity
 class QtyChanger extends StatefulWidget {
@@ -46,8 +46,9 @@ class _QtyChangerState extends State<QtyChanger> {
     final res = context.res;
     return Container(
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(res.dimens.spacingLarge * widget.scaleFactor),
+        borderRadius: BorderRadius.circular(
+          res.dimens.spacingXlarge * widget.scaleFactor,
+        ),
         border: Border.all(color: const Color(0xFFE5E5E7)),
       ),
       padding: const EdgeInsets.all(3),

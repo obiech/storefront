@@ -9,11 +9,12 @@ import 'package:storefront_app/res/resources.dart';
 import '../../../features/product/index.dart';
 import '../buttons/pill_button.dart';
 
-part 'out_of_stock_overdraw.dart';
-part 'product_action.dart';
-part 'product_badge.dart';
-part 'product_item_card_loading.dart';
-part 'qty_changer.dart';
+part 'parts/out_of_stock_overdraw.dart';
+part 'parts/product_action.dart';
+part 'parts/product_badge.dart';
+part 'parts/product_item_card_loading.dart';
+part 'parts/product_variants_list.dart';
+part 'parts/qty_changer.dart';
 
 /// Show's a single inventory product's details including
 /// * Price

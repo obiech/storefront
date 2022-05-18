@@ -1,4 +1,4 @@
-part of 'product_item_card.dart';
+part of '../product_item_card.dart';
 
 /// Loading status for product tem card.
 class ProductItemCardLoading extends StatelessWidget {

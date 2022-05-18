@@ -1,4 +1,4 @@
-part of 'product_item_card.dart';
+part of '../product_item_card.dart';
 
 /// Filter to dim/gray out product item card
 class OutOfStockOverdraw extends StatelessWidget {

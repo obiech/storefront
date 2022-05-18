@@ -1,4 +1,4 @@
-part of 'product_item_card.dart';
+part of '../product_item_card.dart';
 
 /// Flash/Bestseller float widget in product item
 class ProductBadge extends StatelessWidget {

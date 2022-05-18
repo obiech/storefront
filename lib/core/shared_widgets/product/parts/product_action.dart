@@ -1,4 +1,4 @@
-part of 'product_item_card.dart';
+part of '../product_item_card.dart';
 
 /// Widget to carry out product actions such as:-
 ///
@@ -94,6 +94,14 @@ class _ProductActionState extends State<ProductAction> {
       final product = widget.product as ProductModel;
       if (product.variants.length > 1) {
         /// TODO - Open Variants Bottomsheet dialog
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.transparent,
+          builder: (ctx) {
+            return ProductVariantsList(product: product);
+          },
+        );
       } else {
         /// TODO - Add product to cart with default variant
         if (product.variants.isEmpty) return;
