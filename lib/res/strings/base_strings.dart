@@ -320,6 +320,9 @@ abstract class BaseStrings {
 
   /// Address Selection Bottom sheet
   String get addAddress;
-
   String get chooseAddress;
+
+  /// Address List
+  String get addressPrimary;
+  String get update;
 }

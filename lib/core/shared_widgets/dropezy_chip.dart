@@ -37,7 +37,7 @@ class DropezyChip extends StatelessWidget {
         fontWeight: FontWeight.w600,
         color: res.colors.blue,
       ),
-      backgroundColor: const Color(0xFFDEEBFF),
+      backgroundColor: res.colors.paleBlue,
       leading: Icon(
         DropezyIcons.delivery,
         size: 16,
@@ -127,6 +127,21 @@ class DropezyChip extends StatelessWidget {
         color: res.colors.white,
       ),
       backgroundColor: res.colors.red,
+    );
+  }
+
+  /// Used for displaying primary chip
+  factory DropezyChip.primary({
+    required Resources res,
+    required String label,
+  }) {
+    return DropezyChip(
+      label: label,
+      textStyle: res.styles.caption3.copyWith(
+        fontWeight: FontWeight.w600,
+        color: res.colors.blue,
+      ),
+      backgroundColor: const Color(0xFFD0E3FF),
     );
   }
 

@@ -540,4 +540,11 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get chooseAddress => 'Choose Address';
+
+  /// Address List
+  @override
+  String get addressPrimary => 'Primary';
+
+  @override
+  String get update => 'Update';
 }

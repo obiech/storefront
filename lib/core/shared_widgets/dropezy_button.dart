@@ -9,6 +9,8 @@ class DropezyButton extends StatelessWidget {
     required this.label,
     required this.textStyle,
     required this.backgroundColor,
+    this.leftIcon,
+    this.rightIcon,
     this.onPressed,
     this.padding,
     this.isLoading = false,
@@ -21,6 +23,8 @@ class DropezyButton extends StatelessWidget {
     TextStyle? textStyle,
     EdgeInsets? padding,
     bool isLoading = false,
+    Widget? leftIcon,
+    Widget? rightIcon,
   }) {
     return DropezyButton(
       key: key,
@@ -33,6 +37,8 @@ class DropezyButton extends StatelessWidget {
           ),
       padding: padding,
       isLoading: isLoading,
+      leftIcon: leftIcon,
+      rightIcon: rightIcon,
     );
   }
 
@@ -43,6 +49,8 @@ class DropezyButton extends StatelessWidget {
     bool isLoading = false,
     TextStyle? textStyle,
     EdgeInsets? padding,
+    Widget? leftIcon,
+    Widget? rightIcon,
   }) {
     return DropezyButton(
       key: key,
@@ -55,6 +63,8 @@ class DropezyButton extends StatelessWidget {
           ),
       padding: padding,
       isLoading: isLoading,
+      leftIcon: leftIcon,
+      rightIcon: rightIcon,
     );
   }
 
@@ -65,6 +75,8 @@ class DropezyButton extends StatelessWidget {
     bool isLoading = false,
     TextStyle? textStyle,
     EdgeInsets? padding,
+    Widget? leftIcon,
+    Widget? rightIcon,
   }) {
     return DropezyButton(
       key: key,
@@ -77,6 +89,8 @@ class DropezyButton extends StatelessWidget {
           ),
       padding: padding,
       isLoading: isLoading,
+      leftIcon: leftIcon,
+      rightIcon: rightIcon,
     );
   }
 
@@ -85,6 +99,12 @@ class DropezyButton extends StatelessWidget {
   final Color backgroundColor;
   final VoidCallback? onPressed;
   final bool isLoading;
+
+  /// optional icon shown on the left of label
+  final Widget? leftIcon;
+
+  /// optional icon shown on the right of label
+  final Widget? rightIcon;
 
   /// Button custom padding
   final EdgeInsets? padding;
@@ -104,9 +124,26 @@ class DropezyButton extends StatelessWidget {
         shape: const StadiumBorder(),
       ),
       child: !isLoading
-          ? Text(
-              label,
-              style: textStyle,
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leftIcon != null) ...[
+                  leftIcon ?? const SizedBox.shrink(),
+                  const SizedBox(
+                    width: 4.0,
+                  ),
+                ],
+                Text(
+                  label,
+                  style: textStyle,
+                ),
+                if (rightIcon != null) ...[
+                  const SizedBox(
+                    width: 4.0,
+                  ),
+                  rightIcon ?? const SizedBox.shrink(),
+                ],
+              ],
             )
           : _loadingIndicator(),
     );

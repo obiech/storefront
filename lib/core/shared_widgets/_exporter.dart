@@ -3,6 +3,7 @@ export 'bottom_sheet/dropezy_bottom_sheet.dart';
 export 'bottom_sheet/dropezy_dismissable.dart';
 export 'buttons/text_button_skip.dart';
 export 'dropezy_button.dart';
+export 'dropezy_card.dart';
 export 'dropezy_chip.dart';
 export 'dropezy_empty.dart';
 export 'dropezy_error.dart';

@@ -540,4 +540,11 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get chooseAddress => 'Pilih Alamat';
+
+  /// Address List
+  @override
+  String get addressPrimary => 'Utama';
+
+  @override
+  String get update => 'Ubah';
 }

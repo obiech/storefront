@@ -20,6 +20,8 @@ abstract class BaseColors {
 
   Color get grey6;
 
+  Color get grey7;
+
   /// Used for [TextField] [BoxDecoration] [Border] color
   Color get textFieldBorderGrey;
 

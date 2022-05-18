@@ -11,6 +11,7 @@ import 'core/core.dart';
 import 'di/config/di_config.dart';
 import 'di/di_environment.dart';
 import 'di/injection.dart';
+import 'features/address/index.dart';
 import 'features/cart_checkout/index.dart';
 
 Future<void> main() async {
@@ -32,6 +33,11 @@ Future<void> main() async {
           lazy: false,
           create: (context) => getIt<CartBloc>()..add(const LoadCart()),
         ),
+        BlocProvider(
+          lazy: false,
+          create: (_) =>
+              getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
+        )
       ],
       child: AppWidget(
         router: getIt<AppRouter>(),

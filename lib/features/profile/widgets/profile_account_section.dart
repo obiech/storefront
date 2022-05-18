@@ -33,8 +33,13 @@ class ProfileAccountSection extends StatelessWidget {
           ProfileMenuTile.icon(
             icon: DropezyIcons.pin_outlined,
             title: context.res.strings.changeAddress,
-            onTap: () {},
+            onTap: () {
+              context.pushRoute(
+                const ChangeAddressRoute(),
+              );
+            },
           ),
+          // TODO (widy): Handle Select Language
           ProfileMenuTile.icon(
             icon: DropezyIcons.language,
             title: context.res.strings.selectLanguage,
