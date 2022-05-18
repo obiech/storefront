@@ -5,4 +5,7 @@ import 'package:storefront_app/features/child_categories/index.dart';
 class ChildCategoryFinders {
   static Finder get listChildCategoryWidget =>
       find.byKey(const ValueKey(ChildCategoryKeys.childCategoryListWidget));
+
+  static Finder get gridProductCategoryWidget =>
+      find.byKey(const ValueKey(ChildCategoryKeys.productCategoryGridWidget));
 }

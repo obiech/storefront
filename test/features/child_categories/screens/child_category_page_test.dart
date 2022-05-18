@@ -22,6 +22,8 @@ void main() {
   late HttpClient httpClient;
   late StackRouter stackRouter;
 
+  const activeCategory = 0;
+
   const mockChildCategoryList = [
     ChildCategoryModel(
       id: '0',
@@ -90,7 +92,7 @@ void main() {
           [
             ChildCategoryState(
               mockParentCategoryList.childCategories,
-              mockParentCategoryList.childCategories[0],
+              mockParentCategoryList.childCategories[activeCategory],
             )
           ],
         ),
@@ -111,7 +113,7 @@ void main() {
       when(() => childCategoryCubit.state).thenAnswer(
         (invocation) => ChildCategoryState(
           mockParentCategoryList.childCategories,
-          mockParentCategoryList.childCategories[0],
+          mockParentCategoryList.childCategories[activeCategory],
         ),
       );
 
@@ -130,7 +132,10 @@ void main() {
           await pumpChildCategoriesPage(tester);
 
           expect(ChildCategoryFinders.listChildCategoryWidget, findsOneWidget);
-          // TODO (Jonathan) : Add expect for CategoryProduct in STOR-398
+          expect(
+            ChildCategoryFinders.gridProductCategoryWidget,
+            findsOneWidget,
+          );
         },
         createHttpClient: (securityContext) => httpClient,
       );
@@ -161,6 +166,67 @@ void main() {
 
           // expecting the right route being pushed
           expect(routeInfo, isA<GlobalSearchRoute>());
+        },
+        createHttpClient: (securityContext) => httpClient,
+      );
+    });
+
+    testWidgets(
+        'should do nothing '
+        'when active C2 category is tapped', (tester) async {
+      HttpOverrides.runZoned(
+        () async {
+          await pumpChildCategoriesPage(tester);
+
+          await tester.tap(find.byType(ListView).at(activeCategory));
+          await tester.pump(const Duration(seconds: 1));
+
+          expect(find.byType(ProductGridLoading), findsNothing);
+
+          verifyNever(
+            () => childCategoryCubit
+                .setActiveChildCategory(mockChildCategoryList[activeCategory]),
+          );
+
+          verifyNever(
+            () => categoryProductCubit
+                .fetchCategoryProduct(activeCategory.toString()),
+          );
+        },
+        createHttpClient: (securityContext) => httpClient,
+      );
+    });
+
+    testWidgets(
+        'should show [ProductGridLoading] '
+        'when state is [LoadingCategoryProductState]', (tester) async {
+      HttpOverrides.runZoned(
+        () async {
+          when(() => categoryProductCubit.state).thenAnswer(
+            (invocation) => LoadingCategoryProductState(),
+          );
+
+          await pumpChildCategoriesPage(tester);
+
+          expect(find.byType(ProductGridLoading), findsWidgets);
+        },
+        createHttpClient: (securityContext) => httpClient,
+      );
+    });
+
+    testWidgets(
+        'should show [DropezyError] '
+        'when state is [ErrorCategoryProductState]', (tester) async {
+      HttpOverrides.runZoned(
+        () async {
+          when(() => categoryProductCubit.state).thenAnswer(
+            (invocation) => const ErrorCategoryProductState('Fake Error'),
+          );
+
+          await pumpChildCategoriesPage(tester);
+
+          expect(find.byType(DropezyError), findsWidgets);
+          expect(find.text('Fake Error'), findsOneWidget);
         },
         createHttpClient: (securityContext) => httpClient,
       );

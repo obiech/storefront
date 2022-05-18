@@ -17,8 +17,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     stock: 2,
     variants: [],
     defaultProduct: '',
-    thumbnailUrl:
-        'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
+    thumbnailUrl: 'https://pngimg.com/uploads/spinach/spinach_PNG65.png',
   );
 
   static const productSeledri = ProductModel(
@@ -32,25 +31,25 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     defaultProduct: '',
     thumbnailUrl: 'https://pngimg.com/uploads/celery/celery_PNG12.png',
   );
+
   final productsCategoryList = [
     // Sayuran Batang
     productSeledri.copyWith(id: '4'),
     productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
-    productSeledri.copyWith(id: '4'),
+    //Sayuran Bunga
+    productSeledri.copyWith(id: '1'),
+    productSeledri.copyWith(id: '1'),
+    productSeladaRomaine.copyWith(id: '1'),
+    productSeladaRomaine.copyWith(id: '1'),
     //Sayuran Bawang
     productSeladaRomaine.copyWith(id: '5'),
     productSeladaRomaine.copyWith(id: '5'),
+    productSeledri.copyWith(id: '5'),
+    productSeledri.copyWith(id: '5'),
     productSeladaRomaine.copyWith(id: '5'),
     productSeladaRomaine.copyWith(id: '5'),
-    productSeladaRomaine.copyWith(id: '5'),
-    productSeladaRomaine.copyWith(id: '5'),
-    productSeladaRomaine.copyWith(id: '5'),
-    productSeladaRomaine.copyWith(id: '5'),
+    productSeledri.copyWith(id: '5'),
+    productSeledri.copyWith(id: '5'),
   ];
 
   @override

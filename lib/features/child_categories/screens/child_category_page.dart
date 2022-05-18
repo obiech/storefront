@@ -51,10 +51,10 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
         )
       ],
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.23,
-            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: EdgeInsets.only(
                 left: context.res.dimens.spacingMedium,
@@ -73,50 +73,9 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
               ),
             ),
           ),
-          Expanded(
-            child: BlocBuilder<CategoryProductCubit, CategoryProductState>(
-              builder: (context, state) {
-                if (state is LoadedCategoryProductState) {
-                  // TODO (Jonathan) : Move to its own Widget in STOR-398
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: MediaQuery.of(context).orientation ==
-                              Orientation.portrait
-                          ? 2
-                          : 3,
-                      childAspectRatio: 13 / 25,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 12,
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return ProductItemCard(
-                        product: state.productModelList[index],
-                      );
-                    },
-                    shrinkWrap: true,
-                    itemCount: state.productModelList.length,
-                  );
-                } else if (state is LoadingCategoryProductState) {
-                  // TODO (Jonathan) : Use card loading in search page for STOR-398
-                  return const Text('Loading');
-                } else if (state is ErrorCategoryProductState) {
-                  // TODO (Jonathan) : Use search error Widget in STOR-398
-                  return Text(
-                    state.message,
-                    maxLines: 1,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: context.res.colors.red,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }
-
-                return const SizedBox();
-              },
-            ),
-          )
+          const Expanded(
+            child: ProductCategoryGrid(),
+          ),
         ],
       ),
     );

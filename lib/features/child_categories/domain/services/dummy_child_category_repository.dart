@@ -155,13 +155,12 @@ class DummyChildCategoryRepository {
       id: '4',
       name: 'Daging Kalengan',
       thumbnailUrl:
-          'https://www.pngitem.com/pimgs/b/156-1563990_canned-food-png.png',
+          'https://freepngimg.com/thumb/meat/34425-6-beef-meat-transparent-image-thumb.png',
     ),
     ChildCategoryModel(
       id: '5',
       name: 'Ikan Kalengan',
-      thumbnailUrl:
-          'https://www.pngitem.com/pimgs/b/32-329413_tuna-fish-png.png',
+      thumbnailUrl: 'https://pngimg.com/uploads/fish/small/fish_PNG25090.png',
     ),
   ];
 }

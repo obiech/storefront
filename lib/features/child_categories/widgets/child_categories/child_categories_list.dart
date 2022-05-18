@@ -23,15 +23,17 @@ class ChildCategoriesList extends StatelessWidget {
             final childCategory = state.childCategoriesList[index];
             final isActive = state.selectedChildCategory.categoryId ==
                 childCategory.categoryId;
-            final childCategoryCubit = context.read<ChildCategoryCubit>();
+
             return GestureDetector(
               onTap: () {
-                childCategoryCubit.setActiveChildCategory(
-                  childCategory,
-                );
-                context
-                    .read<CategoryProductCubit>()
-                    .fetchCategoryProduct(childCategory.categoryId);
+                if (childCategory != state.selectedChildCategory) {
+                  context.read<ChildCategoryCubit>().setActiveChildCategory(
+                        childCategory,
+                      );
+                  context
+                      .read<CategoryProductCubit>()
+                      .fetchCategoryProduct(childCategory.categoryId);
+                }
               },
               child: Column(
                 children: [
