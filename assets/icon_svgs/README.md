@@ -23,7 +23,7 @@ check | <img height="40" src="check.svg" alt="check"/>
 check_on | <img height="40" src="check_on.svg" alt="check_on"/>
 check_off | <img height="40" src="check_off.svg" alt="check_off"/>
 chevron_down | <img height="40" src="chevron_down.svg" alt="chevron_down"/>
-chevron_left | <img height="40" src="chevron_left.svg" alt="chevron_left"/>
+chevron_right | <img height="40" src="chevron_right.svg" alt="chevron_right"/>
 cross | <img height="40" src="cross.svg" alt="cross"/>
 cross_circled | <img height="40" src="cross_circled.svg" alt="cross_circled"/>
 deals | <img height="40" src="deals.svg" alt="deals"/>

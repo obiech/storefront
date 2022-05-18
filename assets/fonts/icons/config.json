@@ -148,7 +148,7 @@
     },
     {
       "uid": "e1572a838df9d410e302eedc21bc7fcc",
-      "css": "chevron_left",
+      "css": "chevron_right",
       "code": 59402,
       "src": "custom_icons",
       "selected": true,
@@ -157,7 +157,7 @@
         "width": 1000
       },
       "search": [
-        "chevron_left"
+        "chevron_right"
       ]
     },
     {

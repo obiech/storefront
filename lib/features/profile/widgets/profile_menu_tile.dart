@@ -38,7 +38,7 @@ class ProfileMenuTile extends StatelessWidget {
                   ),
                 ),
                 const Icon(
-                  DropezyIcons.chevron_left,
+                  DropezyIcons.chevron_right,
                   color: DropezyColors.black,
                 ),
               ],
