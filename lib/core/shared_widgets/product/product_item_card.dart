@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/res/resources.dart';
 
@@ -10,7 +10,9 @@ import '../../../features/product/index.dart';
 import '../buttons/pill_button.dart';
 
 part 'out_of_stock_overdraw.dart';
+part 'product_action.dart';
 part 'product_badge.dart';
+part 'product_item_card_loading.dart';
 part 'qty_changer.dart';
 
 /// Show's a single inventory product's details including
@@ -25,7 +27,7 @@ part 'qty_changer.dart';
 /// For an item not in cart it offers a button to add the item to cart
 /// and for one in the cart increment and decrement options for the cart
 /// quantity.
-class ProductItemCard extends StatefulWidget {
+class ProductItemCard extends StatelessWidget {
   /// Inventory product
   final ProductModel product;
 
@@ -49,29 +51,11 @@ class ProductItemCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ProductItemCard> createState() => _ProductItemCardState();
-}
-
-class _ProductItemCardState extends State<ProductItemCard> {
-  // Add to cart / Quantity Changer State
-  late ValueNotifier<bool> _qtyIsGreaterThanZero;
-
-  // Item Quantity
-  int _qty = 0;
-
-  @override
-  void initState() {
-    _qtyIsGreaterThanZero = ValueNotifier(widget.itemQuantity > 0);
-    _qty = widget.itemQuantity;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final res = context.res;
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(
-        textScaleFactor: widget.scaleFactor,
+        textScaleFactor: scaleFactor,
       ),
       child: Stack(
         fit: StackFit.expand,
@@ -86,7 +70,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                 ),
               ],
               borderRadius: BorderRadius.circular(
-                widget.borderRadius,
+                borderRadius,
               ),
               color: res.colors.white,
             ),
@@ -97,61 +81,46 @@ class _ProductItemCardState extends State<ProductItemCard> {
                 children: [
                   Stack(
                     children: [
-                      ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(widget.borderRadius),
-                        child: Container(
-                          color: res.colors.lightBlue,
-                          padding: EdgeInsets.all(res.dimens.spacingMiddle),
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: CachedNetworkImage(
-                              imageUrl: widget.product.thumbnailUrl,
-                              fit: BoxFit.contain,
-                              errorWidget: (_, __, ___) => Icon(
-                                DropezyIcons.logo,
-                                size: 65 * widget.scaleFactor,
-                              ),
-                            ),
-                          ),
-                        ),
+                      DropezyImage(
+                        url: product.thumbnailUrl,
+                        borderRadius: borderRadius,
                       ),
-                      if (widget.product.marketStatus != null)
+                      if (product.marketStatus != null)
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.bottomLeft,
-                            child: widget.product.marketStatus ==
-                                    MarketStatus.FLASH_SALE
-                                ? ProductBadge.flash(
-                                    res,
-                                    scaleFactor: widget.scaleFactor,
-                                  )
-                                : ProductBadge.bestSeller(
-                                    res,
-                                    scaleFactor: widget.scaleFactor,
-                                  ),
+                            child:
+                                product.marketStatus == MarketStatus.FLASH_SALE
+                                    ? ProductBadge.flash(
+                                        res,
+                                        scaleFactor: scaleFactor,
+                                      )
+                                    : ProductBadge.bestSeller(
+                                        res,
+                                        scaleFactor: scaleFactor,
+                                      ),
                           ),
                         ),
 
                       /// Stock is almost over
-                      if (widget.product.isAlmostDepleted)
+                      if (product.isAlmostDepleted)
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.topRight,
                             child: ProductBadge.stockWarning(
                               res,
-                              widget.product.stock,
-                              scaleFactor: widget.scaleFactor,
+                              product.stock,
+                              scaleFactor: scaleFactor,
                             ),
                           ),
                         )
                     ],
                   ),
                   SizedBox(
-                    height: res.dimens.spacingMedium * widget.scaleFactor,
+                    height: res.dimens.spacingMedium * scaleFactor,
                   ),
                   Text(
-                    widget.product.price.toCurrency(),
+                    product.price.toCurrency(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: res.styles.caption2.copyWith(
@@ -159,12 +128,12 @@ class _ProductItemCardState extends State<ProductItemCard> {
                       fontSize: res.styles.caption2.fontSize,
                     ),
                   ),
-                  if (widget.product.discount != null) ...[
+                  if (product.discount != null) ...[
                     SizedBox(
-                      height: 3 * widget.scaleFactor,
+                      height: 3 * scaleFactor,
                     ),
                     Text(
-                      widget.product.discount!.toCurrency(),
+                      product.discount!.toCurrency(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: res.styles.caption3.copyWith(
@@ -174,10 +143,10 @@ class _ProductItemCardState extends State<ProductItemCard> {
                     )
                   ],
                   SizedBox(
-                    height: 3 * widget.scaleFactor,
+                    height: 3 * scaleFactor,
                   ),
                   Text(
-                    widget.product.name.capitalize(),
+                    product.name.capitalize(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: res.styles.caption3.copyWith(
@@ -187,7 +156,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
                     ),
                   ),
                   SizedBox(
-                    height: 2 * widget.scaleFactor,
+                    height: 2 * scaleFactor,
                   ),
                   //TODO(obella465): Where will unit be got
                   Text(
@@ -199,72 +168,24 @@ class _ProductItemCardState extends State<ProductItemCard> {
                   ),
                   const Expanded(child: SizedBox()),
                   SizedBox(
-                    height: 30 * widget.scaleFactor,
+                    height: 30 * scaleFactor,
                     width: double.infinity,
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: _qtyIsGreaterThanZero,
-                      builder: (_, value, __) {
-                        return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          transitionBuilder: (child, animation) =>
-                              FadeTransition(
-                            opacity: animation,
-                            child: child,
-                          ),
-                          child: value
-                              ? QtyChanger(
-                                  key: ValueKey(
-                                    '${widget.product.id}_qty_changer',
-                                  ),
-                                  scaleFactor: widget.scaleFactor,
-                                  onQtyChanged: (qty) {
-                                    /// TODO(obella465) - Update cart quantity
-                                    _qty = qty;
-                                    if (_qty == 0) {
-                                      _qtyIsGreaterThanZero.value = false;
-                                    }
-                                  },
-                                  value: _qty,
-                                  maxValue: widget.product.stock,
-                                )
-                              : PillButton(
-                                  key: ValueKey(
-                                    '${widget.product.id}_add_to_cart',
-                                  ),
-                                  scaleFactor: widget.scaleFactor,
-                                  text: widget.product.isOutOfStock
-                                      ? res.strings.outOfStock
-                                      : res.strings.addToCart,
-                                  color: res.colors.lightBlue,
-                                  textColor: res.colors.blue,
-                                  onTap: !widget.product.isOutOfStock
-                                      ? () {
-                                          /// TODO (obella465)- Add to cart
-                                          _qty = 1;
-                                          _qtyIsGreaterThanZero.value = true;
-                                        }
-                                      : null,
-                                ),
-                        );
-                      },
+                    child: ProductAction(
+                      productQuantity: itemQuantity,
+                      product: product,
+                      scaleFactor: scaleFactor,
                     ),
                   )
                 ],
               ),
             ),
           ),
-          if (widget.product.isOutOfStock)
+          if (product.isOutOfStock)
             OutOfStockOverdraw(
-              borderRadius: widget.borderRadius,
+              borderRadius: borderRadius,
             ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _qtyIsGreaterThanZero.dispose();
-    super.dispose();
   }
 }

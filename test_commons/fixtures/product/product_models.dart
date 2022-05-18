@@ -1,4 +1,4 @@
-import 'package:storefront_app/features/product/domain/models/product_model.dart';
+import 'package:storefront_app/features/product/index.dart';
 
 /// Dummy Products
 const productSeladaRomaine = ProductModel(
@@ -42,7 +42,18 @@ const seledaRomaine = ProductModel(
   name: 'Selada Romaine',
   price: '15000',
   discount: '20000',
-  variants: [],
+  variants: [
+    VariantModel(
+      variantId: '',
+      name: '',
+      imagesUrls: ['default-url'],
+      defaultImageUrl: 'default-url',
+      price: '30000',
+      sku: 'default-sku',
+      stock: 5,
+      unit: '200 ml',
+    )
+  ],
   defaultProduct: '',
   stock: 100,
   thumbnailUrl:

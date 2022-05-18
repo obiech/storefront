@@ -30,70 +30,9 @@ extension WidgetTesterX on WidgetTester {
 void main() {
   const product = seledaRomaine;
 
-  final addToCartFinder = find.byKey(ValueKey('${product.id}_add_to_cart'));
-  final qtyChangerFinder = find.byKey(ValueKey('${product.id}_qty_changer'));
-
-  final incrementButtonFinder = find.byIcon(DropezyIcons.plus);
-  final decrementButtonFinder = find.byIcon(DropezyIcons.minus);
-
-  testWidgets('When quantity is zero, show add to cart button',
-      (WidgetTester tester) async {
-    await tester.pumpProductItemCard(product);
-    expect(addToCartFinder, findsOneWidget);
-    expect(qtyChangerFinder, findsNothing);
-  });
-
-  testWidgets('When quantity is greater than zero, show Quantity Changer',
-      (WidgetTester tester) async {
-    await tester.pumpProductItemCard(product, itemQuantity: 2);
-    expect(addToCartFinder, findsNothing);
-    expect(qtyChangerFinder, findsOneWidget);
-  });
-
-  testWidgets('When quantity is decremented, value displayed is decremented',
-      (WidgetTester tester) async {
-    const quantity = 18;
-    await tester.pumpProductItemCard(product, itemQuantity: quantity);
-    expect(find.text(quantity.toString()), findsOneWidget);
-
-    await tester.tap(decrementButtonFinder);
-    await tester.pump();
-    expect(find.text((quantity - 1).toString()), findsOneWidget);
-  });
-
-  testWidgets('When quantity is incremented, value displayed is incremented',
-      (WidgetTester tester) async {
-    const quantity = 18;
-    await tester.pumpProductItemCard(product, itemQuantity: quantity);
-    expect(find.text(quantity.toString()), findsOneWidget);
-
-    await tester.tap(incrementButtonFinder);
-    await tester.pump();
-    expect(find.text((quantity + 1).toString()), findsOneWidget);
-  });
-
-  testWidgets('Quantity Changer & "Add to cart" transition is smooth',
-      (WidgetTester tester) async {
-    await tester.pumpProductItemCard(product);
-    expect(addToCartFinder, findsOneWidget);
-    expect(qtyChangerFinder, findsNothing);
-
-    // Increment qty to one
-    await tester.tap(addToCartFinder);
-    await tester.pumpAndSettle();
-    expect(qtyChangerFinder, findsOneWidget);
-    expect(addToCartFinder, findsNothing);
-
-    // decrement to zero
-    await tester.tap(decrementButtonFinder);
-    await tester.pumpAndSettle();
-    expect(addToCartFinder, findsOneWidget);
-    expect(qtyChangerFinder, findsNothing);
-  });
-
   testWidgets(
-      'When a product is out of stock, gray it out '
-      'and show out of stock label', (WidgetTester tester) async {
+      'show "out of stock" label and gray out card '
+      'when a product is out of stock', (WidgetTester tester) async {
     /// arrange
     await tester.pumpProductItemCard(
       product.copyWith(

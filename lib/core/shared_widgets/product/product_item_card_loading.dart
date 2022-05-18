@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
-import 'package:storefront_app/core/core.dart';
+part of 'product_item_card.dart';
 
 /// Loading status for product tem card.
 class ProductItemCardLoading extends StatelessWidget {
