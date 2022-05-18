@@ -9,10 +9,13 @@ part 'parts/product_information.dart';
 part 'parts/skeleton.dart';
 
 /// Widget for displaying product variant information such as:
-/// - Product Image (left side)
-/// - Product information such as price, discount,
+/// - Variant Image (left side)
+/// - Variant information such as price, discount,
 /// and unit of measurement (middle)
 /// - Optional [trailing] Widget. (right side)
+///
+/// When product variant is out of stock,
+/// left and middle section will have an opacity of 50%.
 ///
 /// This Widget is used in Cart Page and in Product Item Card.
 ///
@@ -44,19 +47,22 @@ class ProductTile extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Row(
-            children: [
-              SizedBox(
-                width: imageSize,
-                height: imageSize,
-                child: DropezyImage(
-                  url: variant.thumbnailUrl,
-                  borderRadius: 8,
+          child: Opacity(
+            opacity: !variant.isOutOfStock ? 1 : 0.5,
+            child: Row(
+              children: [
+                SizedBox(
+                  width: imageSize,
+                  height: imageSize,
+                  child: DropezyImage(
+                    url: variant.thumbnailUrl,
+                    borderRadius: 8,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              ProductInformation(variant: variant),
-            ],
+                const SizedBox(width: 8),
+                ProductInformation(variant: variant),
+              ],
+            ),
           ),
         ),
         if (trailing != null) ...[
