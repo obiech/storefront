@@ -14,23 +14,14 @@ class SearchResults extends StatefulWidget {
 
 class _SearchResultsState extends State<SearchResults> {
   final _scrollController = ScrollController();
-  late double aspectRatio;
-  late double horizontalSpacing;
-  late double verticalSpacing;
+
   late double scaleFactor;
   late int columns;
-  late double cardBorderRadius;
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_loadMoreItemsFromInventory);
-
-    horizontalSpacing = 12;
-    verticalSpacing = 12;
-
-    aspectRatio = 13 / 25;
-    cardBorderRadius = 25;
   }
 
   @override
@@ -57,46 +48,18 @@ class _SearchResultsState extends State<SearchResults> {
               List.generate(columns, (_) => ProductModel.loading()),
             );
           }
-
-          return GridView.builder(
+          return ProductGridView(
+            columns: columns,
+            productModelList: inventoryProducts,
             physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.only(
-              right: res.dimens.spacingLarge,
-              left: res.dimens.spacingLarge,
-              top: res.dimens.spacingLarge,
-              bottom: res.dimens.spacingLarge,
-            ),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columns,
-              childAspectRatio: aspectRatio,
-              crossAxisSpacing: horizontalSpacing,
-              mainAxisSpacing: verticalSpacing,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              final productModel = inventoryProducts[index];
-
-              if (productModel.status != ProductStatus.LOADING) {
-                return ProductItemCard(
-                  key: ValueKey('product_item$index'),
-                  product: productModel,
-                  scaleFactor: scaleFactor,
-                  borderRadius: cardBorderRadius,
-                );
-              } else {
-                return ProductItemCardLoading(borderRadius: cardBorderRadius);
-              }
-            },
-            itemCount: inventoryProducts.length,
+            padding: EdgeInsets.all(res.dimens.spacingLarge),
+            scaleFactor: scaleFactor,
             controller: _scrollController,
           );
         } else if (state is SearchingForItemInInventory) {
           return ProductGridLoading(
-            aspectRatio: aspectRatio,
-            horizontalSpacing: horizontalSpacing,
-            verticalSpacing: verticalSpacing,
             scaleFactor: scaleFactor,
             columns: columns,
-            borderRadius: cardBorderRadius,
             rows: 2,
           );
         } else if (state is ErrorOccurredSearchingForItem) {

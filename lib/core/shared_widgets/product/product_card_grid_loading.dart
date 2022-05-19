@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
+/// Show the skeleton of product card
+/// whenever the state is still in loading
 class ProductGridLoading extends StatelessWidget {
   /// Number of loading columns
   final int columns;
@@ -23,15 +25,21 @@ class ProductGridLoading extends StatelessWidget {
   /// Product Item card maximum row
   final int rows;
 
+  final EdgeInsets? padding;
+
+  final bool shrinkWrap;
+
   const ProductGridLoading({
     Key? key,
     required this.columns,
-    required this.aspectRatio,
-    required this.verticalSpacing,
-    required this.horizontalSpacing,
-    required this.scaleFactor,
-    required this.borderRadius,
+    this.aspectRatio = 13 / 25,
+    this.verticalSpacing = 12,
+    this.horizontalSpacing = 12,
+    this.scaleFactor = 1,
+    this.borderRadius = 25,
     required this.rows,
+    this.padding,
+    this.shrinkWrap = true,
   }) : super(key: key);
 
   @override
@@ -40,10 +48,11 @@ class ProductGridLoading extends StatelessWidget {
 
     return GridView.builder(
       physics: const ClampingScrollPhysics(),
-      padding: EdgeInsets.symmetric(
-        horizontal: res.dimens.spacingLarge,
-        vertical: res.dimens.spacingLarge,
-      ),
+      padding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: res.dimens.spacingLarge,
+            vertical: res.dimens.spacingLarge,
+          ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columns,
         childAspectRatio: aspectRatio,
@@ -56,7 +65,7 @@ class ProductGridLoading extends StatelessWidget {
           borderRadius: borderRadius,
         );
       },
-      shrinkWrap: true,
+      shrinkWrap: shrinkWrap,
       itemCount: columns * rows,
     );
   }

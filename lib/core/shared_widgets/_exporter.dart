@@ -12,6 +12,7 @@ export 'dropezy_image.dart';
 export 'dropezy_scaffold.dart';
 export 'loading/loading_item.dart';
 export 'product/product_card_grid_loading.dart';
+export 'product/product_grid_view.dart';
 export 'product/product_item_card.dart';
 export 'radio_icon.dart';
 export 'text_fields/phone_text_field.dart';
