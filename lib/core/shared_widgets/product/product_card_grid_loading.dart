@@ -21,7 +21,7 @@ class ProductGridLoading extends StatelessWidget {
   final double borderRadius;
 
   /// Product Item card maximum row
-  final int? rows;
+  final int rows;
 
   const ProductGridLoading({
     Key? key,
@@ -31,7 +31,7 @@ class ProductGridLoading extends StatelessWidget {
     required this.horizontalSpacing,
     required this.scaleFactor,
     required this.borderRadius,
-    this.rows,
+    required this.rows,
   }) : super(key: key);
 
   @override
@@ -57,7 +57,7 @@ class ProductGridLoading extends StatelessWidget {
         );
       },
       shrinkWrap: true,
-      itemCount: columns * (rows ?? 2),
+      itemCount: columns * rows,
     );
   }
 }

@@ -97,6 +97,7 @@ class _SearchResultsState extends State<SearchResults> {
             scaleFactor: scaleFactor,
             columns: columns,
             borderRadius: cardBorderRadius,
+            rows: 2,
           );
         } else if (state is ErrorOccurredSearchingForItem) {
           if (state.failure is NetworkError) {
