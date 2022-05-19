@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/index.dart';
-import 'package:storefront_app/features/product_search/widgets/search_results/search_results_loading.dart';
 
 import '../../index.dart';
 
@@ -91,7 +90,7 @@ class _SearchResultsState extends State<SearchResults> {
             controller: _scrollController,
           );
         } else if (state is SearchingForItemInInventory) {
-          return SearchResultsLoading(
+          return ProductGridLoading(
             aspectRatio: aspectRatio,
             horizontalSpacing: horizontalSpacing,
             verticalSpacing: verticalSpacing,

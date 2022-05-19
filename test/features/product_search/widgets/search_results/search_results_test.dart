@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
-import 'package:storefront_app/features/product_search/widgets/search_results/search_results_loading.dart';
 
 import '../../fixtures.dart';
 import '../../mocks.dart';
@@ -29,7 +28,7 @@ void main() {
       await tester.pump();
     }
 
-    expect(find.byType(SearchResultsLoading), findsOneWidget);
+    expect(find.byType(ProductGridLoading), findsOneWidget);
   });
 
   testWidgets('When no state is available nothing is shown',

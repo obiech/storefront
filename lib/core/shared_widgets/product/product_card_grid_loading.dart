@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
-class SearchResultsLoading extends StatelessWidget {
+class ProductGridLoading extends StatelessWidget {
   /// Number of loading columns
   final int columns;
 
@@ -20,7 +20,10 @@ class SearchResultsLoading extends StatelessWidget {
   /// Product Item card border radius
   final double borderRadius;
 
-  const SearchResultsLoading({
+  /// Product Item card maximum row
+  final int? rows;
+
+  const ProductGridLoading({
     Key? key,
     required this.columns,
     required this.aspectRatio,
@@ -28,6 +31,7 @@ class SearchResultsLoading extends StatelessWidget {
     required this.horizontalSpacing,
     required this.scaleFactor,
     required this.borderRadius,
+    this.rows,
   }) : super(key: key);
 
   @override
@@ -53,7 +57,7 @@ class SearchResultsLoading extends StatelessWidget {
         );
       },
       shrinkWrap: true,
-      itemCount: columns * 2,
+      itemCount: columns * (rows ?? 2),
     );
   }
 }
