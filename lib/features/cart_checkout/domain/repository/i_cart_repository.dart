@@ -11,4 +11,20 @@ abstract class ICartRepository {
   /// Adds a new cart item [variant] to a cart session
   /// at a store identified with [storeId].
   RepoResult<CartModel> addItem(String storeId, VariantModel variant);
+
+  /// Increases the amount of cart item [variant] by [quantity]
+  /// to a cart session at a store identified with [storeId].
+  RepoResult<CartModel> incrementItem(
+    String storeId,
+    VariantModel variant,
+    int quantity,
+  );
+
+  /// Subtracts the amount of cart item [variant] by [quantity]
+  /// to a cart session at a store identified with [storeId].
+  RepoResult<CartModel> decrementItem(
+    String storeId,
+    VariantModel variant,
+    int quantity,
+  );
 }

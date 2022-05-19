@@ -181,6 +181,206 @@ void main() {
               }
             },
           );
+
+          group(
+            'when [EditCartItem] event is added',
+            () {
+              const variantToEdit = variant_fixtures.variantMango;
+              final initialCart = cart_fixtures.mockCartModel.copyWith.items([
+                const CartItemModel(
+                  variant: variantToEdit,
+                  quantity: 2,
+                )
+              ]);
+              final seedState = CartLoaded(
+                cart: initialCart,
+                isCalculatingSummary: false,
+                errorMessage: null,
+              );
+
+              /// If new quantity is greater than previous quantity,
+              /// should increment product by difference in quantity
+              group(
+                'and quantity in event is greater than previous quantity',
+                () {
+                  const event = EditCartItem(variantToEdit, 10);
+                  final resultCart = initialCart.copyWith.items([
+                    CartItemModel(
+                      variant: event.variant,
+                      quantity: event.quantity,
+                    ),
+                  ]);
+                  final loadingState = CartLoaded(
+                    cart: resultCart,
+                    isCalculatingSummary: true,
+                    errorMessage: null,
+                  );
+                  void verifyFn(CartBloc bloc) {
+                    verify(
+                      () => bloc.cartRepository.incrementItem(
+                        any(),
+                        event.variant,
+                        8,
+                      ),
+                    );
+                  }
+
+                  blocTest<CartBloc, CartState>(
+                    'should emit a loading [CartLoaded] with increased item quantity '
+                    'and call [CartRepository.incrementItem], '
+                    'and finally emit resulting cart',
+                    setUp: () {
+                      when(
+                        () => cartRepository.incrementItem(
+                          any(),
+                          event.variant,
+                          8,
+                        ),
+                      ).thenAnswer((_) async {
+                        return right(resultCart);
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded(
+                        cart: resultCart,
+                        isCalculatingSummary: false,
+                        errorMessage: null,
+                      )
+                    ],
+                    verify: verifyFn,
+                  );
+
+                  blocTest<CartBloc, CartState>(
+                    'and on failure '
+                    'should emit a loading [CartLoaded] with increased item quantity '
+                    'and call [CartRepository.incrementItem], '
+                    'and finally emit [CartLoaded] with cart before event is added '
+                    'and an error message from Failure',
+                    setUp: () {
+                      when(
+                        () => cartRepository.incrementItem(
+                          any(),
+                          event.variant,
+                          8,
+                        ),
+                      ).thenAnswer((_) async {
+                        return left(
+                          Failure('Failed to increment item quantity'),
+                        );
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded(
+                        cart: initialCart,
+                        isCalculatingSummary: false,
+                        errorMessage: 'Failed to increment item quantity',
+                      )
+                    ],
+                    verify: verifyFn,
+                  );
+                },
+              );
+
+              /// If new quantity is lesser than previous quantity,
+              /// should decrement product by difference in quantity
+              group(
+                'and quantity in event is less than previous quantity',
+                () {
+                  const event = EditCartItem(variantToEdit, 1);
+                  final resultCart = initialCart.copyWith.items([
+                    CartItemModel(
+                      variant: event.variant,
+                      quantity: event.quantity,
+                    ),
+                  ]);
+                  final loadingState = CartLoaded(
+                    cart: resultCart,
+                    isCalculatingSummary: true,
+                    errorMessage: null,
+                  );
+                  void verifyFn(CartBloc bloc) {
+                    verify(
+                      () => bloc.cartRepository.decrementItem(
+                        any(),
+                        event.variant,
+                        1,
+                      ),
+                    );
+                  }
+
+                  blocTest<CartBloc, CartState>(
+                    'should emit a loading [CartLoaded] with decreased item quantity '
+                    'and call [CartRepository.decrementItem] '
+                    'and finally emit resulting cart',
+                    setUp: () {
+                      when(
+                        () => cartRepository.decrementItem(
+                          any(),
+                          event.variant,
+                          1,
+                        ),
+                      ).thenAnswer((_) async {
+                        return right(resultCart);
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded(
+                        cart: resultCart,
+                        isCalculatingSummary: false,
+                        errorMessage: null,
+                      )
+                    ],
+                    verify: verifyFn,
+                  );
+
+                  blocTest<CartBloc, CartState>(
+                    'and on failure '
+                    'should emit a loading [CartLoaded] with decreased item quantity '
+                    'and call [CartRepository.decrementItem], '
+                    'and finally emit [CartLoaded] with cart before event is added '
+                    'and an error message from Failure',
+                    setUp: () {
+                      when(
+                        () => cartRepository.decrementItem(
+                          any(),
+                          event.variant,
+                          1,
+                        ),
+                      ).thenAnswer((_) async {
+                        return left(
+                          Failure('Failed to decrement item quantity'),
+                        );
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded(
+                        cart: initialCart,
+                        isCalculatingSummary: false,
+                        errorMessage: 'Failed to decrement item quantity',
+                      )
+                    ],
+                    verify: verifyFn,
+                  );
+                },
+              );
+            },
+          );
         },
       );
     },

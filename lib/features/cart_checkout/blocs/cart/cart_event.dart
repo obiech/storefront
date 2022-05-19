@@ -22,3 +22,20 @@ class AddCartItem extends CartEvent {
   @override
   List<Object?> get props => [variant];
 }
+
+/// When user changes an item's quantity.
+class EditCartItem extends CartEvent {
+  const EditCartItem(
+    this.variant,
+    this.quantity,
+  );
+
+  /// Product variant whose quantity is being edited
+  final VariantModel variant;
+
+  /// The new quantity
+  final int quantity;
+
+  @override
+  List<Object?> get props => [variant, quantity];
+}

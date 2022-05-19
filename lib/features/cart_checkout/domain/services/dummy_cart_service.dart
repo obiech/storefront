@@ -67,6 +67,66 @@ class DummyCartService implements ICartRepository {
     return right(_cart);
   }
 
+  @override
+  RepoResult<CartModel> incrementItem(
+    String storeId,
+    VariantModel variant,
+    int quantity,
+  ) async {
+    // Simulate a short network loading
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final index = _cart.indexOfProduct(variant.id);
+
+    _cart = _cart.copyWith(
+      items: List.of(_cart.items)
+        ..replaceRange(
+          index,
+          index + 1,
+          [
+            CartItemModel(
+              variant: variant,
+              quantity: _cart.items[index].quantity + quantity,
+            )
+          ],
+        ),
+    );
+
+    _calculatePaymentSummary();
+
+    return right(_cart);
+  }
+
+  @override
+  RepoResult<CartModel> decrementItem(
+    String storeId,
+    VariantModel variant,
+    int quantity,
+  ) async {
+    // Simulate a short network loading
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final index = _cart.indexOfProduct(variant.id);
+
+    _cart = _cart.copyWith(
+      items: List.of(_cart.items)
+        ..replaceRange(
+          index,
+          index + 1,
+          [
+            CartItemModel(
+              variant: variant,
+              quantity: _cart.items[index].quantity - quantity,
+            )
+          ],
+        ),
+    );
+
+    _calculatePaymentSummary();
+
+    return right(_cart);
+  }
+
   void _calculatePaymentSummary() {
     final newTotal = _cart.items.fold<int>(
       0,

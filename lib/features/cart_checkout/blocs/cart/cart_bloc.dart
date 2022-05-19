@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../core/core.dart';
 import '../../../product/domain/domain.dart';
 import '../../domain/domains.dart';
 
@@ -21,6 +23,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this.cartRepository) : super(const CartInitial()) {
     on<LoadCart>(_loadCart);
     on<AddCartItem>(_addCartItem);
+    on<EditCartItem>(_editCartItem);
   }
 
   final ICartRepository cartRepository;
@@ -83,5 +86,88 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
       (cart) => emit(CartLoaded.success(cart)),
     );
+  }
+
+  /// - Given [event.quantity] is zero, will remove the product from cart instead.
+  ///
+  /// - Given [event.quantity] is greater than current quantity, will increment
+  /// [event.variant] quantity in cart by the difference in quantity.
+  ///
+  /// - Given [event.quantity] is less than current quantity, will decrement
+  /// [event.variant] quantity in cart by the difference in quantity.
+  ///
+  /// Can only be used when [state] is [CartLoaded].
+  FutureOr<void> _editCartItem(
+    EditCartItem event,
+    Emitter<CartState> emit,
+  ) async {
+    if (state is! CartLoaded) {
+      // TODO: add better error handling
+      debugPrint('Cannot edit item in cart when state is not CartLoaded');
+      return;
+    }
+
+    final currState = state as CartLoaded;
+
+    final index = currState.cart.items.indexWhere(
+      (item) => item.variant.id == event.variant.id,
+    );
+
+    // Ensure item exists
+    if (index == -1) {
+      // TODO: add better error handling
+      debugPrint('Cannot edit cart item because item does not exist!');
+      return;
+    }
+
+    final tempList = List.of(currState.cart.items);
+    final oldItem = tempList.removeAt(index);
+
+    late Either<Failure, CartModel> result;
+
+    // Remove product when quantity is zero
+    if (event.quantity == 0) {
+      debugPrint('Remove cart item is not yet implemented');
+      return;
+    } else {
+      final qtyChange = event.quantity - oldItem.quantity;
+
+      if (qtyChange == 0) {
+        debugPrint('Skipping edit cart item because quantity is unchanged');
+        return;
+      }
+
+      // Re-insert product with new quantity
+      tempList.insert(
+        index,
+        CartItemModel(
+          variant: event.variant,
+          quantity: event.quantity,
+        ),
+      );
+
+      emit(CartLoaded.loading(currState.cart.copyWith.items(tempList)));
+
+      if (qtyChange > 0) {
+        result = await cartRepository.incrementItem(
+          currState.cart.storeId,
+          event.variant,
+          qtyChange,
+        );
+      } else {
+        result = await cartRepository.decrementItem(
+          currState.cart.storeId,
+          event.variant,
+          qtyChange.abs(),
+        );
+      }
+    }
+
+    final newState = result.fold(
+      (failure) => CartLoaded.error(currState.cart, failure.message),
+      (result) => CartLoaded.success(result),
+    );
+
+    emit(newState);
   }
 }
