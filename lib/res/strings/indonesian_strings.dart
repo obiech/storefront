@@ -549,5 +549,9 @@ class IndonesianStrings implements BaseStrings {
   String get update => 'Ubah';
 
   @override
+  String updatedAddressSnackBarContent(String newAddress) =>
+      'Alamat berhasil diubah ke $newAddress';
+
+  @override
   String get viewCart => 'Lihat Keranjang';
 }

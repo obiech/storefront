@@ -10,7 +10,18 @@ class ChangeAddressPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: context.res.strings.changeAddress,
-      child: BlocBuilder<DeliveryAddressCubit, DeliveryAddressState>(
+      child: BlocConsumer<DeliveryAddressCubit, DeliveryAddressState>(
+        listenWhen: (previous, current) => previous != current,
+        listener: (context, state) {
+          if (state is DeliveryAddressLoaded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              DropezySnackBar.info(
+                context.res.strings
+                    .updatedAddressSnackBarContent(state.activeAddress.title),
+              ),
+            );
+          }
+        },
         builder: (context, state) {
           if (state is DeliveryAddressLoaded) {
             return Padding(
@@ -22,7 +33,17 @@ class ChangeAddressPage extends StatelessWidget {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final address = state.addressList[index];
-                        return AddressCard(address: address);
+                        return AddressCard(
+                          address: address,
+                          isActive: address == state.activeAddress,
+                          onPressed: () {
+                            if (address != state.activeAddress) {
+                              context
+                                  .read<DeliveryAddressCubit>()
+                                  .setActiveAddress(address);
+                            }
+                          },
+                        );
                       },
                       itemCount: state.addressList.length,
                     ),

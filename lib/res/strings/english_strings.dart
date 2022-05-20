@@ -549,5 +549,9 @@ class EnglishStrings implements BaseStrings {
   String get update => 'Update';
 
   @override
+  String updatedAddressSnackBarContent(String newAddress) =>
+      'Address successfully changed to $newAddress';
+
+  @override
   String get viewCart => 'View Cart';
 }

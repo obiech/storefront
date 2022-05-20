@@ -326,4 +326,5 @@ abstract class BaseStrings {
   /// Address List
   String get addressPrimary;
   String get update;
+  String updatedAddressSnackBarContent(String newAddress);
 }

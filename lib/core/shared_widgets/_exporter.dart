@@ -10,6 +10,7 @@ export 'dropezy_empty.dart';
 export 'dropezy_error.dart';
 export 'dropezy_image.dart';
 export 'dropezy_scaffold.dart';
+export 'dropezy_snack_bar.dart';
 export 'loading/loading_item.dart';
 export 'product/product_card_grid_loading.dart';
 export 'product/product_grid_view.dart';
