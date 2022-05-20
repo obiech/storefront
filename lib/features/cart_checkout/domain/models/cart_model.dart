@@ -40,6 +40,9 @@ class CartModel extends Equatable {
 
   @override
   List<Object?> get props => [id, storeId, items, paymentSummary];
+
+  /// Check if current cart has any discount
+  bool get hasDiscount => (int.tryParse(paymentSummary.discount) ?? 0) > 0;
 }
 
 extension CartModelX on CartModel {

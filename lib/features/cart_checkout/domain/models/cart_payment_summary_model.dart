@@ -38,4 +38,19 @@ class CartPaymentSummaryModel extends Equatable {
   List<Object?> get props {
     return [total, subTotal, discount, deliveryFee, isFreeDelivery];
   }
+
+  /// CopyWith
+  CartPaymentSummaryModel copyWith({
+    String? deliveryFee,
+    String? discount,
+    String? subTotal,
+    String? total,
+  }) {
+    return CartPaymentSummaryModel(
+      deliveryFee: deliveryFee ?? this.deliveryFee,
+      discount: discount ?? this.discount,
+      subTotal: subTotal ?? this.subTotal,
+      total: total ?? this.total,
+    );
+  }
 }

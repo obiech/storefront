@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/product/index.dart';
 
+import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../features/cart_checkout/mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductAction(
-    BaseProduct product, {
+    BaseProduct product,
+    CartBloc bloc, {
     int productQuantity = 0,
   }) async {
     await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            width: 100,
-            height: 30,
-            child: ProductAction(
-              product: product,
-              productQuantity: productQuantity,
+      BlocProvider(
+        create: (context) => bloc,
+        child: MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 100,
+              height: 30,
+              child: ProductAction(
+                product: product,
+                productQuantity: productQuantity,
+              ),
             ),
           ),
         ),
@@ -28,6 +37,14 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  late CartBloc bloc;
+
+  setUp(() {
+    bloc = MockCartBloc();
+
+    when(() => bloc.state).thenAnswer((_) => CartLoaded.success(mockCartModel));
+  });
+
   const product = seledaRomaine;
 
   final addToCartFinder = find.byKey(ValueKey('${product.id}_add_to_cart'));
@@ -41,7 +58,7 @@ void main() {
     testWidgets(
         'show add to cart button '
         'when quantity is zero', (WidgetTester tester) async {
-      await tester.pumpProductAction(product);
+      await tester.pumpProductAction(product, bloc);
       expect(addToCartFinder, findsOneWidget);
       expect(quantityChangerFinder, findsNothing);
     });
@@ -49,7 +66,7 @@ void main() {
     testWidgets(
         'show Quantity Changer '
         'when quantity is greater than zero', (WidgetTester tester) async {
-      await tester.pumpProductAction(product, productQuantity: 2);
+      await tester.pumpProductAction(product, bloc, productQuantity: 2);
       expect(addToCartFinder, findsNothing);
       expect(quantityChangerFinder, findsOneWidget);
     });
@@ -58,7 +75,7 @@ void main() {
         'show decremented value '
         'when decrement button is tapped', (WidgetTester tester) async {
       const quantity = 18;
-      await tester.pumpProductAction(product, productQuantity: quantity);
+      await tester.pumpProductAction(product, bloc, productQuantity: quantity);
       expect(find.text(quantity.toString()), findsOneWidget);
 
       await tester.tap(decrementButtonFinder);
@@ -70,7 +87,7 @@ void main() {
         'show incremented value '
         'when incremented button is tapped', (WidgetTester tester) async {
       const quantity = 18;
-      await tester.pumpProductAction(product, productQuantity: quantity);
+      await tester.pumpProductAction(product, bloc, productQuantity: quantity);
       expect(find.text(quantity.toString()), findsOneWidget);
 
       await tester.tap(incrementButtonFinder);
@@ -81,7 +98,7 @@ void main() {
     testWidgets(
         'show add to cart button '
         'when quantity is decremented to zero', (WidgetTester tester) async {
-      await tester.pumpProductAction(product, productQuantity: 1);
+      await tester.pumpProductAction(product, bloc, productQuantity: 1);
       expect(quantityChangerFinder, findsOneWidget);
       expect(addToCartFinder, findsNothing);
 
@@ -102,6 +119,7 @@ void main() {
         product.copyWith(
           variants: List.generate(2, (index) => product.variants.first),
         ),
+        bloc,
       );
       expect(addToCartFinder, findsOneWidget);
       expect(quantityChangerFinder, findsNothing);

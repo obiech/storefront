@@ -79,11 +79,13 @@ class ProductVariantsList extends StatelessWidget {
                       },
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: CartSummary(),
                   ),
-
-                  /// TODO(obella425): Add floating cart button
+                  SizedBox(
+                    height: MediaQuery.of(context).padding.bottom,
+                  ),
                 ],
               ),
             ),
@@ -96,12 +98,21 @@ class ProductVariantsList extends StatelessWidget {
 
 extension BottomSheetSizeX on BuildContext {
   /// Get and fix initialChildSize & maxChildSize for bottom sheet
-  double childSize(int items) {
-    final approxItemsHeight = 70.0 * items;
+  double childSize(int itemsCount) {
+    final itemsPadding = 10 * (itemsCount - 1);
+    const cartSummaryHeight = 42;
+
+    final approxItemsHeight = 70.0 * itemsCount +
+        itemsPadding +
+        cartSummaryHeight +
+        MediaQuery.of(this).padding.bottom;
+
     final height = MediaQuery.of(this).size.height;
 
-    /// TODO(obella425): Fix ratio error for landscape
-    final ratio = (approxItemsHeight / height) + 0.125;
+    final error =
+        MediaQuery.of(this).orientation == Orientation.landscape ? 0.125 : 0.07;
+
+    final ratio = (approxItemsHeight / height) + error;
 
     return min(1, ratio);
   }

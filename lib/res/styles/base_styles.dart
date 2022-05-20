@@ -24,6 +24,8 @@ abstract class BaseStyles {
 
   TextStyle get clickableText;
 
+  TextStyle get discountText;
+
   /// [ProductTile] specific
   TextStyle get productTileProductName;
 

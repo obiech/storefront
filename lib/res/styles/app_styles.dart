@@ -140,4 +140,10 @@ class AppStyles implements BaseStyles {
         topLeft: Radius.circular(_dimens.spacingMlarge),
         topRight: Radius.circular(_dimens.spacingMlarge),
       );
+
+  @override
+  TextStyle get discountText => caption3.copyWith(
+        decoration: TextDecoration.lineThrough,
+        fontSize: caption3.fontSize,
+      );
 }

@@ -547,4 +547,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get update => 'Ubah';
+
+  @override
+  String get viewCart => 'Lihat Keranjang';
 }

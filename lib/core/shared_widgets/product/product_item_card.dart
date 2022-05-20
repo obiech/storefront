@@ -6,6 +6,7 @@ import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/res/resources.dart';
 
+import '../../../features/cart_checkout/index.dart';
 import '../../../features/product/index.dart';
 import '../buttons/pill_button.dart';
 
@@ -137,10 +138,7 @@ class ProductItemCard extends StatelessWidget {
                       product.discount!.toCurrency(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: res.styles.caption3.copyWith(
-                        decoration: TextDecoration.lineThrough,
-                        fontSize: res.styles.caption3.fontSize,
-                      ),
+                      style: res.styles.discountText,
                     )
                   ],
                   SizedBox(

@@ -547,4 +547,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get update => 'Update';
+
+  @override
+  String get viewCart => 'View Cart';
 }

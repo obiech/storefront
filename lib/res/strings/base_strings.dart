@@ -261,6 +261,7 @@ abstract class BaseStrings {
   String get pack;
   String get remainder;
   String get addNote;
+  String get viewCart;
 
   /// Home Page
   String hiWhatAreYouShoppingForToday(String name);
