@@ -23,7 +23,6 @@ void main() {
       name: 'Sayuran',
       thumbnailUrl:
           'https://freepngimg.com/thumb/broccoli/12-broccoli-png-image-with-transparent-background-thumb.png',
-      color: 'FEE5E4',
       childCategories: [],
     ),
   ];

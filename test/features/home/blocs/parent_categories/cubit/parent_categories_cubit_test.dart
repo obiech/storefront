@@ -16,7 +16,6 @@ void main() {
       name: 'Sayuran',
       thumbnailUrl:
           'https://freepngimg.com/thumb/broccoli/12-broccoli-png-image-with-transparent-background-thumb.png',
-      color: 'FEE5E4',
       childCategories: [],
     ),
     ParentCategoryModel(
@@ -24,7 +23,6 @@ void main() {
       name: 'Buah',
       thumbnailUrl:
           'https://freepngimg.com/thumb/apple/88-png-apple-image-clipart-transparent-png-apple-thumb.png',
-      color: 'DFEEFF',
       childCategories: [],
     ),
   ];

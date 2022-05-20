@@ -25,14 +25,13 @@ class ParentCategoryModel extends CategoryModel {
     required String id,
     required String name,
     required String thumbnailUrl,
-    required this.color,
     required this.childCategories,
   }) : super(
           categoryId: id,
           name: name,
           thumbnailUrl: thumbnailUrl,
         );
-  final String color; //TODO (Jonathan): Remove the color
+
   final List<ChildCategoryModel> childCategories;
 
   factory ParentCategoryModel.fromPb(Category category) {
@@ -40,7 +39,6 @@ class ParentCategoryModel extends CategoryModel {
       id: category.categoryId,
       name: category.name,
       thumbnailUrl: category.imagesUrls.isEmpty ? '' : category.imagesUrls[0],
-      color: '91bbff',
       childCategories:
           category.childCategories.map(ChildCategoryModel.fromPb).toList(),
     );
