@@ -12,7 +12,7 @@ import '../../index.dart';
 part 'search_inventory_event.dart';
 part 'search_inventory_state.dart';
 
-@injectable
+@lazySingleton
 class SearchInventoryBloc
     extends Bloc<SearchInventoryEvent, SearchInventoryState> {
   final IProductSearchRepository repository;

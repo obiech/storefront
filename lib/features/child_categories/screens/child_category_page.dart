@@ -42,6 +42,14 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: parentCategoryModel.name,
+      actions: [
+        IconButton(
+          onPressed: () {
+            context.router.push(const GlobalSearchRoute());
+          },
+          icon: const Icon(DropezyIcons.search),
+        )
+      ],
       child: Row(
         children: [
           SizedBox(

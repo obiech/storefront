@@ -13,6 +13,8 @@ import 'di/di_environment.dart';
 import 'di/injection.dart';
 import 'features/address/index.dart';
 import 'features/cart_checkout/index.dart';
+import 'features/home/index.dart';
+import 'features/product_search/index.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +39,21 @@ Future<void> main() async {
           lazy: false,
           create: (_) =>
               getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
-        )
+        ),
+
+        /// Search
+        BlocProvider(
+          create: (_) => getIt<HomeNavCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<SearchHistoryCubit>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<AutosuggestionBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<SearchInventoryBloc>(),
+        ),
       ],
       child: AppWidget(
         router: getIt<AppRouter>(),

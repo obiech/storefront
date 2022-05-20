@@ -57,6 +57,12 @@ import '../features/profile/index.dart';
     /// Profile related
     AutoRoute(page: EditProfilePage),
     AutoRoute(page: ChangeAddressPage),
+
+    /// Global Search Navigation
+    AutoRoute(
+      page: SearchPage,
+      name: 'GlobalSearchRoute',
+    ),
   ],
 )
 class $AppRouter {}

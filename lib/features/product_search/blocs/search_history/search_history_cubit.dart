@@ -8,7 +8,7 @@ import '../../index.dart';
 
 part 'search_history_state.dart';
 
-@injectable
+@lazySingleton
 class SearchHistoryCubit extends Cubit<SearchHistoryState> {
   final ISearchHistoryRepository _searchHistoryRepo;
 

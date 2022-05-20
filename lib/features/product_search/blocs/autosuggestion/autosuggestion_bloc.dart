@@ -12,7 +12,7 @@ part 'autosuggestion_state.dart';
 
 /// The product inventory search page should provide
 /// search suggestions to a user
-@injectable
+@lazySingleton
 class AutosuggestionBloc
     extends Bloc<AutosuggestionEvent, AutosuggestionState> {
   final IProductSearchRepository repository;

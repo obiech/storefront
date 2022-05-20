@@ -1,8 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/di/injection.dart';
 
 import '../../home/index.dart';
 import '../index.dart';
@@ -54,29 +52,11 @@ import '../index.dart';
 /// it should be displayed instantly.
 ///
 /// - However, if no search was made before, proceed as a fresh search.
-class SearchPage extends StatefulWidget implements AutoRouteWrapper {
+class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<SearchHistoryCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<AutosuggestionBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<SearchInventoryBloc>(),
-        ),
-      ],
-      child: this,
-    );
-  }
 }
 
 class _SearchPageState extends State<SearchPage> with RouteAware {
