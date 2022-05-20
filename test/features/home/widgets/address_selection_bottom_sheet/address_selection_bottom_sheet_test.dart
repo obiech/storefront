@@ -42,6 +42,7 @@ extension WidgetTesterX on WidgetTester {
 
 void main() {
   late DeliveryAddressCubit cubit;
+  const activeAddressIndex = 0;
 
   setUp(() {
     cubit = MockDeliveryAddressCubit();
@@ -54,22 +55,20 @@ void main() {
     (tester) async {
       final state = DeliveryAddressLoaded(
         addressList: sampleDeliveryAddressList,
-        activeAddress: sampleDeliveryAddressList[0],
+        activeAddress: sampleDeliveryAddressList[activeAddressIndex],
       );
 
       await tester.pumpAddressSelection(
         cubit: cubit,
         currentState: state,
       );
+
       // Address List
+      expect(find.byType(ListView), findsOneWidget);
+
       for (int index = 0; index < state.addressList.length; index++) {
         final formattedAddress =
             state.addressList[index].details?.toPrettyAddress;
-
-        await tester.pumpAddressSelection(
-          cubit: cubit,
-          currentState: state,
-        );
 
         expect(find.text(state.addressList[index].title), findsOneWidget);
         expect(find.text(formattedAddress.toString()), findsOneWidget);
@@ -120,6 +119,32 @@ void main() {
       );
 
       expect(find.text(state.message), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'should do nothing '
+    'when active address is tapped',
+    (tester) async {
+      final state = DeliveryAddressLoaded(
+        addressList: sampleDeliveryAddressList,
+        activeAddress: sampleDeliveryAddressList[activeAddressIndex],
+      );
+
+      await tester.pumpAddressSelection(
+        cubit: cubit,
+        currentState: state,
+      );
+
+      expect(find.byType(ListView), findsOneWidget);
+
+      await tester.tap(find.byType(ListTile).at(activeAddressIndex));
+      await tester.pumpAndSettle();
+
+      verifyNever(
+        () => cubit
+            .setActiveAddress(sampleDeliveryAddressList[activeAddressIndex]),
+      );
     },
   );
 }

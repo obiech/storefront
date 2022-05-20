@@ -23,7 +23,9 @@ class AddressListView extends StatelessWidget {
 
         return GestureDetector(
           onTap: () {
-            context.read<DeliveryAddressCubit>().setActiveAddress(address);
+            if (address != activeAddress) {
+              context.read<DeliveryAddressCubit>().setActiveAddress(address);
+            }
           },
           child: Column(
             children: [
