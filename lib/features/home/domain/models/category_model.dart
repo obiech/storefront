@@ -39,7 +39,7 @@ class ParentCategoryModel extends CategoryModel {
     return ParentCategoryModel(
       id: category.categoryId,
       name: category.name,
-      thumbnailUrl: category.imagesUrls[0],
+      thumbnailUrl: category.imagesUrls.isEmpty ? '' : category.imagesUrls[0],
       color: '91bbff',
       childCategories:
           category.childCategories.map(ChildCategoryModel.fromPb).toList(),
@@ -63,7 +63,7 @@ class ChildCategoryModel extends CategoryModel {
     return ChildCategoryModel(
       id: category.categoryId,
       name: category.name,
-      thumbnailUrl: category.imagesUrls[0],
+      thumbnailUrl: category.imagesUrls.isEmpty ? '' : category.imagesUrls[0],
     );
   }
 }
