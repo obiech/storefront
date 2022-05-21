@@ -14,6 +14,13 @@ class CartItemModel extends Equatable {
   /// The quantity of [variant] inside this cart
   final int quantity;
 
+  factory CartItemModel.fromPb(Item item) {
+    return CartItemModel(
+      variant: VariantModel.fromPb(item.product),
+      quantity: item.quantity,
+    );
+  }
+
   @override
   List<Object?> get props => [variant, quantity];
 }

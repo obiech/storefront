@@ -6,7 +6,7 @@ import '../models/cart_model.dart';
 /// responsible for Cart.
 abstract class ICartRepository {
   /// Loads cart data from remote or local data source.
-  RepoResult<CartModel> loadCart();
+  RepoResult<CartModel> loadCart(String storeId);
 
   /// Adds a new cart item [variant] to a cart session
   /// at a store identified with [storeId].

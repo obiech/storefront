@@ -19,6 +19,16 @@ class CartLoading extends CartState {
   const CartLoading();
 }
 
+/// When cart is empty and has no contents.
+///
+/// Possible scenarios:
+/// - Cart object is not found. For example, first-time users
+/// and switching between stores.
+/// - Cart is empty after deleting all products.
+class CartIsEmpty extends CartState {
+  const CartIsEmpty();
+}
+
 /// When a failure occured during [CartLoading].
 ///
 /// In such case, ask customer to retry the loading process.

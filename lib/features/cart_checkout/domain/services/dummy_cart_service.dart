@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/di/di_environment.dart';
 
 import '../../../../core/models/repo_result.dart';
 import '../../../product/domain/domain.dart';
@@ -9,7 +10,7 @@ import '../domains.dart';
 ///
 /// Payment summary calculation is done locally and
 /// all actions will always return success results.
-@LazySingleton(as: ICartRepository)
+@LazySingleton(as: ICartRepository, env: [DiEnvironment.dummy])
 class DummyCartService implements ICartRepository {
   late CartModel _cart;
 
@@ -28,12 +29,12 @@ class DummyCartService implements ICartRepository {
   );
 
   @override
-  RepoResult<CartModel> loadCart() async {
+  RepoResult<CartModel> loadCart(String storeId) async {
     await Future.delayed(const Duration(seconds: 1));
 
     _cart = CartModel(
       id: 'cart-id-1',
-      storeId: 'store-id-1',
+      storeId: storeId,
       items: const [
         CartItemModel(
           variant: initialVariant,

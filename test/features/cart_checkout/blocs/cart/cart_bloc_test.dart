@@ -35,13 +35,15 @@ void main() {
           const mockCart = cart_fixtures.mockCartModel;
           const event = LoadCart();
           void verifyFn(CartBloc bloc) =>
-              verify(() => bloc.cartRepository.loadCart()).called(1);
+              verify(() => bloc.cartRepository.loadCart(CartBloc.dummyStoreId))
+                  .called(1);
 
           blocTest<CartBloc, CartState>(
             'should emit [CartLoaded] with Cart contents, loading set '
             'to false, and no error message',
             setUp: () {
-              when(() => cartRepository.loadCart()).thenAnswer((_) async {
+              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+                  .thenAnswer((_) async {
                 return right(mockCart);
               });
             },
@@ -55,9 +57,29 @@ void main() {
           );
 
           blocTest<CartBloc, CartState>(
-            'on failure should emit [CartFailedToLoad]',
+            'should emit [CartIsEmpty] '
+            'when a [ResourceNotFoundFailure] is returned from cart repository',
             setUp: () {
-              when(() => cartRepository.loadCart()).thenAnswer((_) async {
+              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+                  .thenAnswer((_) async {
+                return left(ResourceNotFoundFailure());
+              });
+            },
+            build: () => bloc,
+            act: (bloc) => bloc.add(event),
+            expect: () => const <CartState>[
+              CartLoading(),
+              CartIsEmpty(),
+            ],
+            verify: verifyFn,
+          );
+
+          blocTest<CartBloc, CartState>(
+            'should emit [CartFailedToLoad] '
+            'when a [Failure] is returned from cart repository',
+            setUp: () {
+              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+                  .thenAnswer((_) async {
                 return left(Failure('Failed to load cart'));
               });
             },

@@ -1,4 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:dropezy_proto/v1/cart/cart.pbgrpc.dart';
 import 'package:dropezy_proto/v1/payment/payment.pb.dart';
 import 'package:equatable/equatable.dart';
 
@@ -17,6 +18,17 @@ class CartModel extends Equatable {
     required this.items,
     required this.paymentSummary,
   });
+
+  factory CartModel.fromPb(SummaryResponse summaryResponse) {
+    return CartModel(
+      id: summaryResponse.cart.id,
+      storeId: summaryResponse.cart.storeId,
+      items: summaryResponse.cart.items.map(CartItemModel.fromPb).toList(),
+      paymentSummary: CartPaymentSummaryModel.fromPB(
+        summaryResponse.paymentSummary,
+      ),
+    );
+  }
 
   /// The Cart ID retrieved from storefront-backend.
   final String id;

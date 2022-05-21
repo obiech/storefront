@@ -18,6 +18,9 @@ part 'cart_state.dart';
 /// - Search Results page,
 /// - Child Categories (C2) Page,
 /// - and Cart Checkout Page.
+///
+/// When a [ResourceNotFoundFailure] is received,
+/// it indicates that cart is still empty.
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this.cartRepository) : super(const CartInitial()) {
@@ -25,6 +28,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddCartItem>(_addCartItem);
     on<EditCartItem>(_editCartItem);
   }
+
+  //TODO (leovinsen): Revisit how to obtain storeId on cold start
+  // when store coverage bloc is available. Perhaps by having a
+  // StreamSubscription on said bloc.
+  /// In the meantime, when trying to run gRPC version of CartService,
+  /// replace this with store ID from your local Mongo instance
+  static const dummyStoreId = 'dummy-store-id';
 
   final ICartRepository cartRepository;
 
@@ -34,10 +44,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     emit(const CartLoading());
 
-    final result = await cartRepository.loadCart();
+    final result = await cartRepository.loadCart(dummyStoreId);
 
     result.fold(
-      (_) => emit(const CartFailedToLoad()),
+      (failure) => failure is ResourceNotFoundFailure
+          ? emit(const CartIsEmpty())
+          : emit(const CartFailedToLoad()),
       (cart) => emit(CartLoaded.success(cart)),
     );
   }
@@ -163,11 +175,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     }
 
-    final newState = result.fold(
-      (failure) => CartLoaded.error(currState.cart, failure.message),
-      (result) => CartLoaded.success(result),
+    result.fold(
+      (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
+      (result) => emit(CartLoaded.success(result)),
     );
-
-    emit(newState);
   }
 }
