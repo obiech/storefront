@@ -15,6 +15,8 @@ class ProductCategoryGrid extends StatelessWidget {
     /// * 12 margin between columns
     /// * 0.005 scale factor to fit the
     /// category product page
+
+    // TODO (Jonathan) : Change the scale so it looks bigger
     final double scaleFactor =
         ((MediaQuery.of(context).size.width - (12 * columns)) / columns) *
             0.005;
@@ -30,6 +32,7 @@ class ProductCategoryGrid extends StatelessWidget {
           );
         } else if (state is LoadingCategoryProductState) {
           return ProductGridLoading(
+            padding: EdgeInsets.all(context.res.dimens.spacingMedium),
             scaleFactor: scaleFactor,
             columns: columns,
             rows: 3,

@@ -33,15 +33,20 @@ void main() {
         () {
           blocTest<CategoryProductCubit, CategoryProductState>(
             '[LoadedCategoryProductState] with result from '
-            '[repository.getCategoryProduct(categoryID)]',
+            '[repository.getProductByCategory(categoryID)]',
             setUp: () {
-              when(() => repository.getProductByCategory('4')).thenAnswer(
+              when(
+                () => repository.getProductByCategory(
+                  'dummy-storeId',
+                  '4',
+                ),
+              ).thenAnswer(
                 (_) async => right(fixtures.fakeCategoryProductList),
               );
             },
             build: () => createCubit(),
             act: (cubit) => [
-              cubit.fetchCategoryProduct('4'),
+              cubit.fetchCategoryProduct('4', storeId: 'dummy-storeId'),
             ],
             expect: () => [
               LoadingCategoryProductState(),
@@ -50,15 +55,21 @@ void main() {
               ),
             ],
             verify: (cubit) {
-              verify(() => repository.getProductByCategory('4')).called(1);
+              verify(
+                () => repository.getProductByCategory(
+                  'dummy-storeId',
+                  '4',
+                ),
+              ).called(1);
             },
           );
 
           blocTest<CategoryProductCubit, CategoryProductState>(
             'Change category product of [LoadedCategoryProductState] '
-            'with result from [repository.getCategoryProduct(categoryID)]',
+            'with result from [repository.getProductByCategory(categoryID)]',
             setUp: () {
-              when(() => repository.getProductByCategory('2')).thenAnswer(
+              when(() => repository.getProductByCategory('dummy-storeId', '2'))
+                  .thenAnswer(
                 (_) async => right(fixtures.fakeCategoryProductList),
               );
             },
@@ -66,7 +77,8 @@ void main() {
             seed: () => LoadedCategoryProductState(
               fixtures.fakeCategoryProductList,
             ),
-            act: (cubit) => [cubit.fetchCategoryProduct('2')],
+            act: (cubit) =>
+                [cubit.fetchCategoryProduct('2', storeId: 'dummy-storeId')],
             expect: () => [
               LoadingCategoryProductState(),
               LoadedCategoryProductState(
@@ -74,7 +86,12 @@ void main() {
               ),
             ],
             verify: (cubit) {
-              verify(() => repository.getProductByCategory('2')).called(1);
+              verify(
+                () => repository.getProductByCategory(
+                  'dummy-storeId',
+                  '2',
+                ),
+              ).called(1);
             },
           );
 
@@ -82,14 +99,16 @@ void main() {
             '[ErrorCategoryProductState] if [repository.getCategoryProduct(categoryID)] '
             'returns a failure',
             setUp: () {
-              when(() => repository.getProductByCategory('3')).thenAnswer(
+              when(() => repository.getProductByCategory('dummy-storeId', '3'))
+                  .thenAnswer(
                 (_) async => left(
                   Failure('Failed to load category product'),
                 ),
               );
             },
             build: () => createCubit(),
-            act: (cubit) => cubit.fetchCategoryProduct('3'),
+            act: (cubit) =>
+                cubit.fetchCategoryProduct('3', storeId: 'dummy-storeId'),
             expect: () => [
               LoadingCategoryProductState(),
               const ErrorCategoryProductState(
@@ -97,7 +116,12 @@ void main() {
               ),
             ],
             verify: (cubit) {
-              verify(() => repository.getProductByCategory('3')).called(1);
+              verify(
+                () => repository.getProductByCategory(
+                  'dummy-storeId',
+                  '3',
+                ),
+              ).called(1);
             },
           );
         },

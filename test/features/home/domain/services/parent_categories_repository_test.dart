@@ -4,6 +4,7 @@ import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/home/domain/services/parent_categories_repository.dart';
+import 'package:storefront_app/features/home/index.dart';
 
 import '../../../../../test_commons/fixtures/category/category_pb_model.dart'
     as pb_categories;
@@ -16,11 +17,14 @@ void main() {
     late ParentCategoriesRepository repository;
 
     final mockPbCategory = pb_categories.categoryModel;
+    final List<ParentCategoryModel> expectedParentModels = [];
 
-    setUp(() {
+    setUpAll(() {
       registerFallbackValue(GetRequest());
       categoryServiceClient = MockCategoryServiceClient();
       repository = ParentCategoriesRepository(categoryServiceClient);
+      expectedParentModels
+          .addAll(mockPbCategory.map(ParentCategoryModel.fromPb).toList());
     });
 
     group('[getParentCategories()]', () {
@@ -34,28 +38,14 @@ void main() {
           ),
         );
 
-        // memory cache should be initially empty
-        expect(repository.parentCategoryModels, isEmpty);
-
         final result = await repository.getParentCategories();
 
         verify(() => categoryServiceClient.get(any())).called(1);
 
-        result.fold(
-          (l) => throw TestFailure(
-            '[getParentCategories] should map to OrderModels on a '
-            'successful request ',
-          ),
-          (r) {
-            expect(r.length, mockPbCategory.length);
-            // results should be stored in memory
-            expect(
-              repository.parentCategoryModels,
-              isNotEmpty,
-            );
-            expect(r, repository.parentCategoryModels);
-          },
-        );
+        final categories = result.getRight();
+
+        expect(categories.length, expectedParentModels.length);
+        expect(categories, expectedParentModels);
       });
 
       test(
@@ -74,16 +64,9 @@ void main() {
           // ASSERT
           verify(() => categoryServiceClient.get(any())).called(1);
 
-          //TODO(valcons97): update to use latest Dartz extension
-          result.fold(
-            (l) {
-              expect(l, isA<NetworkFailure>());
-              expect(l.message, 'Categories not found');
-            },
-            (r) => throw TestFailure(
-              '[getParentCategories] failed to map exception into Failure',
-            ),
-          );
+          final failure = result.getLeft();
+          expect(failure, isA<NetworkFailure>());
+          expect(failure.message, 'Categories not found');
         },
       );
     });

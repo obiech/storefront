@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/inventory/inventory.pbgrpc.dart';
 import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
@@ -31,4 +32,23 @@ abstract class ServiceModule {
   @preResolve
   Future<Box<DateTime>> get searchHistoryBox =>
       Hive.openBox<DateTime>(searchHistoryBoxKey);
+
+  /// Creates a gRPC [Client] responsible for communicating with
+  /// storefront-backend Inventories Service,
+  ///
+  /// and registers it to Service Locator [GetIt].
+  @lazySingleton
+  InventoryServiceClient categoryClient(
+    ClientChannel channel,
+    AuthInterceptor authInterceptor,
+    DeviceInterceptor deviceInterceptor,
+  ) {
+    return InventoryServiceClient(
+      channel,
+      interceptors: [
+        authInterceptor,
+        deviceInterceptor,
+      ],
+    );
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/category/category.pbgrpc.dart';
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/di/di_environment.dart';
 
@@ -11,23 +10,21 @@ import '../domain.dart';
 /// using gRPC connection.
 @LazySingleton(as: IParentCategoriesRepository, env: DiEnvironment.grpcEnvs)
 class ParentCategoriesRepository extends IParentCategoriesRepository {
-  ParentCategoriesRepository(this.categoryServiceClient);
+  ParentCategoriesRepository(this._categoryServiceClient);
 
-  @visibleForTesting
-  final CategoryServiceClient categoryServiceClient;
-
-  @visibleForTesting
-  List<ParentCategoryModel> parentCategoryModels = [];
+  final CategoryServiceClient _categoryServiceClient;
 
   @override
   RepoResult<List<ParentCategoryModel>> getParentCategories() async {
     try {
-      final response = await categoryServiceClient.get(GetRequest());
+      final List<ParentCategoryModel> _parentCategoryModels = [];
 
-      parentCategoryModels
+      final response = await _categoryServiceClient.get(GetRequest());
+
+      _parentCategoryModels
           .addAll(response.categories.map(ParentCategoryModel.fromPb).toList());
 
-      return right(parentCategoryModels);
+      return right(_parentCategoryModels);
     } on Exception catch (e) {
       return left(e.toFailure);
     }

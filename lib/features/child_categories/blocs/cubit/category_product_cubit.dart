@@ -14,10 +14,24 @@ class CategoryProductCubit extends Cubit<CategoryProductState> {
 
   final IProductInventoryRepository productInventoryRepo;
 
-  Future<void> fetchCategoryProduct(String categoryId) async {
+  // TODO (jonathan): Revisit how to obtain storeId on cold start
+  // when store coverage bloc is available. Perhaps by having a
+  // StreamSubscription on said bloc.
+
+  /// In the meantime, when trying to run gRPC version of InventoryService,
+  /// replace this with store ID from your local Mongo instance
+  static const dummyStoreId = 'dummyStore';
+
+  Future<void> fetchCategoryProduct(
+    String categoryId, {
+    String storeId = dummyStoreId,
+  }) async {
     emit(LoadingCategoryProductState());
 
-    final result = await productInventoryRepo.getProductByCategory(categoryId);
+    final result = await productInventoryRepo.getProductByCategory(
+      storeId,
+      categoryId,
+    );
 
     final state = result.fold(
       (failure) => ErrorCategoryProductState(failure.message),

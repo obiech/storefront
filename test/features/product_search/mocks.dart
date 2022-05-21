@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/inventory/inventory.pbgrpc.dart';
 import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:hive/hive.dart';
 import 'package:mocktail/mocktail.dart';
@@ -10,6 +11,9 @@ class MockProductSearchRepository extends Mock
     implements IProductSearchRepository {}
 
 class MockSearchServiceClient extends Mock implements SearchServiceClient {}
+
+class MockInventoryServiceClient extends Mock
+    implements InventoryServiceClient {}
 
 class MockAutosuggestionBloc extends Mock implements AutosuggestionBloc {}
 

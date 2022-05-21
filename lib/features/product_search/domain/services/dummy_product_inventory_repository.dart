@@ -3,11 +3,10 @@ import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/models/repo_result.dart';
 import 'package:storefront_app/features/product/domain/models/product_model.dart';
 
-//import '../../../../di/di_environment.dart';
+import '../../../../di/di_environment.dart';
 import '../../index.dart';
 
-// TODO (Jonathan) : add env: [DiEnvironment.dummy] in gRPC ticket
-@LazySingleton(as: IProductInventoryRepository)
+@LazySingleton(as: IProductInventoryRepository, env: [DiEnvironment.dummy])
 class DummyProductInventoryRepository extends IProductInventoryRepository {
   static const productSeladaRomaine = ProductModel(
     productId: 'selada-romaine-id',
@@ -55,7 +54,10 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
   ];
 
   @override
-  RepoResult<List<ProductModel>> getProductByCategory(String categoryId) async {
+  RepoResult<List<ProductModel>> getProductByCategory(
+    String storeId,
+    String categoryId,
+  ) async {
     await Future.delayed(const Duration(seconds: 1));
     return right(
       productsCategoryList
