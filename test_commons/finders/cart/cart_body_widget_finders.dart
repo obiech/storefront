@@ -9,11 +9,18 @@ class CartBodyWidgetFinders {
             widget is CartBodyLoading,
         description: 'Loading widget of CartBodyWidget',
       );
-  static Finder get cartItems => find.byWidgetPredicate(
+  static Finder get cartItemsInStock => find.byWidgetPredicate(
         (widget) =>
-            widget.key == CartBodyWidgetKeys.cartItems &&
+            widget.key == CartBodyWidgetKeys.cartItemsInStock &&
             widget is CartItemsSection,
-        description: 'Cart items section',
+        description: 'Cart items section (in stock)',
+      );
+
+  static Finder get cartItemsOutOfStock => find.byWidgetPredicate(
+        (widget) =>
+            widget.key == CartBodyWidgetKeys.cartItemsOutOfStock &&
+            widget is CartItemsSection,
+        description: 'Cart items section (out of stock)',
       );
 
   static Finder get paymentSummary => find.byWidgetPredicate(

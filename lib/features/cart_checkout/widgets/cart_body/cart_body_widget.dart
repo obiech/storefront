@@ -27,10 +27,19 @@ class CartBodyWidget extends StatelessWidget {
               children: [
                 SizedBox(height: res.dimens.spacingXxlarge),
                 CartItemsSection(
-                  key: CartBodyWidgetKeys.cartItems,
-                  items: state.cart.items,
+                  key: CartBodyWidgetKeys.cartItemsInStock,
+                  items: state.cart.inStockItems,
+                  title: context.res.strings.cart,
                 ),
                 const SizedBox(height: 16),
+                if (state.cart.outOfStockItems.isNotEmpty) ...[
+                  CartItemsSection(
+                    key: CartBodyWidgetKeys.cartItemsOutOfStock,
+                    items: state.cart.outOfStockItems,
+                    title: context.res.strings.outOfStockItems,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 if (!state.isCalculatingSummary)
                   //TODO (leovinsen): Have a separate field for savings once other
                   // discounts are added in backend

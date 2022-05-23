@@ -15,3 +15,10 @@ const mockCartModel = CartModel(
     total: '1500000',
   ),
 );
+
+final mockCartModelOutOfStock = mockCartModel.copyWith(
+  items: [
+    CartItemModel(variant: variantMango.copyWith(stock: 100), quantity: 1),
+    CartItemModel(variant: variantRice.copyWith(stock: 0), quantity: 1),
+  ],
+);

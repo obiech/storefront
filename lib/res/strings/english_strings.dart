@@ -444,6 +444,12 @@ class EnglishStrings implements BaseStrings {
   String get addNote => 'Add note';
 
   @override
+  String get outOfStockItems => 'Out of Stock';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
   String get clearAll => 'Clear All';
 
   @override

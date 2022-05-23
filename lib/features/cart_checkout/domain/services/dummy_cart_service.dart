@@ -16,7 +16,7 @@ class DummyCartService implements ICartRepository {
 
   static const deliveryFee = 1500000;
 
-  static const initialVariant = VariantModel(
+  static const variantMango = VariantModel(
     variantId: 'mango-id',
     sku: 'mango-sku',
     name: 'Sweet Mangoes',
@@ -28,6 +28,17 @@ class DummyCartService implements ICartRepository {
     unit: '500g',
   );
 
+  static const variantApple = VariantModel(
+    variantId: 'fuji-apples-id',
+    sku: 'fuji-apples-sku',
+    name: 'Fuji Apples',
+    price: '1900000',
+    stock: 0,
+    defaultImageUrl: 'image-url',
+    imagesUrls: ['image-url'],
+    unit: '100g',
+  );
+
   @override
   RepoResult<CartModel> loadCart(String storeId) async {
     await Future.delayed(const Duration(seconds: 1));
@@ -37,9 +48,13 @@ class DummyCartService implements ICartRepository {
       storeId: storeId,
       items: const [
         CartItemModel(
-          variant: initialVariant,
+          variant: variantMango,
           quantity: 1,
-        )
+        ),
+        CartItemModel(
+          variant: variantApple,
+          quantity: 3,
+        ),
       ],
       paymentSummary: CartPaymentSummaryModel(
         discount: '000',

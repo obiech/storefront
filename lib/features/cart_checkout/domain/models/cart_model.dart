@@ -64,4 +64,12 @@ extension CartModelX on CartModel {
   /// Returns -1 if a [CartItemModel] with [productId] is not found.
   int indexOfProduct(String productId) =>
       items.indexWhere((item) => item.variant.id == productId);
+
+  /// Returns items in this cart that are in stock
+  List<CartItemModel> get inStockItems =>
+      items.where((item) => !item.variant.isOutOfStock).toList();
+
+  /// Returns items in this cart that are out of stock
+  List<CartItemModel> get outOfStockItems =>
+      items.where((item) => item.variant.isOutOfStock).toList();
 }

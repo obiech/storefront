@@ -445,6 +445,12 @@ class IndonesianStrings implements BaseStrings {
   String get addNote => 'Tambah catatan';
 
   @override
+  String get outOfStockItems => 'Stok Barang Habis';
+
+  @override
+  String get delete => 'Hapus';
+
+  @override
   String get clearAll => 'Hapus Semua';
 
   @override

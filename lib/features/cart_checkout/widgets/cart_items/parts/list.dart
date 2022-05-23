@@ -17,21 +17,38 @@ class CartItemsList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (_, index) {
+        final item = items[index];
         return Padding(
           padding: EdgeInsets.symmetric(
             vertical: context.res.dimens.spacingMiddle,
           ),
           child: ProductTile(
-            variant: items[index].variant,
-            trailing: SizedBox(
-              height: 30,
-              width: 80,
-              child: QtyChanger(
-                onQtyChanged: (qty) {},
-                value: items[index].quantity,
-                maxValue: items[index].variant.stock,
-              ),
-            ),
+            variant: item.variant,
+            trailing: !item.variant.isOutOfStock
+                ? SizedBox(
+                    height: 30,
+                    width: 80,
+                    child: QtyChanger(
+                      onQtyChanged: (qty) {
+                        //TODO(leovinsen): connect with CartBloc edit item qty
+                        // https://dropezy.atlassian.net/browse/STOR-60
+                      },
+                      value: items[index].quantity,
+                      maxValue: items[index].variant.stock,
+                    ),
+                  )
+                : DropezyTextButton(
+                    label: context.res.strings.delete,
+                    leading: Icon(
+                      DropezyIcons.trash,
+                      size: 16,
+                      color: context.res.colors.blue,
+                    ),
+                    onPressed: () {
+                      //TODO(leovinsen): connect with CartBloc delete item
+                      // https://dropezy.atlassian.net/browse/STOR-468
+                    },
+                  ),
           ),
         );
       },

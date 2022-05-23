@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../../product/domain/domain.dart';
 import '../../../product/widgets/product_tile/product_tile.dart';
 import '../../domain/domains.dart';
 
@@ -16,8 +17,12 @@ part 'parts/list_loading.dart';
 class CartItemsSection extends StatelessWidget {
   const CartItemsSection({
     Key? key,
+    required this.title,
     required this.items,
   }) : super(key: key);
+
+  /// Title to show above list of cart items
+  final String title;
 
   /// User's items in the cart
   final List<CartItemModel> items;
@@ -31,7 +36,7 @@ class CartItemsSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.res.strings.cart,
+            title,
             style: context.res.styles.caption1.copyWith(
               fontWeight: FontWeight.w500,
             ),
