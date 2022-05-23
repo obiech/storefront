@@ -29,7 +29,9 @@ class VariantModel extends BaseProduct {
       variantId: productVariant.variantId,
       name: productVariant.name,
       imagesUrls: productVariant.imagesUrls,
-      defaultImageUrl: productVariant.imagesUrls.first,
+      defaultImageUrl: productVariant.imagesUrls.isEmpty
+          ? ''
+          : productVariant.imagesUrls.first,
       price: productVariant.price.num,
       sku: productVariant.sku,
       stock: productVariant.stock,

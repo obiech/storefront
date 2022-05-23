@@ -30,7 +30,8 @@ class OrderProductModel extends Equatable {
     return OrderProductModel(
       productId: item.product.variantId,
       productName: item.product.name,
-      thumbnailUrl: item.product.imagesUrls[0],
+      thumbnailUrl:
+          item.product.imagesUrls.isEmpty ? '' : item.product.imagesUrls[0],
       quantity: item.quantity,
       price: '1500000',
       discount: '100000',

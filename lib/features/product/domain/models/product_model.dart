@@ -48,7 +48,8 @@ class ProductModel extends BaseProduct {
       stock: inventoryProduct.totalStock,
       sku: baseVariant.sku,
       price: baseVariant.price.num,
-      thumbnailUrl: baseVariant.imagesUrls.first,
+      thumbnailUrl:
+          baseVariant.imagesUrls.isEmpty ? '' : baseVariant.imagesUrls.first,
       status: inventoryProduct.totalStock < 1
           ? ProductStatus.OUT_OF_STOCK
           : ProductStatus.ACTIVE,
