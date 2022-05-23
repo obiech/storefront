@@ -37,8 +37,8 @@ class DropezyScaffold extends StatelessWidget {
   /// uses [Text] widget as AppBar title
   factory DropezyScaffold.textTitle({
     Widget? header,
-    required Widget child,
     required String title,
+    required Widget child,
     bool useWhiteBody = true,
     bool centerTitle = false,
     EdgeInsets? childPadding,

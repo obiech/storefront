@@ -558,6 +558,41 @@ class IndonesianStrings implements BaseStrings {
   String updatedAddressSnackBarContent(String newAddress) =>
       'Alamat berhasil diubah ke $newAddress';
 
+  /// Address Detail
+  @override
+  String get addressName => 'Nama Alamat';
+
+  @override
+  String get addressDetail => 'Detail Alamat';
+
+  @override
+  String get recipientName => 'Nama Penerima';
+
+  @override
+  String get phoneNumber => 'Nomor Handphone';
+
+  @override
+  String get usePrimaryAddress => 'Gunakan sebagai alamat utama';
+
+  @override
+  String get saveAddress => 'Simpan Alamat';
+
+  @override
+  String get addressNameHint => 'Ex. Rumah Saya';
+
+  @override
+  String get addressDetailHint => 'Nomor rumah, gang, RT/RW';
+
+  @override
+  String get recipientNameHint => 'Masukkan nama penerima';
+
+  @override
+  String get phoneNumberHint => 'Masukkan nomor yang bisa dihubungi';
+
+  /// Error message
+  @override
+  String cannotBeEmpty(String field) => '$field tidak boleh kosong';
+
   @override
   String get viewCart => 'Lihat Keranjang';
 }

@@ -53,6 +53,7 @@ import '../features/profile/index.dart';
     /// Address related
     AutoRoute(page: RequestLocationAccessPage),
     AutoRoute(page: SearchLocationPage),
+    AutoRoute(page: AddressDetailPage),
 
     /// Profile related
     AutoRoute(page: EditProfilePage),

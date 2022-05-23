@@ -329,4 +329,19 @@ abstract class BaseStrings {
   String get addressPrimary;
   String get update;
   String updatedAddressSnackBarContent(String newAddress);
+
+  /// Address Detail
+  String get addressName;
+  String get addressDetail;
+  String get recipientName;
+  String get phoneNumber;
+  String get usePrimaryAddress;
+  String get saveAddress;
+  String get addressNameHint;
+  String get addressDetailHint;
+  String get recipientNameHint;
+  String get phoneNumberHint;
+
+  /// Error message
+  String cannotBeEmpty(String field);
 }

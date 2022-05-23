@@ -558,6 +558,41 @@ class EnglishStrings implements BaseStrings {
   String updatedAddressSnackBarContent(String newAddress) =>
       'Address successfully changed to $newAddress';
 
+  /// Address Detail
+  @override
+  String get addressName => 'Address Name';
+
+  @override
+  String get addressDetail => 'Address Detail';
+
+  @override
+  String get recipientName => "Recipient's Name";
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get usePrimaryAddress => 'Use as primary address';
+
+  @override
+  String get saveAddress => 'Save Address';
+
+  @override
+  String get addressNameHint => 'Ex. My Home';
+
+  @override
+  String get addressDetailHint => 'House number and street name';
+
+  @override
+  String get recipientNameHint => "Enter recipient's name";
+
+  @override
+  String get phoneNumberHint => 'Enter phone number';
+
+  /// Error message
+  @override
+  String cannotBeEmpty(String field) => '$field can not be empty';
+
   @override
   String get viewCart => 'View Cart';
 }
