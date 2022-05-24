@@ -73,6 +73,8 @@ void main() {
 
           // ASSERT
           verify(() => categoryServiceClient.get(any())).called(1);
+
+          //TODO(valcons97): update to use latest Dartz extension
           result.fold(
             (l) {
               expect(l, isA<NetworkFailure>());

@@ -54,20 +54,17 @@ void main() {
             // ASSERT
             verify(() => orderServiceClient.getOrderHistory(any())).called(1);
 
-            result.fold(
-              (l) => throw TestFailure(
-                '[getUserOrders] should map to OrderModels on a '
-                'successful request ',
-              ),
-              (r) {
-                // should have one order model for each protobuf model
-                expect(r.length, mockPbOrders.length);
+            final orders = result.getRight();
 
-                // results should be stored in memory
-                expect(grpcOrderRepository.orders, isNotEmpty);
-                expect(r, grpcOrderRepository.orders);
-              },
+            // results should be of valid format
+            expect(
+              orders,
+              mockPbOrders.map(OrderModel.fromPb).toList(),
             );
+
+            // results should be stored in memory
+            expect(grpcOrderRepository.orders, isNotEmpty);
+            expect(orders, grpcOrderRepository.orders);
           },
         );
 
@@ -86,15 +83,10 @@ void main() {
 
             // ASSERT
             verify(() => orderServiceClient.getOrderHistory(any())).called(1);
-            result.fold(
-              (l) {
-                expect(l, isA<NetworkFailure>());
-                expect(l.message, 'User orders not found');
-              },
-              (r) => throw TestFailure(
-                '[getUserOrders] failed to map exception into Failure',
-              ),
-            );
+
+            final failure = result.getLeft();
+            expect(failure, isA<NetworkFailure>());
+            expect(failure.message, 'User orders not found');
           },
         );
       });
@@ -117,15 +109,10 @@ void main() {
               // should not fetch from gRPC service
               verifyNever(() => orderServiceClient.get(any()));
 
-              result.fold(
-                (l) => TestFailure(
-                  '[getOrderById] failed to fetch from memory',
-                ),
-                (r) {
-                  // returned order should be same as the one in memory
-                  expect(r, grpcOrderRepository.orders[0]);
-                },
-              );
+              final order = result.getRight();
+
+              // returned order should be same as the one in memory
+              expect(order, grpcOrderRepository.orders[0]);
             },
           );
 
@@ -152,14 +139,8 @@ void main() {
               // should fetch from gRPC service
               verify(() => orderServiceClient.get(any())).called(1);
 
-              result.fold(
-                (l) => throw TestFailure(
-                  '[getOrderById] failed to fetch order from backend',
-                ),
-                (r) {
-                  expect(r, OrderModel.fromPb(mockPbOrder));
-                },
-              );
+              final order = result.getRight();
+              expect(order, OrderModel.fromPb(mockPbOrder));
             },
           );
 
@@ -184,15 +165,9 @@ void main() {
               // should fetch from gRPC service
               verify(() => orderServiceClient.get(any())).called(1);
 
-              result.fold(
-                (l) {
-                  expect(l, isA<NetworkFailure>());
-                  expect(l.message, mockErrorMsg);
-                },
-                (r) => throw TestFailure(
-                  '[getOrderById] failed to map exception into Failure',
-                ),
-              );
+              final failure = result.getLeft();
+              expect(failure, isA<NetworkFailure>());
+              expect(failure.message, mockErrorMsg);
             },
           );
         },

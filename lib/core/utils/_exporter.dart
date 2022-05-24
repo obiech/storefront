@@ -1,6 +1,7 @@
 export 'bloc.ext.dart';
 export 'bottom_sheet_utils.dart';
 export 'build_context.ext.dart';
+export 'dartz.ext.dart';
 export 'datetime.ext.dart';
 export 'dotenv.ext.dart';
 export 'is_test_mode.dart';

@@ -1,8 +1,8 @@
-import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/cart/cart.pbgrpc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/pb_summary_response.dart';
@@ -38,8 +38,7 @@ void main() {
                   .thenAnswer((_) => MockResponseFuture.value(mockResponse));
               final result = await cartService.loadCart(mockStoreId);
 
-              expect(result.isRight(), true);
-              final cart = (result as Right).value;
+              final cart = result.getRight();
               expect(cart, CartModel.fromPb(mockResponse));
             },
           );
@@ -57,8 +56,7 @@ void main() {
               );
               final result = await cartService.loadCart(mockStoreId);
 
-              expect(result.isLeft(), true);
-              final failure = (result as Left).value;
+              final failure = result.getLeft();
               expect(failure.message, 'User is unauthenticated');
             },
           );
