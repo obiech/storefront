@@ -96,6 +96,28 @@ void main() {
       );
 
       testWidgets(
+        'should navigate to Help Page '
+        'when Help tile is tapped',
+        (tester) async {
+          final context = await tester.pumpProfilePage(stackRouter);
+
+          await tester.tap(find.text(context.res.strings.help));
+          await tester.pumpAndSettle();
+
+          final capturedRoutes =
+              verify(() => stackRouter.push(captureAny())).captured;
+
+          // there should only be one route that's being pushed
+          expect(capturedRoutes.length, 1);
+
+          final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+          // expecting the right route being pushed
+          expect(routeInfo, isA<HelpRoute>());
+        },
+      );
+
+      testWidgets(
         'should navigate to Change Address Page '
         'when Change Address tile is tapped',
         (tester) async {

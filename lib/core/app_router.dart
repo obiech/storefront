@@ -4,6 +4,7 @@ import '../features/address/index.dart';
 import '../features/auth/index.dart';
 import '../features/cart_checkout/index.dart';
 import '../features/child_categories/index.dart';
+import '../features/help/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
 import '../features/product_search/index.dart';
@@ -58,6 +59,9 @@ import '../features/profile/index.dart';
     /// Profile related
     AutoRoute(page: EditProfilePage),
     AutoRoute(page: ChangeAddressPage),
+
+    /// Help
+    AutoRoute(page: HelpPage),
 
     /// Global Search Navigation
     AutoRoute(

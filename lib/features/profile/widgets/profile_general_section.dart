@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -26,7 +27,11 @@ class ProfileGeneralSection extends StatelessWidget {
           ProfileMenuTile.icon(
             icon: DropezyIcons.support,
             title: context.res.strings.help,
-            onTap: () {},
+            onTap: () {
+              context.pushRoute(
+                const HelpRoute(),
+              );
+            },
           ),
           ProfileMenuTile.icon(
             icon: DropezyIcons.paper,
