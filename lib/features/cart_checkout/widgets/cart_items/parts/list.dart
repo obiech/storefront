@@ -28,6 +28,7 @@ class CartItemsList extends StatelessWidget {
               width: 80,
               child: QtyChanger(
                 onQtyChanged: (qty) {},
+                value: items[index].quantity,
                 maxValue: items[index].variant.stock,
               ),
             ),

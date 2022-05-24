@@ -152,6 +152,9 @@ extension ProductX on ProductModel {
         (variant) => variant.id == defaultProduct,
         orElse: () => variants.first,
       );
+
+  /// Check if product has more than one variant
+  bool get hasMultipleVariants => variants.length > 1;
 }
 
 /// gRPC [Product] extension methods

@@ -55,13 +55,7 @@ class _ProductActionState extends State<ProductAction> {
                     '${widget.product.id}_qty_changer',
                   ),
                   scaleFactor: widget.scaleFactor,
-                  onQtyChanged: (qty) {
-                    /// TODO(obella465) - Update variant cart quantity
-                    _qty = qty;
-                    if (_qty == 0) {
-                      _isInCart.value = false;
-                    }
-                  },
+                  onQtyChanged: (qty) => _updateCart(context, qty),
                   value: _qty,
                   maxValue: widget.product.stock,
                 )
@@ -82,6 +76,27 @@ class _ProductActionState extends State<ProductAction> {
     );
   }
 
+  /// When [QtyChanger.onQtyChanged] is triggered,
+  /// the new quantity is submitted to the backend
+  /// to update the cart
+  ///
+  /// * [quantity] - The new quantity of this variant
+  void _updateCart(
+    BuildContext context,
+    int quantity,
+  ) {
+    final variant = widget.product is ProductModel
+        ? (widget.product as ProductModel).defaultVariant
+        : widget.product as VariantModel;
+
+    context.read<CartBloc>().add(EditCartItem(variant, quantity));
+
+    _qty = quantity;
+    if (_qty == 0) {
+      _isInCart.value = false;
+    }
+  }
+
   /// Add to cart button tap handler,
   /// behaves differently depending on number of variants a product has
   ///
@@ -92,8 +107,7 @@ class _ProductActionState extends State<ProductAction> {
   void _addToCart() {
     if (widget.product is ProductModel) {
       final product = widget.product as ProductModel;
-      if (product.variants.length > 1) {
-        /// TODO - Open Variants Bottomsheet dialog
+      if (product.hasMultipleVariants) {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
@@ -103,24 +117,26 @@ class _ProductActionState extends State<ProductAction> {
           },
         );
       } else {
-        /// TODO - Add product to cart with default variant
         if (product.variants.isEmpty) return;
-        _addVariantToCart(product.variants.first);
+        _addVariantToCart(context, product.defaultVariant);
         _qty = 1;
         _isInCart.value = true;
       }
     } else {
-      /// TODO - Add Variant to cart
-      _addVariantToCart(widget.product as VariantModel);
+      _addVariantToCart(context, widget.product as VariantModel);
+
       _qty = 1;
       _isInCart.value = true;
     }
   }
 
-  Future<void> _addVariantToCart(VariantModel variant) async {
-    /// TODO (obella465)- Add to cart
-    /// @leovinsen we could think through how to handle a network failed
-    /// add to cart
+  Future<void> _addVariantToCart(
+    BuildContext context,
+    VariantModel variant,
+  ) async {
+    context.read<CartBloc>().add(AddCartItem(variant));
+    // TODO(obella465): Handle failure & loading
+    // https://dropezy.atlassian.net/browse/STOR-467
   }
 
   @override
