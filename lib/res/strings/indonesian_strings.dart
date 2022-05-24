@@ -595,4 +595,14 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get viewCart => 'Lihat Keranjang';
+
+  /// Help Page
+  @override
+  String get contactUs => 'Hubungi Kami';
+
+  @override
+  String get customerService => 'Pelayanan Pelanggan';
+
+  @override
+  String get whatsapp => 'WhatsApp';
 }

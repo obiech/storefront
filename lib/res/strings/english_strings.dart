@@ -595,4 +595,14 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get viewCart => 'View Cart';
+
+  /// Help Page
+  @override
+  String get contactUs => 'Contact Us';
+
+  @override
+  String get customerService => 'Customer Service';
+
+  @override
+  String get whatsapp => 'WhatsApp';
 }

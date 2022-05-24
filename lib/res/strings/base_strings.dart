@@ -344,4 +344,9 @@ abstract class BaseStrings {
 
   /// Error message
   String cannotBeEmpty(String field);
+
+  /// Help Page
+  String get contactUs;
+  String get customerService;
+  String get whatsapp;
 }

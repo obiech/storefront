@@ -10,6 +10,8 @@ void main() {
     GRPC_ENABLE_TLS=false
     URL_PRIVACY_POLICY=https://dropezy.com/privacy
     URL_TERMS_CONDITIONS=https://dropezy.com/terms-and-conditions
+    WHATSAPP_CUSTOMER_SERVICE_NUMBER=000000
+    WHATSAPP_UNIVERSAL_URL=https://wa.me/
       ''';
   test('[EnvVariables] should return the right environment variables', () {
     dotenv.testLoad(fileInput: testVariables);
@@ -22,5 +24,7 @@ void main() {
       ExternalUrlConfig.urlTermsConditions,
       'https://dropezy.com/terms-and-conditions',
     );
+    expect(ExternalUrlConfig.customerServiceWhatsApp, '000000');
+    expect(ExternalUrlConfig.whatsAppUniversalUrl, 'https://wa.me/');
   });
 }

@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+part 'parts/customer_service_tile.dart';
+part 'parts/whatsapp_button.dart';
 
 class HelpPage extends StatelessWidget {
   const HelpPage({Key? key}) : super(key: key);
@@ -7,8 +13,18 @@ class HelpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
+      bodyAlignment: Alignment.topCenter,
       title: context.res.strings.help,
-      child: const SizedBox(),
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: ListView(
+          shrinkWrap: true,
+          children: const [
+            _CustomerServiceTile(),
+            ThickDivider(),
+          ],
+        ),
+      ),
     );
   }
 }
