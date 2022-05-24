@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/di/di_environment.dart';
 
-import '../../../../core/models/repo_result.dart';
+import '../../../../core/core.dart';
 import '../../../product/domain/domain.dart';
 import '../domains.dart';
 
@@ -136,6 +136,29 @@ class DummyCartService implements ICartRepository {
             )
           ],
         ),
+    );
+
+    _calculatePaymentSummary();
+
+    return right(_cart);
+  }
+
+  @override
+  RepoResult<CartModel> removeItem(
+    String storeId,
+    VariantModel variant,
+  ) async {
+    // Simulate a short network loading
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final index = _cart.indexOfProduct(variant.id);
+
+    if (index == -1) {
+      return left(Failure('Cart item not found'));
+    }
+
+    _cart = _cart.copyWith(
+      items: List.of(_cart.items)..removeAt(index),
     );
 
     _calculatePaymentSummary();

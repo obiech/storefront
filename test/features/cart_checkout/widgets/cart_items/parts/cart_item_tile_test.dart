@@ -102,7 +102,7 @@ void main() {
               await tester.tap(finderMinusButton);
               await tester.pumpAndSettle();
 
-              // assert qty has changed, and an EditCartItem evet is dispatched
+              // assert qty has changed, and an EditCartItem event is dispatched
               expect(find.text(newQty.toString()), findsOneWidget);
 
               verify(
@@ -139,7 +139,31 @@ void main() {
             },
           );
 
-          // TODO (leovinsen): add test for Delete Item
+          testWidgets(
+            'should send a [RemoveCartItem] '
+            'when "Delete" Button is tapped',
+            (tester) async {
+              await tester.pumpCartItemTile(
+                item: cartItemOutOfStock,
+                cartBloc: cartBloc,
+              );
+
+              final variantId = cartItemOutOfStock.variant.id;
+
+              final finderDeleteButton =
+                  find.byKey(CartItemsSectionKeys.deleteButton(variantId));
+
+              await tester.tap(finderDeleteButton);
+              await tester.pumpAndSettle();
+
+              // assert RemoveCartItem event is dispatched
+              verify(
+                () => cartBloc.add(
+                  RemoveCartItem(cartItemOutOfStock.variant),
+                ),
+              ).called(1);
+            },
+          );
         },
       );
     },

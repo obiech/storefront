@@ -39,3 +39,15 @@ class EditCartItem extends CartEvent {
   @override
   List<Object?> get props => [variant, quantity];
 }
+
+/// When user removes an item from the cart
+/// i.e. by tapping on 'Delete' button in Cart page
+class RemoveCartItem extends CartEvent {
+  const RemoveCartItem(this.variant);
+
+  /// Product variant being deleted
+  final VariantModel variant;
+
+  @override
+  List<Object?> get props => [variant];
+}

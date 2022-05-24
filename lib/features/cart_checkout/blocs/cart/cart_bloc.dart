@@ -24,9 +24,10 @@ part 'cart_state.dart';
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this.cartRepository) : super(const CartInitial()) {
-    on<LoadCart>(_loadCart);
-    on<AddCartItem>(_addCartItem);
-    on<EditCartItem>(_editCartItem);
+    on<LoadCart>(_onLoadCart);
+    on<AddCartItem>(_onAddCartItem);
+    on<EditCartItem>(_onEditCartItem);
+    on<RemoveCartItem>(_onRemoveCartItem);
   }
 
   //TODO (leovinsen): Revisit how to obtain storeId on cold start
@@ -38,7 +39,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   final ICartRepository cartRepository;
 
-  FutureOr<void> _loadCart(
+  FutureOr<void> _onLoadCart(
     LoadCart event,
     Emitter<CartState> emit,
   ) async {
@@ -54,10 +55,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
-  /// Adds product [event.variant] into cart.
+  /// Handler for [AddCartItem] that
+  /// adds product [event.variant] into cart.
   ///
   /// Can only be used when [state] is [CartLoaded].
-  FutureOr<void> _addCartItem(
+  FutureOr<void> _onAddCartItem(
     AddCartItem event,
     Emitter<CartState> emit,
   ) async {
@@ -100,6 +102,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
+  /// Handler for [EditCartItem].
+  ///
   /// - Given [event.quantity] is zero, will remove the product from cart instead.
   ///
   /// - Given [event.quantity] is greater than current quantity, will increment
@@ -109,7 +113,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   /// [event.variant] quantity in cart by the difference in quantity.
   ///
   /// Can only be used when [state] is [CartLoaded].
-  FutureOr<void> _editCartItem(
+  FutureOr<void> _onEditCartItem(
     EditCartItem event,
     Emitter<CartState> emit,
   ) async {
@@ -121,9 +125,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final currState = state as CartLoaded;
 
-    final index = currState.cart.items.indexWhere(
-      (item) => item.variant.id == event.variant.id,
-    );
+    final index = currState.cart.indexOfProduct(event.variant.id);
 
     // Ensure item exists
     if (index == -1) {
@@ -132,17 +134,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       return;
     }
 
-    final tempList = List.of(currState.cart.items);
-    final oldItem = tempList.removeAt(index);
-
-    late Either<Failure, CartModel> result;
-
     // Remove product when quantity is zero
     if (event.quantity == 0) {
-      debugPrint('Remove cart item is not yet implemented');
+      await _removeCartItem(event.variant, emit);
       return;
     } else {
+      final tempList = List.of(currState.cart.items);
+      final oldItem = tempList.removeAt(index);
+
       final qtyChange = event.quantity - oldItem.quantity;
+
+      late Either<Failure, CartModel> result;
 
       if (qtyChange == 0) {
         debugPrint('Skipping edit cart item because quantity is unchanged');
@@ -173,11 +175,59 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           qtyChange.abs(),
         );
       }
+
+      result.fold(
+        (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
+        (result) => emit(CartLoaded.success(result)),
+      );
     }
+  }
+
+  /// Handler for [RemoveCartItem] event.
+  ///
+  /// Calls [_removeCartItem] using event contents.
+  ///
+  /// Can only be used when [state] is [CartLoaded].
+  FutureOr<void> _onRemoveCartItem(
+    RemoveCartItem event,
+    Emitter<CartState> emit,
+  ) async {
+    if (state is! CartLoaded) {
+      debugPrint('Cannot remove item from cart when state is not CartLoaded');
+      return;
+    }
+
+    await _removeCartItem(event.variant, emit);
+  }
+
+  /// Removes product [variant] from cart.
+  Future<void> _removeCartItem(
+    VariantModel variant,
+    Emitter<CartState> emit,
+  ) async {
+    final currState = state as CartLoaded;
+
+    final index = currState.cart.indexOfProduct(variant.id);
+
+    if (index == -1) {
+      debugPrint('Error: Cart item being removed does not exist');
+      return;
+    }
+
+    // remove item from cart
+    final newItems = List.of(currState.cart.items);
+    final newCart = currState.cart.copyWith(items: newItems..removeAt(index));
+
+    emit(CartLoaded.loading(newCart));
+
+    final result = await cartRepository.removeItem(
+      currState.cart.storeId,
+      variant,
+    );
 
     result.fold(
       (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
-      (result) => emit(CartLoaded.success(result)),
+      (cart) => emit(CartLoaded.success(cart)),
     );
   }
 }

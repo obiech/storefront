@@ -40,10 +40,7 @@ class CartItemTile extends StatelessWidget {
                 size: 16,
                 color: context.res.colors.blue,
               ),
-              onPressed: () {
-                //TODO(leovinsen): connect with CartBloc delete item
-                // https://dropezy.atlassian.net/browse/STOR-468
-              },
+              onPressed: () => _removeCartItem(context, item),
             ),
     );
   }
@@ -54,5 +51,9 @@ class CartItemTile extends StatelessWidget {
     int quantity,
   ) {
     context.read<CartBloc>().add(EditCartItem(variant, quantity));
+  }
+
+  void _removeCartItem(BuildContext context, CartItemModel item) {
+    context.read<CartBloc>().add(RemoveCartItem(item.variant));
   }
 }

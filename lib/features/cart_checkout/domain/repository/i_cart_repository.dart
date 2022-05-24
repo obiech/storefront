@@ -27,4 +27,8 @@ abstract class ICartRepository {
     VariantModel variant,
     int quantity,
   );
+
+  /// Removes a cart item [variant] from a cart session
+  /// at a store identified with [storeId].
+  RepoResult<CartModel> removeItem(String storeId, VariantModel variant);
 }

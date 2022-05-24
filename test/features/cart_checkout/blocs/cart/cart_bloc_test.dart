@@ -204,16 +204,20 @@ void main() {
             },
           );
 
+          // TODO(leovinsen): move this group out of [AddToCart] group
           group(
             'when [EditCartItem] event is added',
             () {
               const variantToEdit = variant_fixtures.variantMango;
-              final initialCart = cart_fixtures.mockCartModel.copyWith.items([
-                const CartItemModel(
-                  variant: variantToEdit,
-                  quantity: 2,
-                )
-              ]);
+              final initialCart = cart_fixtures.mockCartModel.copyWith(
+                storeId: CartBloc.dummyStoreId,
+                items: [
+                  const CartItemModel(
+                    variant: variantToEdit,
+                    quantity: 2,
+                  )
+                ],
+              );
               final seedState = CartLoaded(
                 cart: initialCart,
                 isCalculatingSummary: false,
@@ -401,7 +405,160 @@ void main() {
                   );
                 },
               );
+
+              /// If new quantity zero,
+              /// should remove product from cart
+              group(
+                'and quantity in event is zero',
+                () {
+                  const event = EditCartItem(variantToEdit, 0);
+                  final resultCart = initialCart.copyWith.items([]);
+                  final loadingState = CartLoaded.loading(resultCart);
+                  void verifyFn(CartBloc bloc) {
+                    verify(
+                      () => bloc.cartRepository.removeItem(
+                        CartBloc.dummyStoreId,
+                        event.variant,
+                      ),
+                    );
+                  }
+
+                  blocTest<CartBloc, CartState>(
+                    'should emit a loading [CartLoaded] with item removed from cart '
+                    'and call [CartRepository.removeItem()] '
+                    'and finally emit resulting cart',
+                    setUp: () {
+                      when(
+                        () => cartRepository.removeItem(
+                          CartBloc.dummyStoreId,
+                          event.variant,
+                        ),
+                      ).thenAnswer((_) async {
+                        return right(resultCart);
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded.success(resultCart)
+                    ],
+                    verify: verifyFn,
+                  );
+
+                  blocTest<CartBloc, CartState>(
+                    'and cart repository returns a Failure '
+                    'should emit a loading [CartLoaded] with cart removed '
+                    'and call [CartRepository.removeItem()], '
+                    'and finally emit [CartLoaded] with cart before event is added '
+                    'and an error message from Failure',
+                    setUp: () {
+                      when(
+                        () => cartRepository.removeItem(
+                          CartBloc.dummyStoreId,
+                          event.variant,
+                        ),
+                      ).thenAnswer((_) async {
+                        return left(
+                          Failure('Failed to remove item'),
+                        );
+                      });
+                    },
+                    build: () => bloc,
+                    seed: () => seedState,
+                    act: (bloc) => bloc.add(event),
+                    expect: () => <CartState>[
+                      loadingState,
+                      CartLoaded.error(initialCart, 'Failed to remove item')
+                    ],
+                    verify: verifyFn,
+                  );
+                },
+              );
             },
+          );
+        },
+      );
+
+      group(
+        'when [RemoveCartItem] event is added',
+        () {
+          const variantToRemove = variant_fixtures.variantMango;
+          final initialCart = cart_fixtures.mockCartModel.copyWith(
+            storeId: CartBloc.dummyStoreId,
+            items: [
+              const CartItemModel(
+                variant: variantToRemove,
+                quantity: 10,
+              )
+            ],
+          );
+          final resultCart = initialCart.copyWith.items([]);
+
+          const event = RemoveCartItem(variantToRemove);
+          final loadingState = CartLoaded.loading(resultCart);
+          final seedState = CartLoaded.success(initialCart);
+
+          void verifyFn(CartBloc bloc) {
+            verify(
+              () => bloc.cartRepository.removeItem(
+                CartBloc.dummyStoreId,
+                event.variant,
+              ),
+            );
+          }
+
+          blocTest<CartBloc, CartState>(
+            'should emit a loading [CartLoaded] with item removed from cart '
+            'and call [CartRepository.removeItem()] '
+            'and finally emit resulting cart',
+            setUp: () {
+              when(
+                () => cartRepository.removeItem(
+                  CartBloc.dummyStoreId,
+                  event.variant,
+                ),
+              ).thenAnswer((_) async {
+                return right(resultCart);
+              });
+            },
+            build: () => bloc,
+            seed: () => seedState,
+            act: (bloc) => bloc.add(event),
+            expect: () => <CartState>[
+              loadingState,
+              CartLoaded.success(resultCart),
+            ],
+            verify: verifyFn,
+          );
+
+          blocTest<CartBloc, CartState>(
+            'and cart repository returns a Failure '
+            'should emit a loading [CartLoaded] with cart removed '
+            'and call [CartRepository.removeItem()], '
+            'and finally emit [CartLoaded] with cart before event is added '
+            'and an error message from Failure',
+            setUp: () {
+              when(
+                () => cartRepository.removeItem(
+                  CartBloc.dummyStoreId,
+                  event.variant,
+                ),
+              ).thenAnswer((_) async {
+                return left(
+                  Failure('Failed to remove item'),
+                );
+              });
+            },
+            build: () => bloc,
+            seed: () => seedState,
+            act: (bloc) => bloc.add(event),
+            expect: () => <CartState>[
+              loadingState,
+              CartLoaded.error(initialCart, 'Failed to remove item'),
+            ],
+            verify: verifyFn,
           );
         },
       );

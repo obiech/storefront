@@ -62,4 +62,10 @@ class CartService extends ICartRepository {
     // TODO: implement incrementItem
     throw UnimplementedError();
   }
+
+  @override
+  RepoResult<CartModel> removeItem(String storeId, VariantModel variant) {
+    // TODO: implement removeItem
+    throw UnimplementedError();
+  }
 }
