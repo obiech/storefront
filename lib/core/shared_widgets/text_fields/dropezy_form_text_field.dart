@@ -5,6 +5,7 @@ class DropezyTextFormField extends StatelessWidget {
   final Key? fieldKey;
   final String label;
   final String hintText;
+  final Function(String)? onChanged;
 
   /// Form Field validation
   ///
@@ -17,6 +18,7 @@ class DropezyTextFormField extends StatelessWidget {
     this.fieldKey,
     required this.label,
     required this.hintText,
+    this.onChanged,
     this.validator,
   }) : super(key: key);
 
@@ -42,6 +44,7 @@ class DropezyTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
+          onChanged: onChanged,
           validator: validator ??
               (value) {
                 if (value == null || value.isEmpty) {

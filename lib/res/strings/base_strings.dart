@@ -341,6 +341,7 @@ abstract class BaseStrings {
   String get addressDetailHint;
   String get recipientNameHint;
   String get phoneNumberHint;
+  String get savedAddressSnackBarContent;
 
   /// Error message
   String cannotBeEmpty(String field);

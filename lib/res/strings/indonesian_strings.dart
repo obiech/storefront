@@ -589,6 +589,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get phoneNumberHint => 'Masukkan nomor yang bisa dihubungi';
 
+  @override
+  String get savedAddressSnackBarContent => 'Alamat Berhasil Disimpan';
+
   /// Error message
   @override
   String cannotBeEmpty(String field) => '$field tidak boleh kosong';

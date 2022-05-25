@@ -589,6 +589,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get phoneNumberHint => 'Enter phone number';
 
+  @override
+  String get savedAddressSnackBarContent => 'Address Successfully Updated';
+
   /// Error message
   @override
   String cannotBeEmpty(String field) => '$field can not be empty';

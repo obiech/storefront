@@ -130,4 +130,17 @@ class DummyDeliveryAddressService extends IDeliveryAddressRepository {
     await Future.delayed(const Duration(seconds: 1));
     return right(addressList);
   }
+
+  @override
+  RepoResult<Unit> saveAddress(DeliveryAddressModel address) async {
+    try {
+      //  Simulate network loading
+      await Future.delayed(const Duration(seconds: 1));
+      addressList.add(address);
+
+      return right(unit);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }
