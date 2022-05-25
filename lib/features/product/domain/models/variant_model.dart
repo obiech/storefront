@@ -8,9 +8,6 @@ class VariantModel extends BaseProduct {
   // product variant's image urls.
   final List<String> imagesUrls;
 
-  // product variant unit.
-  final String unit;
-
   const VariantModel({
     required String variantId,
     required String name,
@@ -20,8 +17,17 @@ class VariantModel extends BaseProduct {
     String? discount,
     required String sku,
     required int stock,
-    required this.unit,
-  }) : super(variantId, name, sku, stock, price, discount, defaultImageUrl);
+    required String unit,
+  }) : super(
+          variantId,
+          name,
+          sku,
+          stock,
+          price,
+          discount,
+          defaultImageUrl,
+          unit,
+        );
 
   /// Creates a [VariantModel] from gRPC [Variant]
   factory VariantModel.fromPb(Variant productVariant) {
@@ -66,5 +72,5 @@ class VariantModel extends BaseProduct {
       );
 
   @override
-  List<Object?> get props => [...super.props, unit, imagesUrls];
+  List<Object?> get props => [...super.props, imagesUrls];
 }

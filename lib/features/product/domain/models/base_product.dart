@@ -35,6 +35,12 @@ abstract class BaseProduct extends Equatable {
   /// it holds the default variant's discount
   final String? discount;
 
+  /// unit of product or variant.
+  ///
+  /// For the case of the product,
+  /// it holds the default variant's unit
+  final String unit;
+
   // TODO: Fetch this value from backend when discount module is available
   /// Result of [price] subtracted by [discount].
   ///
@@ -58,6 +64,7 @@ abstract class BaseProduct extends Equatable {
     this.price,
     this.discount,
     this.thumbnailUrl,
+    this.unit,
   );
 
   @override
@@ -69,6 +76,7 @@ abstract class BaseProduct extends Equatable {
         price,
         discount,
         thumbnailUrl,
+        unit,
       ];
 }
 

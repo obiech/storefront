@@ -9,6 +9,7 @@ const productSeladaRomaine = ProductModel(
   stock: 2,
   variants: [],
   defaultProduct: '',
+  unit: '500g',
   thumbnailUrl: 'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
 );
 
@@ -20,6 +21,7 @@ const productCookingOilSania = ProductModel(
   stock: 2,
   variants: [],
   defaultProduct: '',
+  unit: '500g',
   thumbnailUrl:
       'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg',
 );
@@ -32,6 +34,7 @@ const productBellPepperYellow = ProductModel(
   stock: 2,
   variants: [],
   defaultProduct: '',
+  unit: '500g',
   thumbnailUrl:
       'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
 );
@@ -55,6 +58,7 @@ const seledaRomaine = ProductModel(
     )
   ],
   defaultProduct: '',
+  unit: '500g',
   stock: 100,
   thumbnailUrl:
       'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',

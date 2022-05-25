@@ -54,4 +54,30 @@ void main() {
 
     expect(outOfStockButton.enabled, false);
   });
+
+  testWidgets('should display product name', (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpProductItemCard(product);
+
+    /// assert
+    expect(find.text(product.name.capitalize()), findsOneWidget);
+  });
+
+  testWidgets('should display product unit', (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpProductItemCard(product);
+
+    /// assert
+    expect(find.text(product.unit), findsOneWidget);
+  });
+
+  testWidgets('should display product price', (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpProductItemCard(product);
+
+    /// assert
+    expect(find.text(product.price.toCurrency()), findsOneWidget);
+  });
+
+  /// TODO(obella): Test discount display when ready
 }

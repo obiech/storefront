@@ -23,6 +23,7 @@ class ProductModel extends BaseProduct {
     required String sku,
     required int stock,
     required String price,
+    required String unit,
     required String thumbnailUrl,
 
     // TODO(obella465): Fix once fields below are confirmed
@@ -32,7 +33,7 @@ class ProductModel extends BaseProduct {
 
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
     this.status = ProductStatus.ACTIVE,
-  }) : super(productId, name, sku, stock, price, discount, thumbnailUrl);
+  }) : super(productId, name, sku, stock, price, discount, thumbnailUrl, unit);
 
   /// Creates a [ProductModel] from gRPC [Product]
   factory ProductModel.fromPb(Product inventoryProduct) {
@@ -48,6 +49,8 @@ class ProductModel extends BaseProduct {
       stock: inventoryProduct.totalStock,
       sku: baseVariant.sku,
       price: baseVariant.price.num,
+      // TODO(obella465) - Restore to required when added to proto
+      unit: '500g',
       thumbnailUrl:
           baseVariant.imagesUrls.isEmpty ? '' : baseVariant.imagesUrls.first,
       status: inventoryProduct.totalStock < 1
@@ -66,6 +69,7 @@ class ProductModel extends BaseProduct {
       defaultProduct: '',
       stock: 0,
       sku: '',
+      unit: '',
       price: '',
       thumbnailUrl: '',
       status: ProductStatus.LOADING,
@@ -109,6 +113,7 @@ class ProductModel extends BaseProduct {
     String? sku,
     int? stock,
     String? price,
+    String? unit,
     String? thumbnailUrl,
     String? discount,
     ProductStatus? status,
@@ -123,6 +128,7 @@ class ProductModel extends BaseProduct {
         stock: stock ?? this.stock,
         sku: sku ?? this.sku,
         price: price ?? this.price,
+        unit: unit ?? this.unit,
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
         status: status ?? this.status,
         marketStatus: marketStatus ?? this.marketStatus,

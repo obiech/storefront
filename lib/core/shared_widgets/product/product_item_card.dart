@@ -158,9 +158,8 @@ class ProductItemCard extends StatelessWidget {
                   SizedBox(
                     height: 2 * scaleFactor,
                   ),
-                  //TODO(obella465): Where will unit be got
                   Text(
-                    '500 g',
+                    product.unit,
                     style: res.styles.caption3.copyWith(
                       color: const Color(0xFF70717D),
                       fontSize: 11,

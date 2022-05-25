@@ -51,6 +51,7 @@ const _dummyInventory = [
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
     defaultProduct: 'selada-romaine-variant-id',
+    unit: '500g',
     variants: [
       VariantModel(
         variantId: 'selada-romaine-variant-id',
@@ -87,6 +88,7 @@ const _dummyInventory = [
     price: '30000',
     stock: 15,
     defaultProduct: 'mango-variant-id',
+    unit: '500g',
     marketStatus: MarketStatus.FLASH_SALE,
     variants: [
       VariantModel(
@@ -113,6 +115,7 @@ const _dummyInventory = [
     price: '10000',
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     stock: 50,
     status: ProductStatus.OUT_OF_STOCK,
     marketStatus: MarketStatus.BEST_SELLER,
@@ -127,6 +130,7 @@ const _dummyInventory = [
     discount: '20000',
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     stock: 2,
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
@@ -140,6 +144,7 @@ const _dummyInventory = [
     stock: 2,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
   ),
@@ -152,6 +157,7 @@ const _dummyInventory = [
     stock: 2,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
   ),
@@ -163,6 +169,7 @@ const _dummyInventory = [
     stock: 50,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     marketStatus: MarketStatus.BEST_SELLER,
     thumbnailUrl:
         'https://png2.cleanpng.com/sh/d8c9fc6388c317dea186dbeeefcc18a0/L0KzQYm3WcI2N6lBgpH0aYP2gLBuTfZzbZ9ogJ9vcnnog373jCRifJCyjtdwZYTkgrrojr1kfZp4gdDuLXnxdLroTgZmb5Z5ReJ4dHH3f7b6TcVjaZI3ftM6M0e2RLa3TsQzQWQ4Sqs8MUW2R4mAWck3QWM3TqM3cH7q/kisspng-french-fries-potato-vegetarian-cuisine-india-veget-potatoes-5baa2fa13734e0.4293329315378799692261.png',
@@ -176,6 +183,7 @@ const _dummyInventory = [
     stock: 2,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
   ),
@@ -188,6 +196,7 @@ const _dummyInventory = [
     stock: 2,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
   ),
@@ -200,6 +209,7 @@ const _dummyInventory = [
     stock: 2,
     variants: [],
     defaultProduct: '',
+    unit: '500g',
     thumbnailUrl:
         'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
   ),
