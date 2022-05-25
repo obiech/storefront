@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../../product/domain/domain.dart';
 import '../../../product/widgets/product_tile/product_tile.dart';
+import '../../blocs/cart/cart_bloc.dart';
 import '../../domain/domains.dart';
 
+part 'parts/cart_item_tile.dart';
+part 'parts/keys.dart';
 part 'parts/list.dart';
 part 'parts/list_loading.dart';
 

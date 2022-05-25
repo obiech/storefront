@@ -144,13 +144,13 @@ class DummyCartService implements ICartRepository {
   }
 
   void _calculatePaymentSummary() {
-    final newTotal = _cart.items.fold<int>(
+    final newTotal = _cart.inStockItems.fold<int>(
       0,
       (prev, item) =>
           prev + item.quantity * (int.tryParse(item.variant.price) ?? 0),
     );
 
-    final newDiscount = _cart.items.fold<int>(
+    final newDiscount = _cart.inStockItems.fold<int>(
       0,
       (prev, item) =>
           prev +

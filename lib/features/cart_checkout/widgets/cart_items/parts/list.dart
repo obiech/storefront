@@ -22,34 +22,7 @@ class CartItemsList extends StatelessWidget {
           padding: EdgeInsets.symmetric(
             vertical: context.res.dimens.spacingMiddle,
           ),
-          child: ProductTile(
-            variant: item.variant,
-            trailing: !item.variant.isOutOfStock
-                ? SizedBox(
-                    height: 30,
-                    width: 80,
-                    child: QtyChanger(
-                      onQtyChanged: (qty) {
-                        //TODO(leovinsen): connect with CartBloc edit item qty
-                        // https://dropezy.atlassian.net/browse/STOR-60
-                      },
-                      value: items[index].quantity,
-                      maxValue: items[index].variant.stock,
-                    ),
-                  )
-                : DropezyTextButton(
-                    label: context.res.strings.delete,
-                    leading: Icon(
-                      DropezyIcons.trash,
-                      size: 16,
-                      color: context.res.colors.blue,
-                    ),
-                    onPressed: () {
-                      //TODO(leovinsen): connect with CartBloc delete item
-                      // https://dropezy.atlassian.net/browse/STOR-468
-                    },
-                  ),
-          ),
+          child: CartItemTile(item: item),
         );
       },
       separatorBuilder: (_, index) {
