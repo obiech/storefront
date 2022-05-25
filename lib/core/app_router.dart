@@ -7,6 +7,7 @@ import '../features/child_categories/index.dart';
 import '../features/help/index.dart';
 import '../features/home/index.dart';
 import '../features/order/index.dart';
+import '../features/product/index.dart';
 import '../features/product_search/index.dart';
 import '../features/profile/index.dart';
 
@@ -50,6 +51,9 @@ import '../features/profile/index.dart';
 
     /// Categories
     AutoRoute(page: ChildCategoriesPage),
+
+    /// Product
+    AutoRoute(page: ProductDetailPage),
 
     /// Address related
     AutoRoute(page: RequestLocationAccessPage),

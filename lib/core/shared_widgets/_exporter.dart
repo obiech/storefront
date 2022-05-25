@@ -16,6 +16,7 @@ export 'loading/loading_item.dart';
 export 'product/product_grid_loading.dart';
 export 'product/product_grid_view.dart';
 export 'product/product_item_card.dart';
+export 'product/types.dart';
 export 'radio_icon.dart';
 export 'text_fields/dropezy_form_text_field.dart';
 export 'text_fields/phone_text_field.dart';

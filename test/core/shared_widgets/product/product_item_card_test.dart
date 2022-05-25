@@ -10,6 +10,7 @@ extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductItemCard(
     ProductModel productModel, {
     int itemQuantity = 0,
+    ProductCallback? onTap,
   }) async {
     await pumpWidget(
       MaterialApp(
@@ -19,6 +20,7 @@ extension WidgetTesterX on WidgetTester {
             child: ProductItemCard(
               product: productModel,
               itemQuantity: itemQuantity,
+              onTap: onTap,
             ),
           ),
         ),
@@ -77,6 +79,23 @@ void main() {
 
     /// assert
     expect(find.text(product.price.toCurrency()), findsOneWidget);
+  });
+
+  testWidgets('should fire [ProductCallback] when tapped',
+      (WidgetTester tester) async {
+    /// arrange
+    bool isTapped = false;
+    await tester.pumpProductItemCard(
+      product,
+      onTap: (_) {
+        isTapped = true;
+      },
+    );
+
+    await tester.tap(find.byType(ProductItemCard));
+
+    /// assert
+    expect(isTapped, true);
   });
 
   /// TODO(obella): Test discount display when ready

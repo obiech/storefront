@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -67,6 +68,9 @@ class ProductGridView extends StatelessWidget {
             product: productModel,
             scaleFactor: scaleFactor,
             borderRadius: cardBorderRadius,
+            onTap: (product) {
+              context.router.push(ProductDetailRoute(productModel: product));
+            },
           );
         } else {
           return ProductItemCardLoading(borderRadius: cardBorderRadius);

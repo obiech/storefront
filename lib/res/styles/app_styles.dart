@@ -125,6 +125,10 @@ class AppStyles implements BaseStyles {
           borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
           borderSide: BorderSide(color: _colors.black),
         ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
+          borderSide: BorderSide(color: _colors.black),
+        ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(_dimens.spacingMiddle),
           borderSide: BorderSide(color: _colors.red),

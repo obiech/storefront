@@ -45,145 +45,152 @@ class ProductItemCard extends StatelessWidget {
   /// Border Radius for card
   final double borderRadius;
 
+  /// Callback fired when product card is tapped
+  final ProductCallback? onTap;
+
   const ProductItemCard({
     Key? key,
     required this.product,
     this.itemQuantity = 0,
     this.scaleFactor = 1,
     this.borderRadius = 18,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final res = context.res;
-    return MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaleFactor: scaleFactor,
-      ),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: res.colors.boxShadow.withOpacity(.3),
-                  blurRadius: 16,
-                  spreadRadius: 3,
+    return GestureDetector(
+      onTap: () => onTap?.call(product),
+      child: MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaleFactor: scaleFactor,
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: res.colors.boxShadow.withOpacity(.3),
+                    blurRadius: 16,
+                    spreadRadius: 3,
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(
+                  borderRadius,
                 ),
-              ],
-              borderRadius: BorderRadius.circular(
-                borderRadius,
+                color: res.colors.white,
               ),
-              color: res.colors.white,
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(res.dimens.spacingSmall),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      DropezyImage(
-                        url: product.thumbnailUrl,
-                        borderRadius: borderRadius,
-                      ),
-                      if (product.marketStatus != null)
-                        Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child:
-                                product.marketStatus == MarketStatus.FLASH_SALE
-                                    ? ProductBadge.flash(
-                                        res,
-                                        scaleFactor: scaleFactor,
-                                      )
-                                    : ProductBadge.bestSeller(
-                                        res,
-                                        scaleFactor: scaleFactor,
-                                      ),
-                          ),
+              child: Padding(
+                padding: EdgeInsets.all(res.dimens.spacingSmall),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        DropezyImage(
+                          url: product.thumbnailUrl,
+                          borderRadius: borderRadius,
                         ),
-
-                      /// Stock is almost over
-                      if (product.isAlmostDepleted)
-                        Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: ProductBadge.stockWarning(
-                              res,
-                              product.stock,
-                              scaleFactor: scaleFactor,
+                        if (product.marketStatus != null)
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.bottomLeft,
+                              child: product.marketStatus ==
+                                      MarketStatus.FLASH_SALE
+                                  ? ProductBadge.flash(
+                                      res,
+                                      scaleFactor: scaleFactor,
+                                    )
+                                  : ProductBadge.bestSeller(
+                                      res,
+                                      scaleFactor: scaleFactor,
+                                    ),
                             ),
                           ),
-                        )
-                    ],
-                  ),
-                  SizedBox(
-                    height: res.dimens.spacingMedium * scaleFactor,
-                  ),
-                  Text(
-                    product.price.toCurrency(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: res.styles.caption2.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: res.styles.caption2.fontSize,
+
+                        /// Stock is almost over
+                        if (product.isAlmostDepleted)
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: ProductBadge.stockWarning(
+                                res,
+                                product.stock,
+                                scaleFactor: scaleFactor,
+                              ),
+                            ),
+                          )
+                      ],
                     ),
-                  ),
-                  if (product.discount != null) ...[
+                    SizedBox(
+                      height: res.dimens.spacingMedium * scaleFactor,
+                    ),
+                    Text(
+                      product.price.toCurrency(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: res.styles.caption2.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: res.styles.caption2.fontSize,
+                      ),
+                    ),
+                    if (product.discount != null) ...[
+                      SizedBox(
+                        height: 3 * scaleFactor,
+                      ),
+                      Text(
+                        product.discount!.toCurrency(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: res.styles.discountText,
+                      )
+                    ],
                     SizedBox(
                       height: 3 * scaleFactor,
                     ),
                     Text(
-                      product.discount!.toCurrency(),
-                      maxLines: 1,
+                      product.name.capitalize(),
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: res.styles.discountText,
+                      style: res.styles.caption3.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: res.colors.black,
+                        fontSize: res.styles.caption3.fontSize,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2 * scaleFactor,
+                    ),
+                    Text(
+                      product.unit,
+                      style: res.styles.caption3.copyWith(
+                        color: const Color(0xFF70717D),
+                        fontSize: 11,
+                      ),
+                    ),
+                    const Expanded(child: SizedBox()),
+                    SizedBox(
+                      height: 30 * scaleFactor,
+                      width: double.infinity,
+                      child: ProductAction(
+                        productQuantity: itemQuantity,
+                        product: product,
+                        scaleFactor: scaleFactor,
+                      ),
                     )
                   ],
-                  SizedBox(
-                    height: 3 * scaleFactor,
-                  ),
-                  Text(
-                    product.name.capitalize(),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: res.styles.caption3.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: res.colors.black,
-                      fontSize: res.styles.caption3.fontSize,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 2 * scaleFactor,
-                  ),
-                  Text(
-                    product.unit,
-                    style: res.styles.caption3.copyWith(
-                      color: const Color(0xFF70717D),
-                      fontSize: 11,
-                    ),
-                  ),
-                  const Expanded(child: SizedBox()),
-                  SizedBox(
-                    height: 30 * scaleFactor,
-                    width: double.infinity,
-                    child: ProductAction(
-                      productQuantity: itemQuantity,
-                      product: product,
-                      scaleFactor: scaleFactor,
-                    ),
-                  )
-                ],
+                ),
               ),
             ),
-          ),
-          if (product.isOutOfStock)
-            OutOfStockOverdraw(
-              borderRadius: borderRadius,
-            ),
-        ],
+            if (product.isOutOfStock)
+              OutOfStockOverdraw(
+                borderRadius: borderRadius,
+              ),
+          ],
+        ),
       ),
     );
   }
