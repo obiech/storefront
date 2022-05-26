@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// An attempt to mimic FlutterDriver's waitFor
 extension WidgetTesterX on WidgetTester {
   /// Use this when a [pumpAndSettle] cannot be used (e.g. multiple animations
-  /// on screen) and [pump] is too inflexible (e.g. waiting for an API call
+  /// on page) and [pump] is too inflexible (e.g. waiting for an API call
   /// to finish).
   ///
   /// Repeatedly calls [pump] for a duration of [interval] until

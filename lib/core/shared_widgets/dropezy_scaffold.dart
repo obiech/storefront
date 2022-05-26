@@ -14,7 +14,7 @@ import '../utils/_exporter.dart';
 /// - Left Margin of 16 units
 /// - Right Margin of 12 units
 ///
-/// In total it has a distance of 24 units from left side of screen
+/// In total it has a distance of 24 units from left side of page
 /// And a distance of 20 units from [AppBar] title
 ///
 /// Setting [useRoundedBody] to [true] will use a Rounded White Rectangle
@@ -95,8 +95,8 @@ class DropezyScaffold extends StatelessWidget {
     } else {
       final routeController = RouterScope.of(context).controller;
 
-      // routeController.canNavigateBack still returns true if we are in MainScreen
-      // so we need to explicitly disable pop on Tabs inside MainScreen
+      // routeController.canNavigateBack still returns true if we are in MainPage
+      // so we need to explicitly disable pop on Tabs inside MainPage
       canPop =
           routeController is! TabsRouter && routeController.canNavigateBack;
     }

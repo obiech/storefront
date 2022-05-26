@@ -16,7 +16,7 @@ class ProductGridLoading extends StatelessWidget {
   /// Grid horizontal spacing
   final double horizontalSpacing;
 
-  /// Screen scale factor
+  /// Page scale factor
   final double scaleFactor;
 
   /// Product Item card border radius

@@ -9,7 +9,7 @@ import 'keys.dart';
 part 'parts/auth_buttons_section.dart';
 part 'parts/dropezy_text_logo.dart';
 
-/// The actual content for [OnboardingScreen]
+/// The actual content for [OnboardingPage]
 /// Does not include black background / other decoration
 class OnboardingView extends StatelessWidget {
   const OnboardingView({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class OnboardingView extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
-                // Shrink Image on smaller screens
+                // Shrink Image on smaller pages
                 Flexible(
                   child: Image.asset(
                     'assets/images/splash_person.png',

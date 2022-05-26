@@ -8,7 +8,7 @@ class RequestLocationAccessPageRobot {
   final WidgetTester tester;
 
   /// Expects that [RequestLocationAccessPage] is shown.
-  Future<void> expectScreenIsShown() async {
+  Future<void> expectPageIsShown() async {
     expect(RequestLocationAccessPageFinders.page, findsOneWidget);
   }
 

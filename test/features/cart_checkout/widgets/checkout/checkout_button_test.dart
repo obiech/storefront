@@ -7,7 +7,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_button.dart';
 
-import '../../../../../test_commons/finders/cart_checkout_screen_finders.dart';
+import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 
@@ -60,11 +60,11 @@ void main() {
       await tester.pumpAndSettle();
 
       /// assert
-      expect(CartCheckoutScreenFinders.buyButton, findsOneWidget);
-      expect(CartCheckoutScreenFinders.buyElevatedButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
 
       final checkoutElevatedButton = tester
-          .widget<ElevatedButton>(CartCheckoutScreenFinders.buyElevatedButton);
+          .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton);
       expect(checkoutElevatedButton.enabled, false);
     });
 
@@ -87,23 +87,23 @@ void main() {
       await tester.pumpAndSettle();
 
       /// assert
-      expect(CartCheckoutScreenFinders.buyButton, findsOneWidget);
-      expect(CartCheckoutScreenFinders.buyElevatedButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
 
       /// Ensure is enabled
       expect(
         tester
-            .widget<ElevatedButton>(CartCheckoutScreenFinders.buyElevatedButton)
+            .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton)
             .enabled,
         true,
       );
 
-      await tester.tap(CartCheckoutScreenFinders.buyElevatedButton);
+      await tester.tap(CartCheckoutPageFinders.buyElevatedButton);
       await tester.pump();
 
       expect(
         tester
-            .widget<DropezyButton>(CartCheckoutScreenFinders.buyButton)
+            .widget<DropezyButton>(CartCheckoutPageFinders.buyButton)
             .isLoading,
         true,
       );
@@ -131,18 +131,18 @@ void main() {
       verify(() => _repository.getPaymentMethods()).called(1);
 
       /// assert
-      expect(CartCheckoutScreenFinders.buyButton, findsOneWidget);
-      expect(CartCheckoutScreenFinders.buyElevatedButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
 
       /// Ensure is enabled
       expect(
         tester
-            .widget<ElevatedButton>(CartCheckoutScreenFinders.buyElevatedButton)
+            .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton)
             .enabled,
         true,
       );
 
-      await tester.tap(CartCheckoutScreenFinders.buyElevatedButton);
+      await tester.tap(CartCheckoutPageFinders.buyElevatedButton);
       await tester.pump();
       verify(() => _repository.checkoutPayment(any())).called(1);
 

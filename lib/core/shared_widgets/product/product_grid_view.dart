@@ -38,7 +38,7 @@ class ProductGridView extends StatelessWidget {
   /// Product Item card border radius
   final double cardBorderRadius;
 
-  /// Screen scale factor
+  /// Page scale factor
   final double scaleFactor;
 
   final List<ProductModel> productModelList;

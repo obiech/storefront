@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/auth/screens/login/phone_not_registered_bottom_sheet.dart';
+import 'package:storefront_app/features/auth/pages/login/phone_not_registered_bottom_sheet.dart';
 
 import '../../src/mock_navigator.dart';
 
@@ -58,7 +58,7 @@ void main() {
     );
     testWidgets(
       'should display phone number passed into it, and tapping on button '
-      'will take push a route for [RegistrationScreen] with args of phone number '
+      'will take push a route for [RegistrationPage] with args of phone number '
       'with leading zero removed. ',
       (WidgetTester tester) async {
         const phoneNumber = '081234567890';
@@ -74,7 +74,7 @@ void main() {
 
         expect(finderTextPhoneNumber, findsOneWidget);
 
-        // Should push a route for Registration Screen
+        // Should push a route for Registration Page
         await tester.tap(find.byType(DropezyButton));
 
         final routes =

@@ -12,10 +12,10 @@ import '../features/product_search/index.dart';
 import '../features/profile/index.dart';
 
 @AdaptiveAutoRouter(
-  replaceInRouteName: 'Page|ScreenWrapper|Screen,Route',
+  replaceInRouteName: 'PageWrapper|Page,Route',
   routes: <AutoRoute>[
     AutoRoute(
-      page: MainScreen,
+      page: MainPage,
       initial: true,
       guards: [CheckAuthStatus],
       children: [
@@ -25,17 +25,17 @@ import '../features/profile/index.dart';
         // TODO - Add remaining pages here
       ],
     ),
-    AutoRoute(page: OnboardingScreen),
-    AutoRoute(page: RegistrationScreenWrapper),
-    AutoRoute(page: LoginScreenWrapper),
-    AutoRoute(page: OtpVerificationScreenWrapper),
-    AutoRoute(page: PinInputScreenWrapper),
+    AutoRoute(page: OnboardingPage),
+    AutoRoute(page: RegistrationPageWrapper),
+    AutoRoute(page: LoginPageWrapper),
+    AutoRoute(page: OtpVerificationPageWrapper),
+    AutoRoute(page: PinInputPageWrapper),
 
     /// Cart checkout
-    AutoRoute(page: CartCheckoutScreenWrapper),
+    AutoRoute(page: CartCheckoutPageWrapper),
     AutoRoute(
-      page: OrderStatusWrapperScreen,
-      path: OrderStatusWrapperScreen.routeName,
+      page: OrderStatusWrapperPage,
+      path: OrderStatusWrapperPage.routeName,
       guards: [CheckOrderStatus],
     ),
     AutoRoute(page: OrderSuccessfulPage),
@@ -44,7 +44,7 @@ import '../features/profile/index.dart';
       page: EmptyRouterPage,
       name: 'OrderRouter',
       children: [
-        AutoRoute(page: OrderHistoryScreenWrapper),
+        AutoRoute(page: OrderHistoryPageWrapper),
         AutoRoute(page: OrderDetailsPage),
       ],
     ),
@@ -58,7 +58,7 @@ import '../features/profile/index.dart';
     /// Address related
     AutoRoute(page: RequestLocationAccessPage),
     AutoRoute(page: SearchLocationPage),
-    AutoRoute(page: AddressDetailScreenWrapper),
+    AutoRoute(page: AddressDetailPageWrapper),
 
     /// Profile related
     AutoRoute(page: EditProfilePage),
