@@ -346,6 +346,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get contact => 'Contact';
 
+  @override
+  String get deliveryLocation => 'Delivery Location';
+
   /// Order Status
   @override
   String get arrived => 'Arrived';

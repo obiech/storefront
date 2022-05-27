@@ -4,6 +4,7 @@ final sampleDeliveryAddressList = [
   DeliveryAddressModel(
     id: 'delivery-address-1',
     title: 'Rumah',
+    notes: 'Pagar Silver, paket taruh di depan pintu',
     isPrimaryAddress: true,
     lat: -6.17849,
     lng: 106.84138,

@@ -67,6 +67,10 @@ void main() {
         ContactSupportButton,
         skipOffstage: false,
       );
+      final finderDeliveryAddressDetail = find.byType(
+        DeliveryAddressDetail,
+        skipOffstage: false,
+      );
 
       testWidgets(
         'for [OrderStatus.awaitingPayment] should show order status header, '
@@ -77,6 +81,7 @@ void main() {
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
+          expect(finderDeliveryAddressDetail, findsOneWidget);
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsNothing);
           expect(finderContactSupportButton, findsOneWidget);
@@ -92,6 +97,7 @@ void main() {
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
+          expect(finderDeliveryAddressDetail, findsOneWidget);
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsNothing);
           expect(finderContactSupportButton, findsOneWidget);
@@ -107,6 +113,7 @@ void main() {
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
+          expect(finderDeliveryAddressDetail, findsOneWidget);
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsOneWidget);
           expect(finderContactSupportButton, findsOneWidget);
@@ -122,6 +129,7 @@ void main() {
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
+          expect(finderDeliveryAddressDetail, findsOneWidget);
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsOneWidget);
           expect(finderContactSupportButton, findsOneWidget);

@@ -48,6 +48,14 @@ class OrderDetailsPage extends StatelessWidget {
                       const ThickDivider(),
                     ],
                     OrderDetailsSection(products: order.productsBought),
+                    Divider(
+                      indent: context.res.dimens.pagePadding,
+                      endIndent: context.res.dimens.pagePadding,
+                      thickness: 2,
+                      height: 1,
+                      color: context.res.colors.dividerColor,
+                    ),
+                    DeliveryAddressDetail(address: order.recipientAddress),
                     const ThickDivider(),
                     OrderPaymentSummary(
                       totalSavings: (int.parse(order.discount) +

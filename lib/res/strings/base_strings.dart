@@ -212,6 +212,8 @@ abstract class BaseStrings {
 
   String get contact;
 
+  String get deliveryLocation;
+
   // button labels
   String get continuePayment;
 

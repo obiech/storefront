@@ -334,6 +334,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get contact => 'Hubungi';
 
+  @override
+  String get deliveryLocation => 'Lokasi Pengantaran';
+
   // button labels
   @override
   String get continuePayment => 'Lanjut Pembayaran';

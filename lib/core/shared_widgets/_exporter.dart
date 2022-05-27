@@ -1,4 +1,5 @@
 /// Export Shared Widgets for easy access
+export 'address/delivery_address_detail.dart';
 export 'bottom_sheet/dropezy_bottom_sheet.dart';
 export 'bottom_sheet/dropezy_dismissable.dart';
 export 'buttons/dropezy_text_button.dart';
