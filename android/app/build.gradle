@@ -75,9 +75,11 @@ android {
             minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
+            manifestPlaceholders = [usesCleartextTraffic:"false"]
         }
         debug {
             signingConfig signingConfigs.debug
+            manifestPlaceholders = [usesCleartextTraffic:"true"]
         }
     }
 }
