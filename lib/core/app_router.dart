@@ -40,6 +40,7 @@ import '../features/profile/index.dart';
     ),
     AutoRoute(page: OrderSuccessfulPage),
     AutoRoute(page: OrderFailurePage),
+
     AutoRoute(
       page: EmptyRouterPage,
       name: 'OrderRouter',

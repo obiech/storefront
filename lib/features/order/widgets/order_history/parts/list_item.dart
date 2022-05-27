@@ -113,7 +113,9 @@ class OrderHistoryListItem extends StatelessWidget {
             SizedBox(height: context.res.dimens.spacingMedium),
             DropezyButton.primary(
               label: context.res.strings.continuePayment,
-              onPressed: () {},
+              onPressed: () {
+                // TODO : for Deeplink Payment
+              },
               padding: EdgeInsets.symmetric(
                 horizontal: context.res.dimens.spacingLarge,
                 vertical: 2,
