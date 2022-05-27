@@ -11,6 +11,7 @@ const productSeladaRomaine = ProductModel(
   defaultProduct: '',
   unit: '500g',
   thumbnailUrl: 'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
+  imagesUrls: ['https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg'],
 );
 
 const productCookingOilSania = ProductModel(
@@ -24,6 +25,9 @@ const productCookingOilSania = ProductModel(
   unit: '500g',
   thumbnailUrl:
       'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg',
+  imagesUrls: [
+    'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg'
+  ],
 );
 
 const productBellPepperYellow = ProductModel(
@@ -37,6 +41,9 @@ const productBellPepperYellow = ProductModel(
   unit: '500g',
   thumbnailUrl:
       'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
+  imagesUrls: [
+    'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq'
+  ],
 );
 
 const seledaRomaine = ProductModel(
@@ -62,6 +69,52 @@ const seledaRomaine = ProductModel(
   stock: 100,
   thumbnailUrl:
       'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
+  imagesUrls: [
+    'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png'
+  ],
+);
+
+const pomegranate = ProductModel(
+  productId: 'pomegranate-id',
+  sku: 'pomegranate-sku',
+  name: 'Pomegranate Red',
+  price: '30000',
+  stock: 15,
+  defaultProduct: 'pomegranate-variant-id',
+  unit: '500g',
+  marketStatus: MarketStatus.FLASH_SALE,
+  variants: [
+    VariantModel(
+      variantId: 'pomegranate-500g-variant-id',
+      name: '500g',
+      defaultImageUrl: 'https://source.unsplash.com/XiWQbLEhFyo/600x600',
+      imagesUrls: [
+        'https://source.unsplash.com/XiWQbLEhFyo/600x600',
+        'https://source.unsplash.com/haSJEJYzl5A/600x600',
+      ],
+      price: '30000',
+      sku: 'pomegranate-variant-sku',
+      stock: 15,
+      unit: '500g',
+    ),
+    VariantModel(
+      variantId: 'pomegranate-1kg-variant-id',
+      name: '1kg',
+      defaultImageUrl: 'https://source.unsplash.com/XiWQbLEhFyo/600x600',
+      imagesUrls: ['https://source.unsplash.com/XiWQbLEhFyo/600x600'],
+      price: '30000',
+      sku: 'pomegranate-1kg-variant-sku',
+      stock: 12,
+      unit: '1kg',
+    )
+  ],
+  thumbnailUrl: 'https://source.unsplash.com/XiWQbLEhFyo/600x600',
+  imagesUrls: [
+    'https://source.unsplash.com/XiWQbLEhFyo/600x600',
+    'https://source.unsplash.com/haSJEJYzl5A/600x600',
+    'https://source.unsplash.com/rxN2MRdFJVg/600x600',
+    'https://source.unsplash.com/JbnUwSe7XuE/600x600',
+  ],
 );
 
 final fakeCategoryProductList = [

@@ -25,6 +25,7 @@ class ProductModel extends BaseProduct {
     required String price,
     required String unit,
     required String thumbnailUrl,
+    required List<String> imagesUrls,
 
     // TODO(obella465): Fix once fields below are confirmed
     String? discount,
@@ -33,7 +34,17 @@ class ProductModel extends BaseProduct {
 
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
     this.status = ProductStatus.ACTIVE,
-  }) : super(productId, name, sku, stock, price, discount, thumbnailUrl, unit);
+  }) : super(
+          productId,
+          name,
+          sku,
+          stock,
+          price,
+          discount,
+          thumbnailUrl,
+          unit,
+          imagesUrls,
+        );
 
   /// Creates a [ProductModel] from gRPC [Product]
   factory ProductModel.fromPb(Product inventoryProduct) {
@@ -51,6 +62,10 @@ class ProductModel extends BaseProduct {
       price: baseVariant.price.num,
       // TODO(obella465) - Restore to required when added to proto
       unit: '500g',
+
+      /// Add empty image to display logo if no images are available
+      imagesUrls:
+          baseVariant.imagesUrls.isEmpty ? [''] : baseVariant.imagesUrls,
       thumbnailUrl:
           baseVariant.imagesUrls.isEmpty ? '' : baseVariant.imagesUrls.first,
       status: inventoryProduct.totalStock < 1
@@ -73,6 +88,7 @@ class ProductModel extends BaseProduct {
       price: '',
       thumbnailUrl: '',
       status: ProductStatus.LOADING,
+      imagesUrls: [],
     );
   }
 
@@ -115,6 +131,7 @@ class ProductModel extends BaseProduct {
     String? price,
     String? unit,
     String? thumbnailUrl,
+    List<String>? imagesUrls,
     String? discount,
     ProductStatus? status,
     String? defaultProduct,
@@ -130,6 +147,7 @@ class ProductModel extends BaseProduct {
         price: price ?? this.price,
         unit: unit ?? this.unit,
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+        imagesUrls: imagesUrls ?? this.imagesUrls,
         status: status ?? this.status,
         marketStatus: marketStatus ?? this.marketStatus,
         discount: discount ?? this.discount,

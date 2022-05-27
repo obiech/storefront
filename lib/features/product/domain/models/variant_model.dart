@@ -5,13 +5,10 @@ import 'base_product.dart';
 /// Representation of a product variant sold in Dropezy.
 ///
 class VariantModel extends BaseProduct {
-  // product variant's image urls.
-  final List<String> imagesUrls;
-
   const VariantModel({
     required String variantId,
     required String name,
-    required this.imagesUrls,
+    required List<String> imagesUrls,
     required String defaultImageUrl,
     required String price,
     String? discount,
@@ -27,6 +24,7 @@ class VariantModel extends BaseProduct {
           discount,
           defaultImageUrl,
           unit,
+          imagesUrls,
         );
 
   /// Creates a [VariantModel] from gRPC [Variant]
@@ -72,5 +70,5 @@ class VariantModel extends BaseProduct {
       );
 
   @override
-  List<Object?> get props => [...super.props, imagesUrls];
+  List<Object?> get props => [...super.props];
 }

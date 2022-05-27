@@ -16,6 +16,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     stock: 2,
     variants: [],
     defaultProduct: '',
+    imagesUrls: [''],
     unit: '500g',
     thumbnailUrl: 'https://pngimg.com/uploads/spinach/spinach_PNG65.png',
   );
@@ -29,6 +30,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     stock: 20,
     variants: [],
     defaultProduct: '',
+    imagesUrls: [''],
     unit: '500g',
     thumbnailUrl: 'https://pngimg.com/uploads/celery/celery_PNG12.png',
   );

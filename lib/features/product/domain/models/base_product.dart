@@ -56,6 +56,12 @@ abstract class BaseProduct extends Equatable {
   /// it holds the default variant's image URL
   final String thumbnailUrl;
 
+  /// List of image URLs of product/variant.
+  ///
+  /// For the case of the product,
+  /// it holds the default variant's image URLs
+  final List<String> imagesUrls;
+
   const BaseProduct(
     this.id,
     this.name,
@@ -65,6 +71,7 @@ abstract class BaseProduct extends Equatable {
     this.discount,
     this.thumbnailUrl,
     this.unit,
+    this.imagesUrls,
   );
 
   @override

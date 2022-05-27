@@ -34,6 +34,7 @@ dependencies:
   dart_ipify: ^1.1.1
   dartz: ^0.10.1
   device_info_plus: ^3.2.2
+  dots_indicator: ^2.1.0
   dropezy_proto:
     git:
       url: https://github.com/dropezy/proto.git
