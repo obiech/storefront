@@ -1,23 +1,49 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
-  Future<void> pumpOrderDetailsPage({required OrderModel order}) async {
+  Future<void> pumpOrderDetailsPage({
+    required OrderModel order,
+    StackRouter? stackRouter,
+  }) async {
     await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: OrderDetailsPage(order: order),
-        ),
-      ),
+      stackRouter != null
+          ? StackRouterScope(
+              controller: stackRouter,
+              stateHash: 0,
+              child: MaterialApp(
+                home: Scaffold(
+                  body: OrderDetailsPage(order: order),
+                ),
+              ),
+            )
+          : MaterialApp(
+              home: Scaffold(
+                body: OrderDetailsPage(order: order),
+              ),
+            ),
     );
   }
 }
 
 void main() {
+  late StackRouter stackRouter;
+
+  setUp(() {
+    stackRouter = MockStackRouter();
+    when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
+  });
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
   group(
     'OrderDetailsPage',
     () {
@@ -99,6 +125,29 @@ void main() {
           expect(finderPaymentSummary, findsOneWidget);
           expect(finderDriverAndRecipientSection, findsOneWidget);
           expect(finderContactSupportButton, findsOneWidget);
+        },
+      );
+      testWidgets(
+        'should navigate to Help Page '
+        'when Support Button is tapped',
+        (tester) async {
+          await tester.pumpOrderDetailsPage(
+            order: orderArrived,
+            stackRouter: stackRouter,
+          );
+          await tester.tap(finderContactSupportButton);
+          await tester.pumpAndSettle();
+
+          final capturedRoutes =
+              verify(() => stackRouter.push(captureAny())).captured;
+
+          // there should only be one route that's being pushed
+          expect(capturedRoutes.length, 1);
+
+          final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+          // expecting the right route being pushed
+          expect(routeInfo, isA<HelpRoute>());
         },
       );
     },

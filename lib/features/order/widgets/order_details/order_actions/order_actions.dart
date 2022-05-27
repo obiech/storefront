@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -24,7 +25,13 @@ class OrderActions extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: ContactSupportButton(onPressed: _contactSupport),
+            child: ContactSupportButton(
+              onPressed: () {
+                context.pushRoute(
+                  const HelpRoute(),
+                );
+              },
+            ),
           ),
           if (showReorderButton) ...[
             const SizedBox(width: 8),
@@ -45,10 +52,6 @@ class OrderActions extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void _contactSupport() {
-    // TODO (leovinsen): add contact support method
   }
 
   void _initiateReorderFlow() {

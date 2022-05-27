@@ -17,8 +17,7 @@ class HelpPage extends StatelessWidget {
       title: context.res.strings.help,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
           children: const [
             _CustomerServiceTile(),
             ThickDivider(),
