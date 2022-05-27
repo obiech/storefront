@@ -1,5 +1,6 @@
 import 'package:storefront_app/features/order/domain/domains.dart';
 
+import '../address/delivery_address_models.dart';
 import '../product/product_models.dart';
 
 final orderAwaitingPayment = OrderModel(
@@ -37,6 +38,7 @@ final orderAwaitingPayment = OrderModel(
       seconds: 15,
     ),
   ),
+  recipientAddress: sampleDeliveryAddressList[0],
 );
 
 final orderPaid = OrderModel(
@@ -95,6 +97,7 @@ final orderPaid = OrderModel(
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
+  recipientAddress: sampleDeliveryAddressList[0],
 );
 
 final orderInDelivery = OrderModel(
@@ -159,6 +162,7 @@ final orderInDelivery = OrderModel(
     whatsappNumber: '+628123123123',
     imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
   ),
+  recipientAddress: sampleDeliveryAddressList[0],
 );
 
 final orderArrived = OrderModel(
@@ -206,4 +210,5 @@ final orderArrived = OrderModel(
     relationToCustomer: 'Customer',
     imageUrl: 'https://randomuser.me/api/portraits/women/51.jpg',
   ),
+  recipientAddress: sampleDeliveryAddressList[0],
 );

@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
 import '../../../../di/di_environment.dart';
+import '../../../address/index.dart';
 import '../../../product/domain/domain.dart';
 import '../domains.dart';
 
@@ -61,6 +62,27 @@ class DummyOrderRepository extends IOrderRepository {
     ],
   );
 
+  // Dummy Address
+  final deliveryAddress = DeliveryAddressModel(
+    id: 'delivery-address-1',
+    title: 'Rumah',
+    notes: 'Pagar Silver, paket taruh di depan pintu',
+    isPrimaryAddress: true,
+    lat: -6.175392,
+    lng: 106.827153,
+    recipientName: 'Susi Susanti',
+    recipientPhoneNumber: '08123123123',
+    dateCreated: DateTime(2022, 1, 20),
+    details: const AddressDetailsModel(
+      street: 'Jl. Monas',
+      district: 'Gambir',
+      subDistrict: 'Gambir',
+      municipality: 'Jakarta Pusat',
+      province: 'DKI Jakarta',
+      country: 'Indonesia',
+    ),
+  );
+
   DummyOrderRepository() {
     orders = [
       OrderModel(
@@ -93,6 +115,7 @@ class DummyOrderRepository extends IOrderRepository {
           ),
         ],
         paymentExpiryTime: DateTime.now().add(const Duration(hours: 1)),
+        recipientAddress: deliveryAddress,
       ),
       OrderModel(
         id: '2',
@@ -155,6 +178,7 @@ class DummyOrderRepository extends IOrderRepository {
           ),
         ],
         estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
+        recipientAddress: deliveryAddress,
       ),
       OrderModel(
         id: '3',
@@ -224,6 +248,7 @@ class DummyOrderRepository extends IOrderRepository {
           whatsappNumber: '+628123123123',
           imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
         ),
+        recipientAddress: deliveryAddress,
       ),
       OrderModel(
         id: '4',
@@ -273,6 +298,7 @@ class DummyOrderRepository extends IOrderRepository {
           relationToCustomer: 'Customer',
           imageUrl: 'https://randomuser.me/api/portraits/women/51.jpg',
         ),
+        recipientAddress: deliveryAddress,
       ),
     ];
   }
