@@ -1,3 +1,5 @@
+import 'package:dropezy_proto/meta/meta.pb.dart' as meta;
+import 'package:dropezy_proto/v1/customer/customer.pb.dart';
 import 'package:equatable/equatable.dart';
 
 import 'address_details_model.dart';
@@ -50,6 +52,28 @@ class DeliveryAddressModel extends Equatable {
   /// Date & Time at which this address
   /// was first created
   final DateTime dateCreated;
+
+  Address toPb() {
+    // TODO: Update meta.Address naming
+    return Address(
+      address: meta.Address(
+        id: id,
+        name: title,
+        coordinates: meta.Coordinates(
+          longitude: lng,
+          latitude: lat,
+        ),
+        detail: notes,
+      ),
+      addressType: isPrimaryAddress
+          ? AddressType.ADDRESS_TYPE_PRIMARY
+          : AddressType.ADDRESS_TYPE_UNSPECIFIED,
+      contact: Contact(
+        name: recipientName,
+        phoneNumber: recipientPhoneNumber,
+      ),
+    );
+  }
 
   @override
   List<Object?> get props => [id];

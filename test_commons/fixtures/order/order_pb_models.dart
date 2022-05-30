@@ -1,5 +1,5 @@
 import 'package:dropezy_proto/google/protobuf/timestamp.pb.dart';
-import 'package:dropezy_proto/meta/meta.pb.dart';
+import 'package:dropezy_proto/meta/meta.pb.dart' hide Timestamp;
 import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:dropezy_proto/v1/payment/payment.pb.dart';
 
@@ -26,8 +26,9 @@ final orderCreated = Order(
       cur: Currency.CURRENCY_IDR,
     ),
   ),
-  paymentExpiryTime:
-      Timestamp.fromDateTime(DateTime.now().add(const Duration(minutes: 15))),
+  paymentExpiryTime: Timestamp.fromDateTime(
+    DateTime.now().add(const Duration(minutes: 15)),
+  ),
 );
 
 final orderPaid = Order(
@@ -53,8 +54,9 @@ final orderPaid = Order(
       cur: Currency.CURRENCY_IDR,
     ),
   ),
-  estimatedDeliveryTime:
-      Timestamp.fromDateTime(DateTime.now().add(const Duration(minutes: 15))),
+  estimatedDeliveryTime: Timestamp.fromDateTime(
+    DateTime.now().add(const Duration(minutes: 15)),
+  ),
 );
 
 final orderDone = Order(
