@@ -6,6 +6,10 @@ class AddAddress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        context.pushRoute(const AddressDetailRoute());
+      },
       contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 0,
       minLeadingWidth: 20,

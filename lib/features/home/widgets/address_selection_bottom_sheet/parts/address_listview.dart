@@ -21,29 +21,29 @@ class AddressListView extends StatelessWidget {
         final isActive = activeAddress.id == address.id;
         final formattedAddress = address.details?.toPrettyAddress ?? '';
 
-        return GestureDetector(
-          onTap: () {
-            if (address != activeAddress) {
-              context.read<DeliveryAddressCubit>().setActiveAddress(address);
-            }
-          },
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  left: context.res.dimens.pagePadding,
-                  right: context.res.dimens.pagePadding,
-                ),
-                child: ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(address.title),
-                  subtitle: Text(formattedAddress),
-                  trailing: RadioIcon(active: isActive),
-                ),
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                left: context.res.dimens.pagePadding,
+                right: context.res.dimens.pagePadding,
               ),
-              const Divider(thickness: 1),
-            ],
-          ),
+              child: ListTile(
+                onTap: () {
+                  if (address != activeAddress) {
+                    context
+                        .read<DeliveryAddressCubit>()
+                        .setActiveAddress(address);
+                  }
+                },
+                contentPadding: EdgeInsets.zero,
+                title: Text(address.title),
+                subtitle: Text(formattedAddress),
+                trailing: RadioIcon(active: isActive),
+              ),
+            ),
+            const Divider(thickness: 1),
+          ],
         );
       },
     );

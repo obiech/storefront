@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,12 +9,14 @@ import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/home/widgets/address_selection_bottom_sheet/address_selection_bottom_sheet.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpAddressSelection({
     required DeliveryAddressCubit cubit,
     required DeliveryAddressState currentState,
+    required StackRouter router,
   }) async {
     when(() => cubit.state).thenReturn(currentState);
     whenListen(
@@ -29,10 +32,14 @@ extension WidgetTesterX on WidgetTester {
 
     await pumpWidget(
       MaterialApp(
-        home: Scaffold(
-          body: BlocProvider<DeliveryAddressCubit>(
-            create: (_) => cubit,
-            child: const AddressSelectionBottomSheet(),
+        home: StackRouterScope(
+          stateHash: 0,
+          controller: router,
+          child: Scaffold(
+            body: BlocProvider<DeliveryAddressCubit>(
+              create: (_) => cubit,
+              child: const AddressSelectionBottomSheet(),
+            ),
           ),
         ),
       ),
@@ -41,11 +48,21 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  late StackRouter router;
   late DeliveryAddressCubit cubit;
   const activeAddressIndex = 0;
 
+  final state = DeliveryAddressLoaded(
+    addressList: sampleDeliveryAddressList,
+    activeAddress: sampleDeliveryAddressList[activeAddressIndex],
+  );
+
   setUp(() {
     cubit = MockDeliveryAddressCubit();
+
+    router = MockStackRouter();
+    registerFallbackValue(FakePageRouteInfo());
+    when(() => router.push(any())).thenAnswer((_) async => null);
   });
 
   testWidgets(
@@ -53,14 +70,10 @@ void main() {
     'when status is Loaded including active and inactive '
     'Radio Icon',
     (tester) async {
-      final state = DeliveryAddressLoaded(
-        addressList: sampleDeliveryAddressList,
-        activeAddress: sampleDeliveryAddressList[activeAddressIndex],
-      );
-
       await tester.pumpAddressSelection(
         cubit: cubit,
         currentState: state,
+        router: router,
       );
 
       // Address List
@@ -116,6 +129,7 @@ void main() {
       await tester.pumpAddressSelection(
         cubit: cubit,
         currentState: state,
+        router: router,
       );
 
       expect(find.text(state.message), findsOneWidget);
@@ -126,14 +140,10 @@ void main() {
     'should do nothing '
     'when active address is tapped',
     (tester) async {
-      final state = DeliveryAddressLoaded(
-        addressList: sampleDeliveryAddressList,
-        activeAddress: sampleDeliveryAddressList[activeAddressIndex],
-      );
-
       await tester.pumpAddressSelection(
         cubit: cubit,
         currentState: state,
+        router: router,
       );
 
       expect(find.byType(ListView), findsOneWidget);
@@ -145,6 +155,50 @@ void main() {
         () => cubit
             .setActiveAddress(sampleDeliveryAddressList[activeAddressIndex]),
       );
+    },
+  );
+
+  testWidgets(
+    'should move to [AddressDetailPage] '
+    'when [AddAddress] is tapped',
+    (tester) async {
+      await tester.pumpAddressSelection(
+        cubit: cubit,
+        currentState: state,
+        router: router,
+      );
+
+      await tester.tap(find.byType(AddAddress));
+      await tester.pumpAndSettle();
+
+      final capturedRoutes = verify(() => router.push(captureAny())).captured;
+      expect(capturedRoutes.length, 1);
+
+      final routeInfo = capturedRoutes.first as PageRouteInfo;
+      expect(routeInfo, isA<AddressDetailRoute>());
+    },
+  );
+
+  testWidgets(
+    'should set active address to selected index '
+    'when Address List Tile is tapped',
+    (tester) async {
+      await tester.pumpAddressSelection(
+        cubit: cubit,
+        currentState: state,
+        router: router,
+      );
+
+      expect(find.byType(ListView), findsOneWidget);
+
+      await tester.tap(find.byType(ListTile).at(1));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => cubit.setActiveAddress(
+          sampleDeliveryAddressList[1],
+        ),
+      ).called(1);
     },
   );
 }

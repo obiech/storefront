@@ -60,7 +60,6 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                               child: const AddressSelectionBottomSheet(),
                             );
                           });
-                          //TODO (leovinsen): Implement Address Selection
                         },
                       ),
                     ),
