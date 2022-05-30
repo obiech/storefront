@@ -32,6 +32,8 @@ class DropezyScaffold extends StatelessWidget {
     this.toolbarHeight,
     this.bodyAlignment,
     this.header,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   }) : super(key: key);
 
   /// uses [Text] widget as AppBar title
@@ -46,6 +48,8 @@ class DropezyScaffold extends StatelessWidget {
     List<Widget>? actions,
     double? toolBarHeight,
     Alignment? bodyAlignment,
+    Widget? floatingActionButton,
+    FloatingActionButtonLocation? floatingActionButtonLocation,
   }) {
     return DropezyScaffold(
       useRoundedBody: useWhiteBody,
@@ -57,6 +61,8 @@ class DropezyScaffold extends StatelessWidget {
       toolbarHeight: toolBarHeight,
       bodyAlignment: bodyAlignment,
       header: header,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       child: child,
     );
   }
@@ -76,6 +82,10 @@ class DropezyScaffold extends StatelessWidget {
   /// Widget that will be shown below app bar
   /// and above the white rounded body
   final Widget? header;
+
+  /// Floating Action Button
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   final bool useRoundedBody;
   final Widget child;
@@ -147,6 +157,8 @@ class DropezyScaffold extends StatelessWidget {
               ],
             )
           : child,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
     );
   }
 

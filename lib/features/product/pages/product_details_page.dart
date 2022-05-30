@@ -52,6 +52,8 @@ class ProductDetailPage extends StatelessWidget {
           isEnabled: false,
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: const CartSummary(),
       child: Container(),
     );
   }

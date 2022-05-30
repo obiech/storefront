@@ -25,6 +25,9 @@ class CartSummary extends StatelessWidget {
               color: res.colors.black,
               borderRadius: BorderRadius.circular(50),
             ),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 10,
+            ),
             padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
             child: Skeleton(
               isLoading: state.isCalculatingSummary,
@@ -51,6 +54,9 @@ class CartSummary extends StatelessWidget {
             decoration: BoxDecoration(
               color: res.colors.black,
               borderRadius: BorderRadius.circular(50),
+            ),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 10,
             ),
             padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
             child: const SkeletonItem(

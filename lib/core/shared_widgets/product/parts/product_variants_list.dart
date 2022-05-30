@@ -79,10 +79,7 @@ class ProductVariantsList extends StatelessWidget {
                       },
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: CartSummary(),
-                  ),
+                  const CartSummary(),
                   SizedBox(
                     height: MediaQuery.of(context).padding.bottom,
                   ),
