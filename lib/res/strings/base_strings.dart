@@ -156,8 +156,11 @@ abstract class BaseStrings {
 
   /// Onboarding Page
   String get shoppingForDailyNeeds;
+
   String get superEzyWith;
+
   String get register;
+
   String get login;
 
   /// Order Successful Page
@@ -242,29 +245,50 @@ abstract class BaseStrings {
 
   /// Order Payment Summary
   String get wowYouManagedToSave;
+
   String get paymentDetails;
+
   String get paymentMethod;
+
   String get subtotal;
+
   String get deliveryFee;
+
   String get free;
+
   String get discount;
+
   String get voucher;
+
   String get dropezyPoints;
+
   String get totalPayment;
 
   /// Cart Page
   String get shoppingConfirmation;
+
   String get addProduct;
+
   String get chooseAll;
+
   String get pilihVoucherPromo;
+
   String get deliveryDetails;
+
   String get cart;
+
   String get useDropezyPoints;
+
   String get pack;
+
   String get remainder;
+
   String get addNote;
+
   String get viewCart;
+
   String get outOfStockItems;
+
   String get delete;
 
   /// Home Page
@@ -284,10 +308,12 @@ abstract class BaseStrings {
   String get searchForWhatYouNeed;
 
   String get cantFindYourProduct;
+
   String get searchForAnotherProduct;
 
   // Internet status
   String get lostInternetConnection;
+
   String get checkConnectionSettings;
 
   /// Products
@@ -311,38 +337,62 @@ abstract class BaseStrings {
 
   /// Profile Page
   String hiUser(String name);
+
   String get changeAddress;
+
   String get changePin;
+
   String get myVoucher;
+
   String get selectLanguage;
+
   String get general;
+
   String get privacyPolicy;
+
   String get help;
+
   String get termsOfUse;
+
   String get howItWorks;
+
   String get aboutUs;
+
   String get signOut;
 
   /// Address Selection Bottom sheet
   String get addAddress;
+
   String get chooseAddress;
 
   /// Address List
   String get addressPrimary;
+
   String get update;
+
   String updatedAddressSnackBarContent(String newAddress);
 
   /// Address Detail
   String get addressName;
+
   String get addressDetail;
+
   String get recipientName;
+
   String get phoneNumber;
+
   String get usePrimaryAddress;
+
   String get saveAddress;
+
   String get addressNameHint;
+
   String get addressDetailHint;
+
   String get recipientNameHint;
+
   String get phoneNumberHint;
+
   String get savedAddressSnackBarContent;
 
   /// Error message
@@ -350,6 +400,11 @@ abstract class BaseStrings {
 
   /// Help Page
   String get contactUs;
+
   String get customerService;
+
   String get whatsapp;
+
+  /// Product Details Page
+  String get productDetails;
 }

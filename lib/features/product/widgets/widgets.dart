@@ -1,4 +1,5 @@
 /// Product details page
+export 'product_details/description.dart';
 export 'product_details/header.dart';
 export 'product_details/sub_header.dart';
 

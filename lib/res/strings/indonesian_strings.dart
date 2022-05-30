@@ -611,4 +611,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get whatsapp => 'WhatsApp';
+
+  @override
+  String get productDetails => 'Detail Produk';
 }

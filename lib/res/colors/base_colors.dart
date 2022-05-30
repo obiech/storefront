@@ -68,4 +68,6 @@ abstract class BaseColors {
 
   /// Box shadow colors
   Color get boxShadow;
+
+  Color get dropezyBlack;
 }

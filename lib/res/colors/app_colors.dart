@@ -89,4 +89,7 @@ class AppColors implements BaseColors {
 
   @override
   Color get boxShadow => const Color(0xFF95A0AF);
+
+  @override
+  Color get dropezyBlack => const Color(0xFF11142C);
 }
