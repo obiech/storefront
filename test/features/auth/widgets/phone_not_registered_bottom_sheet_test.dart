@@ -5,7 +5,7 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/pages/login/phone_not_registered_bottom_sheet.dart';
 
-import '../../src/mock_navigator.dart';
+import '../../../src/mock_navigator.dart';
 
 void main() {
   late StackRouter navigator;

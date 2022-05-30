@@ -1,36 +1,48 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'account_verification_cubit.dart';
 
-part 'account_verification_state.freezed.dart';
+abstract class AccountVerificationState extends Equatable {
+  const AccountVerificationState();
 
-enum AccountVerificationStatus {
-  initialState,
-  sendingOtp, // waiting for OTP to be sent by Firebase
-  otpSent,
-  verifyingOtp, // waiting for OTP to be verified by Firebase
-  registeringAccount, // registering account with storefront backend
-  success,
-  invalidOtp,
-  error
+  @override
+  List<Object?> get props => [];
 }
 
-/// Convenience methods for checking State status
-extension AccountVerificationStateX on AccountVerificationState {
-  bool get isInitialState => status == AccountVerificationStatus.initialState;
-  bool get isLoading => [
-        AccountVerificationStatus.sendingOtp,
-        AccountVerificationStatus.verifyingOtp,
-        AccountVerificationStatus.registeringAccount,
-      ].contains(status);
-  bool get isOtpSent => status == AccountVerificationStatus.otpSent;
-  bool get isSuccess => status == AccountVerificationStatus.success;
-  bool get isInvalidOtp => status == AccountVerificationStatus.invalidOtp;
-  bool get isOtherErrors => status == AccountVerificationStatus.error;
+/// Initial state when [AccountVerificationCubit] is first initialized.
+class AccountVerificationInitial extends AccountVerificationState {
+  const AccountVerificationInitial();
 }
 
-@freezed
-class AccountVerificationState with _$AccountVerificationState {
-  const factory AccountVerificationState({
-    @Default(AccountVerificationStatus.initialState) status,
-    String? errMsg,
-  }) = _OtpVerificationState;
+/// State when waiting for:
+/// - OTP to be sent by Firebase
+/// - OTP to be verified by Firebase
+/// - Account to be registered with backend
+class AccountVerificationLoading extends AccountVerificationState {
+  const AccountVerificationLoading();
+}
+
+/// State after otp is sent by Firebase
+/// and we are expecting user to input OTP.
+class AccountVerificationOtpIsSent extends AccountVerificationState {
+  const AccountVerificationOtpIsSent();
+}
+
+/// State after otp is successfuly verified by Firebase
+/// and user's account is successfully registered with backend.
+class AccountVerificationSuccess extends AccountVerificationState {
+  const AccountVerificationSuccess();
+}
+
+/// State when Firebase returns an error due to invalid OTP.
+class AccountVerificationInvalidOtp extends AccountVerificationState {
+  const AccountVerificationInvalidOtp();
+}
+
+/// State when an unexpected failure is thrown.
+class AccountVerificationError extends AccountVerificationState {
+  const AccountVerificationError(this.errorMsg);
+
+  final String errorMsg;
+
+  @override
+  List<Object?> get props => [errorMsg];
 }

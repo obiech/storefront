@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/auth/index.dart';
-import 'package:storefront_app/features/auth/pages/otp_verification/otp_input_field.dart';
 
 class MockAccountVerificationCubit extends MockCubit<AccountVerificationState>
     implements AccountVerificationCubit {}
@@ -29,9 +28,7 @@ void main() {
       (WidgetTester tester) async {
         // Mock Cubit functions
         when(() => cubit.state).thenAnswer(
-          (_) => const AccountVerificationState(
-            status: AccountVerificationStatus.otpSent,
-          ),
+          (_) => const AccountVerificationOtpIsSent(),
         );
 
         when(() => cubit.verifyOtp(any())).thenAnswer((_) async {});
@@ -97,9 +94,7 @@ void main() {
           (WidgetTester tester) async {
             expectTextFieldIsDisabled(
               tester,
-              const AccountVerificationState(
-                status: AccountVerificationStatus.initialState,
-              ),
+              const AccountVerificationInitial(),
             );
           },
         );
@@ -108,33 +103,7 @@ void main() {
           (WidgetTester tester) async {
             expectTextFieldIsDisabled(
               tester,
-              const AccountVerificationState(
-                status: AccountVerificationStatus.sendingOtp,
-              ),
-            );
-          },
-        );
-
-        testWidgets(
-          '[AccountVerificationStatus.verifyingOtp]',
-          (WidgetTester tester) async {
-            expectTextFieldIsDisabled(
-              tester,
-              const AccountVerificationState(
-                status: AccountVerificationStatus.verifyingOtp,
-              ),
-            );
-          },
-        );
-
-        testWidgets(
-          '[AccountVerificationStatus.registeringAccount]',
-          (WidgetTester tester) async {
-            expectTextFieldIsDisabled(
-              tester,
-              const AccountVerificationState(
-                status: AccountVerificationStatus.registeringAccount,
-              ),
+              const AccountVerificationLoading(),
             );
           },
         );
@@ -146,11 +115,8 @@ void main() {
       '[AccountVerificationStatus.invalidOtp]',
       (WidgetTester tester) async {
         // Set cubit state to invalidOtp
-        when(() => cubit.state).thenAnswer(
-          (_) => const AccountVerificationState(
-            status: AccountVerificationStatus.invalidOtp,
-          ),
-        );
+        when(() => cubit.state)
+            .thenAnswer((_) => const AccountVerificationInvalidOtp());
 
         whenListen(cubit, Stream<AccountVerificationState>.fromIterable([]));
 

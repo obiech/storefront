@@ -1,10 +1,10 @@
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/core/core.dart';
 
-import '../../../../core/services/prefs/i_prefs_repository.dart';
-import 'account_availability_state.dart';
+part 'account_availability_state.dart';
 
 /// [Cubit] for checking whether an account credentials is already registered
 /// in Dropezy backend.
@@ -16,69 +16,35 @@ import 'account_availability_state.dart';
 /// and Login flow.
 @injectable
 class AccountAvailabilityCubit extends Cubit<AccountAvailabilityState> {
+// TODO (leovinsen): Depend on Service instead of directly depending on gRPC client
   final CustomerServiceClient _customerServiceClient;
-  final IPrefsRepository prefs;
 
-  AccountAvailabilityCubit(this._customerServiceClient, this.prefs)
-      : super(const AccountAvailabilityState());
+  AccountAvailabilityCubit(this._customerServiceClient)
+      : super(const AccountAvailabilityInitial());
 
-  /// On a successful request, will emit a [AccountAvailabilityState] with status of
-  /// [AccountAvailabilityStatus.phoneIsAvailable] if phone number is available
-  /// or [AccountAvailabilityStatus.phoneAlreadyRegistered] if phone number is already taken
+  /// On a successful request, emits:
+  /// - [PhoneIsAvailable] if phone number is available.
+  /// - [PhoneIsAlreadyRegistered] if phone number is already taken.
   ///
-  /// On failure, will return [AccountAvailabilityState] with status of
-  /// [AccountAvailabilityStatus.error]
-  /// Retrieve the error message from [AccountAvailabilityState.errMsg]
+  /// On failure, emits a [AccountAvailabilityError].
   ///
   Future<void> checkPhoneNumberAvailability(String phoneNumber) async {
-    // Notify UI that verification process has started
-    emit(
-      const AccountAvailabilityState(
-        status: AccountAvailabilityStatus.loading,
-      ),
-    );
+    emit(const AccountAvailabilityLoading());
 
     final req = CheckRequest(phoneNumber: phoneNumber);
 
     try {
       await _customerServiceClient.check(req);
 
-      emit(
-        const AccountAvailabilityState(
-          status: AccountAvailabilityStatus.phoneAlreadyRegistered,
-        ),
-      );
-    } catch (e) {
-      String? msg;
-      int? statusCode;
+      emit(const PhoneIsAlreadyRegistered());
+    } on Exception catch (e) {
+      final failure = e.toFailure;
 
-      if (e is GrpcError) {
-        msg = e.message;
-        statusCode = e.code;
+      if (failure is ResourceNotFoundFailure) {
+        emit(const PhoneIsAvailable());
       } else {
-        //TODO: Define a standard status code for errors other than GrpcError
-        msg = e.toString();
-      }
-
-      if (statusCode == StatusCode.notFound) {
-        emit(
-          AccountAvailabilityState(
-            status: AccountAvailabilityStatus.phoneIsAvailable,
-            errStatusCode: statusCode,
-          ),
-        );
-      } else {
-        emit(
-          AccountAvailabilityState(
-            status: AccountAvailabilityStatus.error,
-            errMsg: msg,
-            errStatusCode: statusCode,
-          ),
-        );
+        emit(AccountAvailabilityError(failure.message));
       }
     }
-
-    // Store user phone number to prefs
-    await prefs.setUserPhoneNumber(phoneNumber);
   }
 }

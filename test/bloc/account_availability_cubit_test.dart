@@ -28,15 +28,9 @@ void main() {
     test(
         'Initial state status should be [AccountAvailabilityStatus.initialState]',
         () {
-      final cubit =
-          AccountAvailabilityCubit(customerServiceClient, prefsRepository);
+      final cubit = AccountAvailabilityCubit(customerServiceClient);
 
-      expect(
-        cubit.state,
-        const AccountAvailabilityState(
-          status: AccountAvailabilityStatus.initialState,
-        ),
-      );
+      expect(cubit.state, const AccountAvailabilityInitial());
     });
 
     blocTest<AccountAvailabilityCubit, AccountAvailabilityState>(
@@ -55,15 +49,11 @@ void main() {
         when(() => prefsRepository.setUserPhoneNumber(any()))
             .thenAnswer((_) async => {});
       },
-      build: () =>
-          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
+      build: () => AccountAvailabilityCubit(customerServiceClient),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
-        AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
-        AccountAvailabilityState(
-          status: AccountAvailabilityStatus.phoneIsAvailable,
-          errStatusCode: StatusCode.notFound,
-        ),
+        AccountAvailabilityLoading(),
+        PhoneIsAvailable(),
       ],
     );
 
@@ -94,14 +84,11 @@ void main() {
         when(() => prefsRepository.setUserPhoneNumber(any()))
             .thenAnswer((_) async => {});
       },
-      build: () =>
-          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
+      build: () => AccountAvailabilityCubit(customerServiceClient),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
-        AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
-        AccountAvailabilityState(
-          status: AccountAvailabilityStatus.phoneAlreadyRegistered,
-        ),
+        AccountAvailabilityLoading(),
+        PhoneIsAlreadyRegistered(),
       ],
     );
 
@@ -121,16 +108,11 @@ void main() {
         when(() => prefsRepository.setUserPhoneNumber(any()))
             .thenAnswer((_) async => {});
       },
-      build: () =>
-          AccountAvailabilityCubit(customerServiceClient, prefsRepository),
+      build: () => AccountAvailabilityCubit(customerServiceClient),
       act: (cubit) => cubit.checkPhoneNumberAvailability('+6281234567890'),
       expect: () => const [
-        AccountAvailabilityState(status: AccountAvailabilityStatus.loading),
-        AccountAvailabilityState(
-          status: AccountAvailabilityStatus.error,
-          errMsg: 'Connection timed out',
-          errStatusCode: StatusCode.deadlineExceeded,
-        ),
+        AccountAvailabilityLoading(),
+        AccountAvailabilityError('Connection timed out'),
       ],
     );
   });

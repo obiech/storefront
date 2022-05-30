@@ -5,7 +5,6 @@ import 'package:storefront_app/core/core.dart';
 
 import '../../../../di/injection.dart';
 import '../../index.dart';
-import '../otp_verification/otp_verification.dart';
 import 'phone_not_registered_bottom_sheet.dart';
 
 part 'wrapper.dart';
@@ -89,8 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     key: const Key(LoginPage.keyVerifyPhoneNumberButton),
                     label: 'Lanjutkan',
                     onPressed: _verifyPhoneNumber,
-                    isLoading:
-                        state.status == AccountAvailabilityStatus.loading,
+                    isLoading: state is AccountAvailabilityLoading,
                   ),
                   const SizedBox(height: 24),
                   TextUserAgreement.login(),
@@ -101,21 +99,12 @@ class _LoginPageState extends State<LoginPage> {
         );
       },
       listener: (context, state) {
-        switch (state.status as AccountAvailabilityStatus) {
-          case AccountAvailabilityStatus.phoneIsAvailable:
-            _showDialogPhoneNotRegistered(enteredPhoneNumberInLocalFormat);
-            break;
-          case AccountAvailabilityStatus.phoneAlreadyRegistered:
-            _goToOtpPage();
-            break;
-          case AccountAvailabilityStatus.error:
-            final errMsg = state.errStatusCode != null
-                ? '${state.errStatusCode}, ${state.errMsg}'
-                : state.errMsg!;
-
-            showErrorBottomSheet(context, errMsg);
-            break;
-          default:
+        if (state is PhoneIsAvailable) {
+          _showDialogPhoneNotRegistered(enteredPhoneNumberInLocalFormat);
+        } else if (state is PhoneIsAlreadyRegistered) {
+          _goToOtpPage();
+        } else if (state is AccountAvailabilityError) {
+          showErrorBottomSheet(context, state.errorMsg);
         }
       },
     );

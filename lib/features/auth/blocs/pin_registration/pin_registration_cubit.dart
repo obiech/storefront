@@ -1,11 +1,12 @@
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grpc/grpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../domain/services/user_credentials_storage.dart';
-import 'pin_registration_state.dart';
+
+part 'pin_registration_state.dart';
 
 /// Handles PIN registration which associates the user's current device with
 /// the submitted PIN.
@@ -19,12 +20,13 @@ import 'pin_registration_state.dart';
 /// [userCredentialsStorage].
 @injectable
 class PinRegistrationCubit extends Cubit<PinRegistrationState> {
+  // TODO (leovinsen): Depend on Service instead of directly depending on gRPC client
   PinRegistrationCubit({
     required this.customerServiceClient,
     required this.deviceFingerprintProvider,
     required this.deviceNameProvider,
     required this.userCredentialsStorage,
-  }) : super(const PinRegistrationState());
+  }) : super(const PinRegistrationInitial());
 
   final CustomerServiceClient customerServiceClient;
   final DeviceFingerprintProvider deviceFingerprintProvider;
@@ -41,20 +43,17 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
   /// [PinRegistrationStatus.success]. If there are any errors, will emit status
   /// [PinRegistrationStatus.error].
   Future<void> registerPin(String pin) async {
-    emit(const PinRegistrationState(status: PinRegistrationStatus.loading));
+    emit(const PinRegistrationLoading());
 
     final fingerprint = await deviceFingerprintProvider.getFingerprint();
     final deviceName = await deviceNameProvider.getDeviceName();
     final credentials = await userCredentialsStorage.getCredentials();
 
     // In theory, this should never happen as user should already be logged in
+    //TODO(leovinsen): remove this code block and credentials storage as
+    // it's already covered by auth interceptor
     if (credentials == null) {
-      emit(
-        const PinRegistrationState(
-          status: PinRegistrationStatus.error,
-          errMsg: 'Anda belum melakukan login',
-        ),
-      );
+      emit(const PinRegistrationError('Anda belum melakukan login'));
 
       return;
     }
@@ -70,21 +69,11 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
     try {
       await customerServiceClient.registerDevice(request);
 
-      emit(const PinRegistrationState(status: PinRegistrationStatus.success));
-    } on GrpcError catch (e) {
-      emit(
-        PinRegistrationState(
-          status: PinRegistrationStatus.error,
-          errMsg: '${e.code}, ${e.message}',
-        ),
-      );
-    } catch (e) {
-      emit(
-        PinRegistrationState(
-          status: PinRegistrationStatus.error,
-          errMsg: e.toString(),
-        ),
-      );
+      emit(const PinRegistrationSuccess());
+    } on Exception catch (e) {
+      final failure = e.toFailure;
+
+      emit(PinRegistrationError(failure.message));
     }
   }
 }

@@ -49,12 +49,7 @@ void main() {
         true,
       );
 
-      expect(
-        cubit.state,
-        const AccountVerificationState(
-          status: AccountVerificationStatus.initialState,
-        ),
-      );
+      expect(cubit.state, const AccountVerificationInitial());
     });
 
     blocTest<AccountVerificationCubit, AccountVerificationState>(
@@ -73,7 +68,7 @@ void main() {
       ),
       act: (cubit) => cubit.sendOtp(dummyPhoneNumber),
       expect: () => const [
-        AccountVerificationState(status: AccountVerificationStatus.sendingOtp),
+        AccountVerificationLoading(),
       ],
     );
 
@@ -98,9 +93,7 @@ void main() {
         },
         act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
         expect: () => const [
-          AccountVerificationState(
-            status: AccountVerificationStatus.verifyingOtp,
-          ),
+          AccountVerificationLoading(),
         ],
       );
       blocTest<AccountVerificationCubit, AccountVerificationState>(
@@ -123,10 +116,7 @@ void main() {
         },
         act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
         expect: () => const [
-          AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: 'OTP belum terkirim!',
-          ),
+          AccountVerificationError('OTP belum terkirim!'),
         ],
       );
     });
@@ -146,7 +136,7 @@ void main() {
           true,
         ),
         expect: () => const [
-          AccountVerificationState(status: AccountVerificationStatus.otpSent),
+          AccountVerificationOtpIsSent(),
         ],
       );
 
@@ -202,12 +192,8 @@ void main() {
           },
           build: () => buildFn(false),
           expect: () => const [
-            AccountVerificationState(
-              status: AccountVerificationStatus.registeringAccount,
-            ),
-            AccountVerificationState(
-              status: AccountVerificationStatus.success,
-            ),
+            AccountVerificationLoading(),
+            AccountVerificationSuccess(),
           ],
           verify: (cubit) {
             verifyNever(() => customerServiceClient.register(any()));
@@ -227,12 +213,8 @@ void main() {
               },
               build: () => buildFn(true),
               expect: () => const [
-                AccountVerificationState(
-                  status: AccountVerificationStatus.registeringAccount,
-                ),
-                AccountVerificationState(
-                  status: AccountVerificationStatus.success,
-                ),
+                AccountVerificationLoading(),
+                AccountVerificationSuccess(),
               ],
               verify: (cubit) {
                 verify(() => customerServiceClient.register(any())).called(1);
@@ -248,13 +230,8 @@ void main() {
               },
               build: () => buildFn(true),
               expect: () => const [
-                AccountVerificationState(
-                  status: AccountVerificationStatus.registeringAccount,
-                ),
-                AccountVerificationState(
-                  status: AccountVerificationStatus.error,
-                  errMsg: 'Dummy Error',
-                ),
+                AccountVerificationLoading(),
+                AccountVerificationError('Dummy Error'),
               ],
               verify: (cubit) {
                 verify(() => customerServiceClient.register(any())).called(1);
@@ -293,10 +270,7 @@ void main() {
           return cubit;
         },
         expect: () => const [
-          AccountVerificationState(
-            status: AccountVerificationStatus.invalidOtp,
-            errMsg: 'OTP tidak valid!',
-          ),
+          AccountVerificationInvalidOtp(),
         ],
       );
 
@@ -328,12 +302,7 @@ void main() {
 
           return cubit;
         },
-        expect: () => const [
-          AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: 'Dummy Error',
-          ),
-        ],
+        expect: () => const [AccountVerificationError('Dummy Error')],
       );
     });
   });

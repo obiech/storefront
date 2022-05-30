@@ -1,7 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:storefront_app/core/core.dart';
+part of 'otp_verification_page.dart';
 
 /// A [Widget] that shows a countdown if [resendWaitPeriodInSeconds]
 /// seconds has not elapsed, otherwise shows a clickable text that

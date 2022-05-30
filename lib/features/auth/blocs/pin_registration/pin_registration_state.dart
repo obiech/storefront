@@ -1,25 +1,33 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'pin_registration_cubit.dart';
 
-part 'pin_registration_state.freezed.dart';
+abstract class PinRegistrationState extends Equatable {
+  const PinRegistrationState();
 
-enum PinRegistrationStatus {
-  initialState,
-  success,
-  loading,
-  error, // other errors such as connection timeout
+  @override
+  List<Object?> get props => [];
 }
 
-extension PinRegistrationStateX on PinRegistrationState {
-  bool get isInitialState => status == PinRegistrationStatus.initialState;
-  bool get isSuccess => status == PinRegistrationStatus.success;
-  bool get isLoading => status == PinRegistrationStatus.loading;
-  bool get isError => status == PinRegistrationStatus.error;
+/// Initial state when [PinRegistrationCubit] is first initialized.
+class PinRegistrationInitial extends PinRegistrationState {
+  const PinRegistrationInitial();
 }
 
-@freezed
-class PinRegistrationState with _$PinRegistrationState {
-  const factory PinRegistrationState({
-    @Default(PinRegistrationStatus.initialState) status,
-    String? errMsg,
-  }) = _PinRegistrationState;
+/// When waiting for PIN to be registered.
+class PinRegistrationLoading extends PinRegistrationState {
+  const PinRegistrationLoading();
+}
+
+/// When PIN is successfully registered.
+class PinRegistrationSuccess extends PinRegistrationState {
+  const PinRegistrationSuccess();
+}
+
+/// When an error occured during PiN registration process.
+class PinRegistrationError extends PinRegistrationState {
+  const PinRegistrationError(this.errorMsg);
+
+  final String errorMsg;
+
+  @override
+  List<Object?> get props => [errorMsg];
 }

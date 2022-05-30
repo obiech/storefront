@@ -1,8 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
-part 'phone_verification_status.dart';
 part 'phone_verification_exception.dart';
-part 'phone_verification_result.freezed.dart';
+part 'phone_verification_status.dart';
 
 extension PhoneVerificationResultX on PhoneVerificationResult {
   bool get isOtpSent => status == PhoneVerificationStatus.otpSent;
@@ -11,18 +10,16 @@ extension PhoneVerificationResultX on PhoneVerificationResult {
   bool get isError => status == PhoneVerificationStatus.error;
 }
 
-@freezed
-class PhoneVerificationResult with _$PhoneVerificationResult {
+class PhoneVerificationResult extends Equatable {
   /// exception must not be null when status == [PhoneVerificationStatus.error]
-  @Assert(
-    '''
-  status != PhoneVerificationStatus.error || 
-  exception != null''',
-  )
-  const factory PhoneVerificationResult({
-    required PhoneVerificationStatus status,
-    @Default(null) PhoneVerificationException? exception,
-  }) = _PhoneVerificationResult;
+  const PhoneVerificationResult({
+    required this.status,
+    this.exception,
+  }) : assert(status != PhoneVerificationStatus.error || exception != null);
+
+  final PhoneVerificationStatus status;
+
+  final PhoneVerificationException? exception;
 
   /// Create an instance of [PhoneVerificationResult] with
   /// - [status] of [PhoneVerificationStatus.error]
@@ -33,4 +30,7 @@ class PhoneVerificationResult with _$PhoneVerificationResult {
       exception: PhoneVerificationException(errorMsg),
     );
   }
+
+  @override
+  List<Object?> get props => [status, exception];
 }

@@ -1,11 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:storefront_app/core/core.dart';
-
-import '../../blocs/blocs.dart';
+part of 'otp_verification_page.dart';
 
 class OtpInputField extends StatefulWidget {
   static const keyInputField = 'OtpInputField_textField';
@@ -41,11 +34,9 @@ class _OtpInputFieldState extends State<OtpInputField> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AccountVerificationCubit, AccountVerificationState>(
+      listenWhen: (previous, current) =>
+          current is AccountVerificationInvalidOtp,
       listener: (_, state) {
-        if (!state.isInvalidOtp) {
-          return;
-        }
-
         _triggerErrorOtpIsInvalid();
       },
       builder: (_, state) {
@@ -56,7 +47,8 @@ class _OtpInputFieldState extends State<OtpInputField> {
               width: double.infinity,
               child: PinCodeTextField(
                 key: const Key(OtpInputField.keyInputField),
-                enabled: !state.isLoading && !state.isInitialState,
+                enabled: state is! AccountVerificationLoading &&
+                    state is! AccountVerificationInitial,
                 controller: _ctrlOtp,
                 autoDisposeControllers: false,
                 appContext: context,
@@ -84,7 +76,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
                 },
               ),
             ),
-            if (state.isInvalidOtp) ...[
+            if (state is AccountVerificationInvalidOtp) ...[
               const SizedBox(height: 12),
               Text(
                 'Kode OTP yang kamu masukkan salah',

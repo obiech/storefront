@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/core.dart';
 import '../../../../di/injection.dart';
 import '../../blocs/blocs.dart';
-import '../otp_verification/otp_success_action.dart';
+import '../otp_verification/otp_verification_page.dart';
 import 'phone_already_registered_bottom_sheet.dart';
 
 part 'wrapper.dart';
@@ -88,8 +88,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     label: 'Lanjutkan',
                     onPressed: _verifyPhoneNumber,
-                    isLoading:
-                        state.status == AccountAvailabilityStatus.loading,
+                    isLoading: state is AccountAvailabilityLoading,
                   ),
                   const SizedBox(height: 24),
                   TextUserAgreement.registration(),
@@ -100,21 +99,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
         );
       },
       listener: (context, state) {
-        switch (state.status as AccountAvailabilityStatus) {
-          case AccountAvailabilityStatus.phoneIsAvailable:
-            _navigateToOtpPage();
-            break;
-          case AccountAvailabilityStatus.phoneAlreadyRegistered:
-            _showErrorPhoneAlreadyRegistered(enteredPhoneNumberInLocalFormat);
-            break;
-          case AccountAvailabilityStatus.error:
-            final errMsg = state.errStatusCode != null
-                ? '${state.errStatusCode}, ${state.errMsg}'
-                : state.errMsg!;
-
-            showErrorBottomSheet(context, errMsg);
-            break;
-          default:
+        if (state is PhoneIsAvailable) {
+          _navigateToOtpPage();
+        } else if (state is PhoneIsAlreadyRegistered) {
+          _showErrorPhoneAlreadyRegistered(enteredPhoneNumberInLocalFormat);
+        } else if (state is AccountAvailabilityError) {
+          showErrorBottomSheet(context, state.errorMsg);
         }
       },
     );

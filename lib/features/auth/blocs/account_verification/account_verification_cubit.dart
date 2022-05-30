@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:grpc/grpc.dart';
+import 'package:storefront_app/core/core.dart';
 
 import '../../domain/repository/phone_verification_result.dart';
 import '../../domain/services/auth_service.dart';
-import 'account_verification_state.dart';
+
+part 'account_verification_state.dart';
 
 /// [Cubit] resposible for orchestrating account verification.
 ///
@@ -15,11 +17,12 @@ import 'account_verification_state.dart';
 /// to backend.
 class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// Immediately listen to [_authService.phoneVerificationStream]
+// TODO (leovinsen): Depend on Service instead of directly depending on gRPC client
   AccountVerificationCubit(
     this._authService,
     this._customerServiceClient,
     this.registerAccountAfterSuccessfulOtp,
-  ) : super(const AccountVerificationState()) {
+  ) : super(const AccountVerificationInitial()) {
     _phoneVerificationSubscription = _authService.phoneVerificationStream
         .listen(_handlePhoneVerificationResult);
   }
@@ -40,51 +43,28 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   ) async {
     switch (result.status) {
       case PhoneVerificationStatus.otpSent:
-        emit(
-          const AccountVerificationState(
-            status: AccountVerificationStatus.otpSent,
-          ),
-        );
+        emit(const AccountVerificationOtpIsSent());
         otpIsSent = true;
         break;
 
       case PhoneVerificationStatus.verifiedSuccessfully:
-        emit(
-          const AccountVerificationState(
-            status: AccountVerificationStatus.registeringAccount,
-          ),
-        );
+        emit(const AccountVerificationLoading());
 
         if (registerAccountAfterSuccessfulOtp) {
           await _registerPhoneNumberToBackend();
         } else {
-          emit(
-            const AccountVerificationState(
-              status: AccountVerificationStatus.success,
-            ),
-          );
+          emit(const AccountVerificationSuccess());
         }
         break;
 
       case PhoneVerificationStatus.error:
         final exception = result.exception!;
 
-        emit(
-          AccountVerificationState(
-            status: AccountVerificationStatus.error,
-            errMsg: exception.errorMessage,
-          ),
-        );
+        emit(AccountVerificationError(exception.errorMessage));
 
         break;
       case PhoneVerificationStatus.invalidOtp:
-        final exception = result.exception!;
-        emit(
-          AccountVerificationState(
-            status: AccountVerificationStatus.invalidOtp,
-            errMsg: exception.errorMessage,
-          ),
-        );
+        emit(const AccountVerificationInvalidOtp());
         break;
     }
   }
@@ -96,25 +76,9 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
 
     try {
       await _customerServiceClient.register(request);
-      emit(
-        const AccountVerificationState(
-          status: AccountVerificationStatus.success,
-        ),
-      );
-    } on GrpcError catch (e) {
-      emit(
-        AccountVerificationState(
-          status: AccountVerificationStatus.error,
-          errMsg: e.message,
-        ),
-      );
-    } catch (e) {
-      emit(
-        AccountVerificationState(
-          status: AccountVerificationStatus.error,
-          errMsg: e.toString(),
-        ),
-      );
+      emit(const AccountVerificationSuccess());
+    } on Exception catch (e) {
+      emit(AccountVerificationError(e.toFailure.message));
     }
   }
 
@@ -129,11 +93,7 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// [AccountVerificationStatus.error].
   Future<void> sendOtp(String phoneNumber) async {
     this.phoneNumber = phoneNumber;
-    emit(
-      const AccountVerificationState(
-        status: AccountVerificationStatus.sendingOtp,
-      ),
-    );
+    emit(const AccountVerificationLoading());
 
     await _authService.sendOtp(phoneNumber);
   }
@@ -142,21 +102,12 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// will emit an error state if otp is not yet sent
   Future<void> verifyOtp(String otp) async {
     if (!otpIsSent) {
-      emit(
-        const AccountVerificationState(
-          status: AccountVerificationStatus.error,
-          errMsg: 'OTP belum terkirim!',
-        ),
-      );
-
+      // TODO (leovinsen): Handle error message in UI side
+      emit(const AccountVerificationError('OTP belum terkirim!'));
       return;
     }
 
-    emit(
-      const AccountVerificationState(
-        status: AccountVerificationStatus.verifyingOtp,
-      ),
-    );
+    emit(const AccountVerificationLoading());
 
     await _authService.verifyOtp(otp);
   }

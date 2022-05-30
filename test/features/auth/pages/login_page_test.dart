@@ -9,10 +9,9 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/pages/login/phone_not_registered_bottom_sheet.dart';
-import 'package:storefront_app/features/auth/pages/otp_verification/otp_success_action.dart';
 
-import '../../src/mock_navigator.dart';
-import '../../src/mock_page_utils.dart';
+import '../../../src/mock_navigator.dart';
+import '../../../src/mock_page_utils.dart';
 
 class MockAccountAvailabilityCubit extends MockCubit<AccountAvailabilityState>
     implements AccountAvailabilityCubit {}
@@ -51,7 +50,7 @@ Future<void> main() async {
     testWidgets(' -- Ensure important elements are visible',
         (WidgetTester tester) async {
       when(() => accountAvailabilityCubit.state)
-          .thenReturn(const AccountAvailabilityState());
+          .thenReturn(const AccountAvailabilityInitial());
       await tester.pumpWidget(
         buildMockLoginPage(
           accountAvailabilityCubit,
@@ -76,7 +75,7 @@ Future<void> main() async {
         const initialPhoneNumber = '81234567890';
 
         when(() => accountAvailabilityCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+            .thenReturn(const AccountAvailabilityInitial());
 
         // Build Widget
         await tester.pumpWidget(
@@ -104,12 +103,12 @@ Future<void> main() async {
         [AccountAvailabilityCubit.verifyPhone] will be called with entered phone
         number in international format''', (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+            .thenReturn(const AccountAvailabilityInitial());
 
         whenListen(
           accountAvailabilityCubit,
           Stream.fromIterable([
-            const AccountAvailabilityState(),
+            const AccountAvailabilityInitial(),
           ]),
         );
 
@@ -139,12 +138,12 @@ Future<void> main() async {
          called with entered phone number in international format''',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+            .thenReturn(const AccountAvailabilityInitial());
 
         whenListen(
           accountAvailabilityCubit,
           Stream.fromIterable([
-            const AccountAvailabilityState(),
+            const AccountAvailabilityInitial(),
           ]),
         );
 
@@ -171,15 +170,13 @@ Future<void> main() async {
           '''-- If phone number is available, displays a [PhoneNotRegisteredBottomSheet]''',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+            .thenReturn(const AccountAvailabilityInitial());
 
         whenListen(
           accountAvailabilityCubit,
           Stream.fromIterable([
-            const AccountAvailabilityState(),
-            const AccountAvailabilityState(
-              status: AccountAvailabilityStatus.phoneIsAvailable,
-            )
+            const AccountAvailabilityInitial(),
+            const PhoneIsAvailable(),
           ]),
         );
 
@@ -195,10 +192,10 @@ Future<void> main() async {
         'OtpSuccessAction.goToHome, 3) timeout for OTP',
         (WidgetTester tester) async {
           when(() => accountAvailabilityCubit.state)
-              .thenReturn(const AccountAvailabilityState());
+              .thenReturn(const AccountAvailabilityInitial());
 
           final controller = StreamController<AccountAvailabilityState>();
-          controller.add(const AccountAvailabilityState());
+          controller.add(const AccountAvailabilityInitial());
 
           whenListen(
             accountAvailabilityCubit,
@@ -214,11 +211,7 @@ Future<void> main() async {
 
           await tester.enterText(finderInputPhoneNumber, mockInput);
 
-          controller.add(
-            const AccountAvailabilityState(
-              status: AccountAvailabilityStatus.phoneAlreadyRegistered,
-            ),
-          );
+          controller.add(const PhoneIsAlreadyRegistered());
 
           await tester.pumpAndSettle();
 
@@ -237,22 +230,15 @@ Future<void> main() async {
           '-- If an exception occurs, display a [DropezyBottomSheet] containing the error message',
           (WidgetTester tester) async {
         when(() => accountAvailabilityCubit.state)
-            .thenReturn(const AccountAvailabilityState());
+            .thenReturn(const AccountAvailabilityInitial());
 
         const errMsg = 'Test error';
-        const errStatusCode = 1;
-
-        const displayedMessage = '$errStatusCode, $errMsg';
 
         whenListen(
           accountAvailabilityCubit,
           Stream.fromIterable([
-            const AccountAvailabilityState(),
-            const AccountAvailabilityState(
-              status: AccountAvailabilityStatus.error,
-              errMsg: errMsg,
-              errStatusCode: errStatusCode,
-            )
+            const AccountAvailabilityInitial(),
+            const AccountAvailabilityError(errMsg),
           ]),
         );
 
@@ -261,7 +247,7 @@ Future<void> main() async {
         await tester.pumpAndSettle();
 
         expect(find.byType(DropezyBottomSheet), findsOneWidget);
-        expect(find.text(displayedMessage), findsOneWidget);
+        expect(find.text(errMsg), findsOneWidget);
       });
     });
   });

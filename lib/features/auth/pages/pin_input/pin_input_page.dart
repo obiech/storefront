@@ -66,16 +66,11 @@ class _PinInputPageState extends State<PinInputPage> {
   Widget build(BuildContext context) {
     return BlocListener<PinRegistrationCubit, PinRegistrationState>(
       listener: (context, state) {
-        switch (state.status as PinRegistrationStatus) {
-          case PinRegistrationStatus.success:
-            _finishPinRegistrationProcess();
-            break;
-          case PinRegistrationStatus.error:
-            showErrorBottomSheet(context, state.errMsg!);
-            _resetState();
-            break;
-          default:
-            break;
+        if (state is PinRegistrationSuccess) {
+          _finishPinRegistrationProcess();
+        } else if (state is PinRegistrationError) {
+          showErrorBottomSheet(context, state.errorMsg);
+          _resetState();
         }
       },
       child: DropezyScaffold.textTitle(
@@ -157,7 +152,7 @@ class _PinInputPageState extends State<PinInputPage> {
   Widget _pinInputFieldBuilder() =>
       BlocBuilder<PinRegistrationCubit, PinRegistrationState>(
         builder: (context, state) {
-          if (state.isLoading) {
+          if (state is PinRegistrationLoading) {
             return const CircularProgressIndicator(
               key: Key(PinInputPage.keyLoadingIndicator),
             );

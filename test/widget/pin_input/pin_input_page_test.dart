@@ -66,7 +66,7 @@ void main() {
       'initially shows PIN input and no error messsage',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -89,7 +89,7 @@ void main() {
       'State is loading',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state).thenReturn(
-          const PinRegistrationState(status: PinRegistrationStatus.loading),
+          const PinRegistrationLoading(),
         );
 
         await tester.pumpWidget(
@@ -112,7 +112,7 @@ void main() {
       '[PinRegistrationCubit.registerPin] with entered PIN as args',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -151,7 +151,7 @@ void main() {
       'and prompt user to re-enter PIN',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -185,7 +185,7 @@ void main() {
       'and prompt user to re-enter PIN',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -219,15 +219,15 @@ void main() {
       'and Request Location Access page',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         final successStream = Stream.fromIterable(
-          [const PinRegistrationState(status: PinRegistrationStatus.success)],
+          [const PinRegistrationSuccess()],
         );
 
         whenListen(pinRegistrationCubit, successStream);
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -254,15 +254,15 @@ void main() {
       'and Request Location Access page',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         final stream = Stream.fromIterable([
-          const PinRegistrationState(),
+          const PinRegistrationInitial(),
         ]);
 
         whenListen(pinRegistrationCubit, stream);
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         await tester.pumpWidget(
           buildMockOtpVerificationPage(
@@ -292,11 +292,11 @@ void main() {
       'the error message',
       (WidgetTester tester) async {
         when(() => pinRegistrationCubit.state)
-            .thenReturn(const PinRegistrationState());
+            .thenReturn(const PinRegistrationInitial());
 
         // Initialize stream with default State
         final controller = StreamController<PinRegistrationState>();
-        controller.add(const PinRegistrationState());
+        controller.add(const PinRegistrationInitial());
         whenListen(pinRegistrationCubit, controller.stream);
 
         await tester.pumpWidget(
@@ -307,12 +307,7 @@ void main() {
 
         // Add error State and wait for the animation to finish
         const errMsg = 'Dummy Error';
-        controller.add(
-          const PinRegistrationState(
-            status: PinRegistrationStatus.error,
-            errMsg: errMsg,
-          ),
-        );
+        controller.add(const PinRegistrationError(errMsg));
         await tester.pumpAndSettle();
 
         // Expect the error Bottom Sheet

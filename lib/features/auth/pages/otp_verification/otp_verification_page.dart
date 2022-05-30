@@ -1,18 +1,21 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 
 import '../../../home/pages/home_page.dart';
-import '../../blocs/blocs.dart';
+import '../../blocs/account_verification/account_verification_cubit.dart';
 import '../../domain/services/auth_service.dart';
 import '../pin_input/pin_input_page.dart';
-import 'otp_input_field.dart';
-import 'otp_success_action.dart';
-import 'resend_otp_timer.dart';
 
+part 'otp_input_field.dart';
+part 'otp_success_action.dart';
+part 'resend_otp_timer.dart';
 part 'wrapper.dart';
 
 /// Page for performing OTP verification for given [phoneNumberIntlFormat].
@@ -51,17 +54,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   Widget build(BuildContext context) {
     return BlocListener<AccountVerificationCubit, AccountVerificationState>(
       listener: (context, state) {
-        final status = state.status as AccountVerificationStatus;
-
-        switch (status) {
-          case AccountVerificationStatus.success:
-            _onSuccessfulVerification();
-            break;
-          case AccountVerificationStatus.error:
-            showErrorBottomSheet(context, state.errMsg!);
-            break;
-          default:
-            break;
+        if (state is AccountVerificationSuccess) {
+          _onSuccessfulVerification();
+        } else if (state is AccountVerificationError) {
+          showErrorBottomSheet(context, state.errorMsg);
         }
       },
       child: DropezyScaffold.textTitle(

@@ -9,9 +9,6 @@ import 'package:mockingjay/mockingjay.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/auth/index.dart';
-import 'package:storefront_app/features/auth/pages/otp_verification/otp_input_field.dart';
-import 'package:storefront_app/features/auth/pages/otp_verification/otp_success_action.dart';
-import 'package:storefront_app/features/auth/pages/otp_verification/resend_otp_timer.dart';
 
 import '../../src/mock_customer_service_client.dart';
 import '../../src/mock_navigator.dart';
@@ -61,12 +58,12 @@ Future<void> main() async {
     testWidgets('should display important Widgets when opened',
         (WidgetTester tester) async {
       when(() => accountVerificationCubit.state)
-          .thenReturn(const AccountVerificationState());
+          .thenReturn(const AccountVerificationInitial());
 
       await tester.pumpWidget(
         buildMockOtpVerificationPage(
           cubit: accountVerificationCubit,
-          args: argsForLogin(mockPhoneNumberIntl),
+          phoneNumberIntlFormat: mockPhoneNumberIntl,
         ),
       );
 
@@ -84,15 +81,13 @@ Future<void> main() async {
         '[HomePage] if [successBehavior] is set to [goToHome]',
         (WidgetTester tester) async {
           when(() => accountVerificationCubit.state)
-              .thenReturn(const AccountVerificationState());
+              .thenReturn(const AccountVerificationInitial());
 
           whenListen(
             accountVerificationCubit,
             Stream.fromIterable([
-              const AccountVerificationState(),
-              const AccountVerificationState(
-                status: AccountVerificationStatus.success,
-              ),
+              const AccountVerificationInitial(),
+              const AccountVerificationSuccess(),
             ]),
           );
 
@@ -100,7 +95,8 @@ Future<void> main() async {
             buildMockOtpVerificationPage(
               cubit: accountVerificationCubit,
               navigator: navigator,
-              args: argsForLogin(mockPhoneNumberIntl),
+              phoneNumberIntlFormat: mockPhoneNumberIntl,
+              successAction: OtpSuccessAction.goToHomePage,
             ),
           );
 
@@ -119,15 +115,13 @@ Future<void> main() async {
         '[PinInputPage] if [successBehavior] is set to [goToPinPage]',
         (WidgetTester tester) async {
           when(() => accountVerificationCubit.state)
-              .thenReturn(const AccountVerificationState());
+              .thenReturn(const AccountVerificationInitial());
 
           whenListen(
             accountVerificationCubit,
             Stream.fromIterable([
-              const AccountVerificationState(),
-              const AccountVerificationState(
-                status: AccountVerificationStatus.success,
-              ),
+              const AccountVerificationInitial(),
+              const AccountVerificationSuccess(),
             ]),
           );
 
@@ -135,7 +129,8 @@ Future<void> main() async {
             buildMockOtpVerificationPage(
               cubit: accountVerificationCubit,
               navigator: navigator,
-              args: argsForRegistration(mockPhoneNumberIntl),
+              phoneNumberIntlFormat: mockPhoneNumberIntl,
+              successAction: OtpSuccessAction.goToPinPage,
             ),
           );
 
@@ -151,10 +146,10 @@ Future<void> main() async {
         'error State is emitted.',
         (WidgetTester tester) async {
           when(() => accountVerificationCubit.state)
-              .thenReturn(const AccountVerificationState());
+              .thenReturn(const AccountVerificationInitial());
 
           final controller = StreamController<AccountVerificationState>();
-          controller.add(const AccountVerificationState());
+          controller.add(const AccountVerificationInitial());
 
           const errMsg = 'Dummy Error';
           whenListen(
@@ -165,16 +160,11 @@ Future<void> main() async {
           await tester.pumpWidget(
             buildMockOtpVerificationPage(
               cubit: accountVerificationCubit,
-              args: argsForLogin(mockPhoneNumberIntl),
+              phoneNumberIntlFormat: mockPhoneNumberIntl,
             ),
           );
 
-          controller.add(
-            const AccountVerificationState(
-              status: AccountVerificationStatus.error,
-              errMsg: errMsg,
-            ),
-          );
+          controller.add(const AccountVerificationError(errMsg));
 
           await tester.pumpAndSettle();
 
@@ -187,27 +177,17 @@ Future<void> main() async {
 }
 
 Widget buildMockOtpVerificationPage({
-  required OtpVerificationPageArgs args,
+  required String phoneNumberIntlFormat,
+  OtpSuccessAction? successAction,
   required AccountVerificationCubit cubit,
   StackRouter? navigator,
 }) =>
     buildMockPageWithBlocProviderAndAutoRoute<AccountVerificationCubit>(
       cubit,
       OtpVerificationPage(
-        phoneNumberIntlFormat: args.phoneNumberIntlFormat,
-        successAction: args.successAction,
+        phoneNumberIntlFormat: phoneNumberIntlFormat,
+        successAction: successAction ?? OtpSuccessAction.goToHomePage,
         timeoutInSeconds: 10,
       ),
       navigator,
-    );
-
-OtpVerificationPageArgs argsForLogin(String phone) => OtpVerificationPageArgs(
-      successAction: OtpSuccessAction.goToHomePage,
-      phoneNumberIntlFormat: phone,
-    );
-
-OtpVerificationPageArgs argsForRegistration(String phone) =>
-    OtpVerificationPageArgs(
-      successAction: OtpSuccessAction.goToPinPage,
-      phoneNumberIntlFormat: phone,
     );

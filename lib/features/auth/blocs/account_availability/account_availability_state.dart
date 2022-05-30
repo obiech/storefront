@@ -1,20 +1,41 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+part of 'account_availability_cubit.dart';
 
-part 'account_availability_state.freezed.dart';
+abstract class AccountAvailabilityState extends Equatable {
+  const AccountAvailabilityState();
 
-enum AccountAvailabilityStatus {
-  initialState,
-  loading,
-  phoneIsAvailable,
-  phoneAlreadyRegistered,
-  error,
+  @override
+  List<Object?> get props => [];
 }
 
-@freezed
-class AccountAvailabilityState with _$AccountAvailabilityState {
-  const factory AccountAvailabilityState({
-    @Default(AccountAvailabilityStatus.initialState) status,
-    String? errMsg,
-    int? errStatusCode,
-  }) = _AccountAvailabilityState;
+/// Initial state when [AccountAvailabilityCubit] is first instantiated.
+class AccountAvailabilityInitial extends AccountAvailabilityState {
+  const AccountAvailabilityInitial();
+}
+
+/// When [AccountAvailabilityCubit] is checking account
+/// availiability against backend.
+class AccountAvailabilityLoading extends AccountAvailabilityState {
+  const AccountAvailabilityLoading();
+}
+
+/// When phone number being verified against backend
+/// is not yet used by any user in Dropezy.
+class PhoneIsAvailable extends AccountAvailabilityState {
+  const PhoneIsAvailable();
+}
+
+/// When phone number being verified against backend
+/// is already used by another user in Dropezy.
+class PhoneIsAlreadyRegistered extends AccountAvailabilityState {
+  const PhoneIsAlreadyRegistered();
+}
+
+/// When a failure occured during verification process.
+class AccountAvailabilityError extends AccountAvailabilityState {
+  final String errorMsg;
+
+  const AccountAvailabilityError(this.errorMsg);
+
+  @override
+  List<Object?> get props => [errorMsg];
 }

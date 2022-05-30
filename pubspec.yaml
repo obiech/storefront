@@ -47,7 +47,6 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_dotenv: ^5.0.2
   flutter_svg: ^1.0.3
-  freezed_annotation: ^1.1.0
   geolocator: ^8.1.1
   get_it: ^7.2.0
   grpc: ^3.0.2
@@ -75,7 +74,6 @@ dev_dependencies:
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
-  freezed: ^1.1.1
   hive_generator: ^1.1.2
   injectable_generator: ^1.5.3
   integration_test:

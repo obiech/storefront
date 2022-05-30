@@ -71,12 +71,7 @@ void main() {
       'initial state status should be [PinRegistrationStatus.initialState] '
       'and other properties should be unassigned',
       () {
-        expect(
-          pinRegistrationCubit.state,
-          const PinRegistrationState(
-            status: PinRegistrationStatus.initialState,
-          ),
-        );
+        expect(pinRegistrationCubit.state, const PinRegistrationInitial());
       },
     );
 
@@ -142,8 +137,8 @@ void main() {
           },
           act: (cubit) => cubit.registerPin(fakePin),
           expect: () => const [
-            PinRegistrationState(status: PinRegistrationStatus.loading),
-            PinRegistrationState(status: PinRegistrationStatus.success),
+            PinRegistrationLoading(),
+            PinRegistrationSuccess(),
           ],
         );
 
@@ -165,11 +160,8 @@ void main() {
           },
           act: (cubit) => cubit.registerPin(fakePin),
           expect: () => const [
-            PinRegistrationState(status: PinRegistrationStatus.loading),
-            PinRegistrationState(
-              status: PinRegistrationStatus.error,
-              errMsg: 'Anda belum melakukan login',
-            ),
+            PinRegistrationLoading(),
+            PinRegistrationError('Anda belum melakukan login'),
           ],
         );
 
@@ -197,11 +189,8 @@ void main() {
           ),
           act: (cubit) async => cubit.registerPin(fakePin),
           expect: () => const [
-            PinRegistrationState(status: PinRegistrationStatus.loading),
-            PinRegistrationState(
-              status: PinRegistrationStatus.error,
-              errMsg: '${StatusCode.unknown}, Dummy Error',
-            ),
+            PinRegistrationLoading(),
+            PinRegistrationError('Dummy Error'),
           ],
         );
 
@@ -224,11 +213,8 @@ void main() {
           build: () => _buildCubit(),
           act: (cubit) async => cubit.registerPin(fakePin),
           expect: () => [
-            const PinRegistrationState(status: PinRegistrationStatus.loading),
-            PinRegistrationState(
-              status: PinRegistrationStatus.error,
-              errMsg: Exception('Dummy Error').toString(),
-            ),
+            const PinRegistrationLoading(),
+            isA<PinRegistrationError>(),
           ],
         );
       });
