@@ -10,6 +10,7 @@ const productSeladaRomaine = ProductModel(
   variants: [],
   defaultProduct: '',
   unit: '500g',
+  description: dummyDescription,
   thumbnailUrl: 'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
   imagesUrls: ['https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg'],
 );
@@ -23,6 +24,7 @@ const productCookingOilSania = ProductModel(
   variants: [],
   defaultProduct: '',
   unit: '500g',
+  description: dummyDescription,
   thumbnailUrl:
       'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg',
   imagesUrls: [
@@ -39,6 +41,7 @@ const productBellPepperYellow = ProductModel(
   variants: [],
   defaultProduct: '',
   unit: '500g',
+  description: dummyDescription,
   thumbnailUrl:
       'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
   imagesUrls: [
@@ -66,6 +69,7 @@ const seledaRomaine = ProductModel(
   ],
   defaultProduct: '',
   unit: '500g',
+  description: dummyDescription,
   stock: 100,
   thumbnailUrl:
       'https://purepng.com/public/uploads/large/purepng.com-cabbagecabbagevegetablesgreenfoodcalenonesense-481521740200e5vca.png',
@@ -82,6 +86,7 @@ const pomegranate = ProductModel(
   stock: 15,
   defaultProduct: 'pomegranate-variant-id',
   unit: '500g',
+  description: dummyDescription,
   marketStatus: MarketStatus.FLASH_SALE,
   variants: [
     VariantModel(

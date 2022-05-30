@@ -26,6 +26,7 @@ class ProductModel extends BaseProduct {
     required String unit,
     required String thumbnailUrl,
     required List<String> imagesUrls,
+    required this.description,
 
     // TODO(obella465): Fix once fields below are confirmed
     String? discount,
@@ -62,6 +63,8 @@ class ProductModel extends BaseProduct {
       price: baseVariant.price.num,
       // TODO(obella465) - Restore to required when added to proto
       unit: '500g',
+      // TODO(obella) - Restore when added to proto
+      description: dummyDescription,
 
       /// Add empty image to display logo if no images are available
       imagesUrls:
@@ -86,6 +89,7 @@ class ProductModel extends BaseProduct {
       sku: '',
       unit: '',
       price: '',
+      description: '',
       thumbnailUrl: '',
       status: ProductStatus.LOADING,
       imagesUrls: [],
@@ -105,6 +109,9 @@ class ProductModel extends BaseProduct {
 
   // Default product variant Id
   final String defaultProduct;
+
+  /// Detailed description about the product
+  final String description;
 
   /// List of product variants.
   ///
@@ -136,6 +143,7 @@ class ProductModel extends BaseProduct {
     ProductStatus? status,
     String? defaultProduct,
     MarketStatus? marketStatus,
+    String? description,
   }) =>
       ProductModel(
         productId: id ?? this.id,
@@ -151,6 +159,7 @@ class ProductModel extends BaseProduct {
         status: status ?? this.status,
         marketStatus: marketStatus ?? this.marketStatus,
         discount: discount ?? this.discount,
+        description: description ?? this.description,
       );
 }
 
@@ -200,3 +209,6 @@ extension GRPCProduct on Product {
   ///```
   Variant get defaultVariant => variants.first;
 }
+
+const dummyDescription =
+    'Mengandung Omega 9 yang memiliki asam lemak tak jenuh tunggal atau Mono Unsaturated Fatty Acid (MUFA) yang menurut para ahli internasional berkhasiat menurunkan kolesterol LDL dan menaikkan kolesterol HDL';

@@ -12,6 +12,7 @@ extension SearchInventoryResultX on SearchInventoryResult {
         stock: stock,
         sku: sku,
         unit: '500g',
+        description: dummyDescription,
         thumbnailUrl: '${AssetsConfig.assetsUrl}$imageUrl',
         imagesUrls: ['${AssetsConfig.assetsUrl}$imageUrl'],
         status: stock < 1 ? ProductStatus.OUT_OF_STOCK : ProductStatus.ACTIVE,

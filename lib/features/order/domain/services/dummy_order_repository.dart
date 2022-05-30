@@ -23,6 +23,7 @@ class DummyOrderRepository extends IOrderRepository {
     variants: [],
     defaultProduct: '',
     unit: '500g',
+    description: dummyDescription,
     thumbnailUrl:
         'https://d1d8o7q9jg8pjk.cloudfront.net/p/md_5d29587da3a66.jpg',
     imagesUrls: [
@@ -39,6 +40,7 @@ class DummyOrderRepository extends IOrderRepository {
     variants: [],
     defaultProduct: '',
     unit: '500g',
+    description: dummyDescription,
     thumbnailUrl:
         'https://dn56y54v4g6fs.cloudfront.net/product/22_03_2021_02_11_19_sania_2_liter.jpg',
     imagesUrls: [
@@ -55,6 +57,7 @@ class DummyOrderRepository extends IOrderRepository {
     variants: [],
     defaultProduct: '',
     unit: '500g',
+    description: dummyDescription,
     thumbnailUrl:
         'https://qph.fs.quoracdn.net/main-qimg-1324af1d727feb089eabfb9b3e74e8ca-lq',
     imagesUrls: [
