@@ -57,7 +57,17 @@ class PaymentService implements IPaymentRepository {
       final checkoutResponse =
           await orderServiceClient.checkout(checkoutRequest);
 
-      return right(checkoutResponse.deeplink);
+      final paymentInfo = checkoutResponse.paymentInformation;
+
+      switch (paymentInfo.whichFlow()) {
+        case PaymentInformation_Flow.gopayPaymentInfo:
+          return right(paymentInfo.gopayPaymentInfo.deeplink);
+        case PaymentInformation_Flow.vaPaymentInfo:
+          // TODO: implement VA Checkout
+          throw UnimplementedError();
+        case PaymentInformation_Flow.notSet:
+          return left(CheckoutFailure('Missing payment information'));
+      }
     } on Exception catch (e) {
       return left(e.toFailure);
     }
