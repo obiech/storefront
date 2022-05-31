@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
-
 import '../../index.dart';
 
 class PaymentInstructionsPage extends StatelessWidget {
@@ -15,16 +14,25 @@ class PaymentInstructionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: context.res.strings.payment,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // TODO (Jonathan) : Replace with payment information section
-            Container(height: 500),
-            const ThickDivider(),
-            // TODO (Jonathan) : Replace container with help section
-            Container(height: 300),
-          ],
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PaymentInformationSection(order: order),
+                  const ThickDivider(),
+                  // TODO (Jonathan) : Replace container with help section
+                  Container(height: 300),
+                ],
+              ),
+              OrderActions(
+                order: order,
+                showPayButton: false,
+              ),
+            ],
+          ),
         ),
       ),
     );

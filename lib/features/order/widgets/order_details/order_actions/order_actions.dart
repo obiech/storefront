@@ -7,15 +7,20 @@ import '../../../index.dart';
 /// Widgets that will be shown at the bottom of [OrderDetailsPage]
 /// By default it only shows Contact Support button
 ///
+// TODO: Improve by using list of enum to control buttons shown when Reorder flow is implemented
 class OrderActions extends StatelessWidget {
   const OrderActions({
     Key? key,
     required this.order,
     this.showReorderButton = false,
+    this.showPayButton = true,
   }) : super(key: key);
 
   // toggle to show Reorder button
   final bool showReorderButton;
+
+  // to deactivate Pay button inside [PaymentInstructionsPage]
+  final bool showPayButton;
 
   final OrderModel order;
 
@@ -36,7 +41,7 @@ class OrderActions extends StatelessWidget {
               },
             ),
           ),
-          if (order.status.isAwaitingPayment) ...[
+          if (order.status.isAwaitingPayment && showPayButton) ...[
             const SizedBox(width: 8),
             Expanded(
               child: PayNowButton(
