@@ -1,4 +1,6 @@
 import 'base_strings.dart';
+import 'faq/faq.dart';
+import 'faq/indonesian_faq/indonesian_faq.dart';
 
 class IndonesianStrings implements BaseStrings {
   @override
@@ -614,4 +616,10 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get productDetails => 'Detail Produk';
+
+  @override
+  String get faq => 'FAQ';
+
+  @override
+  FAQ get faqs => FAQIndonesian();
 }

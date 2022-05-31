@@ -1,3 +1,5 @@
+import 'faq/faq.dart';
+
 /// Interface for strings
 abstract class BaseStrings {
   String shoppingForDailyNecessities();
@@ -407,4 +409,8 @@ abstract class BaseStrings {
 
   /// Product Details Page
   String get productDetails;
+
+  String get faq;
+
+  FAQ get faqs;
 }
