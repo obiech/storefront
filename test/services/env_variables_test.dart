@@ -1,6 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/config/external_url_config.dart';
+import 'package:storefront_app/core/config/fpjs_config.dart';
 import 'package:storefront_app/core/config/grpc_config.dart';
 
 void main() {
@@ -12,6 +13,7 @@ void main() {
     URL_TERMS_CONDITIONS=https://dropezy.com/terms-and-conditions
     WHATSAPP_CUSTOMER_SERVICE_NUMBER=000000
     WHATSAPP_UNIVERSAL_URL=https://wa.me/
+    FPJS_API_KEY=12345Qwert
       ''';
   test('[EnvVariables] should return the right environment variables', () {
     dotenv.testLoad(fileInput: testVariables);
@@ -26,5 +28,6 @@ void main() {
     );
     expect(ExternalUrlConfig.customerServiceWhatsApp, '000000');
     expect(ExternalUrlConfig.whatsAppUniversalUrl, 'https://wa.me/');
+    expect(FpjsConfig.fpjsApiKey, '12345Qwert');
   });
 }

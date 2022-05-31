@@ -47,6 +47,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_dotenv: ^5.0.2
   flutter_svg: ^1.0.3
+  fpjs_pro_plugin: ^1.0.1
   geolocator: ^8.1.1
   get_it: ^7.2.0
   grpc: ^3.0.2

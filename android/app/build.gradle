@@ -52,7 +52,7 @@ android {
 
     defaultConfig {
         applicationId "com.dropezy.storefront"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
