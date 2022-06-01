@@ -37,10 +37,23 @@ class CartService extends ICartRepository {
     }
   }
 
+  /// First sends an add item request to storefront-backend.
+  /// Then calls [loadCart] to receive latest cart session.
   @override
-  RepoResult<CartModel> addItem(String storeId, VariantModel variant) {
-    // TODO: implement addItem
-    throw UnimplementedError();
+  RepoResult<CartModel> addItem(String storeId, VariantModel variant) async {
+    try {
+      final req = AddRequest(
+        storeId: storeId,
+        item: UpdateItem(variantId: variant.id),
+      );
+
+      // Ignore value returned
+      await _cartServiceClient.add(req);
+
+      return await loadCart(storeId);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
   }
 
   @override
