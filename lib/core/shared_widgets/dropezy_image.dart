@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../core.dart';
 
-/// Image with a light blue background
+/// Image with a default [Colors.transparent] background
 /// that displays a Dropezy 'D' logo when image fails to load.
 ///
 /// To size this widget, wrap it with a [SizedBox]:
@@ -19,12 +19,16 @@ import '../core.dart';
 /// ```
 ///
 /// Uses [CachedNetworkImage] as underlying Image widget.
+///
+/// To set a background, you can set the
+/// [DropezyImage.color] value to a [Color] value.
 class DropezyImage extends StatelessWidget {
   const DropezyImage({
     Key? key,
     required this.url,
     this.padding,
     this.borderRadius,
+    this.color = Colors.transparent,
   }) : super(key: key);
 
   /// URL to the image.
@@ -34,8 +38,11 @@ class DropezyImage extends StatelessWidget {
   /// Padding between image and the blue background
   final EdgeInsets? padding;
 
-  /// Border radius of the blue background
+  /// Border radius of the image background
   final double? borderRadius;
+
+  /// Image background
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +51,7 @@ class DropezyImage extends StatelessWidget {
         return ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius ?? 8.0),
           child: Container(
-            color: context.res.colors.lightBlue,
+            color: color,
             padding:
                 padding ?? EdgeInsets.all(context.res.dimens.spacingMiddle),
             child: AspectRatio(
