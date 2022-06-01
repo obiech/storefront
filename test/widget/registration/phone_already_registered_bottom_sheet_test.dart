@@ -1,14 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockingjay/mockingjay.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/pages/registration/phone_already_registered_bottom_sheet.dart';
 
 import '../../src/mock_navigator.dart';
 
 void main() {
-  late MockNavigator navigator;
   late StackRouter mockStackRouter;
 
   Widget buildWidgetToTest(String phoneNumber) {
@@ -24,7 +23,6 @@ void main() {
   }
 
   setUpAll(() {
-    navigator = createStubbedMockNavigator();
     registerFallbackValue(FakePageRouteInfo());
     mockStackRouter = MockStackRouter();
     when(() => mockStackRouter.push(any())).thenAnswer((_) async => null);
@@ -41,11 +39,8 @@ void main() {
 
         try {
           await tester.pumpWidget(
-            MockNavigatorProvider(
-              navigator: navigator,
-              child: PhoneAlreadyRegisteredBottomSheet(
-                phoneNumberLocalFormat: phoneNumber,
-              ),
+            PhoneAlreadyRegisteredBottomSheet(
+              phoneNumberLocalFormat: phoneNumber,
             ),
           );
         } on AssertionError catch (_) {

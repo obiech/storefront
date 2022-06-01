@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockingjay/mockingjay.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/app_router.gr.dart';
 import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
 import 'package:storefront_app/di/injection.dart';

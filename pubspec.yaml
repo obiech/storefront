@@ -78,7 +78,6 @@ dev_dependencies:
   injectable_generator: ^1.5.3
   integration_test:
     sdk: flutter
-  mockingjay: ^0.2.0
   mocktail: ^0.2.0
 
 dependency_overrides:
