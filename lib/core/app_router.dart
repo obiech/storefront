@@ -60,6 +60,7 @@ import '../features/profile/index.dart';
     AutoRoute(page: RequestLocationAccessPage),
     AutoRoute(page: SearchLocationPage),
     AutoRoute(page: AddressDetailPageWrapper),
+    AutoRoute(page: AddressPinpointPage),
 
     /// Profile related
     AutoRoute(page: EditProfilePage),

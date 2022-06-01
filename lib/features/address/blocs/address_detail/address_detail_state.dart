@@ -9,6 +9,7 @@ class AddressDetailState extends Equatable {
   final bool loading;
   final String? errorMessage;
   final bool addressUpdated;
+  final LatLng latLng;
 
   const AddressDetailState({
     this.addressName = '',
@@ -19,6 +20,7 @@ class AddressDetailState extends Equatable {
     this.loading = false,
     this.errorMessage,
     this.addressUpdated = false,
+    this.latLng = const LatLng(0, 0),
   });
 
   AddressDetailState copyWith({
@@ -30,6 +32,7 @@ class AddressDetailState extends Equatable {
     bool? loading,
     String? errorMessage,
     bool? addressUpdated,
+    LatLng? latLng,
   }) {
     return AddressDetailState(
       addressName: addressName ?? this.addressName,
@@ -40,6 +43,7 @@ class AddressDetailState extends Equatable {
       loading: loading ?? this.loading,
       errorMessage: errorMessage,
       addressUpdated: addressUpdated ?? this.addressUpdated,
+      latLng: latLng ?? this.latLng,
     );
   }
 
@@ -53,5 +57,6 @@ class AddressDetailState extends Equatable {
         loading,
         errorMessage,
         addressUpdated,
+        latLng,
       ];
 }

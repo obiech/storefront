@@ -20,6 +20,8 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>GoogleMapsApiKey</key>
+    <string>$(MAPS_API_KEY)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,11 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
 void main() {
+  late StackRouter stackRouter;
   late AddressDetailBloc bloc;
 
   const addressName = 'My Home';
@@ -17,20 +20,34 @@ void main() {
   const recipientPhone = '081234567890';
 
   setUp(() {
+    stackRouter = MockStackRouter();
     bloc = MockAddressDetailBloc();
 
     // Default state
     when(() => bloc.state).thenReturn(const AddressDetailState());
+
+    // if not stubbed, this will throw an UnimplementedError when called
+    // here, we stub it to do nothing because we're only checking for the
+    // route name that's being pushed
+    when(() => stackRouter.push(any())).thenAnswer((_) async => null);
+  });
+
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
   });
 
   testWidgets(
     'should display view correctly '
     'when page is rendered',
     (tester) async {
-      await tester.pumpAddressDetailPage(bloc);
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
 
       expect(
         find.byKey(AddressDetailPageKeys.addressNameField),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(AddressDetailPageKeys.googleMapView),
         findsOneWidget,
       );
       expect(
@@ -61,7 +78,7 @@ void main() {
     'when save address button is tapped '
     'and form is empty',
     (tester) async {
-      final context = await tester.pumpAddressDetailPage(bloc);
+      final context = await tester.pumpAddressDetailPage(stackRouter, bloc);
 
       await tester.tap(find.byKey(AddressDetailPageKeys.saveAddressButton));
       await tester.pumpAndSettle();
@@ -98,7 +115,7 @@ void main() {
     'when save address button is tapped '
     'and form is filled',
     (tester) async {
-      await tester.pumpAddressDetailPage(bloc);
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
 
       await tester.enterText(
         find.byKey(AddressDetailPageKeys.addressNameField),
@@ -120,6 +137,9 @@ void main() {
         recipientPhone,
       );
 
+      await tester.ensureVisible(
+        find.byKey(AddressDetailPageKeys.primaryAddressCheckbox),
+      );
       await tester
           .tap(find.byKey(AddressDetailPageKeys.primaryAddressCheckbox));
 
@@ -151,7 +171,7 @@ void main() {
         ]),
       );
 
-      await tester.pumpAddressDetailPage(bloc);
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
 
       // TODO (widy): pre-fill form to make it simpler
       // https://dropezy.atlassian.net/browse/STOR-496
@@ -187,10 +207,39 @@ void main() {
       );
     },
   );
+
+  testWidgets(
+    'should navigate to Address Pinpoint Page '
+    'when map view is tapped',
+    (tester) async {
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
+
+      await tester.tap(find.byKey(AddressDetailPageKeys.googleMapView));
+      await tester.pumpAndSettle();
+
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+
+      // there should only be one route that's being pushed
+      expect(capturedRoutes.length, 1);
+
+      final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+      // expecting the right route being pushed
+      expect(routeInfo, isA<AddressPinpointRoute>());
+    },
+    // TODO (widy): Fix gesture testing
+    // Testing gestures on platform views is not supported yet
+    // https://github.com/flutter/flutter/issues/30471
+    skip: true,
+  );
 }
 
 extension WidgetTesterX on WidgetTester {
-  Future<BuildContext> pumpAddressDetailPage(AddressDetailBloc bloc) async {
+  Future<BuildContext> pumpAddressDetailPage(
+    StackRouter stackRouter,
+    AddressDetailBloc bloc,
+  ) async {
     late BuildContext ctx;
 
     await pumpWidget(
@@ -198,10 +247,14 @@ extension WidgetTesterX on WidgetTester {
         home: Builder(
           builder: (context) {
             ctx = context;
-            return Scaffold(
-              body: BlocProvider.value(
-                value: bloc,
-                child: const AddressDetailPage(),
+            return StackRouterScope(
+              controller: stackRouter,
+              stateHash: 0,
+              child: Scaffold(
+                body: BlocProvider.value(
+                  value: bloc,
+                  child: const AddressDetailPage(),
+                ),
               ),
             );
           },

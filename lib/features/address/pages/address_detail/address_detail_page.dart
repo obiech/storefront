@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/address/index.dart';
@@ -8,6 +9,8 @@ import 'package:storefront_app/features/address/index.dart';
 part 'keys.dart';
 part 'wrapper.dart';
 
+// TODO (widy): Request for location permission when page loaded
+// https://dropezy.atlassian.net/browse/STOR-318
 class AddressDetailPage extends StatefulWidget {
   const AddressDetailPage({Key? key}) : super(key: key);
 
@@ -17,6 +20,7 @@ class AddressDetailPage extends StatefulWidget {
 
 class _AddressDetailPageState extends State<AddressDetailPage> {
   final _formKey = GlobalKey<FormState>();
+  static GoogleMapController? _mapController;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +60,61 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                       .read<AddressDetailBloc>()
                                       .add(AddressNameChanged(name));
                                 },
+                              ),
+                              const SizedBox(height: 24),
+                              SizedBox(
+                                height: 100,
+                                child: GoogleMap(
+                                  key: AddressDetailPageKeys.googleMapView,
+                                  onMapCreated: (controller) {
+                                    _mapController = controller;
+                                  },
+                                  initialCameraPosition: CameraPosition(
+                                    target: state.latLng,
+                                    zoom: 16,
+                                  ),
+                                  onTap: (latLng) {
+                                    context.pushRoute(
+                                      const AddressPinpointRoute(),
+                                    );
+                                  },
+                                  myLocationButtonEnabled: false,
+                                  zoomControlsEnabled: false,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    DropezyIcons.pin_outlined,
+                                    color: context.res.colors.black,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // TODO (widy): Fix address text based on map
+                                        Text(
+                                          'Jalan Kebon Jeruk I',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                          ).withLineHeight(14),
+                                        ),
+                                        Text(
+                                          'Jl. Rawa Belong, Palmerah, Kec. Palmerah, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500,
+                                          ).withLineHeight(16),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 24),
                               DropezyTextFormField(
@@ -167,6 +226,14 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
               context.res.strings.savedAddressSnackBarContent,
             ),
           );
+      },
+    ),
+
+    /// Handle when [LatLng] changes
+    BlocListener<AddressDetailBloc, AddressDetailState>(
+      listenWhen: (previous, current) => previous.latLng != current.latLng,
+      listener: (context, state) async {
+        _mapController?.animateCamera(CameraUpdate.newLatLng(state.latLng));
       },
     ),
   ];

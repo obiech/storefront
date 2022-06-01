@@ -32,6 +32,9 @@ Podfile.lock
 GoogleService-Info.plist
 Flutter/Firebase.xcconfig
 
+# Google Maps configuration file
+Flutter/GoogleMaps.xcconfig
+
 # Exceptions to above rules.
 !default.mode1v3
 !default.mode2v3

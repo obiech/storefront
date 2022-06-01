@@ -5,6 +5,11 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
+def mapsProperties = new Properties()
+def mapsPropertiesFile = rootProject.file('maps.properties')
+if (mapsPropertiesFile.exists()) {
+    mapsProperties.load(new FileInputStream(mapsPropertiesFile))
+}
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
@@ -75,11 +80,17 @@ android {
             minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
-            manifestPlaceholders = [usesCleartextTraffic:"false"]
+            manifestPlaceholders = [
+                    usesCleartextTraffic:"false",
+                    mapsApiKey:mapsProperties['mapsApiKey']
+            ]
         }
         debug {
             signingConfig signingConfigs.debug
-            manifestPlaceholders = [usesCleartextTraffic:"true"]
+            manifestPlaceholders = [
+                    usesCleartextTraffic:"true",
+                    mapsApiKey:mapsProperties['mapsApiKey']
+            ]
         }
     }
 }

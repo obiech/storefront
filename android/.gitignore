@@ -4,6 +4,7 @@ gradle-wrapper.jar
 /gradlew
 /gradlew.bat
 /local.properties
+/maps.properties
 GeneratedPluginRegistrant.java
 
 # Firebase configuration file

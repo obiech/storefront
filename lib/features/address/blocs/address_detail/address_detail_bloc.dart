@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
@@ -20,6 +21,12 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
   })  : _repository = repository,
         _dateTimeProvider = dateTimeProvider,
         super(const AddressDetailState()) {
+    on<LoadAddressDetail>((event, emit) async {
+      // FIXME: ugly hacks to delay & wait for map creation
+      await Future.delayed(const Duration(milliseconds: 500));
+      // TODO (widy): get user location lat & lng
+      emit(state.copyWith(latLng: const LatLng(-6.1754463, 106.8377065)));
+    });
     on<AddressNameChanged>((event, emit) {
       emit(state.copyWith(addressName: event.addressName));
     });
