@@ -28,7 +28,6 @@ extension WidgetTesterX on WidgetTester {
         ],
       ),
     );
-    when(() => cubit.close()).thenAnswer((_) async {});
 
     await pumpWidget(
       MaterialApp(
@@ -85,28 +84,18 @@ void main() {
 
         expect(find.text(state.addressList[index].title), findsOneWidget);
         expect(find.text(formattedAddress.toString()), findsOneWidget);
+        final radioIcon =
+            tester.widget<RadioIcon>(find.byType(RadioIcon).at(index));
+        expect(
+          radioIcon.active,
+          state.activeAddress.id == state.addressList[index].id,
+        );
       }
 
       // Active address
       final formattedAddress = state.activeAddress.details?.toPrettyAddress;
       expect(find.text(state.activeAddress.title), findsOneWidget);
       expect(find.text(formattedAddress.toString()), findsOneWidget);
-
-      // Inactive radio icon
-      expect(
-        find.byWidgetPredicate(
-          (widget) => widget is RadioIcon && widget.active == false,
-        ),
-        findsNWidgets(state.addressList.length - 1),
-      );
-
-      // Active radio icon
-      expect(
-        find.byWidgetPredicate(
-          (widget) => widget is RadioIcon && widget.active,
-        ),
-        findsOneWidget,
-      );
     },
   );
 
@@ -183,20 +172,19 @@ void main() {
     'should set active address to selected index '
     'when Address List Tile is tapped',
     (tester) async {
+      const expectedIndex = 1;
       await tester.pumpAddressSelection(
         cubit: cubit,
         currentState: state,
         router: router,
       );
 
-      expect(find.byType(ListView), findsOneWidget);
-
-      await tester.tap(find.byType(ListTile).at(1));
+      await tester.tap(find.byKey(const ValueKey('addressList$expectedIndex')));
       await tester.pumpAndSettle();
 
       verify(
         () => cubit.setActiveAddress(
-          sampleDeliveryAddressList[1],
+          sampleDeliveryAddressList[expectedIndex],
         ),
       ).called(1);
     },

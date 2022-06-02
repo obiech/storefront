@@ -29,6 +29,7 @@ class AddressListView extends StatelessWidget {
                 right: context.res.dimens.pagePadding,
               ),
               child: ListTile(
+                key: ValueKey('addressList$index'),
                 onTap: () {
                   if (address != activeAddress) {
                     context

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:dropezy_proto/v1/category/category.pbgrpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/address/index.dart';
@@ -13,7 +14,8 @@ class MockParentCategoriesCubit extends Mock implements ParentCategoriesCubit {}
 
 class MockHttpClient extends Mock implements HttpClient {}
 
-class MockDeliveryAddressCubit extends Mock implements DeliveryAddressCubit {}
+class MockDeliveryAddressCubit extends MockCubit<DeliveryAddressState>
+    implements DeliveryAddressCubit {}
 
 class MockUserCredentialsStorage extends Mock
     implements UserCredentialsStorage {}
