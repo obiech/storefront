@@ -397,6 +397,11 @@ abstract class BaseStrings {
 
   String get savedAddressSnackBarContent;
 
+  /// Edit Profile Page
+  String get editProfile;
+
+  String get saveProfile;
+
   /// Error message
   String cannotBeEmpty(String field);
 
