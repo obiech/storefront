@@ -57,28 +57,67 @@ class CartService extends ICartRepository {
   }
 
   @override
-  RepoResult<CartModel> decrementItem(
-    String storeId,
-    VariantModel variant,
-    int quantity,
-  ) {
-    // TODO: implement decrementItem
-    throw UnimplementedError();
-  }
-
-  @override
   RepoResult<CartModel> incrementItem(
     String storeId,
     VariantModel variant,
     int quantity,
-  ) {
-    // TODO: implement incrementItem
-    throw UnimplementedError();
+  ) async {
+    return _cartServiceUpdateItem(
+      storeId: storeId,
+      variantId: variant.id,
+      quantity: quantity,
+      action: UpdateAction.UPDATE_ACTION_ADD,
+    );
+  }
+
+  @override
+  RepoResult<CartModel> decrementItem(
+    String storeId,
+    VariantModel variant,
+    int quantity,
+  ) async {
+    return _cartServiceUpdateItem(
+      storeId: storeId,
+      variantId: variant.id,
+      quantity: quantity,
+      action: UpdateAction.UPDATE_ACTION_SUBSTRACT,
+    );
   }
 
   @override
   RepoResult<CartModel> removeItem(String storeId, VariantModel variant) {
-    // TODO: implement removeItem
-    throw UnimplementedError();
+    return _cartServiceUpdateItem(
+      storeId: storeId,
+      variantId: variant.id,
+      quantity: null,
+      action: UpdateAction.UPDATE_ACTION_REMOVE,
+    );
+  }
+
+  /// Updates cart item by calling [CartServiceClient.update].
+  /// Then calls [loadCart] to receive latest cart session.
+  RepoResult<CartModel> _cartServiceUpdateItem({
+    required String storeId,
+    required String variantId,
+    required int? quantity,
+    required UpdateAction action,
+  }) async {
+    try {
+      final req = UpdateRequest(
+        storeId: storeId,
+        item: UpdateItem(
+          variantId: variantId,
+          quantity: quantity,
+        ),
+        action: action,
+      );
+
+      // Ignore value returned
+      await _cartServiceClient.update(req);
+
+      return await loadCart(storeId);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
   }
 }

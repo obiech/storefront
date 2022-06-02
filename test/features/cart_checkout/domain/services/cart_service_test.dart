@@ -154,6 +154,240 @@ void main() {
           );
         },
       );
+
+      group(
+        '[incrementItem()]',
+        () {
+          const mockQty = 3;
+          final mockRequest = UpdateRequest(
+            storeId: mockStoreId,
+            item: UpdateItem(
+              variantId: mockVariant.id,
+              quantity: mockQty,
+            ),
+            action: UpdateAction.UPDATE_ACTION_ADD,
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and call [loadCart()] once '
+            'and return cart session '
+            'when [incrementItem()] is called',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) => MockResponseFuture.value(UpdateResponse()),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.incrementItem(
+                mockRequest.storeId,
+                mockVariant,
+                mockQty,
+              );
+
+              // assert
+              final cart = result.getRight();
+              expect(cart, CartModel.fromPb(mockSummaryResponse));
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verify(() => cartServiceClient.summary(mockSummaryRequest))
+                  .called(1);
+            },
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and return a failure '
+            'when [incrementItem()] is called '
+            'and [CartServiceClient.update()] throws an exception',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) =>
+                    MockResponseFuture.error(GrpcError.notFound('Test Error')),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.incrementItem(
+                mockRequest.storeId,
+                mockVariant,
+                mockQty,
+              );
+
+              // assert
+              final failure = result.getLeft();
+              expect(failure, isA<Failure>());
+              expect(failure.message, 'Test Error');
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verifyNever(() => cartServiceClient.summary(mockSummaryRequest));
+            },
+          );
+        },
+      );
+
+      group(
+        '[decrementItem()]',
+        () {
+          const mockQty = 3;
+          final mockRequest = UpdateRequest(
+            storeId: mockStoreId,
+            item: UpdateItem(
+              variantId: mockVariant.id,
+              quantity: mockQty,
+            ),
+            action: UpdateAction.UPDATE_ACTION_SUBSTRACT,
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and call [loadCart()] once '
+            'and return cart session '
+            'when [decrementItem()] is called',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) => MockResponseFuture.value(UpdateResponse()),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.decrementItem(
+                mockRequest.storeId,
+                mockVariant,
+                mockQty,
+              );
+
+              // assert
+              final cart = result.getRight();
+              expect(cart, CartModel.fromPb(mockSummaryResponse));
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verify(() => cartServiceClient.summary(mockSummaryRequest))
+                  .called(1);
+            },
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and return a failure '
+            'when [decrementItem()] is called '
+            'and [CartServiceClient.update()] throws an exception',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) =>
+                    MockResponseFuture.error(GrpcError.notFound('Test Error')),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.decrementItem(
+                mockRequest.storeId,
+                mockVariant,
+                mockQty,
+              );
+
+              // assert
+              final failure = result.getLeft();
+              expect(failure, isA<Failure>());
+              expect(failure.message, 'Test Error');
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verifyNever(() => cartServiceClient.summary(mockSummaryRequest));
+            },
+          );
+        },
+      );
+
+      group(
+        '[removeItem()]',
+        () {
+          final mockRequest = UpdateRequest(
+            storeId: mockStoreId,
+            item: UpdateItem(variantId: mockVariant.id),
+            action: UpdateAction.UPDATE_ACTION_REMOVE,
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and call [loadCart()] once '
+            'and return cart session '
+            'when [removeItem()] is called',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) => MockResponseFuture.value(UpdateResponse()),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.removeItem(
+                mockRequest.storeId,
+                mockVariant,
+              );
+
+              // assert
+              final cart = result.getRight();
+              expect(cart, CartModel.fromPb(mockSummaryResponse));
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verify(() => cartServiceClient.summary(mockSummaryRequest))
+                  .called(1);
+            },
+          );
+
+          test(
+            'should call [CartServiceClient.update()] once '
+            'and return a failure '
+            'when [removeItem()] is called '
+            'and [CartServiceClient.update()] throws an exception',
+            () async {
+              // arrange
+              when(() => cartServiceClient.update(mockRequest)).thenAnswer(
+                (_) =>
+                    MockResponseFuture.error(GrpcError.notFound('Test Error')),
+              );
+              when(() => cartServiceClient.summary(mockSummaryRequest))
+                  .thenAnswer(
+                (_) => MockResponseFuture.value(mockSummaryResponse),
+              );
+
+              // act
+              final result = await cartService.removeItem(
+                mockRequest.storeId,
+                mockVariant,
+              );
+
+              // assert
+              final failure = result.getLeft();
+              expect(failure, isA<Failure>());
+              expect(failure.message, 'Test Error');
+
+              verify(() => cartServiceClient.update(mockRequest)).called(1);
+              verifyNever(() => cartServiceClient.summary(mockSummaryRequest));
+            },
+          );
+        },
+      );
     },
   );
 }
