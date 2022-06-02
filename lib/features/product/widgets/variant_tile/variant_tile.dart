@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../index.dart';
 
-part 'parts/product_information.dart';
-part 'parts/skeleton.dart';
+part 'parts/keys.dart';
+part 'parts/variant_information.dart';
 
 /// Widget for displaying product variant information such as:
 /// - Variant Image (left side)
@@ -16,17 +15,16 @@ part 'parts/skeleton.dart';
 /// When product variant is out of stock,
 /// left and middle section will have an opacity of 50%.
 ///
-/// This Widget is used in Cart Page and in Product Item Card.
+/// This Widget is used in Variants List for product details page
+/// and in Product Item Card bottom sheet.
 ///
 /// Design wise is similar to a [ListTile].
-
-// TODO: Update to use new Product Base model
-class ProductTile extends StatelessWidget {
-  const ProductTile({
+class VariantTile extends StatelessWidget {
+  const VariantTile({
     Key? key,
     required this.variant,
     this.trailing,
-    this.imageSize = 60,
+    this.imageSize = 70,
   }) : super(key: key);
 
   /// Product variant information.
@@ -56,10 +54,11 @@ class ProductTile extends StatelessWidget {
                   child: DropezyImage(
                     url: variant.thumbnailUrl,
                     borderRadius: 8,
+                    padding: EdgeInsets.zero,
                   ),
                 ),
                 const SizedBox(width: 8),
-                ProductInformation(variant: variant),
+                VariantInformation(variant: variant),
               ],
             ),
           ),

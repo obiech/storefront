@@ -71,4 +71,8 @@ class VariantModel extends BaseProduct {
 
   @override
   List<Object?> get props => [...super.props];
+
+  // Check if has discount (i.e null or zero)
+  bool get hasDiscount =>
+      discount != null && (double.tryParse(discount!) ?? 0) > 0;
 }

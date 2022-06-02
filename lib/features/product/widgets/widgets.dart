@@ -5,3 +5,6 @@ export 'product_details/sub_header.dart';
 
 /// Product tile
 export 'product_tile/product_tile.dart';
+
+/// Variants Tile
+export 'variant_tile/variant_tile.dart';

@@ -4,6 +4,7 @@ export 'bottom_sheet/dropezy_bottom_sheet.dart';
 export 'bottom_sheet/dropezy_dismissable.dart';
 export 'buttons/dropezy_text_button.dart';
 export 'buttons/text_button_skip.dart';
+export 'discount_tag.dart';
 export 'dropezy_badge.dart';
 export 'dropezy_button.dart';
 export 'dropezy_card.dart';

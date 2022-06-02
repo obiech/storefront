@@ -1,9 +1,9 @@
-part of '../product_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:storefront_app/core/core.dart';
 
 /// Shows discount percentage of a product
 /// e.g. -33%
 class DiscountTag extends StatelessWidget {
-  @visibleForTesting
   const DiscountTag({
     Key? key,
     required this.discountPercentage,
