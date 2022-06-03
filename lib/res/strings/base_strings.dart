@@ -266,6 +266,23 @@ abstract class BaseStrings {
 
   String get totalPayment;
 
+  /// Order Waiting Payment
+  String get payment;
+
+  String get finishPaymentBefore;
+
+  String get processOrderAfterVerify;
+
+  String get virtualAccountNumber;
+
+  String get copy;
+
+  String get totalBill;
+
+  String get details;
+
+  String get virtualAccountCopy;
+
   /// Cart Page
   String get shoppingConfirmation;
 

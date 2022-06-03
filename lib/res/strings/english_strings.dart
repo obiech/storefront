@@ -417,6 +417,33 @@ class EnglishStrings implements BaseStrings {
   @override
   String get wowYouManagedToSave => 'Wow! You managed to save';
 
+  /// Order Waiting Payment
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get finishPaymentBefore => 'Finish payment before';
+
+  @override
+  String get processOrderAfterVerify =>
+      'Your order will be processed after the payment has been successfully verified';
+
+  @override
+  String get virtualAccountNumber => 'Virtual Account Number';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get totalBill => 'Total bill';
+
+  @override
+  String get details => 'Details';
+
+  // TODO (Jonathan): Change this after iyo respond
+  @override
+  String get virtualAccountCopy => 'Virtual Account Copied';
+
   /// Cart Page
   @override
   String get shoppingConfirmation => 'Shopping Confirmation';

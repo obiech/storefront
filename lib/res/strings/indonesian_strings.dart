@@ -418,6 +418,33 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get wowYouManagedToSave => 'Wow! Kamu berhasil hemat';
 
+  /// Order Waiting Payment
+  @override
+  String get payment => 'Pembayaran';
+
+  @override
+  String get finishPaymentBefore => 'Selesaikan pembayaran sebelum';
+
+  @override
+  String get processOrderAfterVerify =>
+      'Pesananmu akan diproses setelah pembayaran berhasil diverifikasi';
+
+  @override
+  String get virtualAccountNumber => 'Nomor Virtual Account';
+
+  @override
+  String get copy => 'Salin';
+
+  @override
+  String get totalBill => 'Total tagihan';
+
+  @override
+  String get details => 'Lihat Detail';
+
+  // TODO (Jonathan): Change this after iyo respond
+  @override
+  String get virtualAccountCopy => 'Virtual Account Tersalin';
+
   /// Cart Page
   @override
   String get shoppingConfirmation => 'Konfirmasi Belanja';
