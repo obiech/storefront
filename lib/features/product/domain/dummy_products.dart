@@ -11,7 +11,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-botol-sosro-original-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/rHfndKT.jpeg',
         imagesUrls: [
@@ -23,7 +23,7 @@ const dummyProducts = [
         unit: '250ml / Pcs',
       ),
       VariantModel(
-        variantId: '1-variant-id',
+        variantId: 'teh-botol-sosro-original-variant-1',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/JxNPDNU.jpeg',
         imagesUrls: [
@@ -35,7 +35,7 @@ const dummyProducts = [
         unit: '330ml / Pcs',
       ),
       VariantModel(
-        variantId: '2-variant-id',
+        variantId: 'teh-botol-sosro-original-variant-2',
         name: '450ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/3hGn49J.jpeg',
         imagesUrls: [
@@ -47,7 +47,7 @@ const dummyProducts = [
         unit: '450ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-botol-sosro-original-variant-0',
     unit: '250ml / Pcs',
     description:
         'Teh Botol Sosro Original Kotak dihasilkan dari daun teh dengan kualitas terbaik dengan cita rasa dan aroma jasmine yang khas',
@@ -66,7 +66,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-kotak-melati-variant-0',
         name: '200 + 100ml / Pack',
         defaultImageUrl: 'https://i.imgur.com/nqVZDQd.jpeg',
         imagesUrls: [
@@ -78,7 +78,7 @@ const dummyProducts = [
         unit: '200 + 100ml / Pack',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-kotak-melati-variant-0',
     unit: '200 + 100ml / Pack',
     description:
         'Teh kotak teh melati kotak minuman teh berkualitas dari pucuk daun teh pilihan.',
@@ -93,7 +93,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'ultra-milk-sari-kacang-hijau-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/h31ZPb2.jpeg',
         imagesUrls: [
@@ -105,7 +105,7 @@ const dummyProducts = [
         unit: '250ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'ultra-milk-sari-kacang-hijau-variant-0',
     unit: '250ml / Pcs',
     description:
         'Ultra sari kacang hijau minuman sari kacang hijau siap minum.',
@@ -120,7 +120,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'schweppes-soda-water-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/Tt6mcoq.jpeg',
         imagesUrls: [
@@ -132,7 +132,7 @@ const dummyProducts = [
         unit: '330ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'schweppes-soda-water-kaleng-variant-0',
     unit: '330ml / Pcs',
     description:
         'Kesegaran Schweppes Soda Water akan membuat siapa saja yang meminumnya bersemangat',
@@ -147,7 +147,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'indocafe-original-blend---kopi-variant-0',
         name: '180gr / Pcs',
         defaultImageUrl: 'https://i.imgur.com/VvVI90a.jpeg',
         imagesUrls: [
@@ -159,7 +159,7 @@ const dummyProducts = [
         unit: '180gr / Pcs',
       ),
       VariantModel(
-        variantId: '1-variant-id',
+        variantId: 'indocafe-original-blend---kopi-variant-1',
         name: '50 x 2gr / Pack',
         defaultImageUrl: 'https://i.imgur.com/eNL4hzN.jpeg',
         imagesUrls: [
@@ -171,7 +171,7 @@ const dummyProducts = [
         unit: '50 x 2gr / Pack',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'indocafe-original-blend---kopi-variant-0',
     unit: '180gr / Pcs',
     description:
         'Indocafe Original Blend adalah bubuk kopi yang diracik dan diolah secara tradisional nikmat bagi pecinta kopi',
@@ -189,7 +189,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'nescafe-classic---kopi-variant-0',
         name: '200gr / Botol',
         defaultImageUrl: 'https://i.imgur.com/Ktvt26m.jpeg',
         imagesUrls: [
@@ -201,39 +201,12 @@ const dummyProducts = [
         unit: '200gr / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'nescafe-classic---kopi-variant-0',
     unit: '200gr / Botol',
     description:
         'Nescafe Classic merupakan 100% kopi murni Robusta yang memiliki aroma nikmat dan rasa kopi yang kuat.',
     thumbnailUrl: 'https://i.imgur.com/Ktvt26m.jpeg',
     imagesUrls: ['https://i.imgur.com/Ktvt26m.jpeg'],
-  ),
-  ProductModel(
-    productId: 'pocari-sweat-kaleng',
-    sku: 'SKUPST002',
-    name: 'Pocari Sweat Kaleng',
-    price: '6000',
-    stock: 50,
-    variants: [
-      VariantModel(
-        variantId: '0-variant-id',
-        name: '330ml / Pcs',
-        defaultImageUrl: 'https://i.imgur.com/LtRpmAC.jpeg',
-        imagesUrls: [
-          'https://i.imgur.com/LtRpmAC.jpeg',
-        ],
-        price: '6000',
-        sku: 'SKUPST002',
-        stock: 15,
-        unit: '330ml / Pcs',
-      ),
-    ],
-    defaultProduct: '0-variant-id',
-    unit: '330ml / Pcs',
-    description:
-        'Pocari swat kemasan kaleng minuman yang mampu mengembalikan ion tubuh',
-    thumbnailUrl: 'https://i.imgur.com/LtRpmAC.jpeg',
-    imagesUrls: ['https://i.imgur.com/LtRpmAC.jpeg'],
   ),
   ProductModel(
     productId: 'good-day-cappuccino---kopi',
@@ -243,7 +216,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'good-day-cappuccino---kopi-variant-0',
         name: '250ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/Ws9y6cV.jpeg',
         imagesUrls: [
@@ -255,12 +228,39 @@ const dummyProducts = [
         unit: '250ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'good-day-cappuccino---kopi-variant-0',
     unit: '250ml / Botol',
     description:
         'Good day funtastic mocacinno coffee dan originale cappuccino botol, kopi dalam kemasan botol lebih praktis dan bergaya',
     thumbnailUrl: 'https://i.imgur.com/Ws9y6cV.jpeg',
     imagesUrls: ['https://i.imgur.com/Ws9y6cV.jpeg'],
+  ),
+  ProductModel(
+    productId: 'pocari-sweat-kaleng',
+    sku: 'SKUPST002',
+    name: 'Pocari Sweat Kaleng',
+    price: '6000',
+    stock: 50,
+    variants: [
+      VariantModel(
+        variantId: 'pocari-sweat-kaleng-variant-0',
+        name: '330ml / Pcs',
+        defaultImageUrl: 'https://i.imgur.com/LtRpmAC.jpeg',
+        imagesUrls: [
+          'https://i.imgur.com/LtRpmAC.jpeg',
+        ],
+        price: '6000',
+        sku: 'SKUPST002',
+        stock: 15,
+        unit: '330ml / Pcs',
+      ),
+    ],
+    defaultProduct: 'pocari-sweat-kaleng-variant-0',
+    unit: '330ml / Pcs',
+    description:
+        'Pocari swat kemasan kaleng minuman yang mampu mengembalikan ion tubuh',
+    thumbnailUrl: 'https://i.imgur.com/LtRpmAC.jpeg',
+    imagesUrls: ['https://i.imgur.com/LtRpmAC.jpeg'],
   ),
   ProductModel(
     productId: 'kopiko-78-coffee-latte',
@@ -270,7 +270,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'kopiko-78-coffee-latte-variant-0',
         name: '240ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/GwfJOhP.jpeg',
         imagesUrls: [
@@ -282,7 +282,7 @@ const dummyProducts = [
         unit: '240ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'kopiko-78-coffee-latte-variant-0',
     unit: '240ml / Botol',
     description:
         'Kopiko 78 Coffee Latte Botol terbuat dari biji kopi pilihan diekstraksi pada suhu 78 derajat celcius untuk menciptakan minuman kopi dengan aroma yang memikat dan rasa yang optimal',
@@ -297,7 +297,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'scheweppes-tonic-water-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/zxiDu3s.jpeg',
         imagesUrls: [
@@ -309,7 +309,7 @@ const dummyProducts = [
         unit: '330ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'scheweppes-tonic-water-kaleng-variant-0',
     unit: '330ml / Pcs',
     description:
         'Schweppes Tonic Water 330ml, produsen minuman ringan berkarbonat paling terkenal di seluruh dunia. Kesegaran minuman ini akan membuat siapa saja yang meminumnya bersemangat',
@@ -324,7 +324,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'larutan-cap-kaki-tiga-plain-variant-0',
         name: '200ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/rjAvUxS.jpeg',
         imagesUrls: [
@@ -336,7 +336,7 @@ const dummyProducts = [
         unit: '200ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'larutan-cap-kaki-tiga-plain-variant-0',
     unit: '200ml / Pcs',
     description:
         'Larutan Cap Kaki Tiga Plain membantu meredakan panas dalam, sariawan, tenggorokan kering dan membantu menyegarkan badan.',
@@ -351,7 +351,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-celup-sosro-variant-0',
         name: 'isi 30 / Pack',
         defaultImageUrl: 'https://i.imgur.com/QyzaGpG.jpeg',
         imagesUrls: [
@@ -363,7 +363,7 @@ const dummyProducts = [
         unit: 'isi 30 / Pack',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-celup-sosro-variant-0',
     unit: 'isi 30 / Pack',
     description:
         'Teh Celup Sosro 30 Kantong Bungkus teh celup yang diolah dari pegunungan sendiri, sehingga menghasilkan aroma, rasa dan warna teh yang alami.',
@@ -378,7 +378,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'coca-cola-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/B5IRlgv.jpeg',
         imagesUrls: [
@@ -390,7 +390,7 @@ const dummyProducts = [
         unit: '330ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'coca-cola-kaleng-variant-0',
     unit: '330ml / Pcs',
     description:
         'Coca Cola Kaleng merupakan minuman ringan berkarbonat paling terkenal diseluruh dunia. Kemasannya yang praktis dan segar dapat diminum setiap saat.',
@@ -405,7 +405,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-sari-wangi-variant-0',
         name: '50 sachet / Pack',
         defaultImageUrl: 'https://i.imgur.com/52dHUA4.jpeg',
         imagesUrls: [
@@ -417,7 +417,7 @@ const dummyProducts = [
         unit: '50 sachet / Pack',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-sari-wangi-variant-0',
     unit: '50 sachet / Pack',
     description:
         'Teh Sari Wangi 50 sachet untuk menemani saat santai atau kumpul seru bersama teman atau keluarga. Terbuat dari bahan dengan kualitas terbaik dan diproses secara modern dan higienis untuk menghasilkan teh celup yang nikmat dan kaya rasa.',
@@ -432,7 +432,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'abc-mr-jussie-milky-strawberry-variant-0',
         name: '90ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/0duir3S.jpeg',
         imagesUrls: [
@@ -444,7 +444,7 @@ const dummyProducts = [
         unit: '90ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'abc-mr-jussie-milky-strawberry-variant-0',
     unit: '90ml / Pcs',
     description:
         'Abc mr jussie milky strawberry minuman jus yang memiliki rasa unik dari perpaduan susu dan buah.',
@@ -459,7 +459,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-pucuk-harum-variant-0',
         name: '350ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ZwqfakS.jpeg',
         imagesUrls: [
@@ -471,7 +471,7 @@ const dummyProducts = [
         unit: '350ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-pucuk-harum-variant-0',
     unit: '350ml / Botol',
     description:
         'Teh Pucuk dibuat dari daun teh yang berkualitas dan menggunakan bagian pucuk daun teh untuk menghasilkan cita rasa teh terbaik.',
@@ -486,7 +486,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'minute-maid-pulpy-orange-botol-variant-0',
         name: '300ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/uFrU0vv.jpeg',
         imagesUrls: [
@@ -498,7 +498,7 @@ const dummyProducts = [
         unit: '300ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'minute-maid-pulpy-orange-botol-variant-0',
     unit: '300ml / Botol',
     description:
         'Minute maid pulpy orange adalah minuman segar dalam kemasan botol yang hadir dengan bulir-bulir buah jeruk yang sangat menyegarkan.',
@@ -513,7 +513,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'schweppes-ginger-ale-kaleng-variant-0',
         name: '330ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/WMeuxsp.jpeg',
         imagesUrls: [
@@ -525,7 +525,7 @@ const dummyProducts = [
         unit: '330ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'schweppes-ginger-ale-kaleng-variant-0',
     unit: '330ml / Kaleng',
     description:
         'Schweppes Ginger Ale merupakan minuman ringan berkarbonat dengan kesegaran yang membuat anda bersemangat.',
@@ -540,7 +540,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'sosro-teh-botol-variant-0',
         name: '350ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/3jqy4dv.jpeg',
         imagesUrls: [
@@ -552,7 +552,7 @@ const dummyProducts = [
         unit: '350ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'sosro-teh-botol-variant-0',
     unit: '350ml / Pcs',
     description: 'Sosro Teh Botol merupakan minuman teh yang beraroma melati',
     thumbnailUrl: 'https://i.imgur.com/3jqy4dv.jpeg',
@@ -566,7 +566,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'indocafe-fine-blend-refill-variant-0',
         name: '100gr / Pack',
         defaultImageUrl: 'https://i.imgur.com/vPsyE8l.jpeg',
         imagesUrls: [
@@ -578,7 +578,7 @@ const dummyProducts = [
         unit: '100gr / Pack',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'indocafe-fine-blend-refill-variant-0',
     unit: '100gr / Pack',
     description:
         'Indocafe Fine Blend Refill merupakan kopi bubuk instan yang terbuat dari biji kopi pilihan dan diolah menggunakan teknogi modern untuk menghasilkan kopi yang harum dan nikmat.',
@@ -593,7 +593,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'marjan-syrup-melon-variant-0',
         name: '460ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ZhdPcaP.jpeg',
         imagesUrls: [
@@ -605,7 +605,7 @@ const dummyProducts = [
         unit: '460ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'marjan-syrup-melon-variant-0',
     unit: '460ml / Botol',
     description:
         'Marjan Syrup Melon adalah sirup rasa kelapa pandan. Sirupnya kental dengan rasa yang mewah, murni, dan menyegarkan. Rasa manisnya pas, menghilangkan dahaga dan memberikan kesegaran seketika. Cocok untuk dinikmati di berbagai suasana.',
@@ -620,7 +620,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'kapal-api-kopi-bubuk-special-variant-0',
         name: '165gr / Pcs',
         defaultImageUrl: 'https://i.imgur.com/msIvu9Q.jpeg',
         imagesUrls: [
@@ -632,7 +632,7 @@ const dummyProducts = [
         unit: '165gr / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'kapal-api-kopi-bubuk-special-variant-0',
     unit: '165gr / Pcs',
     description:
         'Kapal Api Special Merah merupakan kopi bubuk yang terbuat dari biji kopi pilihan. Kapal api menghasilkan kopi yang harum dan lebih enak.',
@@ -647,7 +647,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'san-pellegrino-sparkling-variant-0',
         name: '750ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/TFZSmuU.jpeg',
         imagesUrls: [
@@ -659,7 +659,7 @@ const dummyProducts = [
         unit: '750ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'san-pellegrino-sparkling-variant-0',
     unit: '750ml / Pcs',
     description:
         'San Pellegrino Sparkling merupakan air soda diimpor dari Italia. Rasanya yang renyah dan gurih cocok dipadukan dengan makanan apa pun. Nol kalori, rendah sodium, dan tidak ada warna atau rasa buatan. Diperkaya secara alami dengan kalsium, magnesium, dan garam mineral.',
@@ -674,7 +674,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'le-minerale-variant-0',
         name: '600ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/kje6NUi.jpeg',
         imagesUrls: [
@@ -686,7 +686,7 @@ const dummyProducts = [
         unit: '600ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'le-minerale-variant-0',
     unit: '600ml / Pcs',
     description:
         'Le minerale air mineral pegungan yang berasal dari sumber mata air pegunungan terpilih yang terfilter dan kaya mineral alami.',
@@ -701,7 +701,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-pucuk-harum-less-sugar-variant-0',
         name: '500ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/Bd0kCtV.jpeg',
         imagesUrls: [
@@ -713,7 +713,7 @@ const dummyProducts = [
         unit: '500ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-pucuk-harum-less-sugar-variant-0',
     unit: '500ml / Pcs',
     description:
         'Teh Pucuk Harum Less Sugar Teh pucuk harum ini tidak menggunakan bahan pengawet. Proses teh pucuk harum ini menggunakan teh pilihan dan bukan dari daun teh biasa yang menciptakan rasa teh terbaik. Dan teh pucuk harum ini tidak menggunakan pemanis dan pewarna buatan.',
@@ -728,7 +728,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'fruit-tea-sosro-rasa-apel-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/MCUbq3P.jpeg',
         imagesUrls: [
@@ -740,7 +740,7 @@ const dummyProducts = [
         unit: '500ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'fruit-tea-sosro-rasa-apel-variant-0',
     unit: '500ml / Botol',
     description:
         'Fruit Tea Sosro Rasa Apel minuman teh rasa apel. Dibuat dengan daun teh pilihan dan sari buah. Minuman teh yang praktis untuk menghilangkan haus dan menyegarkan harimu.',
@@ -755,7 +755,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'fruit-tea-sosro-blackcurrent-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ElTLAgb.jpeg',
         imagesUrls: [
@@ -767,7 +767,7 @@ const dummyProducts = [
         unit: '500ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'fruit-tea-sosro-blackcurrent-variant-0',
     unit: '500ml / Botol',
     description:
         'Fruit Tea Sosro Blackcurrent merupakan minuman teh dengan sensasi campuran rasa buah apel dengan blackcurrant yang menyegarkan , sangat baik dikomsumsi untuk kalangan anak-anak hingga remaja.',
@@ -782,7 +782,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'teh-botol-sosro-kotak-less-sugar-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/ePJsHy4.jpeg',
         imagesUrls: [
@@ -794,7 +794,7 @@ const dummyProducts = [
         unit: '250ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'teh-botol-sosro-kotak-less-sugar-variant-0',
     unit: '250ml / Pcs',
     description:
         'Teh Botol Sosro Kotak Less Sugar Minuman teh yang beraroma melati. Hasil campuran Teh hijau dengan Bunga Melati dan Bunga Gambir. Yang dikemas dalam kemasan kotak tanpa mengurangi kadar daun teh sehingga memberikan rasa kelat / sepet dan menjadikan teh berkualitas tinggi dengan kadar gula rendah.',
@@ -809,7 +809,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 's-tee-kotak-variant-0',
         name: '200ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/AOeIVD3.jpeg',
         imagesUrls: [
@@ -821,7 +821,7 @@ const dummyProducts = [
         unit: '200ml / Pcs',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 's-tee-kotak-variant-0',
     unit: '200ml / Pcs',
     description:
         'S-Tee Kotak merupakan minuman teh dalam kemasan kotak yang terbuat dari daun the pilihan dan berklualitas tinggi yang tidak kehilangan cita rasa tEH aslinya.',
@@ -836,7 +836,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'prim-a-variant-0',
         name: '600ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/pyzgB9D.jpeg',
         imagesUrls: [
@@ -848,7 +848,7 @@ const dummyProducts = [
         unit: '600ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'prim-a-variant-0',
     unit: '600ml / Botol',
     description:
         'Prim-A Merupakan air minum dalam kemasan yang terbuat dari mata air gunung pilihan yang terjaga unsur mineralnya sehingga dapat dikonsumsi dengan baik dan aman dikonsumsi setiap hari.',
@@ -863,7 +863,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'vit-air-mineral-variant-0',
         name: '330ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/AfxwJni.jpeg',
         imagesUrls: [
@@ -875,7 +875,7 @@ const dummyProducts = [
         unit: '330ml / Botol',
       ),
       VariantModel(
-        variantId: '1-variant-id',
+        variantId: 'vit-air-mineral-variant-1',
         name: '550ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/cGkgRIf.jpeg',
         imagesUrls: [
@@ -887,7 +887,7 @@ const dummyProducts = [
         unit: '550ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'vit-air-mineral-variant-0',
     unit: '330ml / Botol',
     description:
         'Vit Air Mineral adalah merk air dengan kualitas terpercaya sejak 1984, yang tersertifikasi aman dengan harga terjangkau. Air minum VIT telah melalui uji fisika, kimia dan mikrobiologi untuk memastikan pemenuhan standar kualitas yang telah ditetapkan. Kualitas air mineral vit dijamin melalui proses 2x filtrasi untuk penyaringan.',
@@ -905,7 +905,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'mizone-breakfree-cherry-blossom-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/tGEbKRs.jpeg',
         imagesUrls: [
@@ -917,7 +917,7 @@ const dummyProducts = [
         unit: '500ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'mizone-breakfree-cherry-blossom-variant-0',
     unit: '500ml / Botol',
     description:
         'Mizone Breakfree Cherry Blossom merupakan minuman isotonik yang memiliki rasa dan aroma menyegarkan dengan 3 vitamin (B3,B6, dan B12). Mizone memiliki kandungan vitamin yang baik bagi tubuh setelah beraktivitas hingga berkeringat, sehingga memerlukan elektrolit pengganti dengan cepat.',
@@ -932,7 +932,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'aqua-air-mineral-variant-0',
         name: '1500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/1xhR84I.jpeg',
         imagesUrls: [
@@ -944,7 +944,7 @@ const dummyProducts = [
         unit: '1500ml / Botol',
       ),
       VariantModel(
-        variantId: '1-variant-id',
+        variantId: 'aqua-air-mineral-variant-1',
         name: '330ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/Vn9FJxX.jpeg',
         imagesUrls: [
@@ -956,7 +956,7 @@ const dummyProducts = [
         unit: '330ml / Botol',
       ),
       VariantModel(
-        variantId: '2-variant-id',
+        variantId: 'aqua-air-mineral-variant-2',
         name: '600ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/5o44nby.jpeg',
         imagesUrls: [
@@ -968,7 +968,7 @@ const dummyProducts = [
         unit: '600ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'aqua-air-mineral-variant-0',
     unit: '1500ml / Botol',
     description:
         'Aqua Air Mineral berasal dari sumber mata air yang terpilih dengan segala kemurnian dan kandungan mineral alami yang terpelihara. Dengan proses yang baik, memastikan higienis tetap terjaga. Aqua dikemas dengan proses higienis.',
@@ -987,7 +987,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'kiranti-datang-bulan-variant-0',
         name: '150ml/ Botol',
         defaultImageUrl: 'https://i.imgur.com/qRV8U3P.jpeg',
         imagesUrls: [
@@ -999,7 +999,7 @@ const dummyProducts = [
         unit: '150ml/ Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'kiranti-datang-bulan-variant-0',
     unit: '150ml/ Botol',
     description:
         'Kiranti Datang Bulan membantu mengatasi keluhan saat haid seperti: nyeri haid dan bau tak sedap serta membantu memperlancar haid sehingga tubuh terasa segar dan sehat.',
@@ -1014,7 +1014,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'nutrijel-jely-shake-lecy-variant-0',
         name: '340ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/BcT2Bfy.jpeg',
         imagesUrls: [
@@ -1026,7 +1026,7 @@ const dummyProducts = [
         unit: '340ml / Botol',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'nutrijel-jely-shake-lecy-variant-0',
     unit: '340ml / Botol',
     description:
         'Nutrijel Jely Shake Lecy minuman sehat Terbuat dari bahan pilihan yang diproduksi Dikemas secara higienis dan modern. Mengandung vitamin yang membantu pembentukan sel-sel tubuh, meningkatkan penyerapan nutrisi, dan memperbaiki saluran cerna.',
@@ -1041,7 +1041,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'nescafe-capuccino-variant-0',
         name: '220ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/Ck1PZfQ.jpeg',
         imagesUrls: [
@@ -1053,7 +1053,7 @@ const dummyProducts = [
         unit: '220ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'nescafe-capuccino-variant-0',
     unit: '220ml / Kaleng',
     description:
         'Nescafe Capuccino terbuat dari biji kopi pilihan dalam negeri dengan teknologi internasional yang menghasilkan minuman rasa kopi yang sangat nikmat dan menyegarkan.',
@@ -1068,7 +1068,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'delmotne-boba-taro-variant-0',
         name: '240ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/5rUbcMq.jpeg',
         imagesUrls: [
@@ -1080,7 +1080,7 @@ const dummyProducts = [
         unit: '240ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'delmotne-boba-taro-variant-0',
     unit: '240ml / Kaleng',
     description:
         'Delmonte Boba Caramel Cheese Merupakan minuman dalam kemasan dengan rasa boba taro yang menyegarkan, lebih nikmat disajikan dalam keadaan minuman yang dingin.',
@@ -1095,7 +1095,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'delmonte-boba-caramel-cheese-variant-0',
         name: '240ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/vjQKXz7.jpeg',
         imagesUrls: [
@@ -1107,7 +1107,7 @@ const dummyProducts = [
         unit: '240ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'delmonte-boba-caramel-cheese-variant-0',
     unit: '240ml / Kaleng',
     description:
         'Delmonte Boba Caramel Cheese Merupakan minuman dalam kemasan dengan rasa karamel dengan keju yang menyegarkan, lebih nikmat disajikan dalam keadaan minuman yang dingin.',
@@ -1122,7 +1122,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'redbull-energy-drink-variant-0',
         name: '250ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/ahmnyCE.jpeg',
         imagesUrls: [
@@ -1134,7 +1134,7 @@ const dummyProducts = [
         unit: '250ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'redbull-energy-drink-variant-0',
     unit: '250ml / Kaleng',
     description:
         'Redbull Energy Drink adalah minuman energi terbaru persembahan kratingdaeng yang hadir dalam rasa aneka buah yang menyegarkan. Red bull energy membantu menjaga stamina sekaligus menghilangkan dahaga sehingga bisa dinikmati setiap saat.',
@@ -1149,7 +1149,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
-        variantId: '0-variant-id',
+        variantId: 'panda-grass-jelly-variant-0',
         name: '310ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/AuBZ9k8.jpeg',
         imagesUrls: [
@@ -1161,7 +1161,7 @@ const dummyProducts = [
         unit: '310ml / Kaleng',
       ),
     ],
-    defaultProduct: '0-variant-id',
+    defaultProduct: 'panda-grass-jelly-variant-0',
     unit: '310ml / Kaleng',
     description:
         'Panda Grass Jelly merupakan minuman pelepas dahaga dengan cincau yang terbuat dari bahan-bahan herbal asli dari alam yang bermanfaat untuk mengembalikan kesegaran tubuh anda. Minuman ini berkhasiat dan menyehatkan tubuh anda.',
