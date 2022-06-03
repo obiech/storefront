@@ -269,6 +269,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get support => 'Support';
 
+  @override
+  String copiedSuccessfully(String subject) => '$subject copied successfully';
+
   /// Auth
   @override
   String get letsLoginOrRegister =>
@@ -443,9 +446,8 @@ class EnglishStrings implements BaseStrings {
   @override
   String get details => 'Details';
 
-  // TODO (Jonathan): Change this after iyo respond
   @override
-  String get virtualAccountCopy => 'Virtual Account Copied';
+  String get virtualAccount => 'Virtual Account';
 
   /// Cart Page
   @override

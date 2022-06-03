@@ -153,6 +153,8 @@ abstract class BaseStrings {
   /// Commonly used phrases
   String get support;
 
+  String copiedSuccessfully(String subject);
+
   /// Auth
   String get letsLoginOrRegister;
 
@@ -283,7 +285,7 @@ abstract class BaseStrings {
 
   String get details;
 
-  String get virtualAccountCopy;
+  String get virtualAccount;
 
   /// Cart Page
   String get shoppingConfirmation;

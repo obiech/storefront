@@ -3,7 +3,7 @@ part of '../list.dart';
 class TimingText extends StatelessWidget {
   const TimingText({
     Key? key,
-    required this.title,
+    this.title,
     required this.timeLabel,
     required this.color,
     this.iconData,
@@ -49,7 +49,7 @@ class TimingText extends StatelessWidget {
   }
 
   /// Text shown above [timeLabel]
-  final String title;
+  final String? title;
 
   /// Contains time-related info such as order date
   /// or remaining time before payment expiry
@@ -67,15 +67,19 @@ class TimingText extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: context.res.styles.caption3.copyWith(
-            color: context.res.colors.grey5,
-            height: 1.6, // 10 x 1.6 = 16dp
+        Visibility(
+          visible: title != null,
+          child: Text(
+            title ?? '',
+            style: context.res.styles.caption3.copyWith(
+              color: context.res.colors.grey5,
+              height: 1.6, // 10 x 1.6 = 16dp
+            ),
           ),
         ),
         const SizedBox(height: 2),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (iconData != null) ...[
               Icon(

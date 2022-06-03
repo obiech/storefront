@@ -5,4 +5,5 @@ export 'order_details/pay_now_button.dart';
 export 'order_details/status_header/widget.dart';
 export 'order_history/list.dart';
 export 'order_status_chip.dart';
+export 'payment_instructions/payment_informations/payment_information_section.dart';
 export 'payment_summary/order_payment_summary.dart';

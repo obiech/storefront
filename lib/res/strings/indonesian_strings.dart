@@ -269,6 +269,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get support => 'Bantuan';
 
+  @override
+  String copiedSuccessfully(String subject) => '$subject berhasil tersalin';
+
   /// Auth
   @override
   String get letsLoginOrRegister =>
@@ -444,9 +447,8 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get details => 'Lihat Detail';
 
-  // TODO (Jonathan): Change this after iyo respond
   @override
-  String get virtualAccountCopy => 'Virtual Account Tersalin';
+  String get virtualAccount => 'Virtual Account';
 
   /// Cart Page
   @override

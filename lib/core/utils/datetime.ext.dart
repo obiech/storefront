@@ -34,6 +34,10 @@ extension DateTimeX on DateTime {
   String formatHm() {
     return DateFormat.Hm().format(this);
   }
+
+  String formatDDMMYYhhmm() {
+    return DateFormat('d MMM y · HH:mm').format(this);
+  }
 }
 
 extension DurationX on Duration {
