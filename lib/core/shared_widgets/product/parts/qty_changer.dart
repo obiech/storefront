@@ -56,9 +56,10 @@ class _QtyChangerState extends State<QtyChanger> {
         children: [
           AspectRatio(
             aspectRatio: 1,
-            child: FloatingActionButton(
-              backgroundColor: res.colors.blue,
+            child: RawMaterialButton(
+              fillColor: res.colors.blue,
               elevation: 0,
+              shape: const CircleBorder(),
               onPressed: () {
                 if (_valueNotifier.value > 0) {
                   _valueNotifier.value--;
@@ -85,9 +86,10 @@ class _QtyChangerState extends State<QtyChanger> {
           ),
           AspectRatio(
             aspectRatio: 1,
-            child: FloatingActionButton(
-              backgroundColor: res.colors.blue,
+            child: RawMaterialButton(
+              fillColor: res.colors.blue,
               elevation: 0,
+              shape: const CircleBorder(),
               onPressed: () {
                 if (_valueNotifier.value < widget.maxValue) {
                   _valueNotifier.value++;
