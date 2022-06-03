@@ -64,7 +64,7 @@ class OrderDetailsView extends StatelessWidget {
                 ),
               ),
             ),
-            const OrderActions(),
+            OrderActions(order: order),
           ],
         ),
       ),

@@ -19,11 +19,6 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (order.status.isAwaitingPayment) {
-      return Container();
-      // TODO (Jonathan) : Create View for Awaiting Payment status in STOR-508
-    } else {
-      return OrderDetailsView(order: order);
-    }
+    return OrderDetailsView(order: order);
   }
 }

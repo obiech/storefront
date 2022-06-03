@@ -14,12 +14,3 @@ List<OrderModel> get fakeOrderModels => [
       orderPaid,
       orderArrived
     ];
-
-List<OrderModel> get fakeAwaitingPaymentModels => [
-      orderAwaitingPayment,
-      orderAwaitingPayment,
-      orderAwaitingPayment,
-      orderAwaitingPayment,
-      orderAwaitingPayment,
-      orderAwaitingPayment
-    ];

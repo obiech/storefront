@@ -352,6 +352,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get totalSpent => 'Total Belanja';
 
+  @override
+  String get payNow => 'Bayar Sekarang';
+
   /// Order Status
   @override
   String get awaitingPayment => 'Menunggu Pembayaran';

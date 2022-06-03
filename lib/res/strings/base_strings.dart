@@ -228,6 +228,8 @@ abstract class BaseStrings {
 
   String get totalSpent;
 
+  String get payNow;
+
   /// Order Status
   String get awaitingPayment;
 

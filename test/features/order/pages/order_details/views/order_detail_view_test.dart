@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
@@ -140,6 +141,43 @@ void main() {
 
           // expecting the right route being pushed
           expect(routeInfo, isA<HelpRoute>());
+        },
+      );
+
+      testWidgets(
+        'should navigate to Payment Instructions Page '
+        'when Pay Now Button is tapped',
+        (tester) async {
+          await tester.pumpOrderDetailsView(
+            order: orderAwaitingPayment,
+            stackRouter: stackRouter,
+          );
+          await tester.tap(find.byType(PayNowButton));
+          await tester.pumpAndSettle();
+
+          final capturedRoutes =
+              verify(() => stackRouter.push(captureAny())).captured;
+
+          // there should only be one route that's being pushed
+          expect(capturedRoutes.length, 1);
+
+          final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+          // expecting the right route being pushed
+          expect(routeInfo, isA<PaymentInstructionsRoute>());
+        },
+      );
+
+      testWidgets(
+        'should not shown Pay Now Button '
+        'when Order status is not awaiting payment',
+        (tester) async {
+          final orders = fakeOrderModels;
+          for (int i = 0; i < orders.length; i++) {
+            await tester.pumpOrderDetailsView(order: orders[i]);
+
+            expect(find.byType(PayNowButton), findsNothing);
+          }
         },
       );
     },

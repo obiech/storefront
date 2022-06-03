@@ -69,6 +69,9 @@ import '../features/profile/index.dart';
     /// Help
     AutoRoute(page: HelpPage),
 
+    /// Payment Instruction
+    AutoRoute(page: PaymentInstructionsPage),
+
     /// Global Search Navigation
     AutoRoute(
       page: SearchPage,

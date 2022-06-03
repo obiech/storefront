@@ -312,6 +312,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get totalSpent => 'Total Spent';
 
+  @override
+  String get payNow => 'Pay Now';
+
   /// Order Details Page
   @override
   String get orderDetails => 'Order Details';

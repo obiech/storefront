@@ -1,34 +1,54 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_widgets.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
 import '../../../../../../test_commons/utils/sample_order_models.dart';
+import '../../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
+
 extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpListItem({
     required OrderModel order,
+    StackRouter? stackRouter,
     DateTime? currentTime,
   }) async {
     late BuildContext ctx;
-
     await pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            ctx = context;
-            return OrderHistoryListItem(
-              order: order,
-              currentTime: currentTime,
-            );
-          },
-        ),
-      ),
+      stackRouter != null
+          ? StackRouterScope(
+              controller: stackRouter,
+              stateHash: 0,
+              child: MaterialApp(
+                home: Builder(
+                  builder: (context) {
+                    ctx = context;
+                    return OrderHistoryListItem(
+                      order: order,
+                      currentTime: currentTime,
+                    );
+                  },
+                ),
+              ),
+            )
+          : MaterialApp(
+              home: Builder(
+                builder: (context) {
+                  ctx = context;
+                  return OrderHistoryListItem(
+                    order: order,
+                    currentTime: currentTime,
+                  );
+                },
+              ),
+            ),
     );
 
     return ctx;
@@ -36,6 +56,16 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  late StackRouter stackRouter;
+
+  setUp(() {
+    stackRouter = MockStackRouter();
+    when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
+  });
+  setUpAll(() {
+    registerFallbackValue(FakePageRouteInfo());
+  });
+
   testWidgets(
     '[OrderHistoryListItem] should display a summary section, order thumbnail, '
     'and current order status regardless of order status',
@@ -216,6 +246,33 @@ void main() {
       // and should display order completion date & time
       final df = DateFormat('d MMM y • HH:mm');
       expect(timingText.timeLabel, df.format(order.orderCompletionTime!));
+    },
+  );
+
+  testWidgets(
+    'should move to [PaymentInstructionsPage] '
+    'when continue payment is press',
+    (tester) async {
+      final order = orderAwaitingPayment;
+
+      await tester.pumpListItem(
+        order: order,
+        stackRouter: stackRouter,
+      );
+
+      await tester.tap(find.byType(DropezyButton));
+      await tester.pumpAndSettle();
+
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+
+      // there should only be one route that's being pushed
+      expect(capturedRoutes.length, 1);
+
+      final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+      // expecting the right route being pushed
+      expect(routeInfo, isA<PaymentInstructionsRoute>());
     },
   );
 }

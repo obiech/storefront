@@ -114,6 +114,7 @@ class OrderHistoryListItem extends StatelessWidget {
             DropezyButton.primary(
               label: context.res.strings.continuePayment,
               onPressed: () {
+                context.pushRoute(PaymentInstructionsRoute(order: order));
                 // TODO : for Deeplink Payment
               },
               padding: EdgeInsets.symmetric(

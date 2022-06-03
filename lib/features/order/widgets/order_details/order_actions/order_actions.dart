@@ -10,11 +10,14 @@ import '../../../index.dart';
 class OrderActions extends StatelessWidget {
   const OrderActions({
     Key? key,
+    required this.order,
     this.showReorderButton = false,
   }) : super(key: key);
 
   // toggle to show Reorder button
   final bool showReorderButton;
+
+  final OrderModel order;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,18 @@ class OrderActions extends StatelessWidget {
               },
             ),
           ),
+          if (order.status.isAwaitingPayment) ...[
+            const SizedBox(width: 8),
+            Expanded(
+              child: PayNowButton(
+                onPressed: () {
+                  context.pushRoute(
+                    PaymentInstructionsRoute(order: order),
+                  );
+                },
+              ),
+            ),
+          ],
           if (showReorderButton) ...[
             const SizedBox(width: 8),
             Expanded(

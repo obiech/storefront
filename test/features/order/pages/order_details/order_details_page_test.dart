@@ -50,27 +50,11 @@ void main() {
         'should show [OrderDetailsView] '
         'when order status is not Awaiting Payment',
         (tester) async {
-          final orders = fakeOrderModels;
+          final orders = sampleOrderModels;
           for (int i = 0; i < orders.length; i++) {
             await tester.pumpOrderDetailsPage(order: orders[i]);
 
-            if (!orders[i].status.isAwaitingPayment) {
-              expect(find.byType(OrderDetailsView), findsOneWidget);
-            }
-          }
-        },
-      );
-      testWidgets(
-        'should show [] '
-        'when order status is Awaiting Payment',
-        (tester) async {
-          final orders = fakeAwaitingPaymentModels;
-          for (int i = 0; i < orders.length; i++) {
-            await tester.pumpOrderDetailsPage(order: orders[i]);
-            //TODO (Jonathan) : Create check for awaiting payment status
-            if (orders[i].status.isAwaitingPayment) {
-              //expect(find.byType(), findsOneWidget);
-            }
+            expect(find.byType(OrderDetailsView), findsOneWidget);
           }
         },
       );
