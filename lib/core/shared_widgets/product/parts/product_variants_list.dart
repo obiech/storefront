@@ -24,65 +24,42 @@ class ProductVariantsList extends StatelessWidget {
             decoration: res.styles.bottomSheetStyle,
             child: ClipRRect(
               borderRadius: res.styles.topBorderRadius,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+              child: Stack(
+                alignment: AlignmentDirectional.topCenter,
                 children: [
-                  Container(
-                    color: res.colors.darkBlue,
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      vertical: res.dimens.spacingLarge,
-                      horizontal: res.dimens.spacingLarge,
-                    ),
-                    child: Text(
-                      product.name,
-                      style: res.styles.subtitle.copyWith(
-                        color: res.colors.white,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          vertical: res.dimens.spacingLarge,
+                          horizontal: res.dimens.spacingLarge,
+                        ),
+                        margin: const EdgeInsets.only(top: 15),
+                        child: Text(
+                          product.name,
+                          style: res.styles.subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: ListView.separated(
-                      controller: controller,
-                      physics: const ClampingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final variant = product.variants[index];
-                        return ProductTile(
-                          variant: variant,
-                          trailing: SizedBox(
-                            width: 90,
-                            height: 40,
-                            child: MediaQuery(
-                              data: MediaQuery.of(context).copyWith(
-                                textScaleFactor: .8,
-                              ),
-                              child: ProductAction(
-                                product: variant,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      shrinkWrap: true,
-                      itemCount: product.variants.length,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
+                      Expanded(
+                        child: VariantsListView(
+                          product: product,
+                          controller: controller,
+                        ),
                       ),
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(
-                          height: 10,
-                        );
-                      },
-                    ),
+                      const CartSummary(),
+                      SizedBox(
+                        height: MediaQuery.of(context).padding.bottom,
+                      ),
+                    ],
                   ),
-                  const CartSummary(),
-                  SizedBox(
-                    height: MediaQuery.of(context).padding.bottom,
-                  ),
+                  const Positioned(
+                    top: 8,
+                    child: DragHandle(),
+                  )
                 ],
               ),
             ),
@@ -99,7 +76,7 @@ extension BottomSheetSizeX on BuildContext {
     final itemsPadding = 10 * (itemsCount - 1);
     const cartSummaryHeight = 42;
 
-    final approxItemsHeight = 70.0 * itemsCount +
+    final approxItemsHeight = 85.0 * itemsCount +
         itemsPadding +
         cartSummaryHeight +
         MediaQuery.of(this).padding.bottom;

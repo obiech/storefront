@@ -652,6 +652,9 @@ class IndonesianStrings implements BaseStrings {
   String get productDetails => 'Detail Produk';
 
   @override
+  String get variants => 'Varian';
+
+  @override
   String get faq => 'FAQ';
 
   @override

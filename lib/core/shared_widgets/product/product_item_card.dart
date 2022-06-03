@@ -9,6 +9,7 @@ import 'package:storefront_app/res/resources.dart';
 
 import '../../../features/cart_checkout/index.dart';
 import '../../../features/product/index.dart';
+import '../bottom_sheet/drag_handle.dart';
 import '../buttons/pill_button.dart';
 
 part 'parts/out_of_stock_overdraw.dart';
@@ -17,6 +18,7 @@ part 'parts/product_badge.dart';
 part 'parts/product_item_card_loading.dart';
 part 'parts/product_variants_list.dart';
 part 'parts/qty_changer.dart';
+part 'parts/variants_list_view.dart';
 
 /// Show's a single inventory product's details including
 /// * Price

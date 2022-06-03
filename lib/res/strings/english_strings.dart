@@ -652,6 +652,9 @@ class EnglishStrings implements BaseStrings {
   String get productDetails => 'Product Details';
 
   @override
+  String get variants => 'Variants';
+
+  @override
   String get faq => 'FAQ';
 
   @override

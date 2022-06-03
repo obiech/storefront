@@ -431,6 +431,7 @@ abstract class BaseStrings {
 
   /// Product Details Page
   String get productDetails;
+  String get variants;
 
   String get faq;
 

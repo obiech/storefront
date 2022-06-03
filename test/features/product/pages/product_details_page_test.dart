@@ -5,8 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
-import 'package:storefront_app/features/product/domain/domain.dart';
-import 'package:storefront_app/features/product/pages/product_details_page.dart';
+import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../test_commons/fixtures/product/product_models.dart';
@@ -62,6 +61,18 @@ void main() {
 
     /// assert
     expect(find.byType(CartSummary), findsOneWidget);
+  });
+
+  testWidgets('should display respective PDP widgets',
+      (WidgetTester tester) async {
+    /// arrange
+    await tester.pumpProductDetailsPage(bloc, mockProductModel);
+
+    /// assert
+    expect(find.byType(ProductDetailPageHeader), findsOneWidget);
+    expect(find.byType(ProductDetailsSubHeader), findsOneWidget);
+    expect(find.byType(ProductDescription), findsOneWidget);
+    expect(find.byType(VariantsList), findsOneWidget);
   });
 }
 
