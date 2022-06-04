@@ -32,6 +32,13 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def mapsApiKey = mapsProperties['mapsApiKey'];
+
+if (mapsApiKey == null) {
+    println 'WARNING: "mapsApiKey" is not set in maps.properties file. Defaulting to empty string.'
+    mapsApiKey = '';
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -81,15 +88,15 @@ android {
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             manifestPlaceholders = [
-                    usesCleartextTraffic:"false",
-                    mapsApiKey:mapsProperties['mapsApiKey']
+                usesCleartextTraffic: 'false', // enforce HTTPS connection
+                mapsApiKey: mapsApiKey
             ]
         }
         debug {
             signingConfig signingConfigs.debug
             manifestPlaceholders = [
-                    usesCleartextTraffic:"true",
-                    mapsApiKey:mapsProperties['mapsApiKey']
+                usesCleartextTraffic: 'true',
+                mapsApiKey: mapsApiKey
             ]
         }
     }
