@@ -14,6 +14,7 @@ import 'di/injection.dart';
 import 'features/address/index.dart';
 import 'features/cart_checkout/index.dart';
 import 'features/home/index.dart';
+import 'features/permission_handler/index.dart';
 import 'features/product_search/index.dart';
 
 Future<void> main() async {
@@ -54,6 +55,11 @@ Future<void> main() async {
         BlocProvider(
           create: (_) => getIt<SearchInventoryBloc>(),
         ),
+
+        /// Permission
+        BlocProvider(
+          create: (_) => getIt<PermissionHandlerCubit>(),
+        )
       ],
       child: AppWidget(
         router: getIt<AppRouter>(),

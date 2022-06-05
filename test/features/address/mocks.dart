@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
+import 'package:storefront_app/features/permission_handler/index.dart';
 
 class MockDeliveryAddressRepository extends Mock
     implements IDeliveryAddressRepository {}
@@ -13,6 +14,9 @@ class MockDeliveryAddressCubit extends MockCubit<DeliveryAddressState>
 class MockAddressDetailBloc
     extends MockBloc<AddressDetailEvent, AddressDetailState>
     implements AddressDetailBloc {}
+
+class MockPermissionHandlerCubit extends MockCubit<PermissionHandlerState>
+    implements PermissionHandlerCubit {}
 
 class MockDateTimeProvider extends Mock implements DateTimeProvider {}
 
