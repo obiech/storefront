@@ -23,7 +23,7 @@ class Resources {
   Resources(this._context);
 
   BaseStrings get strings {
-    // It could be from the user preferences or even from the current locale
+    //TODO: It could be from the user preferences or even from the current locale
     final locale = Localizations.localeOf(_context);
 
     switch (locale.languageCode) {

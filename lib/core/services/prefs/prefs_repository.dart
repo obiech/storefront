@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -65,5 +66,29 @@ class PrefsRepository implements IPrefsRepository {
   @override
   Future<void> clear() async {
     await _preferences.clear();
+  }
+
+  @override
+  Future<Locale> getDeviceLocale() async {
+    try {
+      final _localeCode =
+          (_preferences.getString(PrefsKeys.kDeviceLocale) ?? 'id-ID')
+              .split('-');
+
+      return Locale.fromSubtags(
+        languageCode: _localeCode.first,
+        countryCode: _localeCode[1],
+      );
+    } catch (e) {
+      return const Locale('id', 'ID');
+    }
+  }
+
+  @override
+  Future<void> setDeviceLocale(Locale locale) async {
+    await _preferences.setString(
+      PrefsKeys.kDeviceLocale,
+      locale.toLanguageTag(),
+    );
   }
 }

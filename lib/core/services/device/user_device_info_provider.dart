@@ -1,5 +1,6 @@
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -16,10 +17,13 @@ class UserDeviceInfoRepository extends IUserDeviceInfoRepository {
     required this.packageInfo,
     required this.deviceInfoPlugin,
     required this.devicePlatform,
+    required this.prefs,
   });
+
   final PackageInfo packageInfo;
   final DeviceInfoPlugin deviceInfoPlugin;
   final DevicePlatform devicePlatform;
+  final IPrefsRepository prefs;
 
   /// Return current device's OS and version
   /// concantenated into single string. Example:
@@ -78,4 +82,8 @@ class UserDeviceInfoRepository extends IUserDeviceInfoRepository {
     final originIP = await Ipify.ipv4();
     return originIP;
   }
+
+  /// Return the shared preferences Locale
+  @override
+  Future<Locale> getDeviceLocale() => prefs.getDeviceLocale();
 }

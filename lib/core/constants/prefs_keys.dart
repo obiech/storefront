@@ -12,4 +12,5 @@ class PrefsKeys {
   static const kUserPhoneNumber = 'userPhoneNumber';
   static const kDeviceFingerPrint = 'fakeDeviceFingerprint';
   static const kSearchQueries = 'kSearchQueries';
+  static const kDeviceLocale = 'kDeviceLocale';
 }

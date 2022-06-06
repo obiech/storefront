@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -21,6 +22,7 @@ void main() {
     const mockAppVersion = '2.0.1';
     const mockOriginIP = '84.17.39.204';
     const mockXCorrelationID = 'f058ebd6-02f7-4d3f-942e-904344e8cde5';
+    const mockDeviceLocale = Locale('id', 'ID');
 
     const mockMetadata = {
       'OS-Version': 'value1',
@@ -28,6 +30,7 @@ void main() {
       'App-Version': 'value3',
       'Origin-IP': 'value4',
       'X-Correlation-ID': 'value5',
+      'Locale': 'id-ID',
     };
 
     setUp(() {
@@ -70,6 +73,7 @@ void main() {
           deviceInterceptor.addAppVersion,
           deviceInterceptor.addOriginIp,
           deviceInterceptor.addXCorrelationID,
+          deviceInterceptor.addDeviceLocale,
         ],
       );
     });
@@ -167,6 +171,27 @@ void main() {
             metadata,
             {
               'X-Correlation-ID': mockXCorrelationID,
+            },
+          );
+        },
+      );
+
+      test(
+        "add locale into 'Locale'",
+        () async {
+          when(() => mockUserDeviceInfoProvider.getDeviceLocale()).thenAnswer(
+            (_) async => mockDeviceLocale,
+          );
+
+          final Map<String, String> metadata = {};
+
+          await deviceInterceptor.addDeviceLocale(metadata, 'randomUri');
+
+          verify(() => mockUserDeviceInfoProvider.getDeviceLocale()).called(1);
+          expect(
+            metadata,
+            {
+              'Locale': mockDeviceLocale.toLanguageTag(),
             },
           );
         },

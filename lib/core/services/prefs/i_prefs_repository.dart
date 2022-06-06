@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 abstract class IPrefsRepository {
   /// Preference helpers for user onboarding
   ///
@@ -39,6 +41,17 @@ abstract class IPrefsRepository {
 
   /// Store user's finger print
   Future<void> setFingerPrint(String fingerPrint);
+
+  /// Locale preferences
+  ///
+  /// Set device locale, takes [Locale] and
+  /// stores it's id in preferences
+  Future<void> setDeviceLocale(Locale locale);
+
+  /// Get device Locale
+  ///
+  /// Returns [Locale] with indonesian being the default
+  Future<Locale> getDeviceLocale();
 
   /// Clear Prefs
   Future<void> clear();

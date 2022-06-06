@@ -21,6 +21,7 @@ import '../../../../services/device/repository/_exporter.dart';
 /// Device-Model: vivo_1611
 /// App-Version: 2.0.1
 /// Origin-IP: 84.17.39.204
+/// Locale: en-US
 /// X-Correlation-ID: f058ebd6-02f7-4d3f-942e-904344e8cde5
 
 class DeviceInterceptor extends ClientInterceptor {
@@ -48,6 +49,7 @@ class DeviceInterceptor extends ClientInterceptor {
           addAppVersion,
           addOriginIp,
           addXCorrelationID,
+          addDeviceLocale,
         ],
       ),
     );
@@ -118,5 +120,15 @@ class DeviceInterceptor extends ClientInterceptor {
     }
 
     metadata['X-Correlation-ID'] = uuid.v4();
+  }
+
+  @visibleForTesting
+  Future<void> addDeviceLocale(
+    Map<String, String> metadata,
+    String uri,
+  ) async {
+    final appLocale = await userDeviceInfoProvider.getDeviceLocale();
+
+    metadata['Locale'] = appLocale.toLanguageTag();
   }
 }
