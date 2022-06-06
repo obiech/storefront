@@ -1,4 +1,4 @@
-name: Release to Google Play
+name: Push Test Build To Firebase App Distribution
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     - cron: '0 14 * * 1-5'
 
 jobs:
-  release-to-google-play:
+  push-to-fr-app-distribution:
     runs-on: ubuntu-latest
     steps:
       - name: Generate dropezy-ci Access Token
@@ -25,15 +25,20 @@ jobs:
         run: |
           git config --global url."https://dropezy:${CI_TOKEN}@github.com".insteadOf "https://github.com"
 
-      - name: Create '.env' File from Secret
+      - name: Create preprod '.env' File from Secret
         run: echo $SECRETS_FILE_CONTENTS | base64 -d > env/.env
         env:
-          SECRETS_FILE_CONTENTS: ${{ secrets.ENV_BASE64 }}
+          SECRETS_FILE_CONTENTS: ${{ secrets.PREPROD_ENV_BASE64 }}
 
-      - name: Create 'google-services.json' File from Secret
+      - name: Create preprod 'google-services.json' File from Secret
         run: echo $SECRETS_FILE_CONTENTS | base64 -d > android/app/google-services.json
         env:
-          SECRETS_FILE_CONTENTS: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+          SECRETS_FILE_CONTENTS: ${{ secrets.PREPROD_GOOGLE_SERVICES_JSON_BASE64 }}
+
+      - name: Create preprod 'service-key.json' File from Secret
+        run: echo $SECRETS_FILE_CONTENTS > service-key.json
+        env:
+          SECRETS_FILE_CONTENTS: ${{ secrets.PREPROD_GOOGLE_SERVICE_ACCOUNT_KEY }}
 
       - name: Setup Java
         uses: actions/setup-java@v3.3.0
@@ -47,7 +52,7 @@ jobs:
           flutter-version: 2.10.5
           channel: stable
           cache: true
-
+      
       - name: Cache pub dependencies
         uses: actions/cache@v2
         with:
@@ -61,37 +66,35 @@ jobs:
       - name: Build generated code
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
-      - name: Download Android keystore
+      - name: Download Preprod Android keystore
         id: android_keystore
         uses: timheuer/base64-to-file@v1.0.3
         with:
           fileName: key.jks
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          encodedString: ${{ secrets.PREPROD_ANDROID_KEYSTORE_BASE64 }}
 
       - name: Create key.properties
         run: |
           echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "storePassword=${{ secrets.PREPROD_ANDROID_STORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.PREPROD_ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.PREPROD_ANDROID_KEY_ALIAS }}" >> android/key.properties
 
-      - name: Build Android App Bundle
-        run: flutter build appbundle --flavor prod --build-number=$GITHUB_RUN_NUMBER
-
-      - name: Setup ruby and install fastlane
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1.2'
-          bundler-cache: true
-
-      - name: Release to Google Play (alpha)
-        env:
-          SUPPLY_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
-          SUPPLY_JSON_KEY_DATA: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }} # shuld be added to the secrets
+      - name: Create maps.properties
         run: |
-          bundle exec fastlane supply \
-          --aab build/app/outputs/bundle/prodRelease/app-prod-release.aab \
-          --track alpha
+          echo "mapsApiKey=${{ secrets.PREPROD_MAPS_API_KEY }}" > android/maps.properties
+
+      - name: Build Android APK
+        run: flutter build apk --build-number ${{ github.run_number }} --release --flavor preprod
+
+      - name: Upload preprod artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.PREPROD_FIREBASE_APP_ID }}
+          serviceCredentialsFile: service-key.json
+          releaseNotesFile: release-notes.txt
+          groups: developers, products
+          file: build/app/outputs/flutter-apk/app-preprod-release.apk
 
       - name: Send Slack Notification
         if: always()

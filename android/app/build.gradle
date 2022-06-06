@@ -101,6 +101,23 @@ android {
             ]
         }
     }
+
+    flavorDimensions "env"
+    productFlavors {
+        preprod {
+            dimension "env"
+            applicationIdSuffix ".preproduction"
+            versionNameSuffix "-preproduction"
+            resValue "string", "app_name", "Dropezy Preprod"
+            lintOptions {
+                checkReleaseBuilds false
+            }
+        }
+        prod {
+            dimension "env"
+            resValue "string", "app_name", "Dropezy"
+        }
+    }
 }
 
 flutter {
