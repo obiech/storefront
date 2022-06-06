@@ -87,7 +87,10 @@ void main() {
         () {
           final mockRequest = AddRequest(
             storeId: mockStoreId,
-            item: UpdateItem(variantId: mockVariant.id),
+            item: UpdateItem(
+              variantId: mockVariant.id,
+              quantity: 1,
+            ),
           );
 
           test(
@@ -320,7 +323,10 @@ void main() {
         () {
           final mockRequest = UpdateRequest(
             storeId: mockStoreId,
-            item: UpdateItem(variantId: mockVariant.id),
+            item: UpdateItem(
+              variantId: mockVariant.id,
+              quantity: 1,
+            ),
             action: UpdateAction.UPDATE_ACTION_REMOVE,
           );
 

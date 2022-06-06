@@ -44,7 +44,10 @@ class CartService extends ICartRepository {
     try {
       final req = AddRequest(
         storeId: storeId,
-        item: UpdateItem(variantId: variant.id),
+        item: UpdateItem(
+          variantId: variant.id,
+          quantity: 1,
+        ),
       );
 
       // Ignore value returned
@@ -89,7 +92,7 @@ class CartService extends ICartRepository {
     return _cartServiceUpdateItem(
       storeId: storeId,
       variantId: variant.id,
-      quantity: null,
+      quantity: 1,
       action: UpdateAction.UPDATE_ACTION_REMOVE,
     );
   }
