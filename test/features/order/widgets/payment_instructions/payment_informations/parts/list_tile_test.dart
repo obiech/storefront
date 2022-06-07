@@ -43,7 +43,6 @@ extension WidgetTesterX on WidgetTester {
             return Material(
               child: InformationsTile.virtualAccount(
                 ctx: ctx,
-                res: context.res,
                 virtualAccount: virtualAccount,
               ),
             );
@@ -65,8 +64,9 @@ extension WidgetTesterX on WidgetTester {
             ctx = context;
             return Material(
               child: InformationsTile.totalBill(
-                res: context.res,
                 amount: order.total,
+                ctx: ctx,
+                order: orderAwaitingPayment,
               ),
             );
           },
@@ -212,6 +212,21 @@ void main() {
           ),
           findsOneWidget,
         );
+      },
+    );
+
+    testWidgets(
+      'Should show [OrderDetailsBottomSheet] '
+      'when details button in [InformationsTile.totalBill] is tapped',
+      (tester) async {
+        await tester.pumpTotalBillTile(
+          order: orderAwaitingPayment,
+        );
+
+        await tester.tap(ListTileFinder.finderButton);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(OrderDetailsBottomSheet), findsOneWidget);
       },
     );
   });

@@ -47,16 +47,15 @@ class InformationsTile extends StatelessWidget {
   factory InformationsTile.virtualAccount({
     Key? key,
     required BuildContext ctx,
-    required Resources res,
     required String virtualAccount,
   }) {
     return InformationsTile(
       key: key,
-      title: res.strings.virtualAccountNumber,
+      title: ctx.res.strings.virtualAccountNumber,
       subtitle: Text(
         virtualAccount,
         key: const ValueKey(InformationsTileKeys.subtitleText),
-        style: res.styles.caption1
+        style: ctx.res.styles.caption1
             .copyWith(
               fontWeight: FontWeight.w600,
             )
@@ -69,8 +68,8 @@ class InformationsTile extends StatelessWidget {
           onPressed: () {
             Clipboard.setData(ClipboardData(text: virtualAccount)).then((_) {
               ctx.showToast(
-                res.strings.copiedSuccessfully(
-                  res.strings.virtualAccount,
+                ctx.res.strings.copiedSuccessfully(
+                  ctx.res.strings.virtualAccount,
                 ),
               );
             });
@@ -85,8 +84,8 @@ class InformationsTile extends StatelessWidget {
               ),
               const SizedBox(width: 5),
               Text(
-                res.strings.copy,
-                style: res.styles.caption2
+                ctx.res.strings.copy,
+                style: ctx.res.styles.caption2
                     .copyWith(
                       fontWeight: FontWeight.w600,
                       color: DropezyColors.blue,
@@ -102,16 +101,17 @@ class InformationsTile extends StatelessWidget {
 
   factory InformationsTile.totalBill({
     Key? key,
-    required Resources res,
     required String amount,
+    required BuildContext ctx,
+    required OrderModel order,
   }) {
     return InformationsTile(
       key: key,
-      title: res.strings.totalBill,
+      title: ctx.res.strings.totalBill,
       subtitle: Text(
         amount.toCurrency(),
         key: const ValueKey(InformationsTileKeys.subtitleText),
-        style: res.styles.caption1
+        style: ctx.res.styles.caption1
             .copyWith(
               fontWeight: FontWeight.w600,
             )
@@ -120,11 +120,13 @@ class InformationsTile extends StatelessWidget {
       trailing: TextButton(
         key: const ValueKey(InformationsTileKeys.button),
         onPressed: () {
-          // TODO (Jonathan) : Detail BottomSheet
+          showDropezyBottomSheet(ctx, (_) {
+            return OrderDetailsBottomSheet(order: order);
+          });
         },
         child: Text(
-          res.strings.details,
-          style: res.styles.caption2
+          ctx.res.strings.details,
+          style: ctx.res.styles.caption2
               .copyWith(
                 fontWeight: FontWeight.w600,
                 color: DropezyColors.blue,

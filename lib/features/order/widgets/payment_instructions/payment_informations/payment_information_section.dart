@@ -8,6 +8,7 @@ import '../../../index.dart';
 
 part 'keys.dart';
 part 'parts/list_tile.dart';
+part 'parts/order_details_bottomsheet.dart';
 part 'parts/payment_reminder.dart';
 
 class PaymentInformationSection extends StatelessWidget {
@@ -95,15 +96,15 @@ class PaymentInformationSection extends StatelessWidget {
               PaymentInformationSectionKeys.virtualAccountTile,
             ),
             ctx: context,
-            res: context.res,
             virtualAccount: '123456789',
           ),
           InformationsTile.totalBill(
             key: const ValueKey(
               PaymentInformationSectionKeys.totalBillTile,
             ),
-            res: context.res,
             amount: order.total,
+            ctx: context,
+            order: order,
           ),
         ],
       ),
