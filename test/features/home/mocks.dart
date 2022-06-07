@@ -21,3 +21,6 @@ class MockUserCredentialsStorage extends Mock
     implements UserCredentialsStorage {}
 
 class MockCategoryServiceClient extends Mock implements CategoryServiceClient {}
+
+class MockHomeNavCubit extends MockCubit<HomeNavState> implements HomeNavCubit {
+}

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 
+import '../../cart_checkout/widgets/cart_summary/cart_summary.dart';
 import '../index.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,6 +16,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  /// Specifies whetever to return [CartSummary]
+  /// based on tabs active index
+  ///
+  /// When this tab active show [CartSummary]
+  /// 0 = HomeRoute()
+  /// 1 = SearchRoute()
+  bool _isShowCartSummary(int index) => index == 0 || index == 1;
+
   @override
   Widget build(BuildContext context) {
     final res = context.res;
@@ -23,6 +32,7 @@ class _MainPageState extends State<MainPage> {
       routes: const [HomeRoute(), SearchRoute(), ProfileRoute()],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
+
         return Scaffold(
           body: FadeTransition(
             opacity: animation,
@@ -30,6 +40,11 @@ class _MainPageState extends State<MainPage> {
             child: child,
           ),
           extendBody: true,
+          floatingActionButton: _isShowCartSummary(tabsRouter.activeIndex)
+              ? const CartSummary()
+              : null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
           bottomNavigationBar: Container(
             decoration: res.styles.bottomSheetStyle,
             child: BottomNavigationBar(

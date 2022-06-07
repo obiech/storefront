@@ -51,36 +51,8 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      title: const Text('Cart Checkout'),
-                      onTap: () {
-                        context.router.push(const CartCheckoutRoute());
-                      },
-                    ),
-                    const Divider(),
-                    ListTile(
-                      title: const Text('Order History'),
-                      onTap: () {
-                        context.pushRoute(
-                          const OrderRouter(
-                            children: [OrderHistoryRoute()],
-                          ),
-                        );
-                      },
-                    ),
-                    const Divider(),
-                    ListTile(
-                      title: const Text('Delete All Data'),
-                      onTap: () {
-                        getIt<IPrefsRepository>().clear();
-                        context.router.replaceAll([
-                          const OnboardingRoute(),
-                        ]);
-                      },
-                    ),
-                    const Divider(),
-                    const ParentCategoriesGrid()
+                  children: const [
+                    ParentCategoriesGrid(),
                   ],
                 ),
               )
