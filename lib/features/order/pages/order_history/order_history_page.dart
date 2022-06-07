@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/shared_widgets/_exporter.dart';
 import '../../../../core/utils/build_context.ext.dart';
 import '../../../../di/injection.dart';
+import '../../../cart_checkout/widgets/cart_summary/cart_summary.dart';
 import '../../blocs/blocs.dart';
 import '../../widgets/order_history/list.dart';
 
@@ -18,6 +19,8 @@ class OrderHistoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
       title: context.res.strings.myOrders,
+      floatingActionButton: const CartSummary(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       child: BlocBuilder<OrderHistoryCubit, OrderHistoryState>(
         builder: _mapStateToWidget,
       ),
