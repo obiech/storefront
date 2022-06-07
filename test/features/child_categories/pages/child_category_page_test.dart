@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
@@ -7,19 +5,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/child_categories/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 
+import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../test_commons/fixtures/product/product_models.dart'
     as fixtures;
 import '../../../src/mock_navigator.dart';
+import '../../cart_checkout/mocks.dart';
 import '../utils/mocks.dart';
 import 'child_category_page_finder.dart';
 
 void main() {
   late ChildCategoryCubit childCategoryCubit;
   late CategoryProductCubit categoryProductCubit;
-  late HttpClient httpClient;
+  late CartBloc cartBloc;
   late StackRouter stackRouter;
 
   const activeCategory = 0;
@@ -49,7 +50,7 @@ void main() {
   setUp(() {
     childCategoryCubit = MockChildCategoryCubit();
     categoryProductCubit = MockCategoryProductCubit();
-    httpClient = MockHttpClient();
+    cartBloc = MockCartBloc();
 
     // Navigation
     registerFallbackValue(FakePageRouteInfo());
@@ -73,6 +74,7 @@ void main() {
                   ),
                 ),
                 BlocProvider(create: (_) => categoryProductCubit),
+                BlocProvider(create: (_) => cartBloc)
               ],
               child: const ChildCategoriesPage(
                 parentCategoryModel: mockParentCategoryList,
@@ -122,114 +124,99 @@ void main() {
           fixtures.fakeCategoryProductList,
         ),
       );
+
+      when(() => cartBloc.state).thenAnswer(
+        (_) => CartLoaded.success(mockCartModel),
+      );
     });
 
     testWidgets(
-        'display grid of List Categories '
+        'should display grid of List Categories '
         'and Product Category', (tester) async {
-      HttpOverrides.runZoned(
-        () async {
-          await pumpChildCategoriesPage(tester);
+      await pumpChildCategoriesPage(tester);
 
-          expect(ChildCategoryFinders.listChildCategoryWidget, findsOneWidget);
-          expect(
-            ChildCategoryFinders.gridProductCategoryWidget,
-            findsOneWidget,
-          );
-        },
-        createHttpClient: (securityContext) => httpClient,
+      expect(ChildCategoryFinders.listChildCategoryWidget, findsOneWidget);
+      expect(
+        ChildCategoryFinders.gridProductCategoryWidget,
+        findsOneWidget,
       );
+    });
+
+    testWidgets('should display a floating cart summary', (tester) async {
+      await pumpChildCategoriesPage(tester);
+
+      expect(find.byType(CartSummary), findsOneWidget);
     });
 
     testWidgets(
         'should go to search page '
         'when search action is tapped', (WidgetTester tester) async {
-      HttpOverrides.runZoned(
-        () async {
-          /// arrange
-          await pumpChildCategoriesPage(tester);
+      /// arrange
+      await pumpChildCategoriesPage(tester);
 
-          /// act
-          final searchButtonFinder = find.ancestor(
-            of: find.byIcon(DropezyIcons.search),
-            matching: find.byType(IconButton),
-          );
-          expect(searchButtonFinder, findsOneWidget);
-          await tester.tap(searchButtonFinder);
-
-          /// assert
-          final capturedRoutes =
-              verify(() => stackRouter.push(captureAny())).captured;
-          expect(capturedRoutes.length, 1);
-
-          final routeInfo = capturedRoutes.first as PageRouteInfo;
-
-          // expecting the right route being pushed
-          expect(routeInfo, isA<GlobalSearchRoute>());
-        },
-        createHttpClient: (securityContext) => httpClient,
+      /// act
+      final searchButtonFinder = find.ancestor(
+        of: find.byIcon(DropezyIcons.search),
+        matching: find.byType(IconButton),
       );
+      expect(searchButtonFinder, findsOneWidget);
+      await tester.tap(searchButtonFinder);
+
+      /// assert
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+      expect(capturedRoutes.length, 1);
+
+      final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+      // expecting the right route being pushed
+      expect(routeInfo, isA<GlobalSearchRoute>());
     });
 
     testWidgets(
         'should do nothing '
         'when active C2 category is tapped', (tester) async {
-      HttpOverrides.runZoned(
-        () async {
-          await pumpChildCategoriesPage(tester);
+      await pumpChildCategoriesPage(tester);
 
-          await tester.tap(find.byType(ListView).at(activeCategory));
-          await tester.pump(const Duration(seconds: 1));
+      await tester.tap(find.byType(ListView).at(activeCategory));
+      await tester.pump(const Duration(seconds: 1));
 
-          expect(find.byType(ProductGridLoading), findsNothing);
+      expect(find.byType(ProductGridLoading), findsNothing);
 
-          verifyNever(
-            () => childCategoryCubit
-                .setActiveChildCategory(mockChildCategoryList[activeCategory]),
-          );
+      verifyNever(
+        () => childCategoryCubit
+            .setActiveChildCategory(mockChildCategoryList[activeCategory]),
+      );
 
-          verifyNever(
-            () => categoryProductCubit
-                .fetchCategoryProduct(activeCategory.toString()),
-          );
-        },
-        createHttpClient: (securityContext) => httpClient,
+      verifyNever(
+        () => categoryProductCubit
+            .fetchCategoryProduct(activeCategory.toString()),
       );
     });
 
     testWidgets(
         'should show [ProductGridLoading] '
         'when state is [LoadingCategoryProductState]', (tester) async {
-      HttpOverrides.runZoned(
-        () async {
-          when(() => categoryProductCubit.state).thenAnswer(
-            (invocation) => LoadingCategoryProductState(),
-          );
-
-          await pumpChildCategoriesPage(tester);
-
-          expect(find.byType(ProductGridLoading), findsWidgets);
-        },
-        createHttpClient: (securityContext) => httpClient,
+      when(() => categoryProductCubit.state).thenAnswer(
+        (invocation) => LoadingCategoryProductState(),
       );
+
+      await pumpChildCategoriesPage(tester);
+
+      expect(find.byType(ProductGridLoading), findsWidgets);
     });
 
     testWidgets(
         'should show [DropezyError] '
         'when state is [ErrorCategoryProductState]', (tester) async {
-      HttpOverrides.runZoned(
-        () async {
-          when(() => categoryProductCubit.state).thenAnswer(
-            (invocation) => const ErrorCategoryProductState('Fake Error'),
-          );
-
-          await pumpChildCategoriesPage(tester);
-
-          expect(find.byType(DropezyError), findsWidgets);
-          expect(find.text('Fake Error'), findsOneWidget);
-        },
-        createHttpClient: (securityContext) => httpClient,
+      when(() => categoryProductCubit.state).thenAnswer(
+        (invocation) => const ErrorCategoryProductState('Fake Error'),
       );
+
+      await pumpChildCategoriesPage(tester);
+
+      expect(find.byType(DropezyError), findsWidgets);
+      expect(find.text('Fake Error'), findsOneWidget);
     });
   });
 }
