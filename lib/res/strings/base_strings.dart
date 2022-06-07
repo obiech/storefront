@@ -391,6 +391,8 @@ abstract class BaseStrings {
 
   String get update;
 
+  String get addressEmpty;
+
   String updatedAddressSnackBarContent(String newAddress);
 
   /// Address Detail

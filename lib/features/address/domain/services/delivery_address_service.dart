@@ -15,11 +15,22 @@ class DeliveryAddressService implements IDeliveryAddressRepository {
       : _customerService = customerServiceClient;
 
   @override
-  RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses() {
-    // TODO: implement getDeliveryAddresses
-    throw UnimplementedError();
+  RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses() async {
+    try {
+      final request = GetProfileRequest();
+
+      final response = await _customerService.getProfile(request);
+      final profile = response.profile;
+      final addresses =
+          profile.addresses.map(DeliveryAddressModel.fromPb).toList();
+
+      return right(addresses);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
   }
 
+  // TODO (widy): fix address is required when saving new address
   @override
   RepoResult<Unit> saveAddress(DeliveryAddressModel address) async {
     try {

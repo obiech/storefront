@@ -590,6 +590,9 @@ class IndonesianStrings implements BaseStrings {
   String get update => 'Ubah';
 
   @override
+  String get addressEmpty => 'Anda belum menambahkan alamat';
+
+  @override
   String updatedAddressSnackBarContent(String newAddress) =>
       'Alamat berhasil diubah ke $newAddress';
 

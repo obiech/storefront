@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/domain/services/delivery_address_service.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../../test_commons/fixtures/address/delivery_address_pb_models.dart';
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
@@ -23,6 +24,54 @@ void main() {
   tearDownAll(() {
     verifyNoMoreInteractions(customerServiceClient);
   });
+
+  test(
+    'should return address list '
+    'when getProfile is called '
+    'and request is successful',
+    () async {
+      final addresses = [
+        sampleDeliveryAddressList[0],
+      ];
+
+      final request = GetProfileRequest();
+      when(() => customerServiceClient.getProfile(request)).thenAnswer(
+        (_) => MockResponseFuture.value(
+          GetProfileResponse(
+            profile: Profile(
+              addresses: sampleDeliveryAddressPbList,
+            ),
+          ),
+        ),
+      );
+
+      final response = await deliveryAddressService.getDeliveryAddresses();
+
+      final result = response.getRight();
+      expect(result, addresses);
+      verify(() => customerServiceClient.getProfile(request)).called(1);
+    },
+  );
+
+  test(
+    'should return failure '
+    'when getProfile is called '
+    'and exception is thrown',
+    () async {
+      final exception = Exception('Error!');
+
+      final request = GetProfileRequest();
+      when(() => customerServiceClient.getProfile(request))
+          .thenAnswer((_) => MockResponseFuture.error(exception));
+
+      final response = await deliveryAddressService.getDeliveryAddresses();
+
+      final failure = response.getLeft();
+      verify(() => customerServiceClient.getProfile(request)).called(1);
+      expect(failure, isA<Failure>());
+      expect(failure.message, 'An unknown error has occured');
+    },
+  );
 
   test(
     'should add address '

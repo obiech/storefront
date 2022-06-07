@@ -53,6 +53,20 @@ class DeliveryAddressModel extends Equatable {
   /// was first created
   final DateTime dateCreated;
 
+  factory DeliveryAddressModel.fromPb(Address address) {
+    // TODO (widy): Map AddressDetailModel
+    return DeliveryAddressModel(
+      id: address.address.id,
+      title: address.address.name,
+      isPrimaryAddress: address.addressType == AddressType.ADDRESS_TYPE_PRIMARY,
+      lat: address.address.coordinates.latitude,
+      lng: address.address.coordinates.longitude,
+      recipientName: address.contact.name,
+      recipientPhoneNumber: address.contact.phoneNumber,
+      dateCreated: address.address.timestamp.createdTime.toDateTime(),
+    );
+  }
+
   Address toPb() {
     // TODO: Update meta.Address naming
     return Address(
@@ -77,4 +91,10 @@ class DeliveryAddressModel extends Equatable {
 
   @override
   List<Object?> get props => [id];
+}
+
+extension ListDeliveryAddressModelX on List<DeliveryAddressModel> {
+  void sortDate() {
+    sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+  }
 }

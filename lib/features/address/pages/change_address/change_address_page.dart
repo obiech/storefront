@@ -87,6 +87,8 @@ class ChangeAddressPage extends StatelessWidget {
                   ],
                 ),
               );
+            } else if (state is DeliveryAddressLoadedEmpty) {
+              return const AddressEmptyView();
             } else if (state is DeliveryAddressError) {
               return Text(state.message);
             } else {

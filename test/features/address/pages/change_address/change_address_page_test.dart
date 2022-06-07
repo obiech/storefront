@@ -64,6 +64,24 @@ void main() {
     );
 
     testWidgets(
+      'should display AddressEmptyView '
+      'when state is DeliveryAddressLoadedEmpty',
+      (tester) async {
+        when(() => deliveryAddressCubit.state)
+            .thenReturn(const DeliveryAddressLoadedEmpty());
+
+        final context = await tester.pumpChangeAddressPage(
+          stackRouter: stackRouter,
+          deliveryAddressCubit: deliveryAddressCubit,
+          permissionHandlerCubit: permissionHandlerCubit,
+        );
+
+        expect(find.text(context.res.strings.addressEmpty), findsOneWidget);
+        expect(find.byType(AddressEmptyView), findsOneWidget);
+      },
+    );
+
+    testWidgets(
       'should display Address list view '
       'and show correct number of items '
       'when state is DeliveryAddressLoaded',

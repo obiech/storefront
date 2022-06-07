@@ -34,6 +34,14 @@ class DeliveryAddressLoaded extends DeliveryAddressState {
   List<Object?> get props => [addressList, activeAddress];
 }
 
+/// Successfully loaded but address is empty
+class DeliveryAddressLoadedEmpty extends DeliveryAddressState {
+  const DeliveryAddressLoadedEmpty();
+
+  @override
+  List<Object?> get props => [];
+}
+
 /// Error occured while loading for addresses
 class DeliveryAddressError extends DeliveryAddressState {
   const DeliveryAddressError(this.message);

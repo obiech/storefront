@@ -20,13 +20,17 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
     final result = await deliveryAddressRepository.getDeliveryAddresses();
 
     final newState = result.fold(
-      (left) => DeliveryAddressError(left.message),
-      (right) {
-        right.sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
-        return DeliveryAddressLoaded(
-          addressList: right,
-          activeAddress: right.first,
-        );
+      (failure) => DeliveryAddressError(failure.message),
+      (addressList) {
+        if (addressList.isEmpty) {
+          return const DeliveryAddressLoadedEmpty();
+        } else {
+          addressList.sortDate();
+          return DeliveryAddressLoaded(
+            addressList: addressList,
+            activeAddress: addressList.first,
+          );
+        }
       },
     );
 
