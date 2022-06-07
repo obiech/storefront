@@ -1,79 +1,78 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core.dart';
 
 @LazySingleton(as: IPrefsRepository)
 class PrefsRepository implements IPrefsRepository {
-  final SharedPreferences _preferences;
+  final Box _prefBox;
 
-  PrefsRepository(this._preferences);
+  PrefsRepository(@Named(PREF_BOX) this._prefBox);
 
   @override
-  Future<bool> isOnBoarded() async {
-    final _isOnBoarded = _preferences.getBool(PrefsKeys.kIsOnboarded);
-    return _isOnBoarded ?? false;
+  bool isOnBoarded() {
+    return _prefBox.get(PrefsKeys.kIsOnboarded, defaultValue: false);
   }
 
   @override
-  Future<String?> userAuthToken() async {
-    return _preferences.getString(PrefsKeys.kUserAuthToken);
+  String? userAuthToken() {
+    return _prefBox.get(PrefsKeys.kUserAuthToken);
   }
 
   @override
-  Future<String?> userPhoneNumber() async {
-    return _preferences.getString(PrefsKeys.kUserPhoneNumber);
+  String? userPhoneNumber() {
+    return _prefBox.get(PrefsKeys.kUserPhoneNumber);
   }
 
   @override
   Future<void> setUserAuthToken(String authToken) async {
-    await _preferences.setString(PrefsKeys.kUserAuthToken, authToken);
+    await _prefBox.put(PrefsKeys.kUserAuthToken, authToken);
   }
 
   @override
   Future<void> setUserPhoneNumber(String phoneNumber) async {
-    await _preferences.setString(PrefsKeys.kUserPhoneNumber, phoneNumber);
+    await _prefBox.put(PrefsKeys.kUserPhoneNumber, phoneNumber);
   }
 
   @override
   Future<void> clearUserAuthToken() async {
-    await _preferences.remove(PrefsKeys.kUserAuthToken);
+    await _prefBox.delete(PrefsKeys.kUserAuthToken);
   }
 
   @override
   Future<void> clearUserPhoneNumber() async {
-    await _preferences.remove(PrefsKeys.kUserPhoneNumber);
+    await _prefBox.delete(PrefsKeys.kUserPhoneNumber);
   }
 
   @override
   Future<void> setFingerPrint(String fingerPrint) async {
-    await _preferences.setString(PrefsKeys.kDeviceFingerPrint, fingerPrint);
+    await _prefBox.put(PrefsKeys.kDeviceFingerPrint, fingerPrint);
   }
 
   @override
-  Future<String?> getFingerPrint() async {
-    return _preferences.getString(PrefsKeys.kDeviceFingerPrint);
+  String? getFingerPrint() {
+    return _prefBox.get(PrefsKeys.kDeviceFingerPrint);
   }
 
   @override
   Future<void> setIsOnBoarded(bool isOnBoarded) async {
-    await _preferences.setBool(PrefsKeys.kIsOnboarded, isOnBoarded);
+    await _prefBox.put(PrefsKeys.kIsOnboarded, isOnBoarded);
   }
 
   @override
   Future<void> clear() async {
-    await _preferences.clear();
+    await _prefBox.clear();
   }
 
   @override
-  Future<Locale> getDeviceLocale() async {
+  Locale getDeviceLocale() {
     try {
-      final _localeCode =
-          (_preferences.getString(PrefsKeys.kDeviceLocale) ?? 'id-ID')
-              .split('-');
+      final _localeCode = _prefBox
+          .get(PrefsKeys.kDeviceLocale, defaultValue: 'id-ID')
+          .split('-');
 
       return Locale.fromSubtags(
         languageCode: _localeCode.first,
@@ -86,7 +85,7 @@ class PrefsRepository implements IPrefsRepository {
 
   @override
   Future<void> setDeviceLocale(Locale locale) async {
-    await _preferences.setString(
+    await _prefBox.put(
       PrefsKeys.kDeviceLocale,
       locale.toLanguageTag(),
     );

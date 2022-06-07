@@ -1,14 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/core/services/device/fpjs_provider.dart';
 
 import '../../src/mock_customer_service_client.dart';
 
 class MockFpJsProPluginWrapper extends Mock implements FpJsProPluginWrapper {}
-
-class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group('FingerprintJSProvider', () {
@@ -37,7 +34,7 @@ void main() {
             // Simulate no fingerprint saved in device
             when(
               () => sharedPreferences.getFingerPrint(),
-            ).thenAnswer((_) async => null);
+            ).thenAnswer((_) => null);
 
             when(
               () => sharedPreferences.setFingerPrint(any()),
@@ -66,7 +63,7 @@ void main() {
             // Simulate saved fingerprint is available
             when(
               () => sharedPreferences.getFingerPrint(),
-            ).thenAnswer((_) async => mockfpjsId);
+            ).thenAnswer((_) => mockfpjsId);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
 

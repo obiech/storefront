@@ -238,7 +238,7 @@ void _mockUserCredentials(
   UserCredentialsStorage storage,
   UserCredentials? userCredentials,
 ) {
-  when(() => storage.getCredentials()).thenAnswer((_) async => userCredentials);
+  when(() => storage.getCredentials()).thenAnswer((_) => userCredentials);
 }
 
 void _mockSavePINRequest(

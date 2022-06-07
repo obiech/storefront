@@ -123,11 +123,11 @@ class DeviceInterceptor extends ClientInterceptor {
   }
 
   @visibleForTesting
-  Future<void> addDeviceLocale(
+  void addDeviceLocale(
     Map<String, String> metadata,
     String uri,
-  ) async {
-    final appLocale = await userDeviceInfoProvider.getDeviceLocale();
+  ) {
+    final appLocale = userDeviceInfoProvider.getDeviceLocale();
 
     metadata['Locale'] = appLocale.toLanguageTag();
   }

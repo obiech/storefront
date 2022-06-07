@@ -1,5 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
 /// When interacting with [SharedPreferences], please try to use
 /// the constants provided here to avoid typos and to easily find
 /// functions that depend on a particular Key.
@@ -14,3 +12,6 @@ class PrefsKeys {
   static const kSearchQueries = 'kSearchQueries';
   static const kDeviceLocale = 'kDeviceLocale';
 }
+
+/// DI Hive box named key
+const PREF_BOX = 'PREF_BOX';

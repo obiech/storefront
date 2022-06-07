@@ -43,8 +43,7 @@ void main() {
     const mockLocale =
         Locale.fromSubtags(languageCode: 'id', countryCode: 'ID');
 
-    when(() => prefsRepository.getDeviceLocale())
-        .thenAnswer((_) async => mockLocale);
+    when(() => prefsRepository.getDeviceLocale()).thenAnswer((_) => mockLocale);
 
     final UserDeviceInfoRepository apps = UserDeviceInfoRepository(
       packageInfo: packageInfo,
@@ -52,7 +51,7 @@ void main() {
       devicePlatform: devicePlatform,
       prefs: prefsRepository,
     );
-    final expectedLocale = await apps.getDeviceLocale();
+    final expectedLocale = apps.getDeviceLocale();
 
     expect(mockLocale, expectedLocale);
   });

@@ -45,7 +45,7 @@ Future<void> main() async {
     }
 
     when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
-    when(() => prefs.isOnBoarded()).thenAnswer((_) async => true);
+    when(() => prefs.isOnBoarded()).thenAnswer((_) => true);
 
     getIt.registerSingleton<IPrefsRepository>(prefs);
   });

@@ -1,13 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/core/services/prefs/i_prefs_repository.dart';
 import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
 import 'package:storefront_app/features/auth/domain/services/prefs_user_credentials_storage.dart';
 
 import '../../src/mock_customer_service_client.dart';
-
-class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group('Prefs User Credentials Storage', () {
@@ -27,10 +24,9 @@ void main() {
         'should return UserCredentials if it exists in [SharedPreferences] '
         'and cache the result',
         () async {
-          when(() => sharedPrefs.userAuthToken())
-              .thenAnswer((_) async => mockToken);
+          when(() => sharedPrefs.userAuthToken()).thenAnswer((_) => mockToken);
           when(() => sharedPrefs.userPhoneNumber())
-              .thenAnswer((_) async => mockPhoneNumber);
+              .thenAnswer((_) => mockPhoneNumber);
 
           const expectedCreds = UserCredentials(
             authToken: mockToken,
@@ -42,7 +38,7 @@ void main() {
           expect(credentialsStorage.credsIsCached, false);
 
           // Test retrieving data from SharedPreferences
-          final creds = await credentialsStorage.getCredentials();
+          final creds = credentialsStorage.getCredentials();
 
           expect(creds, expectedCreds);
           expect(credentialsStorage.credsIsCached, true);
@@ -50,7 +46,7 @@ void main() {
           verify(() => sharedPrefs.userPhoneNumber()).called(1);
 
           // Test caching; should not hit SharedPreferences
-          final cachedCreds = await credentialsStorage.getCredentials();
+          final cachedCreds = credentialsStorage.getCredentials();
 
           expect(cachedCreds, expectedCreds);
           verifyNever(() => sharedPrefs.userAuthToken());
@@ -63,11 +59,11 @@ void main() {
         'information',
         () async {
           when(() => sharedPrefs.userAuthToken()).thenAnswer(
-            (_) async => null,
+            (_) => null,
           );
 
           when(() => sharedPrefs.userPhoneNumber()).thenAnswer(
-            (_) async => null,
+            (_) => null,
           );
 
           const expectedCreds = null;
@@ -77,7 +73,7 @@ void main() {
           expect(credentialsStorage.credsIsCached, false);
 
           // Test retrieving data from SharedPreferences
-          final creds = await credentialsStorage.getCredentials();
+          final creds = credentialsStorage.getCredentials();
 
           expect(creds, expectedCreds);
           expect(credentialsStorage.credsIsCached, true);

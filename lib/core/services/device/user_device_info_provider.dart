@@ -85,5 +85,5 @@ class UserDeviceInfoRepository extends IUserDeviceInfoRepository {
 
   /// Return the shared preferences Locale
   @override
-  Future<Locale> getDeviceLocale() => prefs.getDeviceLocale();
+  Locale getDeviceLocale() => prefs.getDeviceLocale();
 }

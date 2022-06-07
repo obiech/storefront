@@ -4,7 +4,7 @@ abstract class IPrefsRepository {
   /// Preference helpers for user onboarding
   ///
   /// Check if user was onboarded
-  Future<bool> isOnBoarded();
+  bool isOnBoarded();
 
   /// Mark user as onbaorded
   Future<void> setIsOnBoarded(bool isOnBoarded);
@@ -15,7 +15,7 @@ abstract class IPrefsRepository {
   /// related information
   ///
   /// Get user's auth phone number
-  Future<String?> userPhoneNumber();
+  String? userPhoneNumber();
 
   /// Set user's auth phone number
   Future<void> setUserPhoneNumber(String phoneNumber);
@@ -24,7 +24,7 @@ abstract class IPrefsRepository {
   Future<void> clearUserPhoneNumber();
 
   /// Get user's auth token
-  Future<String?> userAuthToken();
+  String? userAuthToken();
 
   /// Get user's auth token
   Future<void> setUserAuthToken(String authToken);
@@ -36,8 +36,8 @@ abstract class IPrefsRepository {
   ///
   /// They are used to store fingerprint related information
   ///
-  /// Retrive a user's finger print
-  Future<String?> getFingerPrint();
+  /// Retrieve a user's finger print
+  String? getFingerPrint();
 
   /// Store user's finger print
   Future<void> setFingerPrint(String fingerPrint);
@@ -51,7 +51,7 @@ abstract class IPrefsRepository {
   /// Get device Locale
   ///
   /// Returns [Locale] with indonesian being the default
-  Future<Locale> getDeviceLocale();
+  Locale getDeviceLocale();
 
   /// Clear Prefs
   Future<void> clear();

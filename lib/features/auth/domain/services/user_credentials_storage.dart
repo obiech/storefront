@@ -17,7 +17,7 @@ abstract class UserCredentialsStorage {
   }
 
   /// Get currently stored [UserCredentials]. Returns [null] if not found.
-  Future<UserCredentials?> getCredentials();
+  UserCredentials? getCredentials();
 
   /// Persist [UserCredentials] into storage.
   Future<void> persistCredentials(String authToken, String phoneNumber);

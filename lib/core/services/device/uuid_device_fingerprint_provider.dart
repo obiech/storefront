@@ -16,7 +16,7 @@ class UuidDeviceFingerprintProvider extends DeviceFingerprintProvider {
 
   @override
   Future<String> getFingerprint() async {
-    final savedFingerprint = await sharedPreferences.getFingerPrint();
+    final savedFingerprint = sharedPreferences.getFingerPrint();
 
     if (savedFingerprint != null) {
       return savedFingerprint;

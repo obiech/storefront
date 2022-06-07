@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
 import 'package:uuid/uuid.dart';
@@ -41,7 +41,8 @@ abstract class CoreModule {
   @preResolve
   Future<PackageInfo> get packageInfo => PackageInfo.fromPlatform();
 
+  @Named(PREF_BOX)
   @singleton
   @preResolve
-  Future<SharedPreferences> get prefs => SharedPreferences.getInstance();
+  Future<Box> get prefsBox => Hive.openBox(PREF_BOX);
 }

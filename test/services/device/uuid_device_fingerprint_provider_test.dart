@@ -1,14 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../src/mock_customer_service_client.dart';
 
 class MockUuidPlugin extends Mock implements Uuid {}
-
-class MockSharedPreferences extends Mock implements SharedPreferences {}
 
 void main() {
   group('UuidDeviceFingerprintProvider', () {
@@ -38,7 +35,7 @@ void main() {
             // Simulate no fingerprint saved in device
             when(
               () => sharedPreferences.getFingerPrint(),
-            ).thenAnswer((_) async => null);
+            ).thenAnswer((_) => null);
 
             when(
               () => sharedPreferences.setFingerPrint(any()),
@@ -67,7 +64,7 @@ void main() {
             // Simulate saved fingerprint is available
             when(
               () => sharedPreferences.getFingerPrint(),
-            ).thenAnswer((_) async => mockUuid);
+            ).thenAnswer((_) => mockUuid);
 
             final fingerprint = await fingerprintProvider.getFingerprint();
 

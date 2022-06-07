@@ -180,12 +180,12 @@ void main() {
         "add locale into 'Locale'",
         () async {
           when(() => mockUserDeviceInfoProvider.getDeviceLocale()).thenAnswer(
-            (_) async => mockDeviceLocale,
+            (_) => mockDeviceLocale,
           );
 
           final Map<String, String> metadata = {};
 
-          await deviceInterceptor.addDeviceLocale(metadata, 'randomUri');
+          deviceInterceptor.addDeviceLocale(metadata, 'randomUri');
 
           verify(() => mockUserDeviceInfoProvider.getDeviceLocale()).called(1);
           expect(

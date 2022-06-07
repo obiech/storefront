@@ -57,7 +57,7 @@ class AuthInterceptor extends ClientInterceptor {
       return;
     }
 
-    final creds = await userCredentialsStorage.getCredentials();
+    final creds = userCredentialsStorage.getCredentials();
 
     if (creds == null) {
       return;

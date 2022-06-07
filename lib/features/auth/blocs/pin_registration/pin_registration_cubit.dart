@@ -47,7 +47,7 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
 
     final fingerprint = await deviceFingerprintProvider.getFingerprint();
     final deviceName = await deviceNameProvider.getDeviceName();
-    final credentials = await userCredentialsStorage.getCredentials();
+    final credentials = userCredentialsStorage.getCredentials();
 
     // In theory, this should never happen as user should already be logged in
     //TODO(leovinsen): remove this code block and credentials storage as

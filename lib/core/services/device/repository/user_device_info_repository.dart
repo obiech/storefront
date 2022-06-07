@@ -9,5 +9,5 @@ abstract class IUserDeviceInfoRepository {
   Future<String> getDeviceModel();
   Future<String> getAppVersionName();
   Future<String> getOriginIP();
-  Future<Locale> getDeviceLocale();
+  Locale getDeviceLocale();
 }

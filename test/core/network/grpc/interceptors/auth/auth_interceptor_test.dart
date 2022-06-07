@@ -92,7 +92,7 @@ void main() {
             "terminates if key 'authorization' is already set in metadata",
             () async {
               when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) async => mockCreds);
+                  .thenAnswer((_) => mockCreds);
 
               final metadata = {
                 'authorization': 'bearer adsf',
@@ -116,7 +116,7 @@ void main() {
             'terminates if token is null (user is not logged in)',
             () async {
               when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) async => null);
+                  .thenAnswer((_) => null);
 
               final metadata = {
                 'key1': 'value1',
@@ -139,7 +139,7 @@ void main() {
             "appends key 'authorization' if not set and user is logged in",
             () async {
               when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) async => mockCreds);
+                  .thenAnswer((_) => mockCreds);
 
               final metadata = {
                 'key1': 'value1',

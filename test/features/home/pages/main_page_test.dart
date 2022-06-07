@@ -105,7 +105,7 @@ void main() {
 
     userCredsStorage = MockUserCredentialsStorage();
 
-    when(() => prefs.isOnBoarded()).thenAnswer((invocation) async => true);
+    when(() => prefs.isOnBoarded()).thenAnswer((invocation) => true);
 
     parentCategoriesCubit = MockParentCategoriesCubit();
     when(() => parentCategoriesCubit.fetchParentCategories())

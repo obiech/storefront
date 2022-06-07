@@ -16,7 +16,7 @@ class FingerPrintJsProvider extends DeviceFingerprintProvider {
   @override
   Future<String> getFingerprint() async {
     String? newFingerprint;
-    final savedFingerprint = await sharedPreferences.getFingerPrint();
+    final savedFingerprint = sharedPreferences.getFingerPrint();
 
     if (savedFingerprint != null) {
       return savedFingerprint;

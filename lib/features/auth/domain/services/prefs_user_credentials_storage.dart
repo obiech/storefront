@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 
@@ -28,11 +27,11 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
   /// Once this method is called, value will be stored in memory in [creds] and
   /// will no longer read from [SharedPreferences]
   @override
-  Future<UserCredentials?> getCredentials() async {
+  UserCredentials? getCredentials() {
     if (credsIsCached) return creds;
 
-    final token = await prefs.userAuthToken();
-    final phoneNumber = await prefs.userPhoneNumber();
+    final token = prefs.userAuthToken();
+    final phoneNumber = prefs.userPhoneNumber();
 
     creds = token == null
         ? null

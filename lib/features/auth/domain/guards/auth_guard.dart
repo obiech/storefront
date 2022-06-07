@@ -7,12 +7,12 @@ class CheckAuthStatus extends AutoRouteGuard {
   CheckAuthStatus(this.prefs);
 
   @override
-  Future<void> onNavigation(
+  void onNavigation(
     NavigationResolver resolver,
     StackRouter router,
-  ) async {
+  ) {
     // Check if Onboarded & Authenticated
-    final isOnboarded = await prefs.isOnBoarded();
+    final isOnboarded = prefs.isOnBoarded();
 
     /// TODO - Add [FirebaseAuth] status check
 
