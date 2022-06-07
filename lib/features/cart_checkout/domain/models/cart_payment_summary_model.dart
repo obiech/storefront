@@ -10,6 +10,16 @@ class CartPaymentSummaryModel extends Equatable {
     this.isFreeDelivery = false,
   });
 
+  /// Use when cart is empty
+  factory CartPaymentSummaryModel.empty() {
+    return const CartPaymentSummaryModel(
+      deliveryFee: '000',
+      discount: '000',
+      subTotal: '000',
+      total: '000',
+    );
+  }
+
   factory CartPaymentSummaryModel.fromPB(final PaymentSummary summary) {
     return CartPaymentSummaryModel(
       deliveryFee: summary.deliveryFee.num,

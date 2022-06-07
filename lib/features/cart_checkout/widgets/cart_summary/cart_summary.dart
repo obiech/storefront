@@ -11,14 +11,19 @@ part 'parts/summary_details.dart';
 /// Displays a total summary of price & discounts
 /// for items in cart or product list
 class CartSummary extends StatelessWidget {
-  const CartSummary({Key? key}) : super(key: key);
+  const CartSummary({
+    Key? key,
+    this.hideWhenEmpty = true,
+  }) : super(key: key);
+
+  final bool hideWhenEmpty;
 
   @override
   Widget build(BuildContext context) {
     final res = context.res;
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        if (state is CartLoaded) {
+        if (state is CartLoaded && (!hideWhenEmpty || !state.cart.isEmpty)) {
           final cartModel = state.cart;
           return Container(
             decoration: BoxDecoration(

@@ -57,7 +57,7 @@ void main() {
           );
 
           blocTest<CartBloc, CartState>(
-            'should emit [CartIsEmpty] '
+            'should emit an empty [CartLoaded.success] '
             'when a [ResourceNotFoundFailure] is returned from cart repository',
             setUp: () {
               when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
@@ -67,9 +67,9 @@ void main() {
             },
             build: () => bloc,
             act: (bloc) => bloc.add(event),
-            expect: () => const <CartState>[
-              CartLoading(),
-              CartIsEmpty(),
+            expect: () => <CartState>[
+              const CartLoading(),
+              CartLoaded.success(CartModel.empty(CartBloc.dummyStoreId)),
             ],
             verify: verifyFn,
           );

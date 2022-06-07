@@ -19,6 +19,21 @@ class CartModel extends Equatable {
     required this.paymentSummary,
   });
 
+  /// Use when cart is empty.
+  ///
+  /// Possible scenarios:
+  /// - Cart object is not found. For example, first-time users
+  /// and switching between stores.
+  /// - Cart is empty after deleting all products.
+  factory CartModel.empty(String storeId) {
+    return CartModel(
+      id: '',
+      storeId: storeId,
+      items: const [],
+      paymentSummary: CartPaymentSummaryModel.empty(),
+    );
+  }
+
   factory CartModel.fromPb(SummaryResponse summaryResponse) {
     return CartModel(
       id: summaryResponse.cart.id,
@@ -72,4 +87,7 @@ extension CartModelX on CartModel {
   /// Returns items in this cart that are out of stock
   List<CartItemModel> get outOfStockItems =>
       items.where((item) => item.variant.isOutOfStock).toList();
+
+  /// Returns [true] if cart is empty
+  bool get isEmpty => items.isEmpty;
 }

@@ -64,7 +64,8 @@ void main() {
 
   testWidgets(
       'should display [CartSummaryDetails] widget without skeleton '
-      'when not calculating cart summary', (WidgetTester tester) async {
+      'when not calculating cart summary '
+      'and cart is not empty', (WidgetTester tester) async {
     /// arrange
     when(() => bloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
@@ -77,6 +78,45 @@ void main() {
 
     tester.testCartModelValues(cartModel, false);
   });
+
+  testWidgets(
+      'should display [CartSummaryDetails] widget without skeleton '
+      'when not calculating cart summary '
+      'and cart is empty '
+      'and [hideWhenEmpty] is false', (WidgetTester tester) async {
+    /// arrange
+    final emptyCart = CartModel.empty('store-id');
+    when(() => bloc.state).thenAnswer((_) => CartLoaded.success(emptyCart));
+
+    /// act
+    await tester.pumpCartSummary(bloc, false);
+
+    /// assert
+    expect(_cartSummaryFinder, findsOneWidget);
+    expect(_loadingFinder, findsNothing);
+
+    tester.testCartModelValues(emptyCart, false);
+  });
+
+  testWidgets(
+    'should display nothing '
+    'when not calculating cart summary '
+    'and cart is empty '
+    'and [hideWhenEmpty] is true',
+    (WidgetTester tester) async {
+      /// arrange
+      when(() => bloc.state)
+          .thenAnswer((_) => CartLoaded.success(CartModel.empty('store-id')));
+
+      /// act
+      await tester.pumpCartSummary(bloc);
+
+      /// assert
+      expect(_cartSummaryFinder, findsNothing);
+      expect(_loadingFinder, findsNothing);
+      expect(find.byType(SizedBox), findsOneWidget);
+    },
+  );
 }
 
 /// Finders
@@ -87,13 +127,18 @@ final _loadingFinder = find.ancestor(
 );
 
 extension WidgetTesterX on WidgetTester {
-  Future<void> pumpCartSummary(CartBloc bloc) async {
+  Future<void> pumpCartSummary(
+    CartBloc bloc, [
+    bool hideWhenEmpty = true,
+  ]) async {
     await pumpWidget(
       BlocProvider(
         create: (context) => bloc,
-        child: const MaterialApp(
+        child: MaterialApp(
           home: Scaffold(
-            body: CartSummary(),
+            body: CartSummary(
+              hideWhenEmpty: hideWhenEmpty,
+            ),
           ),
         ),
       ),

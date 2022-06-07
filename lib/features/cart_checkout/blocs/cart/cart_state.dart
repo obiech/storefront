@@ -19,16 +19,6 @@ class CartLoading extends CartState {
   const CartLoading();
 }
 
-/// When cart is empty and has no contents.
-///
-/// Possible scenarios:
-/// - Cart object is not found. For example, first-time users
-/// and switching between stores.
-/// - Cart is empty after deleting all products.
-class CartIsEmpty extends CartState {
-  const CartIsEmpty();
-}
-
 /// When a failure occured during [CartLoading].
 ///
 /// In such case, ask customer to retry the loading process.
@@ -48,8 +38,15 @@ class CartLoaded extends CartState {
     required this.errorMessage,
   });
 
-  /// Represents state after a [CartEvent] is
-  /// successfully processed.
+  /// Represents state after a request is successfully
+  /// made to storefront-backend, and the user's cart
+  /// session is successfully retrieved.
+  ///
+  /// For example:
+  /// - after loading cart session [LoadCart]
+  /// - after adding a cart item [AddCartItem]
+  /// - after modifying a cart item quantity [EditCartItem]
+  /// - after removing a cart item [RemoveCartItem]
   factory CartLoaded.success(CartModel cart) {
     return CartLoaded(
       cart: cart,
@@ -58,8 +55,16 @@ class CartLoaded extends CartState {
     );
   }
 
-  /// Represents state when waiting for
-  /// a [CartEvent] to be processed.
+  /// Represents state when a request that modifies the user's cart
+  /// is being processed by storefront-backend.
+  ///
+  /// For example:
+  /// - adding a cart item [AddCartItem]
+  /// - modifying a cart item quantity [EditCartItem]
+  /// - removing a cart item [RemoveCartItem]
+  ///
+  ///  Will contain cart items that
+  /// are calculated client-side while waiting for backend.
   factory CartLoaded.loading(CartModel cart) {
     return CartLoaded(
       cart: cart,
@@ -68,8 +73,16 @@ class CartLoaded extends CartState {
     );
   }
 
-  /// Represents state after a [CartEvent]
-  /// failed to process.
+  /// Represents state when a request that modifies the user's cart
+  /// is not successfully processed by storefront-backend. Essentially,
+  /// when a [Failure] is returned.
+  ///
+  /// For example:
+  /// - failed to add a cart item [AddCartItem]
+  /// - failed to modify a cart item quantity [EditCartItem]
+  /// - failed to remov a cart item [RemoveCartItem]
+  ///
+  /// Will contain cart session BEFORE request was made.
   factory CartLoaded.error(CartModel cart, String errorMessage) {
     return CartLoaded(
       cart: cart,

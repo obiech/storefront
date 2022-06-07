@@ -50,7 +50,9 @@ class ProductVariantsList extends StatelessWidget {
                           controller: controller,
                         ),
                       ),
-                      const CartSummary(),
+                      const CartSummary(
+                        hideWhenEmpty: false,
+                      ),
                       SizedBox(
                         height: MediaQuery.of(context).padding.bottom,
                       ),

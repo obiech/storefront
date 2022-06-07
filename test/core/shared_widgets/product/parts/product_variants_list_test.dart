@@ -44,13 +44,19 @@ void main() {
     expect(variantListView.product, product);
   });
 
-  testWidgets('should display [CartSummary]', (WidgetTester tester) async {
-    /// arrange
-    await tester.pumpVariantsListView(product, cartBloc);
+  testWidgets(
+    'should display [CartSummary] with [hideWhenEmpty] set to false',
+    (WidgetTester tester) async {
+      /// arrange
+      await tester.pumpVariantsListView(product, cartBloc);
 
-    /// assert
-    expect(find.byType(CartSummary), findsOneWidget);
-  });
+      /// assert
+      expect(find.byType(CartSummary), findsOneWidget);
+
+      final cartSummary = tester.widget<CartSummary>(find.byType(CartSummary));
+      expect(cartSummary.hideWhenEmpty, false);
+    },
+  );
 }
 
 extension WidgetTesterX on WidgetTester {

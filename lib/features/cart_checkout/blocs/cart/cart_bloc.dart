@@ -49,7 +49,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     result.fold(
       (failure) => failure is ResourceNotFoundFailure
-          ? emit(const CartIsEmpty())
+          ? emit(CartLoaded.success(CartModel.empty(dummyStoreId)))
           : emit(const CartFailedToLoad()),
       (cart) => emit(CartLoaded.success(cart)),
     );
