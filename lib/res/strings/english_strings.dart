@@ -277,6 +277,10 @@ class EnglishStrings implements BaseStrings {
   String get letsLoginOrRegister =>
       "Let's login or register so your shopping is more convenient";
 
+  /// SignOut
+  @override
+  String get doYouWantToSignOut => 'Do you want to sign out from your account?';
+
   /// Onboarding Page
   @override
   String get register => 'Register';
@@ -317,6 +321,12 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get payNow => 'Pay Now';
+
+  @override
+  String get yesSignOut => 'Yes, Sign Out';
+
+  @override
+  String get cancel => 'Cancel';
 
   /// Order Details Page
   @override

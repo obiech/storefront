@@ -277,6 +277,10 @@ class IndonesianStrings implements BaseStrings {
   String get letsLoginOrRegister =>
       'Yuk, masuk atau daftar dulu biar belanjanya lebih nyaman';
 
+  /// SignOut
+  @override
+  String get doYouWantToSignOut => 'Apakah kamu ingin keluar dari akunmu?';
+
   /// Onboarding Page
   @override
   String get register => 'Daftar';
@@ -357,6 +361,12 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get payNow => 'Bayar Sekarang';
+
+  @override
+  String get yesSignOut => 'Ya, Keluar';
+
+  @override
+  String get cancel => 'Batal';
 
   /// Order Status
   @override

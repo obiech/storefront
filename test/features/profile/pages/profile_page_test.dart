@@ -155,6 +155,21 @@ void main() {
         },
       );
     });
+
+    testWidgets(
+      'should open Sign Out Bottomsheet '
+      'when Sign Out button is tapped',
+      (tester) async {
+        final context = await tester.pumpProfilePage(stackRouter);
+
+        await tester.ensureVisible(find.text(context.res.strings.signOut));
+
+        await tester.tap(find.text(context.res.strings.signOut));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(ProfileSignOutBottomSheet), findsOneWidget);
+      },
+    );
   });
 }
 

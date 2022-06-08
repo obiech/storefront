@@ -158,6 +158,9 @@ abstract class BaseStrings {
   /// Auth
   String get letsLoginOrRegister;
 
+  /// SignOut
+  String get doYouWantToSignOut;
+
   /// Onboarding Page
   String get shoppingForDailyNeeds;
 
@@ -231,6 +234,10 @@ abstract class BaseStrings {
   String get totalSpent;
 
   String get payNow;
+
+  String get yesSignOut;
+
+  String get cancel;
 
   /// Order Status
   String get awaitingPayment;

@@ -15,4 +15,5 @@ abstract class BasePaths {
   String get imageDropezyLogoBlack;
   String get imageLocationAccess;
   String get imageDropezyWaitingPayment;
+  String get imageDropezySignOut;
 }

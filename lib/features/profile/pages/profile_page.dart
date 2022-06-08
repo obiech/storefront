@@ -40,7 +40,11 @@ class ProfileView extends StatelessWidget {
                 width: double.infinity,
                 child: DropezyButton.blueTint(
                   label: context.res.strings.signOut,
-                  onPressed: () {},
+                  onPressed: () {
+                    showDropezyBottomSheet(context, (_) {
+                      return const ProfileSignOutBottomSheet();
+                    });
+                  },
                 ),
               ),
             ],
