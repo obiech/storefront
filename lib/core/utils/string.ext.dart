@@ -1,3 +1,5 @@
+import '../core.dart';
+
 /// Extension methods for [String] data
 extension StringX on String {
   /// Takes a [String] [this] and converts it to IDR currency
@@ -60,4 +62,7 @@ extension StringX on String {
   /// Take any string and capitalize it
   String capitalize() =>
       isNotEmpty ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
+
+  /// Append image URL source to path from backend
+  String get toImageUrl => '${AssetsConfig.assetsUrl}$this';
 }

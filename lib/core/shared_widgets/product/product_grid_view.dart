@@ -62,7 +62,7 @@ class ProductGridView extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final productModel = productModelList[index];
 
-        if (productModel.status != ProductStatus.LOADING) {
+        if (productModel.status != ProductModelStatus.LOADING) {
           return ProductItemCard(
             key: ValueKey('product_item$index'),
             product: productModel,

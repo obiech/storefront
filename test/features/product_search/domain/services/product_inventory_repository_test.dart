@@ -1,4 +1,5 @@
 import 'package:dropezy_proto/v1/inventory/inventory.pbgrpc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,6 +24,8 @@ void main() {
       registerFallbackValue(GetRequest(categoryId: '1'));
       client = MockInventoryServiceClient();
       repository = ProductInventoryRepository(client);
+
+      dotenv.testLoad(fileInput: '''ASSETS_URL=https://test.dropezy.com''');
 
       for (final inventory in pb_inventories.fakeInventories) {
         final products = inventory.products.map(ProductModel.fromPb).toList();

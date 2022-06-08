@@ -1,6 +1,7 @@
 import 'package:dropezy_proto/v1/inventory/inventory.pb.dart';
 
 import 'base_product.dart';
+import 'variant_model.ext.dart';
 
 /// Representation of a product variant sold in Dropezy.
 ///
@@ -29,19 +30,16 @@ class VariantModel extends BaseProduct {
 
   /// Creates a [VariantModel] from gRPC [Variant]
   factory VariantModel.fromPb(Variant productVariant) {
+    final imageUrls = productVariant.toImageUrls;
     return VariantModel(
       variantId: productVariant.variantId,
       name: productVariant.name,
-      imagesUrls: productVariant.imagesUrls,
-      defaultImageUrl: productVariant.imagesUrls.isEmpty
-          ? ''
-          : productVariant.imagesUrls.first,
+      imagesUrls: imageUrls,
+      defaultImageUrl: imageUrls.isEmpty ? '' : imageUrls.first,
       price: productVariant.price.num,
       sku: productVariant.sku,
       stock: productVariant.stock,
-
-      // TODO(obella465) - Restore to required when added to proto
-      unit: '500g',
+      unit: productVariant.toUnit,
     );
   }
 

@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/inventory/inventory.pbgrpc.dart';
 import 'base_product.dart';
 import 'market_status.dart';
 import 'variant_model.dart';
+import 'variant_model.ext.dart';
 
 /// Representation of a product sold in Dropezy.
 ///
@@ -34,7 +35,7 @@ class ProductModel extends BaseProduct {
     required this.defaultProduct,
 
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
-    this.status = ProductStatus.ACTIVE,
+    this.status = ProductModelStatus.ACTIVE,
   }) : super(
           productId,
           name,
@@ -49,22 +50,18 @@ class ProductModel extends BaseProduct {
 
   /// Creates a [ProductModel] from gRPC [Product]
   factory ProductModel.fromPb(Product inventoryProduct) {
-    final baseVariant = inventoryProduct.defaultVariant;
+    final baseVariant = inventoryProduct.variants.defaultVariant;
 
     return ProductModel(
       productId: inventoryProduct.productId,
       name: inventoryProduct.name,
       variants: inventoryProduct.variants.map(VariantModel.fromPb).toList(),
-      // TODO(obella465): Request backend to include default product that will
-      // provide imageUrl, price & discount
-      defaultProduct: baseVariant.variantId,
+      defaultProduct: baseVariant.id,
       stock: inventoryProduct.totalStock,
       sku: baseVariant.sku,
-      price: baseVariant.price.num,
-      // TODO(obella465) - Restore to required when added to proto
-      unit: '500g',
-      // TODO(obella) - Restore when added to proto
-      description: dummyDescription,
+      price: baseVariant.price,
+      unit: baseVariant.unit,
+      description: inventoryProduct.description,
 
       /// Add empty image to display logo if no images are available
       imagesUrls:
@@ -72,8 +69,8 @@ class ProductModel extends BaseProduct {
       thumbnailUrl:
           baseVariant.imagesUrls.isEmpty ? '' : baseVariant.imagesUrls.first,
       status: inventoryProduct.totalStock < 1
-          ? ProductStatus.OUT_OF_STOCK
-          : ProductStatus.ACTIVE,
+          ? ProductModelStatus.OUT_OF_STOCK
+          : ProductModelStatus.ACTIVE,
     );
   }
 
@@ -91,14 +88,14 @@ class ProductModel extends BaseProduct {
       price: '',
       description: '',
       thumbnailUrl: '',
-      status: ProductStatus.LOADING,
+      status: ProductModelStatus.LOADING,
       imagesUrls: [],
     );
   }
 
   final MarketStatus? marketStatus;
 
-  final ProductStatus status;
+  final ProductModelStatus status;
 
   /// TODO(obella465): Retire once default flow confirmed
   /// @Iyo
@@ -140,7 +137,7 @@ class ProductModel extends BaseProduct {
     String? thumbnailUrl,
     List<String>? imagesUrls,
     String? discount,
-    ProductStatus? status,
+    ProductModelStatus? status,
     String? defaultProduct,
     MarketStatus? marketStatus,
     String? description,
@@ -164,7 +161,7 @@ class ProductModel extends BaseProduct {
 }
 
 /// https://dropezy.slack.com/archives/C038EPQGJLR/p1650423774792949?thread_ts=1650422527.075119&cid=C038EPQGJLR
-enum ProductStatus {
+enum ProductModelStatus {
   /// Product is currently available for purchase
   ACTIVE,
 
@@ -193,21 +190,10 @@ extension ProductX on ProductModel {
 /// gRPC [Product] extension methods
 extension GRPCProduct on Product {
   /// Overall stock from all variants
-  int get totalStock => variants
-      .map((productVariant) => productVariant.stock)
-      .reduce((stock1, stock2) => stock1 + stock2);
-
-  /// Default variant will be used for product image, price & discount
-  /// TODO(obella465): Refactor to use default product variant Id once proto
-  /// confirmed.
-  ///
-  /// ```dart
-  /// variants.firstWhere(
-  ///         (variant) => variant.variantId == defaultVariantId,
-  ///     orElse: () => variants.first,
-  ///   )
-  ///```
-  Variant get defaultVariant => variants.first;
+  int get totalStock => variants.fold(
+        0,
+        (currentStock, productVariant) => productVariant.stock + currentStock,
+      );
 }
 
 const dummyDescription =

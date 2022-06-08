@@ -39,7 +39,7 @@ void main() {
     await tester.pumpProductItemCard(
       product.copyWith(
         stock: 0,
-        status: ProductStatus.OUT_OF_STOCK,
+        status: ProductModelStatus.OUT_OF_STOCK,
       ),
     );
 

@@ -51,6 +51,7 @@ class PaymentService implements IPaymentRepository {
 
       final checkoutRequest = CheckoutRequest(
         storeId: 'store_11',
+        addressId: 'address_11',
         paymentMethod: method,
       );
 

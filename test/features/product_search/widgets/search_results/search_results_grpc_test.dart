@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/inventory/inventory.pb.dart';
 import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -41,11 +42,21 @@ Future<void> main() async {
         SearchInventoryResult(
           productId: productId,
           name: 'milkuat cokelat malt uht 115ml  pcs',
-          brand: 'milkuat',
-          sku: 'sku0961',
-          imageUrl: 'milkuatcokelatmaltuht115mlpcs.jpg',
+          brandName: 'milkuat',
+          description: 'Dummy description',
+          imagesUrls: ['milkuatcokelatmaltuht115mlpcs.jpg'],
           storeId: 'store_11',
-          stock: 0,
+          variants: [
+            Variant(
+              variantId: 'variant-id',
+              imagesUrls: ['milkuatcokelatmaltuht115mlpcs.jpg'],
+              variantQuantifier: 'ml',
+              variantValue: '500 ml',
+              name: '500 ml',
+              sku: 'sku-000',
+              stock: 0,
+            )
+          ],
         ),
       ],
     );

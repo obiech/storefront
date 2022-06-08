@@ -1,35 +1,33 @@
 import 'package:dropezy_proto/meta/meta.pb.dart';
 import 'package:dropezy_proto/v1/search/search.pb.dart';
 import 'package:equatable/equatable.dart';
-import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
 
 extension SearchInventoryResultX on SearchInventoryResult {
-  ProductModel get toProduct => ProductModel(
-        productId: productId,
-        name: name,
-        price: price.num,
-        stock: stock,
-        sku: sku,
-        unit: '500g',
-        description: dummyDescription,
-        thumbnailUrl: '${AssetsConfig.assetsUrl}$imageUrl',
-        imagesUrls: ['${AssetsConfig.assetsUrl}$imageUrl'],
-        status: stock < 1 ? ProductStatus.OUT_OF_STOCK : ProductStatus.ACTIVE,
-        variants: [
-          VariantModel(
-            variantId: 'default',
-            name: name,
-            defaultImageUrl: '${AssetsConfig.assetsUrl}$imageUrl',
-            imagesUrls: ['${AssetsConfig.assetsUrl}$imageUrl'],
-            price: price.num,
-            sku: sku,
-            stock: stock,
-            unit: '500g',
-          )
-        ],
-        defaultProduct: 'default',
-      );
+  ProductModel get toProduct {
+    final defaultVariant = variants.defaultVariant;
+
+    final defaultVariantImages = defaultVariant.imagesUrls;
+
+    final overallStock = variants.overallStock;
+
+    return ProductModel(
+      productId: productId,
+      name: name,
+      price: defaultVariant.price,
+      stock: overallStock,
+      sku: defaultVariant.sku,
+      unit: defaultVariant.unit,
+      description: description,
+      thumbnailUrl: defaultVariantImages.first,
+      imagesUrls: defaultVariantImages,
+      status: overallStock < 1
+          ? ProductModelStatus.OUT_OF_STOCK
+          : ProductModelStatus.ACTIVE,
+      variants: variants.map(VariantModel.fromPb).toList(),
+      defaultProduct: defaultVariant.id,
+    );
+  }
 }
 
 extension SearchInventoryResultListX on List<SearchInventoryResult> {
