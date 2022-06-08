@@ -18,6 +18,15 @@ class MockAddressDetailBloc
 class MockPermissionHandlerCubit extends MockCubit<PermissionHandlerState>
     implements PermissionHandlerCubit {}
 
+class MockSearchLocationBloc
+    extends MockBloc<SearchLocationEvent, SearchLocationState>
+    implements SearchLocationBloc {}
+
 class MockDateTimeProvider extends Mock implements DateTimeProvider {}
 
 class MockCustomerServiceClient extends Mock implements CustomerServiceClient {}
+
+class MockDropezyPlacesService extends Mock implements DropezyPlacesService {}
+
+class MockSearchLocationRespository extends Mock
+    implements ISearchLocationRepository {}

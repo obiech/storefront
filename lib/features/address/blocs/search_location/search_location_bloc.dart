@@ -1,0 +1,46 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+import 'package:places_service/places_service.dart';
+import 'package:storefront_app/features/address/domain/repository/i_search_location_repository.dart';
+
+part 'search_location_event.dart';
+part 'search_location_state.dart';
+
+@injectable
+class SearchLocationBloc
+    extends Bloc<SearchLocationEvent, SearchLocationState> {
+  final ISearchLocationRepository _searchRepository;
+
+  SearchLocationBloc(this._searchRepository)
+      : super(const SearchLocationInitial()) {
+    on<QueryChanged>((event, emit) => _onQueryChanged(emit, event));
+    on<QueryDeleted>((event, emit) => _onQueryDeleted(emit));
+  }
+
+  Future<void> _onQueryChanged(
+    Emitter<SearchLocationState> emit,
+    QueryChanged event,
+  ) async {
+    emit(const SearchLocationLoading());
+
+    final result = await _searchRepository.searchLocation(event.query);
+
+    result.fold(
+      (failure) {
+        emit(SearchLocationError(failure.message));
+      },
+      (searchResult) {
+        if (searchResult.isEmpty) {
+          emit(const SearchLocationLoadedEmpty());
+        } else {
+          emit(SearchLocationLoaded(searchResult));
+        }
+      },
+    );
+  }
+
+  void _onQueryDeleted(Emitter<SearchLocationState> emit) {
+    emit(const SearchLocationInitial());
+  }
+}

@@ -5,6 +5,7 @@ export 'dartz.ext.dart';
 export 'date_time_provider.dart';
 export 'datetime.ext.dart';
 export 'dotenv.ext.dart';
+export 'dropezy_places_service.dart';
 export 'is_test_mode.dart';
 export 'num.ext.dart';
 export 'phone_number_transformer.dart';

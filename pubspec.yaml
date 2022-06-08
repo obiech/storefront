@@ -63,6 +63,7 @@ dependencies:
   percent_indicator: ^4.0.0
   permission_handler: ^9.2.0
   pin_code_fields: ^7.3.0
+  places_service: ^0.1.2
   protobuf: ^2.0.1
   rxdart: ^0.27.3
   skeletons: ^0.0.3

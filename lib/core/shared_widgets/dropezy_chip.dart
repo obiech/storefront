@@ -134,6 +134,7 @@ class DropezyChip extends StatelessWidget {
   factory DropezyChip.primary({
     required Resources res,
     required String label,
+    Widget? leading,
   }) {
     return DropezyChip(
       label: label,
@@ -141,6 +142,7 @@ class DropezyChip extends StatelessWidget {
         fontWeight: FontWeight.w600,
         color: res.colors.blue,
       ),
+      leading: leading,
       backgroundColor: const Color(0xFFD0E3FF),
     );
   }
