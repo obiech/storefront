@@ -13,9 +13,13 @@ class ParentCategoriesGrid extends StatelessWidget {
     return BlocBuilder<ParentCategoriesCubit, ParentCategoriesState>(
       builder: (context, state) {
         if (state is LoadingParentCategoriesState) {
-          return const Center(
-            key: ValueKey(HomePageKeys.loadingparentCategoryWidget),
-            child: CircularProgressIndicator(),
+          return SizedBox(
+            // TODO (Jonathan) : implements skeleton
+            height: MediaQuery.of(context).size.height * .40,
+            child: const Center(
+              key: ValueKey(HomePageKeys.loadingparentCategoryWidget),
+              child: CircularProgressIndicator(),
+            ),
           );
         } else if (state is LoadedParentCategoriesState) {
           return GridView.builder(
