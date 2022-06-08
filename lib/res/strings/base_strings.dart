@@ -432,6 +432,8 @@ abstract class BaseStrings {
 
   String get saveProfile;
 
+  String get savedProfileSnackBarContent;
+
   /// Error message
   String cannotBeEmpty(String field);
 

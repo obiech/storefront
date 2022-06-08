@@ -649,6 +649,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get saveProfile => 'Simpan';
 
+  @override
+  String get savedProfileSnackBarContent => 'Nama berhasil diperbarui';
+
   /// Error message
   @override
   String cannotBeEmpty(String field) => '$field tidak boleh kosong';

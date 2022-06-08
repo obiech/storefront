@@ -649,6 +649,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get saveProfile => 'Save';
 
+  @override
+  String get savedProfileSnackBarContent => 'Name successfully updated';
+
   /// Error message
   @override
   String cannotBeEmpty(String field) => '$field can not be empty';

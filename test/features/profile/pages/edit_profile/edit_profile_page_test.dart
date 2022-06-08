@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/profile/index.dart';
 
+import '../../mocks.dart';
+
 void main() {
+  late EditProfileBloc editProfileBloc;
+
+  setUp(() {
+    editProfileBloc = MockEditProfileBloc();
+
+    // Default state
+    when(() => editProfileBloc.state).thenReturn(const EditProfileState());
+  });
+
   testWidgets(
     'should display view correctly '
     'when page is rendered',
     (widgetTester) async {
-      await widgetTester.pumpEditProfilePage();
+      await widgetTester.pumpEditProfilePage(editProfileBloc);
 
       expect(
-        find.byKey(EditProfilePageKeys.nameField),
+        find.byKey(EditProfilePageKeys.fullNameField),
         findsOneWidget,
       );
       expect(
@@ -26,7 +39,7 @@ void main() {
     'when save button is tapped '
     'and form is empty',
     (widgetTester) async {
-      final context = await widgetTester.pumpEditProfilePage();
+      final context = await widgetTester.pumpEditProfilePage(editProfileBloc);
 
       await widgetTester.tap(find.byKey(EditProfilePageKeys.saveProfileButton));
       await widgetTester.pumpAndSettle();
@@ -42,7 +55,9 @@ void main() {
 }
 
 extension WidgetTesterX on WidgetTester {
-  Future<BuildContext> pumpEditProfilePage() async {
+  Future<BuildContext> pumpEditProfilePage(
+    EditProfileBloc editProfileBloc,
+  ) async {
     late BuildContext ctx;
 
     await pumpWidget(
@@ -50,8 +65,11 @@ extension WidgetTesterX on WidgetTester {
         home: Builder(
           builder: (context) {
             ctx = context;
-            return const Scaffold(
-              body: EditProfilePage(),
+            return BlocProvider(
+              create: (context) => editProfileBloc,
+              child: const Scaffold(
+                body: EditProfilePage(),
+              ),
             );
           },
         ),

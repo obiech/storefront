@@ -63,7 +63,7 @@ import '../features/profile/index.dart';
     AutoRoute(page: AddressPinpointPage),
 
     /// Profile related
-    AutoRoute(page: EditProfilePage),
+    AutoRoute(page: EditProfilePageWrapper),
     AutoRoute(page: ChangeAddressPage),
 
     /// Help
