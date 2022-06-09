@@ -38,6 +38,7 @@ class DropezyTextFormField extends StatelessWidget {
         TextFormField(
           key: fieldKey,
           decoration: InputDecoration(
+            contentPadding: const EdgeInsets.all(12.0),
             hintText: hintText,
             hintStyle: DropezyTextStyles.textFieldHint.copyWith(fontSize: 14),
             border: OutlineInputBorder(
