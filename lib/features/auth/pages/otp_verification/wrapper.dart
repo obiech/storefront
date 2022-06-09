@@ -12,32 +12,32 @@ class OtpVerificationPageWrapper extends StatelessWidget
     required this.phoneNumberIntlFormat,
     required this.successAction,
     required this.timeoutInSeconds,
-    this.registerAccountAfterSuccessfulOtp = false,
+    this.isRegistration = false,
   }) : super(key: key);
 
   final String phoneNumberIntlFormat;
   final int timeoutInSeconds;
   final OtpSuccessAction successAction;
-  final bool registerAccountAfterSuccessfulOtp;
+  final bool isRegistration;
 
   @override
   Widget build(BuildContext context) => OtpVerificationPage(
         phoneNumberIntlFormat: phoneNumberIntlFormat,
         successAction: successAction,
         timeoutInSeconds: timeoutInSeconds,
-        registerAccountAfterSuccessfulOtp: registerAccountAfterSuccessfulOtp,
+        isRegistration: isRegistration,
       );
 
   @override
   Widget wrappedRoute(BuildContext context) {
     final authService = getIt<AuthService>();
-    final customerServiceClient = getIt<CustomerServiceClient>();
+    final customerRepository = getIt<ICustomerRepository>();
 
     return BlocProvider<AccountVerificationCubit>(
       create: (context) => AccountVerificationCubit(
         authService,
-        customerServiceClient,
-        registerAccountAfterSuccessfulOtp,
+        customerRepository,
+        isRegistration,
       )..sendOtp(phoneNumberIntlFormat),
       child: this,
     );

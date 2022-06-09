@@ -5,23 +5,28 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../../auth/index.dart';
 import '../../domain/repository/phone_verification_result.dart';
 import '../../domain/services/auth_service.dart';
 
 part 'account_verification_state.dart';
 
-/// [Cubit] resposible for orchestrating account verification.
+/// Resposible for verifying performing account verification
+/// using Firebase Auth Phone Signin.
 ///
-/// [_authService] handles the verification process, whereas
-/// [_customerServiceClient] will be used to register the phone number
-/// to backend.
+/// when [isRegistration] is true, this will
+/// call [CustomerServiceClient.register] before OTP verification
+/// to register the account with storefront-backend.
+///
+/// It is crucial that [CustomerServiceClient.register] is called BEFORE
+/// OTP verification to prevent Firebase from creating the user account
+/// before storefront-backend has managed to do so.
 class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// Immediately listen to [_authService.phoneVerificationStream]
-// TODO (leovinsen): Depend on Service instead of directly depending on gRPC client
   AccountVerificationCubit(
     this._authService,
-    this._customerServiceClient,
-    this.registerAccountAfterSuccessfulOtp,
+    this._customerRepository,
+    this.isRegistration,
   ) : super(const AccountVerificationInitial()) {
     _phoneVerificationSubscription = _authService.phoneVerificationStream
         .listen(_handlePhoneVerificationResult);
@@ -30,8 +35,8 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   late StreamSubscription _phoneVerificationSubscription;
 
   final AuthService _authService;
-  final CustomerServiceClient _customerServiceClient;
-  final bool registerAccountAfterSuccessfulOtp;
+  final ICustomerRepository _customerRepository;
+  final bool isRegistration;
 
   /// will be used for registration in backend after phone verification
   late String phoneNumber;
@@ -48,37 +53,17 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
         break;
 
       case PhoneVerificationStatus.verifiedSuccessfully:
-        emit(const AccountVerificationLoading());
-
-        if (registerAccountAfterSuccessfulOtp) {
-          await _registerPhoneNumberToBackend();
-        } else {
-          emit(const AccountVerificationSuccess());
-        }
+        emit(const AccountVerificationSuccess());
         break;
 
       case PhoneVerificationStatus.error:
         final exception = result.exception!;
-
         emit(AccountVerificationError(exception.errorMessage));
 
         break;
       case PhoneVerificationStatus.invalidOtp:
         emit(const AccountVerificationInvalidOtp());
         break;
-    }
-  }
-
-  /// Registers [phoneNumber] to storefront backend.
-  /// Call only after a successful OTP verification to ensure its validity.
-  Future<void> _registerPhoneNumberToBackend() async {
-    final request = RegisterRequest(phoneNumber: phoneNumber);
-
-    try {
-      await _customerServiceClient.register(request);
-      emit(const AccountVerificationSuccess());
-    } on Exception catch (e) {
-      emit(AccountVerificationError(e.toFailure.message));
     }
   }
 
@@ -94,6 +79,19 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   Future<void> sendOtp(String phoneNumber) async {
     this.phoneNumber = phoneNumber;
     emit(const AccountVerificationLoading());
+
+    // In registration flow, register phone number with backend before
+    // attempting OTP verification.
+    // If a failure occured, terminate the whole process.
+    if (isRegistration) {
+      final result = await _customerRepository.registerPhoneNumber(phoneNumber);
+
+      if (result.isLeft()) {
+        final failure = result.getLeft();
+        emit(AccountVerificationError(failure.message));
+        return;
+      }
+    }
 
     await _authService.sendOtp(phoneNumber);
   }

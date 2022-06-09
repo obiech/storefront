@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -10,6 +9,7 @@ import 'package:storefront_app/di/injection.dart';
 
 import '../../../home/pages/home_page.dart';
 import '../../blocs/account_verification/account_verification_cubit.dart';
+import '../../domain/domain.dart';
 import '../../domain/services/auth_service.dart';
 import '../pin_input/pin_input_page.dart';
 
@@ -34,13 +34,13 @@ class OtpVerificationPage extends StatefulWidget {
     required this.phoneNumberIntlFormat,
     required this.successAction,
     required this.timeoutInSeconds,
-    this.registerAccountAfterSuccessfulOtp = false,
+    this.isRegistration = false,
   }) : super(key: key);
 
   final String phoneNumberIntlFormat;
   final int timeoutInSeconds;
   final OtpSuccessAction successAction;
-  final bool registerAccountAfterSuccessfulOtp;
+  final bool isRegistration;
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();

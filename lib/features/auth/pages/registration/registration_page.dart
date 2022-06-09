@@ -116,7 +116,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
         successAction: OtpSuccessAction.goToPinPage,
         timeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
-        registerAccountAfterSuccessfulOtp: true,
+        isRegistration: true,
       ),
     );
   }

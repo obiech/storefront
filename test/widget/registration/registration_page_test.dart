@@ -203,7 +203,7 @@ Future<void> main() async {
         route = route as OtpVerificationRoute;
         expect(route.args?.successAction, OtpSuccessAction.goToPinPage);
         expect(route.args?.phoneNumberIntlFormat, mockPhoneNumber);
-        expect(route.args?.registerAccountAfterSuccessfulOtp, true);
+        expect(route.args?.isRegistration, true);
       });
       testWidgets('''
         -- If phone number is not available, display a 
