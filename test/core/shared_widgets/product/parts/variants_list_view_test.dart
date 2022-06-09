@@ -8,6 +8,7 @@ import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../../test_commons/test_commons.dart';
 import '../../../../features/cart_checkout/mocks.dart';
 
 void main() {
@@ -91,24 +92,69 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets(
+      'should display maximum product quantity warning '
+      'when variant is incremented up to maximum quantity',
+      (WidgetTester tester) async {
+    /// arrange
+    when(() => cartBloc.state).thenReturn(
+      CartLoaded.success(
+        cartModel.copyWith(
+          items: [
+            CartItemModel(
+              variant: product.variants.first,
+              quantity: 1,
+            )
+          ],
+        ),
+      ),
+    );
+
+    expect(product.variants.length > 1, true);
+    final variants = List.of(product.variants);
+    const maxQty = 2;
+    variants[0] = variants[0].copyWith(maxQty: maxQty);
+    final context = await tester.pumpVariantsListView(
+      product.copyWith(variants: variants),
+      cartBloc,
+    );
+
+    /// act
+    expect(ProductWidgetFinders.incrementButtonFinder, findsOneWidget);
+    await tester.tap(ProductWidgetFinders.incrementButtonFinder);
+    await tester.pump();
+
+    /// assert
+    expect(find.text(context.res.strings.maximumQty(maxQty)), findsOneWidget);
+    await tester.pump(const Duration(seconds: 3));
+  });
 }
 
 extension WidgetTesterX on WidgetTester {
-  Future<void> pumpVariantsListView(
+  Future<BuildContext> pumpVariantsListView(
     ProductModel product,
     CartBloc cartBloc,
   ) async {
+    late BuildContext ctx;
     await pumpWidget(
       BlocProvider(
         create: (context) => cartBloc,
         child: MaterialApp(
           home: Scaffold(
-            body: VariantsListView(
-              product: product,
+            body: Builder(
+              builder: (context) {
+                ctx = context;
+                return VariantsListView(
+                  product: product,
+                );
+              },
             ),
           ),
         ),
       ),
     );
+
+    return ctx;
   }
 }

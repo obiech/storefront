@@ -20,6 +20,7 @@ const dummyProducts = [
         price: '3200',
         sku: 'SKUTBS002',
         stock: 15,
+        maxQty: 5,
         unit: '250ml / Pcs',
       ),
       VariantModel(
@@ -63,7 +64,8 @@ const dummyProducts = [
     sku: 'SKUTKK001',
     name: 'Teh Kotak Melati',
     price: '3500',
-    stock: 50,
+    stock: 10,
+    maxQty: 5,
     variants: [
       VariantModel(
         variantId: 'teh-kotak-melati-variant-0',
@@ -74,7 +76,8 @@ const dummyProducts = [
         ],
         price: '3500',
         sku: 'SKUTKK001',
-        stock: 15,
+        stock: 10,
+        maxQty: 5,
         unit: '200 + 100ml / Pack',
       ),
     ],

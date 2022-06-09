@@ -16,6 +16,7 @@ class VariantModel extends BaseProduct {
     required String sku,
     required int stock,
     required String unit,
+    int? maxQty,
   }) : super(
           variantId,
           name,
@@ -26,6 +27,7 @@ class VariantModel extends BaseProduct {
           defaultImageUrl,
           unit,
           imagesUrls,
+          maxQty,
         );
 
   /// Creates a [VariantModel] from gRPC [Variant]
@@ -40,6 +42,7 @@ class VariantModel extends BaseProduct {
       sku: productVariant.sku,
       stock: productVariant.stock,
       unit: productVariant.toUnit,
+      maxQty: productVariant.maximumOrder,
     );
   }
 
@@ -53,6 +56,7 @@ class VariantModel extends BaseProduct {
     String? discount,
     String? sku,
     int? stock,
+    int? maxQty,
     String? unit,
   }) =>
       VariantModel(
@@ -65,10 +69,8 @@ class VariantModel extends BaseProduct {
         sku: sku ?? this.sku,
         stock: stock ?? this.stock,
         unit: unit ?? this.unit,
+        maxQty: maxQty ?? this.maxQty,
       );
-
-  @override
-  List<Object?> get props => [...super.props];
 
   // Check if has discount (i.e null or zero)
   bool get hasDiscount =>

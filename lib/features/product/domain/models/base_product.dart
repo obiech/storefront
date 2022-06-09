@@ -23,6 +23,13 @@ abstract class BaseProduct extends Equatable {
   /// it holds the overall stock of all variants.
   final int stock;
 
+  /// maximum quantity of product/variant.
+  ///
+  /// For the case of the product,
+  /// it holds the maximum product quantity
+  /// for the default variant.
+  final int? maxQty;
+
   /// price of product variant.
   ///
   /// For the case of the product,
@@ -72,6 +79,7 @@ abstract class BaseProduct extends Equatable {
     this.thumbnailUrl,
     this.unit,
     this.imagesUrls,
+    this.maxQty,
   );
 
   @override
@@ -84,6 +92,7 @@ abstract class BaseProduct extends Equatable {
         discount,
         thumbnailUrl,
         unit,
+        maxQty,
       ];
 }
 

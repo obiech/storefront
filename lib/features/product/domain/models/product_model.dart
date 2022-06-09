@@ -36,6 +36,7 @@ class ProductModel extends BaseProduct {
 
     /// Defaulting to active TODO(obella465) - Fix once product structure affirmed
     this.status = ProductModelStatus.ACTIVE,
+    int? maxQty,
   }) : super(
           productId,
           name,
@@ -46,6 +47,7 @@ class ProductModel extends BaseProduct {
           thumbnailUrl,
           unit,
           imagesUrls,
+          maxQty,
         );
 
   /// Creates a [ProductModel] from gRPC [Product]
@@ -71,6 +73,7 @@ class ProductModel extends BaseProduct {
       status: inventoryProduct.totalStock < 1
           ? ProductModelStatus.OUT_OF_STOCK
           : ProductModelStatus.ACTIVE,
+      maxQty: baseVariant.maxQty,
     );
   }
 
@@ -96,13 +99,6 @@ class ProductModel extends BaseProduct {
   final MarketStatus? marketStatus;
 
   final ProductModelStatus status;
-
-  /// TODO(obella465): Retire once default flow confirmed
-  /// @Iyo
-  /// Hey Isaac, for the images it should be stored under variant I believe,
-  /// and then there we have a default flag to determine which variant is
-  /// a default variant that will be shown on the product cards.
-  /// What about product status? I think its missing on your code snippet
 
   // Default product variant Id
   final String defaultProduct;
@@ -132,6 +128,7 @@ class ProductModel extends BaseProduct {
     List<VariantModel>? variants,
     String? sku,
     int? stock,
+    int? maxQty,
     String? price,
     String? unit,
     String? thumbnailUrl,
@@ -157,6 +154,7 @@ class ProductModel extends BaseProduct {
         marketStatus: marketStatus ?? this.marketStatus,
         discount: discount ?? this.discount,
         description: description ?? this.description,
+        maxQty: maxQty ?? this.maxQty,
       );
 }
 

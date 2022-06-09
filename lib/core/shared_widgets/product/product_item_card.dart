@@ -181,6 +181,9 @@ class ProductItemCard extends StatelessWidget {
                         productQuantity: itemQuantity,
                         product: product,
                         scaleFactor: scaleFactor,
+                        onMaxAvailableQtyChanged: (isAtMaxQty) {
+                          // TODO(obella) - Handle for Product Card
+                        },
                       ),
                     )
                   ],

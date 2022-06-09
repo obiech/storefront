@@ -1,36 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/res/strings/english_strings.dart';
 
-extension WidgetTesterX on WidgetTester {
-  Future<void> pumpQuantityChanger(
-    Function(int) onQtyChanged,
-    int maxValue, {
-    int value = 1,
-  }) async {
-    await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            width: 100,
-            height: 30,
-            child: QtyChanger(
-              maxValue: maxValue,
-              onQtyChanged: onQtyChanged,
-              value: value,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+import '../../../../../test_commons/test_commons.dart';
 
 void main() {
-  final incrementButtonFinder = find.byIcon(DropezyIcons.plus);
-  final decrementButtonFinder = find.byIcon(DropezyIcons.minus);
-
   testWidgets('Quantity will never exceed maximum value',
       (WidgetTester tester) async {
     /// arrange
@@ -39,11 +13,11 @@ void main() {
 
     await tester.pumpQuantityChanger((p0) {}, max, value: quantity);
     expect(find.text(quantity.toString()), findsOneWidget);
-    expect(incrementButtonFinder, findsOneWidget);
+    expect(ProductWidgetFinders.incrementButtonFinder, findsOneWidget);
 
     // Tap increment button 5 times
     for (int i = 0; i < 5; i++) {
-      await tester.tap(incrementButtonFinder);
+      await tester.tap(ProductWidgetFinders.incrementButtonFinder);
       await tester.pumpAndSettle();
     }
 
@@ -57,11 +31,11 @@ void main() {
 
     await tester.pumpQuantityChanger((p0) {}, max, value: quantity);
     expect(find.text(quantity.toString()), findsOneWidget);
-    expect(decrementButtonFinder, findsOneWidget);
+    expect(ProductWidgetFinders.decrementButtonFinder, findsOneWidget);
 
     // Tap increment button 5 times
     for (int i = 0; i < 5; i++) {
-      await tester.tap(decrementButtonFinder);
+      await tester.tap(ProductWidgetFinders.decrementButtonFinder);
       await tester.pumpAndSettle();
     }
 
@@ -76,19 +50,19 @@ void main() {
 
     await tester.pumpQuantityChanger((p0) {}, max, value: quantity);
     expect(find.text(quantity.toString()), findsOneWidget);
-    expect(decrementButtonFinder, findsOneWidget);
+    expect(ProductWidgetFinders.decrementButtonFinder, findsOneWidget);
 
     // Decrement quantity
-    await tester.tap(decrementButtonFinder);
+    await tester.tap(ProductWidgetFinders.decrementButtonFinder);
     await tester.pumpAndSettle();
     expect(find.text((quantity - 1).toString()), findsOneWidget);
 
     // Increment quantity
-    await tester.tap(incrementButtonFinder);
+    await tester.tap(ProductWidgetFinders.incrementButtonFinder);
     await tester.pumpAndSettle();
     expect(find.text(quantity.toString()), findsOneWidget);
 
-    await tester.tap(incrementButtonFinder);
+    await tester.tap(ProductWidgetFinders.incrementButtonFinder);
     await tester.pumpAndSettle();
     expect(find.text((quantity + 1).toString()), findsOneWidget);
   });
@@ -120,10 +94,10 @@ void main() {
     for (int i = 0; i < 6; i++) {
       if (i % 3 == 0) {
         // Increment
-        await tester.tap(incrementButtonFinder);
+        await tester.tap(ProductWidgetFinders.incrementButtonFinder);
       } else {
         // Decrement
-        await tester.tap(decrementButtonFinder);
+        await tester.tap(ProductWidgetFinders.decrementButtonFinder);
       }
     }
 
@@ -131,19 +105,97 @@ void main() {
     expect(callBackResult, [6, 5, 4, 5, 4, 3]);
   });
 
-  final _strings = EnglishStrings();
   testWidgets(
       'When increment button is touched & stock is at max, '
       'show snackbar to notify user that stock is exceeded',
       (WidgetTester tester) async {
     /// arrange
-    await tester.pumpQuantityChanger((p0) => {}, 2, value: 2);
+    final context = await tester.pumpQuantityChanger((p0) => {}, 2);
 
     /// act
-    await tester.tap(incrementButtonFinder);
-    await tester.pump();
+    await tester.tap(ProductWidgetFinders.incrementButtonFinder);
+    await tester.pumpAndSettle();
 
     /// assert
-    expect(find.text(_strings.thatIsAllTheStockWeHave), findsOneWidget);
+    expect(
+      find.text(context.res.strings.thatIsAllTheStockWeHave),
+      findsOneWidget,
+    );
   });
+
+  testWidgets(
+      'should fire [onMaxAvailableQtyChanged] and disable the increment button '
+      'when maximum quantity is reached', (WidgetTester tester) async {
+    /// arrange
+    final callBackResults = <bool>[];
+    const maximumQuantity = 2;
+    final context = await tester.pumpQuantityChanger(
+      (_) {},
+      10,
+      maxValue: maximumQuantity,
+      onMaxAvailableQtyChanged: (isAtMaxQty) {
+        callBackResults.add(isAtMaxQty);
+      },
+    );
+
+    /// Tap increment till maximum quantity
+    expect(ProductWidgetFinders.incrementButtonFinder, findsOneWidget);
+    for (int i = 0; i < maximumQuantity; i++) {
+      await tester.tap(ProductWidgetFinders.incrementButtonFinder);
+      await tester.pumpAndSettle();
+    }
+
+    /// Button is Disabled
+    final incrementButton = tester.firstWidget<RawMaterialButton>(
+      ProductWidgetFinders.incrementButtonFinder,
+    );
+    expect(incrementButton.fillColor, context.res.colors.grey2);
+    expect(find.text(maximumQuantity.toString()), findsOneWidget);
+
+    /// [onMaxAvailableQtyChanged] is fired
+    expect(callBackResults, [true]);
+
+    /// When decremented [onMaxAvailableQtyChanged] is fired
+    /// with false value
+    await tester.tap(ProductWidgetFinders.decrementButtonFinder);
+    await tester.pumpAndSettle();
+
+    expect(callBackResults, [true, false]);
+  });
+}
+
+extension WidgetTesterX on WidgetTester {
+  Future<BuildContext> pumpQuantityChanger(
+    Function(int) onQtyChanged,
+    int stock, {
+    int value = 1,
+    int? maxValue,
+    Function(bool)? onMaxAvailableQtyChanged,
+  }) async {
+    late BuildContext ctx;
+    await pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            ctx = context;
+            return Scaffold(
+              body: SizedBox(
+                width: 100,
+                height: 30,
+                child: QtyChanger(
+                  stock: stock,
+                  onQtyChanged: onQtyChanged,
+                  value: value,
+                  maxValue: maxValue,
+                  onMaxAvailableQtyChanged: onMaxAvailableQtyChanged,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
+    return ctx;
+  }
 }

@@ -10,11 +10,16 @@ class ProductAction extends StatefulWidget {
   final int productQuantity;
   final BaseProduct product;
 
+  /// Callback Fired when a product's maximum
+  /// available quantity is reached
+  final Function(bool)? onMaxAvailableQtyChanged;
+
   const ProductAction({
     Key? key,
     this.scaleFactor = 1,
     this.productQuantity = 0,
     required this.product,
+    this.onMaxAvailableQtyChanged,
   }) : super(key: key);
 
   @override
@@ -57,7 +62,9 @@ class _ProductActionState extends State<ProductAction> {
                   scaleFactor: widget.scaleFactor,
                   onQtyChanged: (qty) => _updateCart(context, qty),
                   value: _qty,
-                  maxValue: widget.product.stock,
+                  stock: widget.product.stock,
+                  maxValue: widget.product.maxQty,
+                  onMaxAvailableQtyChanged: widget.onMaxAvailableQtyChanged,
                 )
               : PillButton(
                   key: ValueKey(

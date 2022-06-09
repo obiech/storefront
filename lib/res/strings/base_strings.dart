@@ -448,6 +448,8 @@ abstract class BaseStrings {
   String get productDetails;
   String get variants;
 
+  String maximumQty(int qty);
+
   String get faq;
 
   FAQ get faqs;

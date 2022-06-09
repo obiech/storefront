@@ -680,4 +680,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   FAQ get faqs => FAQEnglish();
+
+  @override
+  String maximumQty(int qty) => 'Maximum Quantity: $qty';
 }

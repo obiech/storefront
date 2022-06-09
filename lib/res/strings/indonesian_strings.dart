@@ -680,4 +680,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   FAQ get faqs => FAQIndonesian();
+
+  @override
+  String maximumQty(int qty) => 'Jumlah maksimal: $qty';
 }

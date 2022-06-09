@@ -29,7 +29,7 @@ class CartItemTile extends StatelessWidget {
                 onQtyChanged: (quantity) =>
                     _editItemQty(context, item.variant, quantity),
                 value: item.quantity,
-                maxValue: item.variant.stock,
+                stock: item.variant.stock,
               ),
             )
           : DropezyTextButton(
