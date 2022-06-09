@@ -62,6 +62,12 @@ class DropezyImage extends StatelessWidget {
                 errorWidget: (_, __, ___) => Icon(
                   DropezyIcons.logo,
                   size: constraints.maxWidth * 0.6,
+                  color: context.res.colors.lightBlue,
+                ),
+                placeholder: (_, __) => Icon(
+                  DropezyIcons.logo,
+                  size: constraints.maxWidth * 0.6,
+                  color: context.res.colors.lightBlue,
                 ),
               ),
             ),
