@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:places_service/places_service.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/address/domain/repository/i_search_location_repository.dart';
+import 'package:storefront_app/features/address/domain/domains.dart';
 
 @LazySingleton(as: ISearchLocationRepository)
 class SearchLocationService implements ISearchLocationRepository {

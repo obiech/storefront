@@ -2,7 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:places_service/places_service.dart';
-import 'package:storefront_app/features/address/domain/repository/i_search_location_repository.dart';
+import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/domain/domains.dart';
 
 part 'search_location_event.dart';
 part 'search_location_state.dart';
@@ -14,7 +15,10 @@ class SearchLocationBloc
 
   SearchLocationBloc(this._searchRepository)
       : super(const SearchLocationInitial()) {
-    on<QueryChanged>((event, emit) => _onQueryChanged(emit, event));
+    on<QueryChanged>(
+      (event, emit) => _onQueryChanged(emit, event),
+      transformer: debounce(const Duration(milliseconds: 500)),
+    );
     on<QueryDeleted>((event, emit) => _onQueryDeleted(emit));
   }
 
