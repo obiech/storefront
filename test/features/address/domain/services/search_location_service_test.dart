@@ -22,35 +22,73 @@ void main() {
     verifyNoMoreInteractions(placesService);
   });
 
-  test(
-    'should return list '
-    'when searchLocation is called '
-    'and request is successful',
-    () async {
-      when(() => placesService.getAutoComplete(query))
-          .thenAnswer((_) async => placesResultList);
+  group('searchLocation', () {
+    test(
+      'should return list '
+      'when searchLocation is called '
+      'and request is successful',
+      () async {
+        when(() => placesService.getAutoComplete(query))
+            .thenAnswer((_) async => placesResultList);
 
-      final result = await searchLocationService.searchLocation(query);
+        final result = await searchLocationService.searchLocation(query);
 
-      expect(result, right(placesResultList));
-      verify(() => placesService.getAutoComplete(query)).called(1);
-    },
-  );
+        expect(result, right(placesResultList));
+        verify(() => placesService.getAutoComplete(query)).called(1);
+      },
+    );
 
-  test(
-    'should return failure '
-    'when searchLocation is called '
-    'and exception is thrown',
-    () async {
-      final exception = Exception('Error!');
-      when(() => placesService.getAutoComplete(query)).thenThrow(exception);
+    test(
+      'should return failure '
+      'when searchLocation is called '
+      'and exception is thrown',
+      () async {
+        final exception = Exception('Error!');
+        when(() => placesService.getAutoComplete(query)).thenThrow(exception);
 
-      final result = await searchLocationService.searchLocation(query);
+        final result = await searchLocationService.searchLocation(query);
 
-      final failure = result.getLeft();
-      expect(failure, isA<Failure>());
-      expect(failure.message, 'An unknown error has occured');
-      verify(() => placesService.getAutoComplete(query)).called(1);
-    },
-  );
+        final failure = result.getLeft();
+        expect(failure, isA<Failure>());
+        expect(failure.message, 'An unknown error has occured');
+        verify(() => placesService.getAutoComplete(query)).called(1);
+      },
+    );
+  });
+
+  group('getLocationDetail', () {
+    const id = 'places-details-1';
+
+    test(
+      'should return AddressDetailsModel '
+      'when getLocationDetail is called '
+      'and request is successful',
+      () async {
+        when(() => placesService.getPlaceDetailsModel(id))
+            .thenAnswer((_) async => placeDetails);
+
+        final result = await searchLocationService.getLocationDetail(id);
+
+        expect(result, right(placeDetails));
+        verify(() => placesService.getPlaceDetailsModel(id)).called(1);
+      },
+    );
+
+    test(
+      'should return failure '
+      'when getLocationDetail is called '
+      'and exception is thrown',
+      () async {
+        final exception = Exception('Error!');
+        when(() => placesService.getPlaceDetailsModel(id)).thenThrow(exception);
+
+        final result = await searchLocationService.getLocationDetail(id);
+
+        final failure = result.getLeft();
+        expect(failure, isA<Failure>());
+        expect(failure.message, 'An unknown error has occured');
+        verify(() => placesService.getPlaceDetailsModel(id)).called(1);
+      },
+    );
+  });
 }

@@ -233,7 +233,7 @@ void main() {
       'Permission Handler',
       () {
         testWidgets(
-          'should navigate to Address Detail page '
+          'should navigate to SearchLocationPage '
           'when permission is granted',
           (tester) async {
             whenListen(
@@ -258,7 +258,7 @@ void main() {
             final routeInfo = capturedRoutes.first as PageRouteInfo;
 
             // expecting the right route being pushed
-            expect(routeInfo, isA<AddressDetailRoute>());
+            expect(routeInfo, isA<SearchLocationRoute>());
           },
         );
 

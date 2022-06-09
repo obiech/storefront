@@ -13,6 +13,7 @@ void main() {
   late SearchLocationBloc searchLocationBloc;
 
   const query = 'Lebak Bulus';
+  const placeId = 'placeId';
 
   setUp(() {
     searchRepository = MockSearchLocationRespository();
@@ -78,6 +79,38 @@ void main() {
     expect: () => [
       const SearchLocationLoading(),
       const SearchLocationError('Error!'),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectSuccess '
+    'when LocationSelected event is added '
+    'and repository return address details',
+    setUp: () {
+      when(() => searchRepository.getLocationDetail(placeId))
+          .thenAnswer((_) async => right(placeDetails));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const LocationSelected(placeId)),
+    expect: () => [
+      const SearchLocationLoading(),
+      LocationSelectSuccess(placeDetails),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectError '
+    'when LocationSelected event is added '
+    'and repository return failure',
+    setUp: () {
+      when(() => searchRepository.getLocationDetail(placeId))
+          .thenAnswer((_) async => left(Failure('Error!')));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const LocationSelected(placeId)),
+    expect: () => [
+      const SearchLocationLoading(),
+      const LocationSelectError('Error!'),
     ],
   );
 }

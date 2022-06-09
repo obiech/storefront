@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
@@ -38,30 +39,62 @@ class SearchLocationResult extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Flexible(
-            child: BlocBuilder<SearchLocationBloc, SearchLocationState>(
-              builder: (context, state) {
-                if (state is SearchLocationLoaded) {
-                  return ListView.separated(
-                    itemBuilder: (context, index) {
-                      final place = state.results[index];
+            child: MultiBlocListener(
+              listeners: [
+                /// Handle when getting location detail is success
+                SingleStateListener<LocationSelectSuccess, SearchLocationBloc,
+                    SearchLocationState>(
+                  callback: (context, state) {
+                    context.pushRoute(
+                      AddressDetailRoute(
+                        placeDetails: state.addressDetails,
+                      ),
+                    );
+                  },
+                ),
 
-                      return PlaceSuggestionTile(place: place);
-                    },
-                    itemCount: state.results.length,
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                  );
-                } else if (state is SearchLocationInitial) {
-                  // TODO (widy): show search history
-                  // https://dropezy.atlassian.net/browse/STOR-621
-                  return const SizedBox.shrink();
-                } else if (state is SearchLocationLoadedEmpty) {
-                  return const Text("Can't find address");
-                } else {
-                  return const CircularProgressIndicator();
-                }
-              },
+                /// Handle when getting location detail is fail
+                SingleStateListener<LocationSelectError, SearchLocationBloc,
+                    SearchLocationState>(
+                  callback: (context, state) {
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(DropezySnackBar.info(state.message));
+                  },
+                ),
+              ],
+              child: BlocBuilder<SearchLocationBloc, SearchLocationState>(
+                builder: (context, state) {
+                  if (state is SearchLocationLoaded) {
+                    return ListView.separated(
+                      itemBuilder: (context, index) {
+                        final place = state.results[index];
+
+                        return PlaceSuggestionTile(
+                          place: place,
+                          onTap: () {
+                            context
+                                .read<SearchLocationBloc>()
+                                .add(LocationSelected(place.placeId ?? ''));
+                          },
+                        );
+                      },
+                      itemCount: state.results.length,
+                      separatorBuilder: (context, index) {
+                        return const Divider();
+                      },
+                    );
+                  } else if (state is SearchLocationInitial) {
+                    // TODO (widy): show search history
+                    // https://dropezy.atlassian.net/browse/STOR-621
+                    return const SizedBox.shrink();
+                  } else if (state is SearchLocationLoadedEmpty) {
+                    return const Text("Can't find address");
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
+              ),
             ),
           )
         ],

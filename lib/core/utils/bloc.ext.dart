@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -20,4 +21,25 @@ import 'package:rxdart/rxdart.dart';
 ///   ```
 EventTransformer<T> debounce<T>(Duration duration) {
   return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+}
+
+/// a [BlocListener] that will accepts only a single State
+class SingleStateListener<T extends S, B extends StateStreamable<S>, S>
+    extends BlocListener<B, S> {
+  SingleStateListener({
+    Key? key,
+    required this.callback,
+    Widget? child,
+  }) : super(
+          key: key,
+          listenWhen: (_, curr) => curr is T,
+          listener: (context, state) {
+            if (state is T) {
+              callback.call(context, state);
+            }
+          },
+          child: child,
+        );
+
+  final Function(BuildContext, T) callback;
 }

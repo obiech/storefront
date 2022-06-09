@@ -4,8 +4,8 @@ import 'package:storefront_app/features/address/domain/models/address_details_mo
 void main() {
   const mockAddressDetails = AddressDetailsModel(
     street: 'Jl. Senen Raya No.135, RW.2',
-    district: 'Senen',
-    subDistrict: 'Kec. Senen',
+    district: 'Kec. Senen',
+    subDistrict: 'Senen',
     municipality: 'Jakarta Pusat',
     province: 'DKI Jakarta',
     zipCode: '10410',

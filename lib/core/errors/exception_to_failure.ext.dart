@@ -14,6 +14,10 @@ extension ExceptionToFailureX on Exception {
       debugPrint('Encountered a FormatException: $errMsg');
 
       return Failure('Failed to format incoming data.');
+    } else if (this is PlacesApiException) {
+      final errorMessage = (this as PlacesApiException).message;
+
+      return Failure(errorMessage);
     } else {
       debugPrint('Encountered unhandled Exceptions: ${toString()}');
       return Failure('An unknown error has occured');

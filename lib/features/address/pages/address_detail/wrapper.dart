@@ -2,7 +2,12 @@ part of 'address_detail_page.dart';
 
 class AddressDetailPageWrapper extends StatelessWidget
     implements AutoRouteWrapper {
-  const AddressDetailPageWrapper({Key? key}) : super(key: key);
+  const AddressDetailPageWrapper({
+    Key? key,
+    this.placeDetails,
+  }) : super(key: key);
+
+  final PlaceDetailsModel? placeDetails;
 
   @override
   Widget wrappedRoute(BuildContext context) {

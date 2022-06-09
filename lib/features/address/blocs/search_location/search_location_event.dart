@@ -19,3 +19,12 @@ class QueryDeleted extends SearchLocationEvent {
   @override
   List<Object?> get props => [];
 }
+
+class LocationSelected extends SearchLocationEvent {
+  final String placeId;
+
+  const LocationSelected(this.placeId);
+
+  @override
+  List<Object?> get props => [placeId];
+}

@@ -42,3 +42,21 @@ class SearchLocationError extends SearchLocationState {
   @override
   List<Object?> get props => [message];
 }
+
+class LocationSelectSuccess extends SearchLocationState {
+  final PlaceDetailsModel addressDetails;
+
+  const LocationSelectSuccess(this.addressDetails);
+
+  @override
+  List<Object?> get props => [addressDetails];
+}
+
+class LocationSelectError extends SearchLocationState {
+  final String message;
+
+  const LocationSelectError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

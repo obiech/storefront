@@ -113,8 +113,7 @@ class ChangeAddressPage extends StatelessWidget {
   }
 
   void _onPermissionGranted(BuildContext context) {
-    // TODO (widy): Change of flow - navigate to Add Address/Search Address when SearchLocationPage ready
-    context.pushRoute(const AddressDetailRoute());
+    context.pushRoute(const SearchLocationRoute());
   }
 
   void _onDeliveryAddressUpdated(

@@ -22,4 +22,15 @@ class SearchLocationService implements ISearchLocationRepository {
       return left(e.toFailure);
     }
   }
+
+  @override
+  RepoResult<PlaceDetailsModel> getLocationDetail(String id) async {
+    try {
+      final addressDetail = await _placesService.getPlaceDetailsModel(id);
+
+      return right(addressDetail);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
+  }
 }

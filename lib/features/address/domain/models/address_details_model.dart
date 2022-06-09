@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 
 /// Details of an address such as:
 /// - Street Name & Number
+/// - Sub-District (Desa/Kelurahan)
 /// - District (Kecamatan)
-/// - Sub-District (Kabupaten)
-/// - Municipality (Kotamadya)
+/// - Municipality (Kota/Kabupaten)
 /// - Zip Code
 /// - Province
 /// - Country
@@ -13,8 +13,8 @@ import 'package:equatable/equatable.dart';
 class AddressDetailsModel extends Equatable {
   const AddressDetailsModel({
     this.street,
-    this.district,
     this.subDistrict,
+    this.district,
     this.municipality,
     this.zipCode,
     this.province,
@@ -23,9 +23,9 @@ class AddressDetailsModel extends Equatable {
 
   final String? street;
 
-  final String? district;
-
   final String? subDistrict;
+
+  final String? district;
 
   final String? municipality;
 
@@ -38,8 +38,8 @@ class AddressDetailsModel extends Equatable {
   @override
   List<Object?> get props => [
         street,
-        district,
         subDistrict,
+        district,
         municipality,
         zipCode,
         province,
@@ -53,8 +53,8 @@ extension AddressDetailsModelX on AddressDetailsModel {
   String get toPrettyAddress {
     return <String?>[
       street,
-      district,
       subDistrict,
+      district,
       municipality,
       zipCode,
       province,

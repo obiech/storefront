@@ -20,6 +20,26 @@ class SearchLocationBloc
       transformer: debounce(const Duration(milliseconds: 500)),
     );
     on<QueryDeleted>((event, emit) => _onQueryDeleted(emit));
+    on<LocationSelected>((event, emit) => _onLocationSelected(emit, event));
+  }
+
+  Future<void> _onLocationSelected(
+    Emitter<SearchLocationState> emit,
+    LocationSelected event,
+  ) async {
+    emit(const SearchLocationLoading());
+
+    final addressOrFailure =
+        await _searchRepository.getLocationDetail(event.placeId);
+
+    addressOrFailure.fold(
+      (failure) {
+        emit(LocationSelectError(failure.message));
+      },
+      (address) {
+        emit(LocationSelectSuccess(address));
+      },
+    );
   }
 
   Future<void> _onQueryChanged(
