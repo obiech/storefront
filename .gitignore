@@ -60,3 +60,6 @@ injection.config.dart
 
 # VSCode
 .vscode/
+
+# iOs
+ios/firebase_app_id_file.json

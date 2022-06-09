@@ -1,0 +1,8 @@
+# TODO(obella): Setup flutter fire
+{
+  "file_generated_by": "FlutterFire CLI",
+  "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
+  "GOOGLE_APP_ID": #GOOGLE_APP_ID from GoogleService-Info.plist,
+  "FIREBASE_PROJECT_ID": #FIREBASE_PROJECT_ID from GoogleService-Info.plist,
+  "GCM_SENDER_ID": #GCM_SENDER_ID from GoogleService-Info.plist
+}

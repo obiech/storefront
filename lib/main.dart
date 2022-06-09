@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,53 +21,62 @@ import 'features/permission_handler/index.dart';
 import 'features/product_search/index.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: 'env/.env');
-  await Firebase.initializeApp();
-  await Hive.initFlutter();
+      await dotenv.load(fileName: 'env/.env');
+      await Firebase.initializeApp();
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-  // Dependency Injection
-  await configureInjection(determineEnvironment());
+      await Hive.initFlutter();
 
-  runApp(
-    /// Reserved for BLocs that are needed by various pages
-    /// but are difficult to scope
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          lazy: false,
-          create: (context) => getIt<CartBloc>()..add(const LoadCart()),
-        ),
-        BlocProvider(
-          lazy: false,
-          create: (_) =>
-              getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
-        ),
+      // Dependency Injection
+      await configureInjection(determineEnvironment());
 
-        /// Search
-        BlocProvider(
-          create: (_) => getIt<HomeNavCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<SearchHistoryCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<AutosuggestionBloc>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<SearchInventoryBloc>(),
-        ),
+      runApp(
+        /// Reserved for BLocs that are needed by various pages
+        /// but are difficult to scope
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              lazy: false,
+              create: (context) => getIt<CartBloc>()..add(const LoadCart()),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (_) =>
+                  getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
+            ),
 
-        /// Permission
-        BlocProvider(
-          create: (_) => getIt<PermissionHandlerCubit>(),
-        )
-      ],
-      child: AppWidget(
-        router: getIt<AppRouter>(),
-      ),
-    ),
+            /// Search
+            BlocProvider(
+              create: (_) => getIt<HomeNavCubit>(),
+            ),
+            BlocProvider(
+              create: (_) => getIt<SearchHistoryCubit>(),
+            ),
+            BlocProvider(
+              create: (_) => getIt<AutosuggestionBloc>(),
+            ),
+            BlocProvider(
+              create: (_) => getIt<SearchInventoryBloc>(),
+            ),
+
+            /// Permission
+            BlocProvider(
+              create: (_) => getIt<PermissionHandlerCubit>(),
+            )
+          ],
+          child: AppWidget(
+            router: getIt<AppRouter>(),
+          ),
+        ),
+      );
+    },
+    (error, stack) =>
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true),
   );
 }
 

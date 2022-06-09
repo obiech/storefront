@@ -40,3 +40,6 @@ Flutter/GoogleMaps.xcconfig
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# Flutter Fire file
+firebase_app_id_file.json
