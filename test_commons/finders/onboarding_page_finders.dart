@@ -10,6 +10,3 @@ Finder finderButtonRegister =
 
 Finder finderButtonLogin =
     find.byKey(const ValueKey(OnboardingViewKeys.buttonLogin));
-
-Finder finderButtonSkipOnboarding =
-    find.byKey(const ValueKey(OnboardingViewKeys.buttonSkipOnboarding));

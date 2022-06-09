@@ -6,7 +6,4 @@ class OnboardingViewKeys {
 
   /// Button to initiate Login process
   static const String buttonLogin = '${_base}_buttonLogin';
-
-  /// Button to skip Onboarding process
-  static const String buttonSkipOnboarding = '${_base}_buttonSkipOnboarding';
 }

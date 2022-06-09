@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/core.dart';
-import '../../../../di/injection.dart';
 import 'keys.dart';
 
 part 'parts/auth_buttons_section.dart';
@@ -33,14 +32,8 @@ class OnboardingView extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const DropezyTextLogo(),
-                    TextButtonSkip(
-                      key: const ValueKey(
-                        OnboardingViewKeys.buttonSkipOnboarding,
-                      ),
-                      onPressed: () => _skipOnboarding(context),
-                    ),
+                  children: const [
+                    DropezyTextLogo(),
                   ],
                 ),
                 const SizedBox(height: 20.0),
@@ -81,10 +74,5 @@ class OnboardingView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _skipOnboarding(BuildContext context) async {
-    await getIt<IPrefsRepository>().setIsOnBoarded(true);
-    context.router.replaceAll([const MainRoute()]);
   }
 }

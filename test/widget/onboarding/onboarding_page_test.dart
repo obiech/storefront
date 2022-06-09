@@ -59,7 +59,6 @@ void main() {
 
           expect(finderButtonLogin, findsOneWidget);
           expect(finderButtonRegister, findsOneWidget);
-          expect(finderButtonSkipOnboarding, findsOneWidget);
         },
       );
 
@@ -92,26 +91,6 @@ void main() {
           expect(routes.length, 1);
           final route = routes.first;
           expect(route, isA<RegistrationRoute>());
-        },
-      );
-
-      testWidgets(
-        "replaces route stack with MainPage when 'Skip Onboarding' is tapped "
-        'and sets onboarding boolean value to true',
-        (WidgetTester tester) async {
-          await pumpOnboardingPage(tester);
-
-          await tester.tap(finderButtonSkipOnboarding);
-          await tester.pumpAndSettle();
-
-          final routeStack = verify(() => router.replaceAll(captureAny()))
-              .captured
-              .first as List<PageRouteInfo>;
-
-          expect(routeStack.length, 1);
-          expect(routeStack.first, isA<MainRoute>());
-
-          verify(() => prefsRepository.setIsOnBoarded(true)).called(1);
         },
       );
     },
