@@ -32,6 +32,9 @@ class InventoryItemResults extends SearchInventoryState {
   /// Search Results
   final List<ProductModel> results;
 
+  /// The Dark Store ID where items are retrieved from
+  final String storeId;
+
   /// If inventory has reached last page
   final bool isAtEnd;
 
@@ -39,11 +42,12 @@ class InventoryItemResults extends SearchInventoryState {
   final bool isLoadingMore;
 
   const InventoryItemResults(
-    this.results, {
+    this.results,
+    this.storeId, {
     this.isAtEnd = false,
     this.isLoadingMore = false,
   });
 
   @override
-  List<Object> get props => [results, isAtEnd, isLoadingMore];
+  List<Object> get props => [results, storeId, isAtEnd, isLoadingMore];
 }

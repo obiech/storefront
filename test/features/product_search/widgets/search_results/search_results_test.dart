@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../../../commons.dart';
@@ -9,16 +11,14 @@ import '../../mocks.dart';
 import 'test.ext.dart';
 
 void main() {
+  const mockStoreId = 'store-id-1';
+
   late SearchInventoryBloc searchInventoryBloc;
-  late IProductSearchRepository repository;
-  late ISearchHistoryRepository searchHistoryRepository;
-
+  late DiscoveryCubit discoveryCubit;
   setUp(() {
-    repository = MockProductSearchRepository();
-    searchHistoryRepository = MockSearchHistoryRepository();
-
-    searchInventoryBloc =
-        SearchInventoryBloc(repository, searchHistoryRepository);
+    searchInventoryBloc = MockSearchInventoryBloc();
+    discoveryCubit = MockDiscoveryCubit();
+    when(() => discoveryCubit.state).thenReturn(mockStoreId);
   });
 
   setUpAll(() {
@@ -26,8 +26,12 @@ void main() {
   });
 
   testWidgets('When loading, a shimmer is shown', (WidgetTester tester) async {
-    searchInventoryBloc.emit(SearchingForItemInInventory());
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    when(() => searchInventoryBloc.state)
+        .thenReturn(SearchingForItemInInventory());
+    await tester.pumpSearchResultsWidget(
+      searchInventoryBloc,
+      discoveryCubit,
+    );
 
     for (int i = 0; i < 5; i++) {
       await tester.pump();
@@ -38,8 +42,8 @@ void main() {
 
   testWidgets('When no state is available nothing is shown',
       (WidgetTester tester) async {
-    searchInventoryBloc.emit(SearchInventoryInitial());
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    when(() => searchInventoryBloc.state).thenReturn(SearchInventoryInitial());
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
 
     expect(find.byType(SizedBox), findsNWidgets(1));
   });
@@ -47,8 +51,9 @@ void main() {
   testWidgets(
       'When inventory items are available, show GridList  list of items',
       (WidgetTester tester) async {
-    searchInventoryBloc.emit(const InventoryItemResults(pageInventory));
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    when(() => searchInventoryBloc.state)
+        .thenReturn(const InventoryItemResults(pageInventory, mockStoreId));
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
 
     expect(find.byType(GridView), findsOneWidget);
 

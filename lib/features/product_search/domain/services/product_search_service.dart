@@ -35,7 +35,8 @@ class ProductSearchService implements IProductSearchRepository {
 
   @override
   RepoResult<List<ProductModel>> searchInventoryForItems(
-    String query, {
+    String query,
+    String storeId, {
     int page = 0,
     int limit = 10,
   }) async {
@@ -43,8 +44,7 @@ class ProductSearchService implements IProductSearchRepository {
       final _result = await searchService.searchInventory(
         SearchInventoryRequest(
           query: query,
-          // TODO(obella465) - Get store once geo-spatial setup is done
-          storeId: 'store_11',
+          storeId: storeId,
           pageCurrent: page,
           pageSize: limit,
         ),

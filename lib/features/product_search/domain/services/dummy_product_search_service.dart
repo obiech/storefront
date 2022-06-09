@@ -27,7 +27,8 @@ class DummyProductSearchService implements IProductSearchRepository {
 
   @override
   RepoResult<List<ProductModel>> searchInventoryForItems(
-    String query, {
+    String query,
+    String storeId, {
     int page = 0,
     int limit = 10,
   }) async {

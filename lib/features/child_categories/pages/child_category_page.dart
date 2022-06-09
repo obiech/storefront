@@ -5,6 +5,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
+import '../../discovery/index.dart';
 import '../../home/index.dart';
 import '../index.dart';
 import '../widgets/widgets.dart';
@@ -32,6 +33,7 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
           create: (_) => getIt<CategoryProductCubit>()
             ..fetchCategoryProduct(
               parentCategoryModel.sortChildrenByName[0].categoryId,
+              context.read<DiscoveryCubit>().state ?? '',
             ),
         ),
       ],

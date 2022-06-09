@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../../discovery/index.dart';
 import '../../index.dart';
 
 part 'parts/image.dart';
@@ -30,9 +31,10 @@ class ChildCategoriesList extends StatelessWidget {
                   context.read<ChildCategoryCubit>().setActiveChildCategory(
                         childCategory,
                       );
-                  context
-                      .read<CategoryProductCubit>()
-                      .fetchCategoryProduct(childCategory.categoryId);
+                  context.read<CategoryProductCubit>().fetchCategoryProduct(
+                        childCategory.categoryId,
+                        context.read<DiscoveryCubit>().state ?? '',
+                      );
                 }
               },
               child: Column(

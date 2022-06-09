@@ -15,6 +15,7 @@ void main() {
   group(
     '[CartBloc]',
     () {
+      const mockStoreId = 'store-id-1';
       late CartBloc bloc;
       late ICartRepository cartRepository;
 
@@ -33,16 +34,15 @@ void main() {
         'when [LoadCart] event is added',
         () {
           const mockCart = cart_fixtures.mockCartModel;
-          const event = LoadCart();
+          const event = LoadCart(mockStoreId);
           void verifyFn(CartBloc bloc) =>
-              verify(() => bloc.cartRepository.loadCart(CartBloc.dummyStoreId))
-                  .called(1);
+              verify(() => bloc.cartRepository.loadCart(mockStoreId)).called(1);
 
           blocTest<CartBloc, CartState>(
             'should emit [CartLoaded] with Cart contents, loading set '
             'to false, and no error message',
             setUp: () {
-              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+              when(() => cartRepository.loadCart(mockStoreId))
                   .thenAnswer((_) async {
                 return right(mockCart);
               });
@@ -60,7 +60,7 @@ void main() {
             'should emit an empty [CartLoaded.success] '
             'when a [ResourceNotFoundFailure] is returned from cart repository',
             setUp: () {
-              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+              when(() => cartRepository.loadCart(mockStoreId))
                   .thenAnswer((_) async {
                 return left(ResourceNotFoundFailure());
               });
@@ -69,7 +69,7 @@ void main() {
             act: (bloc) => bloc.add(event),
             expect: () => <CartState>[
               const CartLoading(),
-              CartLoaded.success(CartModel.empty(CartBloc.dummyStoreId)),
+              CartLoaded.success(CartModel.empty(mockStoreId)),
             ],
             verify: verifyFn,
           );
@@ -78,7 +78,7 @@ void main() {
             'should emit [CartFailedToLoad] '
             'when a [Failure] is returned from cart repository',
             setUp: () {
-              when(() => cartRepository.loadCart(CartBloc.dummyStoreId))
+              when(() => cartRepository.loadCart(mockStoreId))
                   .thenAnswer((_) async {
                 return left(Failure('Failed to load cart'));
               });
@@ -210,7 +210,7 @@ void main() {
             () {
               const variantToEdit = variant_fixtures.variantMango;
               final initialCart = cart_fixtures.mockCartModel.copyWith(
-                storeId: CartBloc.dummyStoreId,
+                storeId: mockStoreId,
                 items: [
                   const CartItemModel(
                     variant: variantToEdit,
@@ -417,7 +417,7 @@ void main() {
                   void verifyFn(CartBloc bloc) {
                     verify(
                       () => bloc.cartRepository.removeItem(
-                        CartBloc.dummyStoreId,
+                        mockStoreId,
                         event.variant,
                       ),
                     );
@@ -430,7 +430,7 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.removeItem(
-                          CartBloc.dummyStoreId,
+                          mockStoreId,
                           event.variant,
                         ),
                       ).thenAnswer((_) async {
@@ -456,7 +456,7 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.removeItem(
-                          CartBloc.dummyStoreId,
+                          mockStoreId,
                           event.variant,
                         ),
                       ).thenAnswer((_) async {
@@ -486,7 +486,7 @@ void main() {
         () {
           const variantToRemove = variant_fixtures.variantMango;
           final initialCart = cart_fixtures.mockCartModel.copyWith(
-            storeId: CartBloc.dummyStoreId,
+            storeId: mockStoreId,
             items: [
               const CartItemModel(
                 variant: variantToRemove,
@@ -503,7 +503,7 @@ void main() {
           void verifyFn(CartBloc bloc) {
             verify(
               () => bloc.cartRepository.removeItem(
-                CartBloc.dummyStoreId,
+                mockStoreId,
                 event.variant,
               ),
             );
@@ -516,7 +516,7 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.removeItem(
-                  CartBloc.dummyStoreId,
+                  mockStoreId,
                   event.variant,
                 ),
               ).thenAnswer((_) async {
@@ -542,7 +542,7 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.removeItem(
-                  CartBloc.dummyStoreId,
+                  mockStoreId,
                   event.variant,
                 ),
               ).thenAnswer((_) async {

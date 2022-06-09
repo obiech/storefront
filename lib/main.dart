@@ -16,6 +16,7 @@ import 'di/di_environment.dart';
 import 'di/injection.dart';
 import 'features/address/index.dart';
 import 'features/cart_checkout/index.dart';
+import 'features/discovery/index.dart';
 import 'features/home/index.dart';
 import 'features/permission_handler/index.dart';
 import 'features/product_search/index.dart';
@@ -42,7 +43,11 @@ Future<void> main() async {
           providers: [
             BlocProvider(
               lazy: false,
-              create: (context) => getIt<CartBloc>()..add(const LoadCart()),
+              create: (context) => getIt<DiscoveryCubit>()..loadStore(),
+            ),
+            BlocProvider(
+              lazy: false,
+              create: (context) => getIt<CartBloc>(),
             ),
             BlocProvider(
               lazy: false,

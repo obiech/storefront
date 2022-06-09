@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
@@ -17,6 +18,7 @@ extension WidgetTesterX on WidgetTester {
     AutosuggestionBloc autosuggestionBloc,
     SearchHistoryCubit historyCubit,
     HomeNavCubit homeNavCubit,
+    DiscoveryCubit discoveryCubit,
   ) async {
     await pumpWidget(
       MultiBlocProvider(
@@ -25,6 +27,7 @@ extension WidgetTesterX on WidgetTester {
           BlocProvider(create: (context) => autosuggestionBloc),
           BlocProvider(create: (context) => historyCubit),
           BlocProvider(create: (context) => homeNavCubit),
+          BlocProvider(create: (context) => discoveryCubit),
         ],
         child: const MaterialApp(
           home: Scaffold(
@@ -41,8 +44,11 @@ void main() {
   late AutosuggestionBloc autosuggestionBloc;
   late SearchHistoryCubit historyCubit;
   late HomeNavCubit homeNavCubit;
+  late DiscoveryCubit discoveryCubit;
   late ISearchHistoryRepository searchHistoryRepository;
   late IProductSearchRepository repository;
+
+  const mockStoreId = 'store-id-1';
 
   setUp(() {
     repository = MockProductSearchRepository();
@@ -53,8 +59,13 @@ void main() {
       (_) => Stream.fromIterable([[]]),
     );
 
-    searchInventoryCubit =
-        SearchInventoryBloc(repository, searchHistoryRepository);
+    discoveryCubit = MockDiscoveryCubit();
+    when(() => discoveryCubit.state).thenReturn(mockStoreId);
+
+    searchInventoryCubit = SearchInventoryBloc(
+      repository,
+      searchHistoryRepository,
+    );
     autosuggestionBloc = AutosuggestionBloc(repository);
     historyCubit = SearchHistoryCubit(searchHistoryRepository);
     homeNavCubit = HomeNavCubit();
@@ -72,6 +83,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      discoveryCubit,
     );
 
     await tester.pumpAndSettle();
@@ -87,6 +99,7 @@ void main() {
     when(
       () => repository.searchInventoryForItems(
         any(),
+        any(),
         limit: any(named: 'limit'),
       ),
     ).thenAnswer((_) async => right(pageInventory));
@@ -99,6 +112,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      discoveryCubit,
     );
 
     await tester.pumpAndSettle();
@@ -132,6 +146,7 @@ void main() {
     when(
       () => repository.searchInventoryForItems(
         any(),
+        any(),
         limit: any(named: 'limit'),
       ),
     ).thenAnswer((_) async => right(pageInventory));
@@ -141,6 +156,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      discoveryCubit,
     );
 
     await tester.pumpAndSettle();
@@ -161,6 +177,7 @@ void main() {
       verify(
         () => repository.searchInventoryForItems(
           query,
+          any(),
           limit: any(named: 'limit'),
         ),
       ).called(1);

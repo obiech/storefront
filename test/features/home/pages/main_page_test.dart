@@ -8,14 +8,13 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 import 'package:storefront_app/features/profile/pages/profile_page.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../src/mock_customer_service_client.dart';
-import '../../cart_checkout/mocks.dart';
-import '../../product_search/mocks.dart';
 import '../mocks.dart';
 import 'main_page_finder.dart';
 
@@ -27,6 +26,7 @@ extension WidgetTesterX on WidgetTester {
     required HomeNavCubit homeNavCubit,
     required SearchInventoryBloc searchInventoryBloc,
     required SearchHistoryCubit searchHistoryCubit,
+    required DiscoveryCubit discoveryCubit,
   }) async {
     late BuildContext ctx;
 
@@ -44,6 +44,9 @@ extension WidgetTesterX on WidgetTester {
           ),
           BlocProvider(
             create: (context) => searchHistoryCubit,
+          ),
+          BlocProvider(
+            create: (context) => discoveryCubit,
           ),
         ],
         child: MaterialApp.router(
@@ -67,6 +70,7 @@ void main() {
   late HomeNavCubit homeNavCubit;
   late SearchInventoryBloc searchInventoryBloc;
   late SearchHistoryCubit searchHistoryCubit;
+  late DiscoveryCubit discoveryCubit;
 
   setUp(() {
     final prefs = MockIPrefsRepository();
@@ -79,6 +83,7 @@ void main() {
     homeNavCubit = MockHomeNavCubit();
     searchInventoryBloc = MockSearchInventoryBloc();
     searchHistoryCubit = MockSearchHistoryCubit();
+    discoveryCubit = MockDiscoveryCubit();
 
     late UserCredentialsStorage userCredsStorage;
     late ParentCategoriesCubit parentCategoriesCubit;
@@ -159,6 +164,7 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
+        discoveryCubit: discoveryCubit,
       );
 
       await tester.pumpAndSettle();
@@ -180,6 +186,7 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
+        discoveryCubit: discoveryCubit,
       );
 
       await tester.pumpAndSettle();
@@ -201,6 +208,7 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
+        discoveryCubit: discoveryCubit,
       );
 
       await tester.pumpAndSettle();

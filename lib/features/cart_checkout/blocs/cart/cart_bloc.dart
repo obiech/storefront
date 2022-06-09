@@ -30,13 +30,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveCartItem>(_onRemoveCartItem);
   }
 
-  //TODO (leovinsen): Revisit how to obtain storeId on cold start
-  // when store coverage bloc is available. Perhaps by having a
-  // StreamSubscription on said bloc.
-  /// In the meantime, when trying to run gRPC version of CartService,
-  /// replace this with store ID from your local Mongo instance
-  static const dummyStoreId = 'dummy-store-id';
-
   final ICartRepository cartRepository;
 
   FutureOr<void> _onLoadCart(
@@ -45,11 +38,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     emit(const CartLoading());
 
-    final result = await cartRepository.loadCart(dummyStoreId);
+    final result = await cartRepository.loadCart(event.storeId);
 
     result.fold(
       (failure) => failure is ResourceNotFoundFailure
-          ? emit(CartLoaded.success(CartModel.empty(dummyStoreId)))
+          ? emit(CartLoaded.success(CartModel.empty(event.storeId)))
           : emit(const CartFailedToLoad()),
       (cart) => emit(CartLoaded.success(cart)),
     );

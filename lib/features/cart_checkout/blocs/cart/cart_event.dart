@@ -7,8 +7,16 @@ abstract class CartEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+/// Loads user's cart at Dark Store identified [storeId].
+///
+/// Will be called whenever Store ID is changed.
 class LoadCart extends CartEvent {
-  const LoadCart();
+  const LoadCart(this.storeId);
+
+  final String storeId;
+
+  @override
+  List<Object?> get props => [storeId];
 }
 
 /// When user adds a product variant into the cart

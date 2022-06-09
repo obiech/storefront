@@ -15,15 +15,20 @@ void main() {
 
   String _query = '';
   const limitPerPage = 5;
+  const mockStoreId = 'store-id-1';
 
   setUp(() {
     repository = MockProductSearchRepository();
     searchHistoryRepository = MockSearchHistoryRepository();
-    bloc = SearchInventoryBloc(repository, searchHistoryRepository);
+    bloc = SearchInventoryBloc(
+      repository,
+      searchHistoryRepository,
+    );
 
     when(
       () => repository.searchInventoryForItems(
         any(),
+        mockStoreId,
         page: any(named: 'page'),
         limit: any(named: 'limit'),
       ),
@@ -58,15 +63,19 @@ void main() {
     'When [searchInventory] is called, page, query & inventory are reset '
     'then loading shown and if successful a full list of inventory results emitted',
     build: () => bloc,
-    act: (cubit) => cubit.add(SearchInventory('beans')),
+    act: (cubit) => cubit.add(SearchInventory('beans', mockStoreId)),
     expect: () => [
       isA<SearchingForItemInInventory>(),
-      InventoryItemResults(pageInventory.take(limitPerPage).toList())
+      InventoryItemResults(
+        pageInventory.take(limitPerPage).toList(),
+        mockStoreId,
+      )
     ],
     verify: (bloc) {
       verify(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
         ),
       ).called(1);
@@ -84,12 +93,18 @@ void main() {
       when(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
         ),
       ).thenAnswer((_) async => left(NoInventoryResults()));
     },
     build: () => bloc,
-    act: (cubit) => cubit.add(SearchInventory('beans')),
+    act: (cubit) => cubit.add(
+      SearchInventory(
+        'beans',
+        mockStoreId,
+      ),
+    ),
     expect: () => [
       isA<SearchingForItemInInventory>(),
       isA<ErrorOccurredSearchingForItem>(),
@@ -102,12 +117,13 @@ void main() {
       when(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
         ),
       ).thenAnswer((_) async => left(NetworkError(Exception().toFailure)));
     },
     build: () => bloc,
-    act: (cubit) => cubit.add(SearchInventory('beans')),
+    act: (cubit) => cubit.add(SearchInventory('beans', mockStoreId)),
     expect: () => [
       isA<SearchingForItemInInventory>(),
       isA<ErrorOccurredSearchingForItem>(),
@@ -119,7 +135,7 @@ void main() {
     'When no items are returned during [loadMoreItems], we assume that the last page has been reached',
     build: () => bloc,
     act: (cubit) async {
-      cubit.add(SearchInventory('beans'));
+      cubit.add(SearchInventory('beans', mockStoreId));
       await Future.delayed(const Duration(milliseconds: 400));
       cubit.add(LoadMoreItems());
       await Future.delayed(const Duration(milliseconds: 400));
@@ -139,15 +155,27 @@ void main() {
 
       return [
         isA<SearchingForItemInInventory>(),
-        InventoryItemResults(pageOneResults),
-        InventoryItemResults(pageOneResults, isLoadingMore: true),
-        InventoryItemResults(pageOneResults + pageTwoResults, isAtEnd: true),
+        InventoryItemResults(
+          pageOneResults,
+          mockStoreId,
+        ),
+        InventoryItemResults(
+          pageOneResults,
+          mockStoreId,
+          isLoadingMore: true,
+        ),
+        InventoryItemResults(
+          pageOneResults + pageTwoResults,
+          mockStoreId,
+          isAtEnd: true,
+        ),
       ];
     },
     verify: (_) {
       verify(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
         ),
       ).called(1);
@@ -155,6 +183,7 @@ void main() {
       verify(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
           page: 1,
         ),
@@ -171,6 +200,7 @@ void main() {
       when(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
           page: 1,
         ),
@@ -178,27 +208,29 @@ void main() {
     },
     build: () => bloc,
     act: (cubit) async {
-      cubit.add(SearchInventory('beans'));
+      cubit.add(SearchInventory('beans', mockStoreId));
       await Future.delayed(const Duration(milliseconds: 400));
       cubit.add(LoadMoreItems());
       await Future.delayed(const Duration(milliseconds: 400));
     },
     expect: () => [
       isA<SearchingForItemInInventory>(),
-      InventoryItemResults(pageOneResults),
-      InventoryItemResults(pageOneResults, isLoadingMore: true),
-      InventoryItemResults(pageOneResults),
+      InventoryItemResults(pageOneResults, mockStoreId),
+      InventoryItemResults(pageOneResults, mockStoreId, isLoadingMore: true),
+      InventoryItemResults(pageOneResults, mockStoreId),
     ],
     verify: (bloc) {
       verify(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
         ),
       ).called(1);
       verify(
         () => repository.searchInventoryForItems(
           any(),
+          mockStoreId,
           limit: any(named: 'limit'),
           page: 1,
         ),

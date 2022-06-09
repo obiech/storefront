@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../discovery/blocs/discovery/discovery_cubit.dart';
 import '../../home/index.dart';
 import '../index.dart';
 
@@ -68,15 +69,27 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final res = context.res;
-    return BlocListener<HomeNavCubit, HomeNavState>(
-      listenWhen: (prevState, currentState) =>
-          prevState.route != SearchRoute.name &&
-          currentState.route == SearchRoute.name,
-      listener: (context, state) {
-        /// Trigger fresh [SearchPageState] when user
-        /// is returning to Search bottom sheet tab.
-        _setUpPage();
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<HomeNavCubit, HomeNavState>(
+          listenWhen: (prevState, currentState) =>
+              prevState.route != SearchRoute.name &&
+              currentState.route == SearchRoute.name,
+          listener: (context, state) {
+            /// Trigger fresh [SearchPageState] when user
+            /// is returning to Search bottom sheet tab.
+            _setUpPage();
+          },
+        ),
+        BlocListener<DiscoveryCubit, String?>(
+          listener: (context, state) {
+            // TODO (leovinsen): Think of a better approach, for example using Streams
+            context
+                .read<SearchInventoryBloc>()
+                .add(ChangeInventoryStore(state ?? ''));
+          },
+        ),
+      ],
       child: DropezyScaffold(
         useRoundedBody: true,
         toolbarHeight: res.dimens.appBarSize + 20,
@@ -101,14 +114,24 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
             context.read<AutosuggestionBloc>().add(GetSuggestions(query));
 
             /// Set-off search to search service
-            context.read<SearchInventoryBloc>().add(SearchInventory(query));
+            context.read<SearchInventoryBloc>().add(
+                  SearchInventory(
+                    query,
+                    context.read<DiscoveryCubit>().state ?? '',
+                  ),
+                );
           },
           onSearch: (query) {
             _pageState.value = SearchPageState.PRODUCT_SEARCH;
             context.read<SearchHistoryCubit>().addSearchQuery(query);
 
             /// Set-off search to search service
-            context.read<SearchInventoryBloc>().add(SearchInventory(query));
+            context.read<SearchInventoryBloc>().add(
+                  SearchInventory(
+                    query,
+                    context.read<DiscoveryCubit>().state ?? '',
+                  ),
+                );
           },
           onCleared: () {
             /// Reset State

@@ -5,10 +5,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/discovery/blocs/discovery/discovery_cubit.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../../../commons.dart';
-import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 import 'test.ext.dart';
 
@@ -16,22 +16,15 @@ Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'env/.env');
 
+  const mockStoreId = 'store-id-1';
+
   late SearchInventoryBloc searchInventoryBloc;
-  late IProductSearchRepository productSearchService;
-  late ISearchHistoryRepository searchHistoryRepository;
-  late SearchServiceClient searchServiceClient;
+  late DiscoveryCubit discoveryCubit;
 
   setUp(() {
-    searchServiceClient = MockSearchServiceClient();
-    productSearchService = ProductSearchService(searchServiceClient);
-    searchHistoryRepository = MockSearchHistoryRepository();
-    searchInventoryBloc =
-        SearchInventoryBloc(productSearchService, searchHistoryRepository);
-
-    registerFallbackValue(SearchInventoryRequest(query: 'susu'));
-
-    when(() => searchHistoryRepository.addSearchQuery(any()))
-        .thenAnswer((_) async => []);
+    searchInventoryBloc = MockSearchInventoryBloc();
+    discoveryCubit = MockDiscoveryCubit();
+    when(() => discoveryCubit.state).thenReturn(mockStoreId);
   });
 
   setUpAll(() {
@@ -66,12 +59,16 @@ Future<void> main() async {
       ],
     );
 
-    when(() => searchServiceClient.searchInventory(any()))
-        .thenAnswer((_) => MockResponseFuture.value(inventoryResponse));
+    when(() => searchInventoryBloc.state).thenReturn(
+      InventoryItemResults(
+        inventoryResponse.results.toModel,
+        mockStoreId,
+      ),
+    );
 
     /// act
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
-    searchInventoryBloc.add(SearchInventory('susu'));
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
+    searchInventoryBloc.add(SearchInventory('susu', mockStoreId));
 
     await tester.runAsync(() async {
       await Future.delayed(const Duration(milliseconds: 400));

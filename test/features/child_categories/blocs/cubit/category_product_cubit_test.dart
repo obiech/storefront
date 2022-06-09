@@ -46,7 +46,7 @@ void main() {
             },
             build: () => createCubit(),
             act: (cubit) => [
-              cubit.fetchCategoryProduct('4', storeId: 'dummy-storeId'),
+              cubit.fetchCategoryProduct('4', 'dummy-storeId'),
             ],
             expect: () => [
               LoadingCategoryProductState(),
@@ -77,8 +77,7 @@ void main() {
             seed: () => LoadedCategoryProductState(
               fixtures.fakeCategoryProductList,
             ),
-            act: (cubit) =>
-                [cubit.fetchCategoryProduct('2', storeId: 'dummy-storeId')],
+            act: (cubit) => [cubit.fetchCategoryProduct('2', 'dummy-storeId')],
             expect: () => [
               LoadingCategoryProductState(),
               LoadedCategoryProductState(
@@ -107,8 +106,7 @@ void main() {
               );
             },
             build: () => createCubit(),
-            act: (cubit) =>
-                cubit.fetchCategoryProduct('3', storeId: 'dummy-storeId'),
+            act: (cubit) => cubit.fetchCategoryProduct('3', 'dummy-storeId'),
             expect: () => [
               LoadingCategoryProductState(),
               const ErrorCategoryProductState(

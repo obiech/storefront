@@ -11,7 +11,8 @@ abstract class IProductSearchRepository {
 
   /// Get Product Inventory Search Results
   RepoResult<List<ProductModel>> searchInventoryForItems(
-    String query, {
+    String query,
+    String storeId, {
     int page = 0,
     int limit = 10,
   });

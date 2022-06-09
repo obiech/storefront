@@ -47,6 +47,7 @@ class SearchInventoryBloc
 
     final _failureOrResult = await repository.searchInventoryForItems(
       _query,
+      event.storeId,
       limit: _pageSize,
     );
 
@@ -58,6 +59,7 @@ class SearchInventoryBloc
       emit(
         InventoryItemResults(
           List.of(_inventory),
+          event.storeId,
           isAtEnd: inventory.length < _pageSize,
         ),
       );
@@ -76,19 +78,37 @@ class SearchInventoryBloc
         !(state as InventoryItemResults).isAtEnd) {
       // Show loading more cards
       final currentState = state as InventoryItemResults;
-      emit(InventoryItemResults(currentState.results, isLoadingMore: true));
+      emit(
+        InventoryItemResults(
+          currentState.results,
+          currentState.storeId,
+          isLoadingMore: true,
+        ),
+      );
 
       final _resultOrFailure = await repository.searchInventoryForItems(
         _query,
+        currentState.storeId,
         page: _page + 1,
         limit: _pageSize,
       );
 
       _resultOrFailure.fold((failure) {
         if (failure is NoInventoryResults) {
-          emit(InventoryItemResults(List.of(_inventory), isAtEnd: true));
+          emit(
+            InventoryItemResults(
+              List.of(_inventory),
+              currentState.storeId,
+              isAtEnd: true,
+            ),
+          );
         } else {
-          emit(InventoryItemResults(List.of(_inventory)));
+          emit(
+            InventoryItemResults(
+              List.of(_inventory),
+              currentState.storeId,
+            ),
+          );
         }
       }, (inventory) {
         _page++;
@@ -96,6 +116,7 @@ class SearchInventoryBloc
         emit(
           InventoryItemResults(
             List.of(_inventory),
+            currentState.storeId,
             isAtEnd: inventory.length < _pageSize,
           ),
         );
