@@ -664,6 +664,15 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get viewCart => 'Lihat Keranjang';
 
+  @override
+  String get isThisReallyYourLocation => 'Apakah benar ini lokasi kamu?';
+
+  @override
+  String get locationConfirm => 'Konfirmasi Lokasi';
+
+  @override
+  String get viewMap => 'Lihat Peta';
+
   /// Help Page
   @override
   String get contactUs => 'Hubungi Kami';

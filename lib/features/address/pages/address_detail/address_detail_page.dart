@@ -75,7 +75,9 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                   ),
                                   onTap: (latLng) {
                                     context.pushRoute(
-                                      const AddressPinpointRoute(),
+                                      AddressPinpointRoute(
+                                        cameraTarget: state.latLng,
+                                      ),
                                     );
                                   },
                                   myLocationButtonEnabled: false,

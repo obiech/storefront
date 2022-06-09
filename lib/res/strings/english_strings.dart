@@ -664,6 +664,15 @@ class EnglishStrings implements BaseStrings {
   @override
   String get viewCart => 'View Cart';
 
+  @override
+  String get isThisReallyYourLocation => 'Is this really your location?';
+
+  @override
+  String get locationConfirm => 'Location Confirm';
+
+  @override
+  String get viewMap => 'View Map';
+
   /// Help Page
   @override
   String get contactUs => 'Contact Us';

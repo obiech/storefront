@@ -449,6 +449,7 @@ abstract class BaseStrings {
 
   /// Product Details Page
   String get productDetails;
+
   String get variants;
 
   String get pay;
@@ -464,4 +465,11 @@ abstract class BaseStrings {
   FAQ get faqs;
 
   PaymentInstructions get paymentInstructions;
+
+  /// confirm Location.
+  String get isThisReallyYourLocation;
+
+  String get locationConfirm;
+
+  String get viewMap;
 }

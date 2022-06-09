@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places_service/places_service.dart';
 import 'package:storefront_app/core/core.dart';
 
+// TODO(Obiechina) Replace PlacesAutoCompleteResult.
 class PlaceSuggestionTile extends StatelessWidget {
   final PlacesAutoCompleteResult place;
 
@@ -9,6 +10,18 @@ class PlaceSuggestionTile extends StatelessWidget {
     Key? key,
     required this.place,
   }) : super(key: key);
+
+  factory PlaceSuggestionTile.address({
+    required String mainAddress,
+    required String description,
+  }) {
+    return PlaceSuggestionTile(
+      place: PlacesAutoCompleteResult(
+        mainText: mainAddress,
+        description: description,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
