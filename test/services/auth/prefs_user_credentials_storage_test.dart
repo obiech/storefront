@@ -148,5 +148,25 @@ void main() {
         },
       );
     });
+
+    group('[signOutApps()]', () {
+      test(
+        'should clear user token and phone number from [SharedPreferences] '
+        'when user is sign out',
+        () async {
+          when(() => sharedPrefs.clear()).thenAnswer((_) async => true);
+
+          // Initial state
+          expect(credentialsStorage.credsIsCached, false);
+
+          await credentialsStorage.signOutApps();
+
+          // Cache should be null, and keys removed from [SharedPreferences]
+          expect(credentialsStorage.creds, null);
+          expect(credentialsStorage.credsIsCached, false);
+          verify(() => sharedPrefs.clear()).called(1);
+        },
+      );
+    });
   });
 }

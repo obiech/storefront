@@ -37,6 +37,18 @@ void main() {
       );
     });
 
+    test(
+      'should call [UserCredentialsStorage.signOutApps()] '
+      'when [FirebaseAuthService.signOut] is called',
+      () async {
+        when(() => credentialsStorage.signOutApps()).thenAnswer((_) async {});
+
+        await service.signOut();
+
+        verify(() => credentialsStorage.signOutApps()).called(1);
+      },
+    );
+
     group('[onFirebaseUserChanged()]', () {
       test(
         'Calls [UserCredentialsStorage.unpersistCredentials()] if user is null',

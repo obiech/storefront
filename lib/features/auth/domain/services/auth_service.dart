@@ -36,6 +36,8 @@ abstract class AuthService {
   /// Check submitted OTP against sent OTP
   Future<void> verifyOtp(String otp);
 
+  Future<void> signOut();
+
   @protected
   @visibleForTesting
   void addToPhoneVerificationStream(PhoneVerificationResult result) {

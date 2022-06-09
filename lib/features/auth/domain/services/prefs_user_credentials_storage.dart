@@ -62,4 +62,13 @@ class PrefsUserCredentialsStorage extends UserCredentialsStorage {
     credsIsCached = false;
     addToStream(creds);
   }
+
+  @override
+  Future<void> signOutApps() async {
+    await prefs.clear();
+
+    creds = null;
+    credsIsCached = false;
+    addToStream(creds);
+  }
 }

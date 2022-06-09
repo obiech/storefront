@@ -24,4 +24,7 @@ abstract class UserCredentialsStorage {
 
   /// Remove [UserCredentials] from storage.
   Future<void> unpersistCredentials();
+
+  /// Remove [UserCredentials] from storage and clear prefs
+  Future<void> signOutApps();
 }

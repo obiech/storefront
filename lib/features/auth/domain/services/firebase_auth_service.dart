@@ -42,7 +42,7 @@ class FirebaseAuthService extends AuthService {
   @visibleForTesting
   Future<void> onFirebaseUserChanged(User? user) async {
     if (user == null) {
-      storage.unpersistCredentials();
+      await storage.unpersistCredentials();
       return;
     }
 
@@ -147,5 +147,10 @@ class FirebaseAuthService extends AuthService {
   void dispose() {
     _subscriptionFirebaseUserChanges.cancel();
     super.dispose();
+  }
+
+  @override
+  Future<void> signOut() async {
+    await storage.signOutApps();
   }
 }

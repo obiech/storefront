@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
 
 import '../../../core/core.dart';
+import '../../../di/injection.dart';
 
 class ProfileSignOutBottomSheet extends StatelessWidget {
   const ProfileSignOutBottomSheet({Key? key}) : super(key: key);
@@ -28,8 +30,9 @@ class ProfileSignOutBottomSheet extends StatelessWidget {
       ),
       primaryButton: DropezyButton.primary(
         label: context.res.strings.yesSignOut,
-        onPressed: () {
-          // TODO (Jonathan) : implements sign out in next ticket
+        onPressed: () async {
+          getIt<AuthService>().signOut();
+          context.router.replaceAll([const OnboardingRoute()]);
         },
       ),
       secondaryButton: DropezyButton(
@@ -43,7 +46,7 @@ class ProfileSignOutBottomSheet extends StatelessWidget {
             .withLineHeight(24),
         backgroundColor: context.res.colors.lightBlue,
         onPressed: () {
-          context.router.pop();
+          Navigator.of(context).pop();
         },
       ),
     );
