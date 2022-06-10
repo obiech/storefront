@@ -31,22 +31,30 @@ class CheckoutButton extends StatelessWidget {
         }
       },
       builder: (context, checkoutState) {
-        return BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
-          builder: (context, paymentMethodState) {
-            return DropezyButton.primary(
-              key: const ValueKey(CheckoutKeys.buy),
-              label: 'Bayar',
-              textStyle: res.styles.button.copyWith(fontSize: 14),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 10,
-              ),
-              isLoading: checkoutState is LoadingPaymentCheckout,
-              onPressed: paymentMethodState is LoadedPaymentMethods
-                  ? () async => context
-                      .read<PaymentCheckoutCubit>()
-                      .checkoutPayment(paymentMethodState.activePaymentMethod)
-                  : null,
+        return BlocBuilder<CartBloc, CartState>(
+          builder: (context, cartState) {
+            return BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
+              builder: (context, paymentMethodState) {
+                final isCalculatingSummary =
+                    cartState is CartLoaded && cartState.isCalculatingSummary;
+                return DropezyButton.primary(
+                  key: const ValueKey(CheckoutKeys.buy),
+                  label: res.strings.pay,
+                  textStyle: res.styles.button.copyWith(fontSize: 14),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 10,
+                  ),
+                  isLoading: checkoutState is LoadingPaymentCheckout,
+                  onPressed: paymentMethodState is LoadedPaymentMethods &&
+                          !isCalculatingSummary
+                      ? () async =>
+                          context.read<PaymentCheckoutCubit>().checkoutPayment(
+                                paymentMethodState.activePaymentMethod,
+                              )
+                      : null,
+                );
+              },
             );
           },
         );

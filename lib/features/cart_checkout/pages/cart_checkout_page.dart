@@ -23,12 +23,7 @@ class CartCheckoutPage extends StatelessWidget {
           Expanded(
             child: CartBodyWidget(),
           ),
-          CartCheckout(
-            price: '10300',
-            discount: '12300',
-            preferredPayment: 'OVO',
-            points: '100',
-          ),
+          CartCheckout(),
         ],
       ),
     );

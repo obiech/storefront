@@ -4,160 +4,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/core/utils/string.ext.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
+import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_button.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/keys.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/keys.dart';
+import 'package:storefront_app/features/cart_checkout/widgets/payment_method/selector.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/widgets.dart';
 
+import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 
 void main() {
   late IPaymentRepository _paymentMethodsRepository;
   late PaymentMethodCubit _cubit;
+  late CartBloc _cartBloc;
+  late CartModel _cartModel;
+
   setUp(() {
     _paymentMethodsRepository = MockPaymentMethodRepository();
     _cubit = PaymentMethodCubit(_paymentMethodsRepository);
+    _cartBloc = MockCartBloc();
+    _cartModel = mockCartModel;
   });
 
   group(
     'Cart Checkout Widget',
     () {
-      Future<void> _pumpTestWidget(
-        WidgetTester tester, {
-        required String price,
-        String? discount,
-        String? points,
-        String? preferredPaymentMethod,
-      }) =>
-          tester.pumpWidget(
-            MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => _cubit,
-                ),
-                BlocProvider(
-                  create: (context) =>
-                      PaymentCheckoutCubit(_paymentMethodsRepository),
-                ),
-              ],
-              child: MaterialApp(
-                home: Scaffold(
-                  body: CartCheckout(
-                    price: price,
-                    discount: discount,
-                    preferredPayment: preferredPaymentMethod,
-                    points: points,
-                  ),
-                ),
+      Future<void> _pumpTestWidget(WidgetTester tester) {
+        return tester.pumpWidget(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => _cubit,
+              ),
+              BlocProvider(
+                create: (context) =>
+                    PaymentCheckoutCubit(_paymentMethodsRepository),
+              ),
+              BlocProvider(
+                create: (context) => _cartBloc,
+              ),
+            ],
+            child: const MaterialApp(
+              home: Scaffold(
+                body: CartCheckout(),
               ),
             ),
-          );
-
-      Future<void> _testWidgetForAmount(
-        WidgetTester tester, {
-        String price = '19000',
-        String? discount,
-        required String key,
-        required String result,
-      }) async {
-        await _pumpTestWidget(tester, price: price, discount: discount);
-        await tester.pumpAndSettle();
-
-        // assert
-        final _textWidget = tester.firstWidget(
-          find.byKey(
-            ValueKey(key),
           ),
-        ) as Text;
-
-        expect(_textWidget.data, result);
+        );
       }
 
-      const priceKey = CheckoutKeys.price;
-      const discountKey = CheckoutKeys.discount;
-
-      /// Price display tests
-      group('Checkout Price', () {
-        testWidgets(
-            'should display price in Rupiahs with 0dp for whole numbers',
-            (WidgetTester tester) async {
-          // Price
-          await _testWidgetForAmount(
-            tester,
-            key: priceKey,
-            price: '10800',
-            result: 'Rp 108',
-          );
-        });
-
-        testWidgets('should price in Rupiahs with 2dp for cents',
-            (WidgetTester tester) async {
-          // Price
-          await _testWidgetForAmount(
-            tester,
-            key: priceKey,
-            price: '10856',
-            result: 'Rp 108,56',
-          );
-
-          await _testWidgetForAmount(
-            tester,
-            key: priceKey,
-            price: '10800056',
-            result: 'Rp 108.000,56',
-          );
-        });
+      setUp(() {
+        when(() => _cartBloc.state)
+            .thenAnswer((_) => CartLoaded.success(_cartModel));
       });
 
-      /// Discount display tests
-      group('Checkout Discount', () {
-        testWidgets(
-            'should display discount in Rupiahs with 0dp for whole numbers',
-            (WidgetTester tester) async {
-          // Discount
-          await _testWidgetForAmount(
-            tester,
-            key: discountKey,
-            discount: '10800',
-            result: 'Rp 108',
-          );
-        });
-
-        testWidgets('should display discount in Rupiahs with 2dp for cents',
-            (WidgetTester tester) async {
-          // Discount
-          await _testWidgetForAmount(
-            tester,
-            key: discountKey,
-            discount: '10856',
-            result: 'Rp 108,56',
-          );
-
-          await _testWidgetForAmount(
-            tester,
-            key: discountKey,
-            discount: '10800056',
-            result: 'Rp 108.000,56',
-          );
-        });
-
-        testWidgets("should not display discount if it's not available",
-            (WidgetTester tester) async {
-          // Discount
-          await _pumpTestWidget(tester, price: '19000');
+      testWidgets(
+        'should display [CheckoutDetails], [PaymentMethodSelector] '
+        'and [CheckoutButton]',
+        (WidgetTester tester) async {
+          await _pumpTestWidget(tester);
           await tester.pumpAndSettle();
 
-          // assert
-          final _discountTextWidget = find.byKey(
-            const ValueKey(CheckoutKeys.discount),
-          );
-
-          expect(_discountTextWidget, findsNothing);
-        });
-      });
+          expect(find.byType(CheckoutDetails), findsOneWidget);
+          expect(find.byType(PaymentMethodSelector), findsOneWidget);
+          expect(find.byType(CheckoutButton), findsOneWidget);
+        },
+      );
 
       /// Payment method selection tests
       group('Payment method selector', () {
@@ -175,7 +90,7 @@ void main() {
         testWidgets('should display first payment method as default',
             (WidgetTester tester) async {
           /// Load Checkout sticky bottom sheet
-          await _pumpTestWidget(tester, price: '12000');
+          await _pumpTestWidget(tester);
           await tester.pumpAndSettle();
 
           /// Payment Selector widget is displayed
@@ -255,57 +170,57 @@ void main() {
         });*/
       });
 
-      /// Points display
-      group('Points display', () {
-        testWidgets(
-            'When no points are to be won '
-            'hide points display', (WidgetTester tester) async {
-          /// Load Checkout sticky bottom sheet
-          await _pumpTestWidget(tester, price: '12000');
-          await tester.pumpAndSettle();
+      /// Points display (TEMPORARILY HIDDEN)
+      // group('Points display', () {
+      //   testWidgets(
+      //       'When no points are to be won '
+      //       'hide points display', (WidgetTester tester) async {
+      //     /// Load Checkout sticky bottom sheet
+      //     await _pumpTestWidget(tester);
+      //     await tester.pumpAndSettle();
 
-          expect(
-            find.byKey(const ValueKey(CheckoutKeys.points)),
-            findsNothing,
-          );
-        });
+      //     expect(
+      //       find.byKey(const ValueKey(CheckoutKeys.points)),
+      //       findsNothing,
+      //     );
+      //   });
 
-        testWidgets(
-            'When points are to be won '
-            'show points display with right message',
-            (WidgetTester tester) async {
-          /// Load Checkout sticky bottom sheet
-          const pointsWon = '5000';
-          await _pumpTestWidget(tester, price: '12000', points: pointsWon);
-          await tester.pumpAndSettle();
+      //   testWidgets(
+      //       'When points are to be won '
+      //       'show points display with right message',
+      //       (WidgetTester tester) async {
+      //     /// Load Checkout sticky bottom sheet
+      //     const pointsWon = '5000';
+      //     await _pumpTestWidget(tester);
+      //     await tester.pumpAndSettle();
 
-          final pointsDisplayFinder =
-              find.byKey(const ValueKey(CheckoutKeys.points));
-          expect(
-            pointsDisplayFinder,
-            findsOneWidget,
-          );
+      //     final pointsDisplayFinder =
+      //         find.byKey(const ValueKey(CheckoutKeys.points));
+      //     expect(
+      //       pointsDisplayFinder,
+      //       findsOneWidget,
+      //     );
 
-          final pointsMessageFinder = find.descendant(
-            of: pointsDisplayFinder,
-            matching: find.byType(RichText),
-          );
+      //     final pointsMessageFinder = find.descendant(
+      //       of: pointsDisplayFinder,
+      //       matching: find.byType(RichText),
+      //     );
 
-          expect(pointsMessageFinder, findsOneWidget);
+      //     expect(pointsMessageFinder, findsOneWidget);
 
-          final pointsMessageWidget =
-              tester.firstWidget(pointsMessageFinder) as RichText;
+      //     final pointsMessageWidget =
+      //         tester.firstWidget(pointsMessageFinder) as RichText;
 
-          final pointsTextSpanWidget = (pointsMessageWidget.text as TextSpan)
-              .children
-              ?.first as TextSpan?;
+      //     final pointsTextSpanWidget = (pointsMessageWidget.text as TextSpan)
+      //         .children
+      //         ?.first as TextSpan?;
 
-          expect(
-            pointsTextSpanWidget?.text,
-            '${pointsWon.toIDRFormat()} coins',
-          );
-        });
-      });
+      //     expect(
+      //       pointsTextSpanWidget?.text,
+      //       '${pointsWon.toIDRFormat()} coins',
+      //     );
+      //   });
+      // });
     },
   );
 }

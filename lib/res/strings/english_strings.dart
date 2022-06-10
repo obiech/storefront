@@ -676,6 +676,9 @@ class EnglishStrings implements BaseStrings {
   String get variants => 'Variants';
 
   @override
+  String get pay => 'Pay';
+
+  @override
   String get faq => 'FAQ';
 
   @override

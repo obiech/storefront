@@ -676,6 +676,9 @@ class IndonesianStrings implements BaseStrings {
   String get variants => 'Varian';
 
   @override
+  String get pay => 'Bayar';
+
+  @override
   String get faq => 'FAQ';
 
   @override

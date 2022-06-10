@@ -16,6 +16,20 @@ const mockCartModel = CartModel(
   ),
 );
 
+const mockCartModelDiscounted = CartModel(
+  id: 'cart-1',
+  storeId: 'store-1',
+  items: [
+    CartItemModel(variant: variantMango, quantity: 1),
+  ],
+  paymentSummary: CartPaymentSummaryModel(
+    deliveryFee: '1500000',
+    discount: '100000',
+    subTotal: '1500000',
+    total: '1500000',
+  ),
+);
+
 final mockCartModelOutOfStock = mockCartModel.copyWith(
   items: [
     CartItemModel(variant: variantMango.copyWith(stock: 100), quantity: 1),

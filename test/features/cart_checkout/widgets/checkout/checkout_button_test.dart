@@ -8,16 +8,21 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_button.dart';
 
 import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
+import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../mocks.dart';
 
 void main() {
   group('[CheckoutButton]', () {
+    late CartBloc _cartBloc;
+    late CartModel _cartModel;
     late PaymentCheckoutCubit _cubit;
     late PaymentMethodCubit _paymentMethodsCubit;
     late IPaymentRepository _repository;
 
     setUp(() {
+      _cartBloc = MockCartBloc();
+      _cartModel = mockCartModel;
       _repository = MockPaymentMethodRepository();
       _cubit = PaymentCheckoutCubit(_repository);
 
@@ -33,6 +38,9 @@ void main() {
     Future<void> _pumpTestWidget(WidgetTester tester) => tester.pumpWidget(
           MultiBlocProvider(
             providers: [
+              BlocProvider(
+                create: (context) => _cartBloc,
+              ),
               BlocProvider(
                 create: (context) => _cubit,
               ),
@@ -55,6 +63,33 @@ void main() {
       when(() => _repository.getPaymentMethods())
           .thenAnswer((_) async => left(NoPaymentMethods()));
 
+      when(() => _cartBloc.state)
+          .thenAnswer((_) => CartLoaded.success(_cartModel));
+
+      /// act
+      await _pumpTestWidget(tester);
+      await tester.pumpAndSettle();
+
+      /// assert
+      expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+      expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
+
+      final checkoutElevatedButton = tester
+          .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton);
+      expect(checkoutElevatedButton.enabled, false);
+    });
+
+    testWidgets(
+        'When calculating cart summary '
+        'should be disabled', (WidgetTester tester) async {
+      /// arrange
+      when(() => _repository.getPaymentMethods()).thenAnswer(
+        (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      );
+
+      when(() => _cartBloc.state)
+          .thenAnswer((_) => CartLoaded.loading(_cartModel));
+
       /// act
       await _pumpTestWidget(tester);
       await tester.pumpAndSettle();
@@ -75,6 +110,9 @@ void main() {
       when(() => _repository.getPaymentMethods()).thenAnswer(
         (_) async => right(samplePaymentMethods.toPaymentDetails()),
       );
+
+      when(() => _cartBloc.state)
+          .thenAnswer((_) => CartLoaded.success(_cartModel));
 
       when(() => _repository.checkoutPayment(any())).thenAnswer((_) async {
         await Future.delayed(const Duration(milliseconds: 2));
@@ -115,6 +153,9 @@ void main() {
         'When there is an error checking out '
         'should show error snackbar', (WidgetTester tester) async {
       /// arrange
+      when(() => _cartBloc.state)
+          .thenAnswer((_) => CartLoaded.success(_cartModel));
+
       when(() => _repository.getPaymentMethods()).thenAnswer(
         (_) async => right(samplePaymentMethods.toPaymentDetails()),
       );
