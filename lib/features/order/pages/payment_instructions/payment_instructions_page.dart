@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
+
 import '../../index.dart';
 
 class PaymentInstructionsPage extends StatelessWidget {
@@ -23,8 +24,7 @@ class PaymentInstructionsPage extends StatelessWidget {
                 children: [
                   PaymentInformationSection(order: order),
                   const ThickDivider(),
-                  // TODO (Jonathan) : Replace container with help section
-                  Container(height: 300),
+                  const PaymentHelpSection(),
                 ],
               ),
               OrderActions(

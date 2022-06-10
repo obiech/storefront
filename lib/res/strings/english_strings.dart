@@ -1,6 +1,8 @@
 import 'base_strings.dart';
 import 'faq/english_faq/english_faq.dart';
 import 'faq/faq.dart';
+import 'payment_instruction/english_payment_instruction/payment_instruction_english.dart';
+import 'payment_instruction/payment_instructions.dart';
 
 class EnglishStrings implements BaseStrings {
   @override
@@ -459,6 +461,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get virtualAccount => 'Virtual Account';
 
+  @override
+  String get howToPay => 'How to Pay';
+
   /// Cart Page
   @override
   String get shoppingConfirmation => 'Shopping Confirmation';
@@ -676,6 +681,9 @@ class EnglishStrings implements BaseStrings {
   String get variants => 'Variants';
 
   @override
+  String maximumQty(int qty) => 'Maximum Quantity: $qty';
+
+  @override
   String get pay => 'Pay';
 
   @override
@@ -685,5 +693,5 @@ class EnglishStrings implements BaseStrings {
   FAQ get faqs => FAQEnglish();
 
   @override
-  String maximumQty(int qty) => 'Maximum Quantity: $qty';
+  PaymentInstructions get paymentInstructions => PaymentInstructionEnglish();
 }

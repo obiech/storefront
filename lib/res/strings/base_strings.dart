@@ -1,4 +1,5 @@
 import 'faq/faq.dart';
+import 'payment_instruction/payment_instructions.dart';
 
 /// Interface for strings
 abstract class BaseStrings {
@@ -294,6 +295,8 @@ abstract class BaseStrings {
 
   String get virtualAccount;
 
+  String get howToPay;
+
   /// Cart Page
   String get shoppingConfirmation;
 
@@ -455,4 +458,6 @@ abstract class BaseStrings {
   String get faq;
 
   FAQ get faqs;
+
+  PaymentInstructions get paymentInstructions;
 }

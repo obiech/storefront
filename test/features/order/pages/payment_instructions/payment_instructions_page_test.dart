@@ -26,12 +26,14 @@ void main() {
   });
 
   testWidgets(
-      'Should show [PaymentInformationSection] and [ContactSupportButton] '
-      'when [PaymentInstructionsPage] is shown', (tester) async {
-    await tester.pumpPaymentInstructionsPage(order: orderAwaitingPayment);
+    'Should show [PaymentInformationSection], [PaymentHelpSection] and [ContactSupportButton] '
+    'when [PaymentInstructionsPage] is shown',
+    (tester) async {
+      await tester.pumpPaymentInstructionsPage(order: orderAwaitingPayment);
 
-    expect(find.byType(PaymentInformationSection), findsOneWidget);
-    // TODO : add expect for payment help section here
-    expect(find.byType(ContactSupportButton), findsOneWidget);
-  });
+      expect(find.byType(PaymentInformationSection), findsOneWidget);
+      expect(find.byType(PaymentHelpSection), findsOneWidget);
+      expect(find.byType(ContactSupportButton), findsOneWidget);
+    },
+  );
 }

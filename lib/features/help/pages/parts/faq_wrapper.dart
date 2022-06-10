@@ -16,7 +16,7 @@ class _FAQWrapper extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: context.res.dimens.pagePadding,
       ),
-      child: DropezyExpansionTile(
+      child: DropezyExpansionTile.textSubtitle(
         title: questionAndAnswer.question,
         subtitle: questionAndAnswer.answer,
       ),
