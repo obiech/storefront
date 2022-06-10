@@ -10,10 +10,15 @@ import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/permission_handler/index.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group('ChangeAddressPage', () {
     late StackRouter stackRouter;
     late DeliveryAddressCubit deliveryAddressCubit;

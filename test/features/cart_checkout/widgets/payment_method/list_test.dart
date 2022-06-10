@@ -9,15 +9,22 @@ import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
 
 import '../../../../../test_commons/utils/payment_methods.dart';
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
   late IPaymentRepository _paymentMethodsRepository;
   late PaymentMethodCubit _cubit;
+
   setUp(() {
     _paymentMethodsRepository = MockPaymentMethodRepository();
     _cubit = PaymentMethodCubit(_paymentMethodsRepository);
   });
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     'Payment Methods List',
     () {

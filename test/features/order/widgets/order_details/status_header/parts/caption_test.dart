@@ -4,6 +4,8 @@ import 'package:storefront_app/core/utils/build_context.ext.dart';
 import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_details/status_header/widget.dart';
 
+import '../../../../../../../test_commons/utils/locale_setup.dart';
+
 void main() {
   /// Pumps [OrderStatusCaption] widget and tests for displayed text.
   ///
@@ -38,6 +40,10 @@ void main() {
       findsOneWidget,
     );
   }
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   group(
     '[OrderStatusCaption] should display text based on order status.',

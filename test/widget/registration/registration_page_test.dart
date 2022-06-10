@@ -10,6 +10,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/pages/registration/phone_already_registered_bottom_sheet.dart';
 
+import '../../../test_commons/utils/locale_setup.dart';
 import '../../src/mock_navigator.dart';
 import '../../src/mock_page_utils.dart';
 
@@ -26,6 +27,10 @@ Future<void> main() async {
 
   final verifyPhoneButtonFinder =
       find.byKey(const Key(RegistrationPage.keyVerifyPhoneNumberButton));
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   setUp(() {
     accountAvailabilityCubit = MockAccountAvailabilityCubit();

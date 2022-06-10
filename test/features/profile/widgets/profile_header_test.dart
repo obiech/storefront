@@ -5,9 +5,14 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/profile/index.dart';
 import 'package:storefront_app/features/profile/widgets/profile_header.dart';
 
+import '../../../commons.dart';
 import '../mocks.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group('ProfileHeader', () {
     late ProfileCubit profileCubit;
 

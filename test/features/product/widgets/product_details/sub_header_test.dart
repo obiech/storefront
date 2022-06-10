@@ -4,12 +4,14 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../commons.dart';
 
 void main() {
   late ProductModel mockProduct;
 
   setUpAll(() {
     mockProduct = pomegranate;
+    setUpLocaleInjection();
   });
 
   testWidgets('show product name in sub-header', (tester) async {

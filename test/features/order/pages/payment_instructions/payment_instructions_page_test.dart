@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../test_commons/utils/locale_setup.dart';
 
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
@@ -20,6 +21,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
       'Should show [PaymentInformationSection] and [ContactSupportButton] '
       'when [PaymentInstructionsPage] is shown', (tester) async {

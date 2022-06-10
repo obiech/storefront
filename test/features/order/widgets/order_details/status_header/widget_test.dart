@@ -5,6 +5,8 @@ import 'package:storefront_app/core/utils/_exporter.dart';
 import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_details/status_header/widget.dart';
 
+import '../../../../../../test_commons/utils/locale_setup.dart';
+
 void main() {
   final dateFormat = DateFormat('d MMM y, HH:mm');
   final orderCreationTime = DateTime(2022, 1, 1, 12, 30, 5);
@@ -12,6 +14,10 @@ void main() {
       orderCreationTime.add(const Duration(minutes: 5));
   final pickupTime = paymentCompletedTime.add(const Duration(minutes: 5));
   final orderCompletedTime = pickupTime.add(const Duration(minutes: 5));
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   group(
     'OrderStatusHeader',

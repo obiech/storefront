@@ -9,6 +9,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/home/index.dart';
 
+import '../../../../test_commons/utils/locale_setup.dart';
 import '../mocks.dart';
 import 'home_page_finder.dart';
 
@@ -40,6 +41,10 @@ void main() {
     }
 
     GetIt.I.registerSingleton<UserCredentialsStorage>(userCredsStorage);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   Future<void> pumpHomePage(WidgetTester tester) async {

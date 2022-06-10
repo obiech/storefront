@@ -7,6 +7,7 @@ import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/features/order/finders/order_history_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
+import '../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../cart_checkout/mocks.dart';
 import '../../mocks.dart';
@@ -18,6 +19,10 @@ void main() {
   setUp(() {
     orderHistoryCubit = MockOrderHistoryCubit();
     cartBloc = MockCartBloc();
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   Future<void> pumpOrderHistoryPage(WidgetTester tester) async {

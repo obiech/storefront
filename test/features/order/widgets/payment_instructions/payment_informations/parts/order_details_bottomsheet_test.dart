@@ -4,8 +4,13 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../../test_commons/utils/locale_setup.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
       'Should show [OrderPaymentSummary], [OrderDetailsSection], and [DeliveryAddressDetail] '
       'when [OrderDetailsBottomSheet] is shown', (tester) async {

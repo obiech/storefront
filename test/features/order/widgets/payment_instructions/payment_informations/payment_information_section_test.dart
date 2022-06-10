@@ -6,6 +6,7 @@ import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/finders/payment_instructions/payment_informations_section_finder.dart';
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
@@ -30,8 +31,11 @@ void main() {
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
   });
+
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+
+    setUpLocaleInjection();
   });
 
   group('[PaymentInformationSection]', () {

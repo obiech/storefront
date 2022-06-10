@@ -3,12 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../commons.dart';
 
 void main() {
   late ProductModel mockProduct;
 
   setUpAll(() {
     mockProduct = pomegranate;
+    setUpLocaleInjection();
   });
 
   testWidgets('show full product description', (tester) async {

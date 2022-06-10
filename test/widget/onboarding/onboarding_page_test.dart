@@ -33,6 +33,9 @@ void main() {
     when(() => prefsRepository.setIsOnBoarded(any()))
         .thenAnswer((_) async => {});
 
+    when(() => prefsRepository.getDeviceLocale())
+        .thenAnswer((_) => const Locale('en', 'EN'));
+
     // OnboardingView has a reference to GetIt
     getIt.registerSingleton<IPrefsRepository>(prefsRepository);
   });

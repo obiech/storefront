@@ -7,6 +7,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/pages/request_location/request_location_access_page.dart';
 
 import '../../../../../test_commons/finders/address/request_location_access_page_finders.dart';
+import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
 
 extension WidgetTesterX on WidgetTester {
@@ -34,6 +35,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     '[RequestLocationAccessPage]',
     () {

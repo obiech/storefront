@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 
 import '../../../../test_commons/fixtures/product/product_models.dart'
     as fixtures;
+import '../../../../test_commons/utils/locale_setup.dart';
 import '../../../src/mock_navigator.dart';
 
 extension WidgetTesterX on WidgetTester {
@@ -41,6 +42,7 @@ extension WidgetTesterX on WidgetTester {
 void main() {
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   testWidgets('Should display a grid of [ProductItemCard]',

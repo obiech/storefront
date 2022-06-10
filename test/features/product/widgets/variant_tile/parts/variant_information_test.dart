@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/index.dart';
 
+import '../../../../../commons.dart';
 import '../../../finders.dart';
 
 void main() {
@@ -19,6 +20,10 @@ void main() {
     stock: 2,
     unit: '250ml / Pcs',
   );
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   testWidgets('should display variant name', (WidgetTester tester) async {
     /// arrange

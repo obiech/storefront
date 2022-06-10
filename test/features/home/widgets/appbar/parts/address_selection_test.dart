@@ -7,6 +7,7 @@ import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/home/widgets/appbar/appbar.dart';
 
 import '../../../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../../commons.dart';
 import '../../../mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
@@ -42,6 +43,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group('[AddressSelection]', () {
     late DeliveryAddressCubit cubit;
 

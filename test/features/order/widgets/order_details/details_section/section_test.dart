@@ -4,8 +4,13 @@ import 'package:storefront_app/core/utils/build_context.ext.dart';
 import 'package:storefront_app/features/order/widgets/order_details/details_section/section.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/utils/locale_setup.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
     "[OrderDetails] consists of a heading text 'order details' and a list of "
     'purchased products',

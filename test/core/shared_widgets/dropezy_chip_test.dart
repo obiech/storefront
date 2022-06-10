@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 
+import '../../../test_commons/utils/locale_setup.dart';
+
 extension WidgetTesterX on WidgetTester {
   Future<void> testFn({
     required DropezyChip Function(BuildContext) builder,
@@ -37,6 +39,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
     '[DropezyChip] should display passed-in label and leading Widget',
     (tester) async {

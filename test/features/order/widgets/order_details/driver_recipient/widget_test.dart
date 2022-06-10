@@ -5,6 +5,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/features/order/finders/driver_and_recipient_section_finders.dart';
+import '../../../../../../test_commons/utils/locale_setup.dart';
 
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
@@ -95,6 +96,10 @@ void main() {
   const recipientImageUrl = 'https://dropezy-2.com';
   const recipientName = 'John Doe';
   const recipientRelation = 'Husband';
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   group(
     'DriverAndRecipientSection',

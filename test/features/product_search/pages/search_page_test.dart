@@ -7,6 +7,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../commons.dart';
 import '../fixtures.dart';
 import '../mocks.dart';
 
@@ -57,6 +58,10 @@ void main() {
     autosuggestionBloc = AutosuggestionBloc(repository);
     historyCubit = SearchHistoryCubit(searchHistoryRepository);
     homeNavCubit = HomeNavCubit();
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets('When Page State  is DEFAULT, show the Default Page',

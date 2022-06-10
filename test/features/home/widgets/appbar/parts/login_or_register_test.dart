@@ -3,7 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/home/widgets/appbar/appbar.dart';
 
+import '../../../../../../test_commons/utils/locale_setup.dart';
+
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
     '[PromptLoginOrRegister] should be tappable and has '
     'text content that encourages user to login or register',

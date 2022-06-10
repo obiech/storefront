@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../commons.dart';
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 import 'test.ext.dart';
@@ -31,6 +32,10 @@ Future<void> main() async {
 
     when(() => searchHistoryRepository.addSearchQuery(any()))
         .thenAnswer((_) async => []);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets('When stock is zero, gray out card', (WidgetTester tester) async {

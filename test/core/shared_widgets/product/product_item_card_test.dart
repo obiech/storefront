@@ -5,6 +5,7 @@ import 'package:storefront_app/features/product/domain/domain.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
 
 import '../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../test_commons/utils/locale_setup.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductItemCard(
@@ -31,6 +32,10 @@ extension WidgetTesterX on WidgetTester {
 
 void main() {
   const product = seledaRomaine;
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   testWidgets(
       'show "out of stock" label and gray out card '

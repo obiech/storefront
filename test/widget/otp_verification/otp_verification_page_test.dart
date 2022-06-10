@@ -46,6 +46,8 @@ Future<void> main() async {
 
     when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
     when(() => prefs.isOnBoarded()).thenAnswer((_) => true);
+    when(() => prefs.getDeviceLocale())
+        .thenAnswer((_) => const Locale('en', 'EN'));
 
     getIt.registerSingleton<IPrefsRepository>(prefs);
   });

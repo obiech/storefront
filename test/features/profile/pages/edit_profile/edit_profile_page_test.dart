@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/profile/index.dart';
 
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -15,6 +16,10 @@ void main() {
 
     // Default state
     when(() => editProfileBloc.state).thenReturn(const EditProfileState());
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets(

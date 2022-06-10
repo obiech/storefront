@@ -13,6 +13,7 @@ import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
 import 'package:storefront_app/features/home/widgets/address_selection_bottom_sheet/address_selection_bottom_sheet.dart';
 import 'package:storefront_app/features/home/widgets/appbar/appbar.dart';
 
+import '../../../../../test_commons/utils/locale_setup.dart';
 import '../../mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
@@ -51,6 +52,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     '[HomeAppBar]',
     () {

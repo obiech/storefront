@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/address/index.dart';
 
 import '../../../../../test_commons/fixtures/address/places_auto_complete_result.dart';
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -16,6 +17,10 @@ void main() {
     // default state
     when(() => searchLocationBloc.state)
         .thenReturn(const SearchLocationInitial());
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets(

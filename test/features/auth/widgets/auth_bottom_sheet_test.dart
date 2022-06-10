@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/app_router.gr.dart';
 import 'package:storefront_app/features/auth/widgets/auth_bottom_sheet.dart';
 
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 
 void main() {
@@ -18,6 +19,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   testWidgets(

@@ -9,6 +9,7 @@ import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 import '../../cart_checkout/mocks.dart';
 
@@ -21,6 +22,8 @@ void main() {
     bloc = MockCartBloc();
 
     when(() => bloc.state).thenAnswer((_) => CartLoaded.success(mockCartModel));
+
+    setUpLocaleInjection();
   });
 
   testWidgets(

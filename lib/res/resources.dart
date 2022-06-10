@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
 
 import 'colors/app_colors.dart';
@@ -19,14 +21,12 @@ import 'styles/base_styles.dart';
 
 class Resources {
   final BuildContext _context;
+  final Locale _locale;
 
-  Resources(this._context);
+  Resources(this._context, this._locale);
 
   BaseStrings get strings {
-    //TODO: It could be from the user preferences or even from the current locale
-    final locale = Localizations.localeOf(_context);
-
-    switch (locale.languageCode) {
+    switch (_locale.languageCode) {
       case 'id':
         return IndonesianStrings();
       default:
@@ -49,10 +49,7 @@ class Resources {
   }
 
   BaseLinks get links {
-    // It could be from the user preferences or even from the current locale
-    final locale = Localizations.localeOf(_context);
-
-    switch (locale.languageCode) {
+    switch (_locale.languageCode) {
       case 'id':
         return IndonesianLinks();
       default:
@@ -61,10 +58,7 @@ class Resources {
   }
 
   BasePaths get paths {
-    // It could be from the user preferences or even from the current locale
-    final locale = Localizations.localeOf(_context);
-
-    switch (locale.languageCode) {
+    switch (_locale.languageCode) {
       case 'id':
         return IndonesianPaths();
       default:
@@ -80,6 +74,7 @@ class Resources {
   // look at existing .of implementations in Provider, Localization, etc.
   // ignore: prefer_constructors_over_static_methods
   static Resources of(BuildContext context) {
-    return Resources(context);
+    final deviceLocale = getIt<IPrefsRepository>().getDeviceLocale();
+    return Resources(context, deviceLocale);
   }
 }

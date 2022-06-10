@@ -5,6 +5,8 @@ import 'package:storefront_app/core/utils/build_context.ext.dart';
 import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_details/status_header/widget.dart';
 
+import '../../../../../../../test_commons/utils/locale_setup.dart';
+
 typedef ExpectedColor = Color Function(BuildContext context);
 
 /// Helper functions specific to this test
@@ -72,6 +74,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     'DeliveryProgressBar',
     () {

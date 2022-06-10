@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/index.dart';
 
+import '../../../../commons.dart';
+
 void main() {
   /// Base model for test has to have a null discount
   /// because it affects the outcome
@@ -17,6 +19,10 @@ void main() {
     defaultImageUrl: 'image-url-1',
     imagesUrls: ['image-url-1', 'image-url-2'],
   );
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   group(
     '[ProductTile]',

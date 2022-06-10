@@ -12,6 +12,7 @@ import 'package:storefront_app/features/home/index.dart';
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../test_commons/fixtures/product/product_models.dart'
     as fixtures;
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 import '../../cart_checkout/mocks.dart';
 import '../utils/mocks.dart';
@@ -57,6 +58,10 @@ void main() {
 
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((_) async => null);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   Future<void> pumpChildCategoriesPage(WidgetTester tester) async {

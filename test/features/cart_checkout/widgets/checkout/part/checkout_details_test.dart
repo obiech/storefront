@@ -7,6 +7,7 @@ import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/cart_checkout.dart';
 
 import '../../../../../../test_commons/fixtures/cart/cart_models.dart';
+import '../../../../../commons.dart';
 import '../../../mocks.dart';
 
 void main() {
@@ -18,6 +19,10 @@ void main() {
     _cartBloc = MockCartBloc();
     _cartModel = mockCartModel;
     _cartModelDiscounted = mockCartModelDiscounted;
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   group('[PriceAmountText]', () {

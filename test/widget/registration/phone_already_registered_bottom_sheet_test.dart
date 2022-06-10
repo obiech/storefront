@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/pages/registration/phone_already_registered_bottom_sheet.dart';
 
+import '../../../test_commons/utils/locale_setup.dart';
 import '../../src/mock_navigator.dart';
 
 void main() {
@@ -26,6 +27,8 @@ void main() {
     registerFallbackValue(FakePageRouteInfo());
     mockStackRouter = MockStackRouter();
     when(() => mockStackRouter.push(any())).thenAnswer((_) async => null);
+
+    setUpLocaleInjection();
   });
 
   group('PhoneAlreadyRegisteredBottomSheet', () {

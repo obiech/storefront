@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/utils/datetime.ext.dart';
 import 'package:storefront_app/features/order/widgets/order_details/status_header/widget.dart';
 
+import '../../../../../../../test_commons/utils/locale_setup.dart';
+
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpWidgetForTest(int timeInSeconds) async {
@@ -17,6 +19,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
     'DeliveryTimeRemaining should tick down every second '
     'and stop ticking once time runs out',

@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/domain/domains.dart';
 import 'package:storefront_app/features/order/widgets/order_history/list.dart';
 
+import '../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../src/mock_navigator.dart';
 
@@ -37,6 +38,8 @@ void main() {
     // Router stubs
     registerFallbackValue(FakePageRouteInfo());
     when(() => router.push(any())).thenAnswer((_) async => null);
+
+    setUpLocaleInjection();
   });
 
   group('[OrderHistoryList]', () {

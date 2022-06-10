@@ -4,8 +4,13 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../../test_commons/fixtures/product/variant_models.dart'
     as variant_fixtures;
+import '../../../../../commons.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     '[CartItemsList]',
     () {

@@ -7,6 +7,7 @@ import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../../test_commons/finders/payment_instructions/list_tile_finders.dart';
 import '../../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
@@ -87,6 +88,8 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+
+    setUpLocaleInjection();
   });
 
   group('[InformationsTile]', () {

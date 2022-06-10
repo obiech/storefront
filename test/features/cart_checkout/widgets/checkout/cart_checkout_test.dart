@@ -14,6 +14,7 @@ import 'package:storefront_app/features/cart_checkout/widgets/widgets.dart';
 
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/utils/payment_methods.dart';
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -27,6 +28,10 @@ void main() {
     _cubit = PaymentMethodCubit(_paymentMethodsRepository);
     _cartBloc = MockCartBloc();
     _cartModel = mockCartModel;
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   group(

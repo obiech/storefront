@@ -8,11 +8,16 @@ import 'package:storefront_app/features/product/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../../test_commons/fixtures/product/product_models.dart';
+import '../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../features/cart_checkout/mocks.dart';
 
 void main() {
   late CartBloc cartBloc;
   const product = pomegranate;
+
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
 
   setUp(() {
     cartBloc = MockCartBloc();

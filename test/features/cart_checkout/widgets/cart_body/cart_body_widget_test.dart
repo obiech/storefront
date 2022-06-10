@@ -7,9 +7,14 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 import '../../../../../test_commons/finders/cart/cart_body_widget_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart'
     as cart_fixtures;
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     '[CartBodyWidget]',
     () {

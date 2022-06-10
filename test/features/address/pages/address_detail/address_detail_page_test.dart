@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
@@ -34,6 +35,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   testWidgets(

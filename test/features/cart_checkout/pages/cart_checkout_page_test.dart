@@ -4,9 +4,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
+import '../../../commons.dart';
 import '../mocks.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group(
     '[CartCheckoutPage]',
     () {

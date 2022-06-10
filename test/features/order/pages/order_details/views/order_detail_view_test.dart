@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../../src/mock_navigator.dart';
 
@@ -44,6 +45,8 @@ void main() {
   });
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+
+    setUpLocaleInjection();
   });
   group(
     'OrderDetailsPage',

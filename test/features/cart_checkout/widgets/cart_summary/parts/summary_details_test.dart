@@ -5,11 +5,13 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
+import '../../../../../commons.dart';
 import '../../../../../src/mock_navigator.dart';
 
 void main() {
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   group('Payment Summary Badge', () {

@@ -9,6 +9,7 @@ import 'package:storefront_app/features/order/domain/models/order_model.dart';
 import 'package:storefront_app/features/order/widgets/order_widgets.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
+import '../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../../src/mock_navigator.dart';
 
@@ -62,8 +63,11 @@ void main() {
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
   });
+
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+
+    setUpLocaleInjection();
   });
 
   testWidgets(

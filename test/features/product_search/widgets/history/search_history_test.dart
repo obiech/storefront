@@ -8,6 +8,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
 
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 extension WidgetX on WidgetTester {
@@ -80,6 +81,10 @@ void main() {
     _repository = SearchHistoryRepository(_box);
 
     cubit = SearchHistoryCubit(_repository);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets(

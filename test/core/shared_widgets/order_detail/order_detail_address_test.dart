@@ -4,6 +4,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
 import '../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../test_commons/utils/locale_setup.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpWidgetForTest({
@@ -24,6 +25,10 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   group('[OrderAddress]', () {
     testWidgets(
       'should consists of address title, recipient, '

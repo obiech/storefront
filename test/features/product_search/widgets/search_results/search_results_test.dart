@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../commons.dart';
 import '../../fixtures.dart';
 import '../../mocks.dart';
 import 'test.ext.dart';
@@ -18,6 +19,10 @@ void main() {
 
     searchInventoryBloc =
         SearchInventoryBloc(repository, searchHistoryRepository);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets('When loading, a shimmer is shown', (WidgetTester tester) async {

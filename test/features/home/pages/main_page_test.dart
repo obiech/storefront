@@ -106,6 +106,8 @@ void main() {
     userCredsStorage = MockUserCredentialsStorage();
 
     when(() => prefs.isOnBoarded()).thenAnswer((invocation) => true);
+    when(() => prefs.getDeviceLocale())
+        .thenAnswer((invocation) => const Locale('en', 'EN'));
 
     parentCategoriesCubit = MockParentCategoriesCubit();
     when(() => parentCategoriesCubit.fetchParentCategories())
@@ -141,6 +143,10 @@ void main() {
 
     GetIt.instance
         .registerSingleton<HomeNavObserver>(HomeNavObserver(HomeNavCubit()));
+
+    if (!GetIt.I.isRegistered<IPrefsRepository>()) {
+      GetIt.I.registerSingleton<IPrefsRepository>(prefs);
+    }
   });
 
   testWidgets(

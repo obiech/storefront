@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/cart_checkout.dart';
 
+import '../../../../../commons.dart';
+
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets(
     'should display price in Rupiahs with 0dp for whole numbers',
     (WidgetTester tester) async {

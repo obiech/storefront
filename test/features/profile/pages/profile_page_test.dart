@@ -6,6 +6,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/profile/index.dart';
 import 'package:storefront_app/features/profile/widgets/widgets.dart';
 
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 
 void main() {
@@ -22,6 +23,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   group('[ProfilePage]', () {

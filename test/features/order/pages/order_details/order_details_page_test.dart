@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/order/index.dart';
 
+import '../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../src/mock_navigator.dart';
 
@@ -40,9 +41,13 @@ void main() {
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
   });
+
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+
+    setUpLocaleInjection();
   });
+
   group(
     'OrderDetailsPage',
     () {

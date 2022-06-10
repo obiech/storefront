@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/dropezy_icons.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../commons.dart';
+
 extension WidgetX on WidgetTester {
   Future<void> pumpSearchHistoryItem(
     String query, {
@@ -24,6 +26,10 @@ extension WidgetX on WidgetTester {
 }
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets('should show provided query', (WidgetTester tester) async {
     /// arrange
     const query = 'tomatoes';

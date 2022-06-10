@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../commons.dart';
 import '../../fixtures.dart';
 import '../../mocks.dart';
 
@@ -28,6 +29,10 @@ void main() {
   setUp(() {
     repository = MockProductSearchRepository();
     bloc = AutosuggestionBloc(repository);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets('When loading, a shimmer is shown', (WidgetTester tester) async {

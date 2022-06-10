@@ -3,8 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../../../../test_commons/test_commons.dart';
+import '../../../../../test_commons/utils/locale_setup.dart';
 
 void main() {
+  setUpAll(() {
+    setUpLocaleInjection();
+  });
+
   testWidgets('Quantity will never exceed maximum value',
       (WidgetTester tester) async {
     /// arrange

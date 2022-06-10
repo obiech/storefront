@@ -10,6 +10,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/auth/pages/login/phone_not_registered_bottom_sheet.dart';
 
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 import '../../../src/mock_page_utils.dart';
 
@@ -44,6 +45,10 @@ Future<void> main() async {
     registerFallbackValue(FakePageRouteInfo());
     when(() => navigator.push(any())).thenAnswer((_) async => null);
     when(() => navigator.replaceAll(any())).thenAnswer((_) async => {});
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   group('Login Page', () {

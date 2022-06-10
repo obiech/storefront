@@ -9,6 +9,7 @@ import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/home/widgets/address_selection_bottom_sheet/address_selection_bottom_sheet.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
+import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
@@ -62,6 +63,10 @@ void main() {
     router = MockStackRouter();
     registerFallbackValue(FakePageRouteInfo());
     when(() => router.push(any())).thenAnswer((_) async => null);
+  });
+
+  setUpAll(() {
+    setUpLocaleInjection();
   });
 
   testWidgets(
