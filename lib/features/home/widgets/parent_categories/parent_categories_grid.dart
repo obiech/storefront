@@ -1,39 +1,56 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../index.dart';
+import '../../index.dart';
+
+part 'parts/parent_categories_item_loading.dart';
+part 'parts/parent_grid_loading.dart';
 
 class ParentCategoriesGrid extends StatelessWidget {
   const ParentCategoriesGrid({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Column count for phone 4 and tablet 7
+    final int columns = MediaQuery.of(context).size.width < 600 ? 4 : 7;
+
+    // Horizontal spacing for phone 16 and tablet 35
+    final horizontalSpacing =
+        MediaQuery.of(context).size.width < 600 ? 16.0 : 35.0;
+
+    // Vertical spacing for phone 12 and tablet 25
+    final verticalSpacing =
+        MediaQuery.of(context).size.width < 600 ? 12.0 : 25.0;
+
+    // TODO (Jonathan) : try to find better solving
+    // Iphone 13 screen height is 667
+    final screenSize = MediaQuery.of(context).size.height;
+
+    final appBarHeight = context.res.dimens.appBarSize;
+
+    // Navbar height is 56
+    final navBarHeight = screenSize * 0.08;
+
+    // Search Area height is 180
+    final searchHeight = screenSize * 0.28;
+
+    final parentCategoriesHeight =
+        screenSize - (appBarHeight + navBarHeight + searchHeight);
+
     return BlocBuilder<ParentCategoriesCubit, ParentCategoriesState>(
       builder: (context, state) {
-        // TODO (Jonathan) : try to find better solving
-        // Iphone 13 screen height is 667
-        final screenSize = MediaQuery.of(context).size.height;
-
-        final appBarHeight = context.res.dimens.appBarSize;
-
-        // Navbar height is 56
-        final navBarHeight = screenSize * 0.08;
-
-        // Search Area height is 180
-        final searchHeight = screenSize * 0.28;
-
-        final parentCategoriesHeight =
-            screenSize - (appBarHeight + navBarHeight + searchHeight);
-
         if (state is LoadingParentCategoriesState) {
           return SizedBox(
-            // TODO (Jonathan) : implements skeleton
             height: parentCategoriesHeight,
-            child: const Center(
-              key: ValueKey(HomePageKeys.loadingparentCategoryWidget),
-              child: CircularProgressIndicator(),
+            child: ParentLoadingGrid(
+              key: const ValueKey(HomePageKeys.loadingparentCategoryWidget),
+              columns: columns,
+              rows: 3,
+              horizontalSpacing: horizontalSpacing,
+              verticalSpacing: verticalSpacing,
             ),
           );
         } else if (state is LoadedParentCategoriesState) {
@@ -43,13 +60,11 @@ class ParentCategoriesGrid extends StatelessWidget {
               shrinkWrap: true,
               key: const ValueKey(HomePageKeys.parentCategoryGridWidget),
               physics: const NeverScrollableScrollPhysics(),
-              //TODO (Jonathan): update into dynamic
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 100,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: columns,
                 childAspectRatio: 3 / 5,
-                // mainAxisExtent: 140,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 12,
+                crossAxisSpacing: horizontalSpacing,
+                mainAxisSpacing: verticalSpacing,
               ),
               padding: EdgeInsets.zero,
               itemCount: state.parentCategoryList.length,
