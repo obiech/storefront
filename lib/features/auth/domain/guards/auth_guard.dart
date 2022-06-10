@@ -17,7 +17,7 @@ class CheckAuthStatus extends AutoRouteGuard {
     /// TODO - Add [FirebaseAuth] status check
 
     if (!isOnboarded) {
-      router.replaceAll([const OnboardingRoute()]);
+      router.replaceAll([OnboardingRoute()]);
     } else {
       resolver.next();
     }

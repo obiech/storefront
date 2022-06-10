@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/core/core.dart';
 
 import '../../widgets/onboarding/onboarding_view.dart';
 import 'triangle_clipper.dart';
 
-class OnboardingPage extends StatelessWidget {
-  const OnboardingPage({Key? key}) : super(key: key);
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({
+    Key? key,
+    this.isUserSignOut = false,
+  }) : super(key: key);
+
+  final bool isUserSignOut;
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> with AfterLayoutMixin {
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if (widget.isUserSignOut == true) {
+      context.showToast(
+        context.res.strings.youveLogoutSuccesfully,
+        color: DropezyColors.green,
+        leading: const Icon(DropezyIcons.radio_checked),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

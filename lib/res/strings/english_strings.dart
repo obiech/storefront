@@ -296,6 +296,9 @@ class EnglishStrings implements BaseStrings {
   @override
   String get superEzyWith => 'Super Ezy with';
 
+  @override
+  String get youveLogoutSuccesfully => 'You have logout successfully!';
+
   /// Order History Page
   @override
   String get myOrders => 'My Orders';

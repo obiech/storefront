@@ -296,6 +296,9 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get superEzyWith => 'Super Ezy dengan';
 
+  @override
+  String get youveLogoutSuccesfully => 'Kamu berhasil keluar';
+
   /// Order History Page
   @override
   String get myOrders => 'Pesananku';

@@ -171,6 +171,8 @@ abstract class BaseStrings {
 
   String get login;
 
+  String get youveLogoutSuccesfully;
+
   /// Order Successful Page
   String get orderSuccessful;
 

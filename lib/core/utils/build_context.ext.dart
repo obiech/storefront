@@ -8,6 +8,7 @@ extension BuildContextX on BuildContext {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showToast(
     String message, {
     Color? color,
+    Widget? leading,
   }) {
     return ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
@@ -20,12 +21,22 @@ extension BuildContextX on BuildContext {
             vertical: res.dimens.spacingMedium,
             horizontal: res.dimens.spacingMiddle,
           ),
-          child: Text(
-            message,
-            style: res.styles.button.copyWith(
-              fontWeight: FontWeight.w600,
-              fontSize: 12,
-            ),
+          child: Row(
+            children: [
+              if (leading != null) ...[
+                leading,
+                const SizedBox(
+                  width: 8,
+                )
+              ],
+              Text(
+                message,
+                style: res.styles.button.copyWith(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
         ),
         backgroundColor: Colors.transparent,

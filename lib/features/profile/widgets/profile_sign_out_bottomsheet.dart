@@ -32,7 +32,7 @@ class ProfileSignOutBottomSheet extends StatelessWidget {
         label: context.res.strings.yesSignOut,
         onPressed: () async {
           getIt<AuthService>().signOut();
-          context.router.replaceAll([const OnboardingRoute()]);
+          context.router.replaceAll([OnboardingRoute(isUserSignOut: true)]);
         },
       ),
       secondaryButton: DropezyButton(
