@@ -9,6 +9,7 @@ import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/profile/widgets/widgets.dart';
 
+import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
@@ -36,8 +37,9 @@ void main() {
     GetIt.instance.registerSingleton<AuthService>(service);
   });
 
-  setUpAll(() async {
+  setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
+    setUpLocaleInjection();
   });
 
   group('[ProfileSignOutBottomSheet]', () {
