@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
 
 import '../../../core/core.dart';
 import '../../../di/injection.dart';
+import '../../auth/domain/services/auth_service.dart';
 
 class ProfileSignOutBottomSheet extends StatelessWidget {
   const ProfileSignOutBottomSheet({Key? key}) : super(key: key);

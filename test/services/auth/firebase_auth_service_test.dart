@@ -38,14 +38,16 @@ void main() {
     });
 
     test(
-      'should call [UserCredentialsStorage.signOutApps()] '
+      'should call [UserCredentialsStorage.signOutApps()] and [ FirebaseAuth.instance.signOut()] '
       'when [FirebaseAuthService.signOut] is called',
       () async {
         when(() => credentialsStorage.signOutApps()).thenAnswer((_) async {});
+        when(() => firebaseAuth.signOut()).thenAnswer((_) async {});
 
         await service.signOut();
 
         verify(() => credentialsStorage.signOutApps()).called(1);
+        verify(() => firebaseAuth.signOut()).called(1);
       },
     );
 

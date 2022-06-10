@@ -152,5 +152,6 @@ class FirebaseAuthService extends AuthService {
   @override
   Future<void> signOut() async {
     await storage.signOutApps();
+    await firebaseAuth.signOut();
   }
 }
