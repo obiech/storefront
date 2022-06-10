@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
+import 'package:storefront_app/features/discovery/domain/repository/i_store_repository.dart';
 
 import '../domains.dart';
 
@@ -24,8 +25,9 @@ import '../domains.dart';
 @LazySingleton(as: IPaymentRepository, env: DiEnvironment.grpcEnvs)
 class PaymentService implements IPaymentRepository {
   final OrderServiceClient orderServiceClient;
+  final IStoreRepository storeRepository;
 
-  PaymentService(this.orderServiceClient);
+  PaymentService(this.orderServiceClient, this.storeRepository);
 
   @override
   RepoResult<List<PaymentMethodDetails>> getPaymentMethods() async {
@@ -48,9 +50,11 @@ class PaymentService implements IPaymentRepository {
   RepoResult<String> checkoutPayment(PaymentMethod method) async {
     try {
       // TODO(obella465): Fix once minimal submission details are provided
+      final storeId = storeRepository.storeStream.valueOrNull;
 
+      // TODO(obella): Handle null storeId
       final checkoutRequest = CheckoutRequest(
-        storeId: 'store_11',
+        storeId: storeId,
         addressId: 'address_11',
         paymentMethod: method,
       );
