@@ -694,4 +694,10 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   PaymentInstructions get paymentInstructions => PaymentInstructionIndonesian();
+
+  @override
+  String get choosePaymentMethod => 'Pilih Metode Pembayaran';
+
+  @override
+  String get loading => 'Sedang memuat';
 }

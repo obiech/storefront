@@ -159,6 +159,15 @@ class DummyPaymentService implements IPaymentRepository {
       status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
     );
 
-    return right([goPaymentChannel.paymentInfo()]);
+    final bcaPaymentChannel = PaymentChannel(
+      paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
+      paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_BANK_TRANSFER,
+      status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
+    );
+
+    return right([
+      goPaymentChannel.paymentInfo(),
+      bcaPaymentChannel.paymentInfo(),
+    ]);
   }
 }

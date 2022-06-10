@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
@@ -8,7 +9,6 @@ import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
 
-import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../../../commons.dart';
 import '../../mocks.dart';
 
@@ -102,16 +102,19 @@ void main() {
           expect(paymentMethodWidgetFinder, findsOneWidget);
 
           /// Payment method logo is displayed
-          final methodLogo = tester.firstWidget(
+          final methodLogo = tester.firstWidget<SvgPicture>(
             find.descendant(
               of: paymentMethodWidgetFinder,
-              matching: find.byType(Image),
+              matching: find.byType(SvgPicture),
             ),
-          ) as Image;
+          );
 
           final info = method.paymentInfo();
 
-          expect((methodLogo.image as AssetImage).assetName, info.image);
+          expect(
+            (methodLogo.pictureProvider as ExactAssetPicture).assetName,
+            info.image,
+          );
 
           /// Payment method title is displayed
           final methodTitle = tester.firstWidget(

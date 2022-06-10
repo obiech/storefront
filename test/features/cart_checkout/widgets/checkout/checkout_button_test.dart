@@ -9,7 +9,6 @@ import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_
 
 import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
-import '../../../../../test_commons/utils/payment_methods.dart';
 import '../../../../commons.dart';
 import '../../mocks.dart';
 

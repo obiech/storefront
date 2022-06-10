@@ -6,14 +6,13 @@ import 'package:storefront_app/core/core.dart';
 
 import '../../../../res/resources.dart';
 import '../../index.dart';
-import '../payment_method/selector.dart';
 import 'checkout_button.dart';
 import 'keys.dart';
 
 part './part/checkout_details.dart';
 part './part/checkout_details_skeleton.dart';
-part './part/slashed_amount_text.dart';
 part './part/price_amount_text.dart';
+part './part/slashed_amount_text.dart';
 
 /// A checkout widget for the cart
 ///

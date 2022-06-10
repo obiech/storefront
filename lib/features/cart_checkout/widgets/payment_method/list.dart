@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../blocs/blocs.dart';
@@ -28,18 +31,19 @@ class PaymentMethodList extends StatelessWidget {
   Widget build(BuildContext context) {
     final res = context.res;
     return DropezyDismissable(
+      // TODO(obella) - Pass dynamic child size
       child: DraggableScrollableSheet(
-        /// TODO - Set basing on number of payment methods
-        maxChildSize: .8,
+        maxChildSize: context.methodCardSize(2),
+        initialChildSize: context.methodCardSize(2),
         builder: (_, controller) {
           return DropezyBottomSheet(
             marginTop: 24,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              // controller: controller,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Pilih Metode Pembayaran',
+                  res.strings.choosePaymentMethod,
                   style: res.styles.subtitle,
                 ),
                 const SizedBox(
@@ -90,9 +94,8 @@ class PaymentMethodList extends StatelessWidget {
                                 height: 52,
                                 child: Row(
                                   children: [
-                                    Image.asset(
+                                    SvgPicture.asset(
                                       paymentMethod.image,
-                                      fit: BoxFit.contain,
                                       height: 36,
                                     ),
                                     const SizedBox(
@@ -111,9 +114,12 @@ class PaymentMethodList extends StatelessWidget {
                           },
                           separatorBuilder: (BuildContext context, int index) {
                             if (index != state.methods.length - 1) {
-                              return const Divider(
-                                color: DropezyColors.dividerColor,
-                                height: 1,
+                              return const Padding(
+                                padding: EdgeInsets.only(bottom: 8.0),
+                                child: Divider(
+                                  color: DropezyColors.dividerColor,
+                                  height: 1,
+                                ),
                               );
                             }
                             return const SizedBox();
@@ -137,5 +143,27 @@ class PaymentMethodList extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+extension PaymentBottomSheetSizeX on BuildContext {
+  /// Get and fix initialChildSize & maxChildSize for bottom sheet
+  double methodCardSize(int itemsCount) {
+    final dividers = 9 * (itemsCount - 1);
+    const topMargin = 24;
+
+    final approxItemsHeight = 44.0 * itemsCount +
+        topMargin +
+        dividers +
+        MediaQuery.of(this).padding.bottom;
+
+    final height = MediaQuery.of(this).size.height;
+
+    final error =
+        MediaQuery.of(this).orientation == Orientation.landscape ? 0.125 : 0.07;
+
+    final ratio = (approxItemsHeight / height) + error;
+
+    return min(1, ratio);
   }
 }

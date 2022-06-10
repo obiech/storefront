@@ -455,6 +455,10 @@ abstract class BaseStrings {
 
   String maximumQty(int qty);
 
+  String get choosePaymentMethod;
+
+  String get loading;
+
   String get faq;
 
   FAQ get faqs;

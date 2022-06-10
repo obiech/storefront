@@ -694,4 +694,10 @@ class EnglishStrings implements BaseStrings {
 
   @override
   PaymentInstructions get paymentInstructions => PaymentInstructionEnglish();
+
+  @override
+  String get choosePaymentMethod => 'Choose Payment Method';
+
+  @override
+  String get loading => 'Loading';
 }

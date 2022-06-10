@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/constants/dropezy_colors.dart';
 import '../../../../res/resources.dart';
@@ -52,13 +53,15 @@ class PaymentMethodSelector extends StatelessWidget {
         icon: BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
           builder: (context, state) {
             if (state is! LoadedPaymentMethods) {
-              return const Text('Loading ...');
+              return Text('${res.strings.loading} ...');
             } else {
-              return Image.asset(
-                state.activePaymentMethod.image,
-                fit: BoxFit.contain,
-                height: 30,
-                key: const ValueKey(PaymentMethodKeys.logo),
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(8, 4, 10, 4),
+                child: SvgPicture.asset(
+                  state.activePaymentMethod.image,
+                  height: 40,
+                  key: const ValueKey(PaymentMethodKeys.logo),
+                ),
               );
             }
           },

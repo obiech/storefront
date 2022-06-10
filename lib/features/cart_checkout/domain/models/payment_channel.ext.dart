@@ -10,7 +10,13 @@ extension PaymentChannelX on PaymentChannel {
       case PaymentMethod.PAYMENT_METHOD_GOPAY:
         return PaymentMethodDetails(
           title: 'Go Pay',
-          image: 'assets/icons/providers/go_pay.png',
+          image: 'assets/icons/providers/go_pay.svg',
+          method: paymentMethod,
+        );
+      case PaymentMethod.PAYMENT_METHOD_VA_BCA:
+        return PaymentMethodDetails(
+          title: 'Bank BCA',
+          image: 'assets/icons/providers/bca.svg',
           method: paymentMethod,
         );
       default:

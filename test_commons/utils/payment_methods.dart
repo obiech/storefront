@@ -10,8 +10,8 @@ List<PaymentChannel> get samplePaymentMethods => [
         status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
       ),
       PaymentChannel(
-        paymentMethod: PaymentMethod.PAYMENT_METHOD_UNSPECIFIED,
-        paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_DEEPLINK,
+        paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
+        paymentType: PaymentMethodType.PAYMENT_METHOD_TYPE_BANK_TRANSFER,
         status: PaymentMethodStatus.PAYMENT_METHOD_STATUS_ACTIVE,
       )
     ];
