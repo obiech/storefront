@@ -99,11 +99,17 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
   /// Verifies sumitted OTP against actual OTP
   /// will emit an error state if otp is not yet sent
   Future<void> verifyOtp(String otp) async {
-    if (!otpIsSent) {
-      // TODO (leovinsen): Handle error message in UI side
-      emit(const AccountVerificationError('OTP belum terkirim!'));
-      return;
-    }
+    // TODO (leovinsen): Remove if this check is not necessary
+    // Disabling the requirement that OTP has to be sent before user
+    // are allowed to enter OTP.
+    // Reason is using Test Phone Number does not send an OTP,
+    // and this check blocks verification of these numbers.
+
+    // if (!otpIsSent) {
+    //   // TODO (leovinsen): Handle error message in UI side
+    //   emit(const AccountVerificationError('OTP belum terkirim!'));
+    //   return;
+    // }
 
     emit(const AccountVerificationLoading());
 

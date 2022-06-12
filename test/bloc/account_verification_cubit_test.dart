@@ -151,7 +151,7 @@ void main() {
 
     group('[verifyOtp()]', () {
       blocTest<AccountVerificationCubit, AccountVerificationState>(
-        'should return State with status of [verifyingOtp]',
+        'should return loading state',
         setUp: () {
           /// Return an empty stream
           mockPhoneVerificationStream(authService, []);
@@ -173,29 +173,30 @@ void main() {
           AccountVerificationLoading(),
         ],
       );
-      blocTest<AccountVerificationCubit, AccountVerificationState>(
-        'should return State with status of [error] if [otpIsSent] is false',
-        setUp: () {
-          /// Return an empty stream
-          mockPhoneVerificationStream(authService, []);
 
-          // /// Stub sendOtp function
-          when(() => authService.verifyOtp(any())).thenAnswer((_) async {});
-        },
-        build: () {
-          final cubit = AccountVerificationCubit(
-            authService,
-            customerRepository,
-            false,
-          );
-          cubit.otpIsSent = false;
-          return cubit;
-        },
-        act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
-        expect: () => const [
-          AccountVerificationError('OTP belum terkirim!'),
-        ],
-      );
+      // blocTest<AccountVerificationCubit, AccountVerificationState>(
+      //   'should return error state if [otpIsSent] is false',
+      //   setUp: () {
+      //     /// Return an empty stream
+      //     mockPhoneVerificationStream(authService, []);
+
+      //     // /// Stub sendOtp function
+      //     when(() => authService.verifyOtp(any())).thenAnswer((_) async {});
+      //   },
+      //   build: () {
+      //     final cubit = AccountVerificationCubit(
+      //       authService,
+      //       customerRepository,
+      //       false,
+      //     );
+      //     cubit.otpIsSent = false;
+      //     return cubit;
+      //   },
+      //   act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
+      //   expect: () => const [
+      //     AccountVerificationError('OTP belum terkirim!'),
+      //   ],
+      // );
     });
 
     group(' -- react to events from [AuthService.phoneVerificationStream]', () {
