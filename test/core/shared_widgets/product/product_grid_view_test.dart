@@ -14,27 +14,14 @@ extension WidgetTesterX on WidgetTester {
     StackRouter? stackRouter,
   }) async {
     await pumpWidget(
-      stackRouter != null
-          ? StackRouterScope(
-              controller: stackRouter,
-              stateHash: 0,
-              child: MaterialApp(
-                home: Scaffold(
-                  body: ProductGridView(
-                    productModelList: fixtures.fakeCategoryProductList,
-                    columns: 2,
-                  ),
-                ),
-              ),
-            )
-          : MaterialApp(
-              home: Scaffold(
-                body: ProductGridView(
-                  productModelList: fixtures.fakeCategoryProductList,
-                  columns: 2,
-                ),
-              ),
-            ),
+      MaterialApp(
+        home: Scaffold(
+          body: ProductGridView(
+            productModelList: fixtures.fakeCategoryProductList,
+            columns: 2,
+          ),
+        ),
+      ).withRouterScope(stackRouter),
     );
   }
 }
