@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
 import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
@@ -27,6 +28,7 @@ extension WidgetTesterX on WidgetTester {
     required SearchInventoryBloc searchInventoryBloc,
     required SearchHistoryCubit searchHistoryCubit,
     required DiscoveryCubit discoveryCubit,
+    required DeliveryAddressCubit deliveryAddressCubit,
   }) async {
     late BuildContext ctx;
 
@@ -47,6 +49,9 @@ extension WidgetTesterX on WidgetTester {
           ),
           BlocProvider(
             create: (context) => discoveryCubit,
+          ),
+          BlocProvider(
+            create: (context) => deliveryAddressCubit,
           ),
         ],
         child: MaterialApp.router(
@@ -71,6 +76,7 @@ void main() {
   late SearchInventoryBloc searchInventoryBloc;
   late SearchHistoryCubit searchHistoryCubit;
   late DiscoveryCubit discoveryCubit;
+  late DeliveryAddressCubit deliveryAddressCubit;
 
   setUp(() {
     final prefs = MockIPrefsRepository();
@@ -84,6 +90,7 @@ void main() {
     searchInventoryBloc = MockSearchInventoryBloc();
     searchHistoryCubit = MockSearchHistoryCubit();
     discoveryCubit = MockDiscoveryCubit();
+    deliveryAddressCubit = MockDeliveryAddressCubit();
 
     late UserCredentialsStorage userCredsStorage;
     late ParentCategoriesCubit parentCategoriesCubit;
@@ -107,6 +114,15 @@ void main() {
       const Stream<SearchHistoryState>.empty(),
     );
     when(() => searchHistoryCubit.close()).thenAnswer((_) async {});
+
+    // stubs for discovery cubit
+    when(() => discoveryCubit.loadStore()).thenAnswer((_) async {});
+
+    // stubs for delivery cubit
+    when(() => deliveryAddressCubit.state)
+        .thenReturn(const DeliveryAddressInitial());
+    when(() => deliveryAddressCubit.fetchDeliveryAddresses())
+        .thenAnswer((_) async {});
 
     userCredsStorage = MockUserCredentialsStorage();
 
@@ -165,6 +181,7 @@ void main() {
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
+        deliveryAddressCubit: deliveryAddressCubit,
       );
 
       await tester.pumpAndSettle();
@@ -187,6 +204,7 @@ void main() {
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
+        deliveryAddressCubit: deliveryAddressCubit,
       );
 
       await tester.pumpAndSettle();
@@ -209,6 +227,7 @@ void main() {
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
+        deliveryAddressCubit: deliveryAddressCubit,
       );
 
       await tester.pumpAndSettle();

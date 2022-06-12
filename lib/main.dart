@@ -47,17 +47,13 @@ Future<void> main() async {
         MultiBlocProvider(
           providers: [
             BlocProvider(
-              lazy: false,
-              create: (context) => getIt<DiscoveryCubit>()..loadStore(),
+              create: (context) => getIt<DiscoveryCubit>(),
             ),
             BlocProvider(
-              lazy: false,
               create: (context) => getIt<CartBloc>(),
             ),
             BlocProvider(
-              lazy: false,
-              create: (_) =>
-                  getIt<DeliveryAddressCubit>()..fetchDeliveryAddresses(),
+              create: (_) => getIt<DeliveryAddressCubit>(),
             ),
 
             /// Search

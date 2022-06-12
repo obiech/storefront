@@ -1,9 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 
-import '../../cart_checkout/widgets/cart_summary/cart_summary.dart';
+import '../../address/index.dart';
+import '../../cart_checkout/index.dart';
+import '../../discovery/index.dart';
 import '../index.dart';
 
 class MainPage extends StatefulWidget {
@@ -15,7 +18,7 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with AfterLayoutMixin {
   /// Specifies whetever to return [CartSummary]
   /// based on tabs active index
   ///
@@ -23,6 +26,14 @@ class _MainPageState extends State<MainPage> {
   /// 0 = HomeRoute()
   /// 1 = SearchRoute()
   bool _isShowCartSummary(int index) => index == 0 || index == 1;
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // initialize blocs or cubits that need to be present on app start
+    // but require auth token to be present.
+    context.read<DeliveryAddressCubit>().fetchDeliveryAddresses();
+    context.read<DiscoveryCubit>().loadStore();
+  }
 
   @override
   Widget build(BuildContext context) {
