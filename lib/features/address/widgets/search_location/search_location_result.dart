@@ -42,24 +42,29 @@ class SearchLocationResult extends StatelessWidget {
             child: MultiBlocListener(
               listeners: [
                 /// Handle when getting location detail is success
-                SingleStateListener<LocationSelectSuccess, SearchLocationBloc,
-                    SearchLocationState>(
-                  callback: (context, state) {
-                    context.pushRoute(
-                      AddressDetailRoute(
-                        placeDetails: state.addressDetails,
-                      ),
-                    );
+                BlocListener<SearchLocationBloc, SearchLocationState>(
+                  listenWhen: (prev, current) =>
+                      current is LocationSelectSuccess,
+                  listener: (context, state) {
+                    if (state is LocationSelectSuccess) {
+                      context.pushRoute(
+                        AddressDetailRoute(
+                          placeDetails: state.addressDetails,
+                        ),
+                      );
+                    }
                   },
                 ),
 
                 /// Handle when getting location detail is fail
-                SingleStateListener<LocationSelectError, SearchLocationBloc,
-                    SearchLocationState>(
-                  callback: (context, state) {
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(DropezySnackBar.info(state.message));
+                BlocListener<SearchLocationBloc, SearchLocationState>(
+                  listenWhen: (prev, current) => current is LocationSelectError,
+                  listener: (context, state) {
+                    if (state is LocationSelectError) {
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(DropezySnackBar.info(state.message));
+                    }
                   },
                 ),
               ],
