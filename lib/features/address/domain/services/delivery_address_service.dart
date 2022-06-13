@@ -30,7 +30,6 @@ class DeliveryAddressService implements IDeliveryAddressRepository {
     }
   }
 
-  // TODO (widy): fix address is required when saving new address
   @override
   RepoResult<Unit> saveAddress(DeliveryAddressModel address) async {
     try {

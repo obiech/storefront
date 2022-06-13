@@ -52,16 +52,21 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
       // TODO (widy): Fix model passed to repository
       // Notes:
       // - id can be exist if page opened from edit address
-      // - fix lat * lng from maps
+      // - fix address detail model from PlaceDetailsModel
       DeliveryAddressModel(
         id: 'id',
         title: state.addressName,
         isPrimaryAddress: state.isPrimaryAddress,
-        lat: 0.0,
-        lng: 0.0,
+        lat: state.latLng.latitude,
+        lng: state.latLng.longitude,
+        notes: state.addressDetail,
         recipientName: state.addressName,
         recipientPhoneNumber: state.recipientPhoneNumber,
         dateCreated: _dateTimeProvider.now,
+        // TODO (widy): fix this hardcode
+        details: const AddressDetailsModel(
+          street: 'street name',
+        ),
       ),
     );
 

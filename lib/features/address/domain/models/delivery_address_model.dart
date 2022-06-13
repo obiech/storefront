@@ -64,15 +64,20 @@ class DeliveryAddressModel extends Equatable {
       recipientName: address.contact.name,
       recipientPhoneNumber: address.contact.phoneNumber,
       dateCreated: address.address.timestamp.createdTime.toDateTime(),
+      details: AddressDetailsModel(
+        // TODO: Find better naming :")
+        street: address.address.address,
+      ),
     );
   }
 
   Address toPb() {
-    // TODO: Update meta.Address naming
+    // TODO: Update meta.Address naming on proto
     return Address(
       address: meta.Address(
         id: id,
         name: title,
+        address: details?.toPrettyAddress,
         coordinates: meta.Coordinates(
           longitude: lng,
           latitude: lat,

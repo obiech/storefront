@@ -12,7 +12,12 @@ part 'wrapper.dart';
 // TODO (widy): Request for location permission when page loaded
 // https://dropezy.atlassian.net/browse/STOR-318
 class AddressDetailPage extends StatefulWidget {
-  const AddressDetailPage({Key? key}) : super(key: key);
+  final PlaceDetailsModel? placeDetailsModel;
+
+  const AddressDetailPage({
+    Key? key,
+    this.placeDetailsModel,
+  }) : super(key: key);
 
   @override
   State<AddressDetailPage> createState() => _AddressDetailPageState();
@@ -219,7 +224,8 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
     /// Handle when Address created/updated
     BlocListener<AddressDetailBloc, AddressDetailState>(
       listenWhen: (previous, current) => current.addressUpdated,
-      listener: (context, state) {
+      listener: (context, state) async {
+        context.read<DeliveryAddressCubit>().fetchDeliveryAddresses();
         context.popRoute();
         ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()
