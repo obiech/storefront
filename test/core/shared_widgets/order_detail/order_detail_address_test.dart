@@ -15,7 +15,10 @@ extension WidgetTesterX on WidgetTester {
         home: Builder(
           builder: (context) {
             return Scaffold(
-              body: DeliveryAddressDetail(address: expectedAddress),
+              body: DeliveryAddressDetail(
+                address: expectedAddress,
+                heading: context.res.strings.deliveryLocation,
+              ),
             );
           },
         ),

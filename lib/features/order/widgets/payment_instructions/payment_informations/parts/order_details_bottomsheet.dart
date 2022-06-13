@@ -37,7 +37,10 @@ class OrderDetailsBottomSheet extends StatelessWidget {
               const ThickDivider(),
               OrderDetailsSection(products: order.productsBought),
               const ThickDivider(),
-              DeliveryAddressDetail(address: order.recipientAddress),
+              DeliveryAddressDetail(
+                heading: context.res.strings.deliveryLocation,
+                address: order.recipientAddress,
+              ),
             ],
           ),
         ),

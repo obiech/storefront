@@ -1,28 +1,45 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
 import '../../../features/address/index.dart';
 
+part 'parts/address_column.dart';
+part 'parts/chevron_button.dart';
+
 /// Widget for delivery address detail
-/// that consist of:
+/// that consists of:
 ///
-/// - Address title
-/// - Recipient Name and Phone Number
-/// - Delivery Address
+/// - A heading text and delivery estimation (optional).
+/// - A column of address details [AddressColumn].
 /// - Notes (if there's any)
 class DeliveryAddressDetail extends StatelessWidget {
   const DeliveryAddressDetail({
     Key? key,
+    required this.heading,
     required this.address,
     this.padding,
+    this.showDeliveryEstimation = false,
+    this.enableAddressSelection = false,
   }) : super(key: key);
 
   final DeliveryAddressModel address;
+
+  /// Text shown at the top
+  final String heading;
+
   final EdgeInsets? padding;
+
+  /// If true, show estimated delivery duration
+  /// in the form of a [DropezyChip.deliveryDuration].
+  final bool showDeliveryEstimation;
+
+  /// If true, show a IconButton with [DropezyIcons.chevron_right] icon.
+  /// On tap, take user to [ChangeAddressPage].
+  final bool enableAddressSelection;
 
   @override
   Widget build(BuildContext context) {
-    final formattedAddress = address.details?.toPrettyAddress ?? '';
     return Container(
       padding: padding ??
           EdgeInsets.fromLTRB(
@@ -34,42 +51,33 @@ class DeliveryAddressDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            context.res.strings.deliveryLocation,
-            style: context.res.styles.caption1
-                .copyWith(fontWeight: FontWeight.w600)
-                .withLineHeight(22),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  heading,
+                  style: context.res.styles.caption1
+                      .copyWith(fontWeight: FontWeight.w600)
+                      .withLineHeight(22),
+                ),
+              ),
+              if (showDeliveryEstimation)
+                // TODO (leovinsen): use estimation from geofence module
+                DropezyChip.deliveryDuration(res: context.res, minutes: 15),
+            ],
           ),
           SizedBox(
             height: context.res.dimens.spacingMiddle,
           ),
-
-          // Text for address title
-          Text(
-            address.title,
-            style: context.res.styles.caption2
-                .copyWith(fontWeight: FontWeight.w600)
-                .withLineHeight(16),
-          ),
-          SizedBox(height: context.res.dimens.spacingSmall),
-
-          // Text for recipient name and phone number
-          Text(
-            '${address.recipientName} | ${address.recipientPhoneNumber}',
-            style: context.res.styles.caption2
-                .copyWith(fontWeight: FontWeight.w400)
-                .withLineHeight(20),
-          ),
-
-          // Text for delivery address
-          Text(
-            formattedAddress,
-            style: context.res.styles.caption2
-                .copyWith(fontWeight: FontWeight.w400)
-                .withLineHeight(20),
+          Row(
+            children: [
+              Expanded(
+                child: AddressColumn(address: address),
+              ),
+              if (enableAddressSelection) const ChevronRightButton(),
+            ],
           ),
           SizedBox(height: context.res.dimens.spacingMiddle),
-
           Visibility(
             visible: address.notes != null,
             child: Row(

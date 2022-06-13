@@ -47,7 +47,10 @@ class OrderDetailsView extends StatelessWidget {
                       height: 1,
                       color: context.res.colors.dividerColor,
                     ),
-                    DeliveryAddressDetail(address: order.recipientAddress),
+                    DeliveryAddressDetail(
+                      heading: context.res.strings.deliveryLocation,
+                      address: order.recipientAddress,
+                    ),
                     const ThickDivider(),
                     OrderPaymentSummary(
                       totalSavings: (int.parse(order.discount) +
