@@ -79,8 +79,11 @@ class UserDeviceInfoRepository extends IUserDeviceInfoRepository {
   /// Return current device's public IP
   @override
   Future<String> getOriginIP() async {
-    final originIP = await Ipify.ipv4();
-    return originIP;
+    try {
+      return await Ipify.ipv4();
+    } catch (e) {
+      return '';
+    }
   }
 
   /// Return the shared preferences Locale
