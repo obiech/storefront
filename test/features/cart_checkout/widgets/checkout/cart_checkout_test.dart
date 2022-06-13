@@ -12,15 +12,15 @@ import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
-  late IPaymentRepository _paymentMethodsRepository;
-  late PaymentMethodCubit _cubit;
-  late CartBloc _cartBloc;
+  late PaymentMethodCubit paymentMethodCubit;
+  late PaymentCheckoutCubit paymentCheckoutCubit;
+  late CartBloc cartBloc;
   late CartModel _cartModel;
 
   setUp(() {
-    _paymentMethodsRepository = MockPaymentMethodRepository();
-    _cubit = PaymentMethodCubit(_paymentMethodsRepository);
-    _cartBloc = MockCartBloc();
+    paymentMethodCubit = MockPaymentMethodCubit();
+    paymentCheckoutCubit = MockPaymentCheckoutCubit();
+    cartBloc = MockCartBloc();
     _cartModel = mockCartModel;
   });
 
@@ -36,14 +36,13 @@ void main() {
           MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => _cubit,
+                create: (context) => paymentMethodCubit,
               ),
               BlocProvider(
-                create: (context) =>
-                    PaymentCheckoutCubit(_paymentMethodsRepository),
+                create: (context) => paymentCheckoutCubit,
               ),
               BlocProvider(
-                create: (context) => _cartBloc,
+                create: (context) => cartBloc,
               ),
             ],
             child: const MaterialApp(
@@ -56,8 +55,18 @@ void main() {
       }
 
       setUp(() {
-        when(() => _cartBloc.state)
+        final paymentMethods = samplePaymentMethods.toPaymentDetails();
+
+        when(() => cartBloc.state)
             .thenAnswer((_) => CartLoaded.success(_cartModel));
+
+        when(() => paymentMethodCubit.state).thenAnswer(
+          (_) => LoadedPaymentMethods(paymentMethods, paymentMethods.first),
+        );
+
+        when(() => paymentCheckoutCubit.state).thenAnswer(
+          (_) => InitialPaymentCheckoutState(),
+        );
       });
 
       testWidgets(

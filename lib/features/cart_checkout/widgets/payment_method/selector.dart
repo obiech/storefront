@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart' show CupertinoIcons;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../../../core/constants/dropezy_colors.dart';
 import '../../../../res/resources.dart';
@@ -50,21 +51,30 @@ class PaymentMethodSelector extends StatelessWidget {
             },
           );
         },
-        icon: BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
-          builder: (context, state) {
-            if (state is! LoadedPaymentMethods) {
-              return Text('${res.strings.loading} ...');
-            } else {
-              return Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 10, 4),
-                child: SvgPicture.asset(
+        icon: SizedBox(
+          // TODO(obella): Replace with responsiveness
+          width: 5 / 36 * MediaQuery.of(context).size.width,
+          child: BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
+            builder: (context, state) {
+              if (state is! LoadedPaymentMethods) {
+                return SkeletonItem(
+                  child: Container(
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: res.colors.grey3,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                  ),
+                );
+              } else {
+                return SvgPicture.asset(
                   state.activePaymentMethod.image,
-                  height: 40,
+                  height: 30,
                   key: const ValueKey(PaymentMethodKeys.logo),
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         ),
         label: const Icon(
           CupertinoIcons.chevron_down,

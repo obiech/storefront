@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:skeletons/skeletons.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/keys.dart';
@@ -30,14 +31,14 @@ void main() {
   });
 
   testWidgets(
-      'should show "Loading..." '
+      'should show Loading Widget '
       'when [PaymentMethodCubit] state is not [LoadedPaymentMethods]',
       (WidgetTester tester) async {
     /// arrange
-    final context = await tester.pumpPaymentSelector(paymentMethodCubit);
+    await tester.pumpPaymentSelector(paymentMethodCubit);
 
     /// assert
-    expect(find.text('${context.res.strings.loading} ...'), findsOneWidget);
+    expect(find.byType(SkeletonItem), findsOneWidget);
   });
 
   testWidgets(
@@ -70,6 +71,10 @@ void main() {
       'should open payment method list '
       'when tapped', (WidgetTester tester) async {
     /// arrange
+    when(() => paymentMethodCubit.state).thenReturn(
+      LoadedPaymentMethods(paymentMethods, paymentMethods.first),
+    );
+
     await tester.pumpPaymentSelector(paymentMethodCubit);
 
     expect(find.byType(PaymentMethodList), findsNothing);
