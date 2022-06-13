@@ -315,12 +315,23 @@ class DummyOrderRepository extends IOrderRepository {
 
   @override
   RepoResult<OrderModel> getOrderById(String id) async {
-    final index = orders.indexWhere((o) => o.id == id);
+    final index = orders.indexById(id);
 
     if (index > -1) {
       return right(orders[index]);
     }
 
     return left(ResourceNotFoundFailure('Order not found.'));
+  }
+
+  @override
+  void addOrder(OrderModel order) {
+    final index = orders.indexById(order.id);
+
+    if (index > -1) {
+      orders[index] = order;
+    } else {
+      orders.add(order);
+    }
   }
 }

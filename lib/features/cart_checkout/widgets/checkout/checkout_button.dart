@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,13 +21,22 @@ class CheckoutButton extends StatelessWidget {
       listener: (context, state) async {
         // Launch payment link
         if (state is LoadedPaymentCheckout) {
-          await _launchCheckoutLink(state.checkoutLink);
+          switch (state.paymentResults.paymentMethod) {
+            case PaymentMethod.PAYMENT_METHOD_GOPAY:
+              await _launchCheckoutLink(
+                state.paymentResults.paymentInformation.deeplink!,
+              );
+              break;
+            case PaymentMethod.PAYMENT_METHOD_VA_BCA:
+              // TODO(obella): Handle BCA result.
+              break;
+            default:
+              break;
+          }
         } else if (state is ErrorLoadingPaymentCheckout) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: res.colors.red,
-            ),
+          context.showToast(
+            state.message,
+            color: res.colors.red,
           );
         }
       },

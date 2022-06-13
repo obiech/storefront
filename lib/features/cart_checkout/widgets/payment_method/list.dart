@@ -151,10 +151,12 @@ extension PaymentBottomSheetSizeX on BuildContext {
   double methodCardSize(int itemsCount) {
     final dividers = 9 * (itemsCount - 1);
     const topMargin = 24;
+    const titleHeight = 40;
 
     final approxItemsHeight = 44.0 * itemsCount +
         topMargin +
         dividers +
+        titleHeight +
         MediaQuery.of(this).padding.bottom;
 
     final height = MediaQuery.of(this).size.height;

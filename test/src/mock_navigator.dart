@@ -5,6 +5,8 @@ import 'package:mocktail/mocktail.dart';
 /// AutoRoute Mocks
 class MockStackRouter extends Mock implements StackRouter {}
 
+class MockNavigationResolver extends Mock implements NavigationResolver {}
+
 // ignore: avoid_implementing_value_types
 class FakePageRouteInfo extends Fake implements PageRouteInfo {}
 
@@ -30,5 +32,29 @@ extension StackRouterX on Widget {
             child: this,
           )
         : this;
+  }
+}
+
+/// Route Helpers
+class RouteHelpers {
+  /// Creates a [RouteMatch] with [params]
+  /// ```dart
+  ///     when(() => navigationResolver.route).thenAnswer(
+  //       (invocation) => RouteHelpers.routeWithParams({
+  //         'order_id': orderId,
+  //       }),
+  //     );
+  /// ```
+  static RouteMatch<dynamic> routeWithParams(Map<String, dynamic> params) {
+    return RouteMatch(
+      name: '',
+      segments: const [],
+      path: '',
+      stringMatch: '',
+      key: const ValueKey(''),
+      queryParams: Parameters(
+        params,
+      ),
+    );
   }
 }

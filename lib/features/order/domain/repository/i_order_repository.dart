@@ -9,4 +9,7 @@ abstract class IOrderRepository {
 
   /// Gets an order by its ID
   RepoResult<OrderModel> getOrderById(String id);
+
+  /// Add order from payment response
+  void addOrder(OrderModel order);
 }

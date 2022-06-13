@@ -16,6 +16,7 @@ import 'package:storefront_app/features/profile/pages/profile_page.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../src/mock_customer_service_client.dart';
+import '../../order/mocks.dart';
 import '../mocks.dart';
 import 'main_page_finder.dart';
 
@@ -80,9 +81,10 @@ void main() {
 
   setUp(() {
     final prefs = MockIPrefsRepository();
+    final orderRepo = MockOrderRepository();
     router = AppRouter(
       checkAuthStatus: CheckAuthStatus(prefs),
-      checkOrderStatus: CheckOrderStatus(),
+      checkOrderStatus: CheckOrderStatus(orderRepo),
     );
 
     cartBloc = MockCartBloc();

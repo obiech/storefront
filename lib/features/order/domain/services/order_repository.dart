@@ -36,7 +36,7 @@ class OrderRepository extends IOrderRepository {
   @override
   RepoResult<OrderModel> getOrderById(String id) async {
     try {
-      final index = orders.indexWhere((o) => o.id == id);
+      final index = orders.indexById(id);
 
       // Return model from in-memory cache if found
       if (index > -1) {
@@ -49,6 +49,17 @@ class OrderRepository extends IOrderRepository {
       return right(OrderModel.fromPb(response.order));
     } on Exception catch (e) {
       return left(e.toFailure);
+    }
+  }
+
+  @override
+  void addOrder(OrderModel order) {
+    final index = orders.indexById(order.id);
+
+    if (index > -1) {
+      orders[index] = order;
+    } else {
+      orders.add(order);
     }
   }
 }

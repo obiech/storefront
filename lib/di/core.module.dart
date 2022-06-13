@@ -6,15 +6,16 @@ import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
+import 'package:storefront_app/features/order/index.dart';
 import 'package:uuid/uuid.dart';
 
 import '../features/cart_checkout/index.dart';
 
 @module
 abstract class CoreModule {
-  AppRouter router(IPrefsRepository prefs) {
+  AppRouter router(IPrefsRepository prefs, IOrderRepository orderRepository) {
     return AppRouter(
-      checkOrderStatus: CheckOrderStatus(),
+      checkOrderStatus: CheckOrderStatus(orderRepository),
       checkAuthStatus: CheckAuthStatus(prefs),
     );
   }

@@ -1,12 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
-import 'package:dropezy_proto/v1/order/order.pbenum.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 
-import '../../../../../test_commons/utils/payment_methods.dart';
+import '../../../../commons.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -15,6 +15,8 @@ void main() {
     late IPaymentRepository _repository;
     final List<PaymentMethodDetails> _paymentMethods =
         samplePaymentMethods.toPaymentDetails();
+
+    final paymentResults = mockGoPayPaymentResults;
 
     setUp(() {
       _repository = MockPaymentMethodRepository();
@@ -26,8 +28,6 @@ void main() {
       expect(_cubit.state is InitialPaymentCheckoutState, true);
     });
 
-    const link = 'gogek://app';
-
     blocTest<PaymentCheckoutCubit, PaymentCheckoutState>(
       'When repository checkout is successful '
       'should emit a checkout link',
@@ -37,12 +37,20 @@ void main() {
           () => _repository.checkoutPayment(
             _paymentMethods.first.method,
           ),
-        ).thenAnswer((_) async => right(link));
+        ).thenAnswer(
+          (_) async => right(
+            paymentResults,
+          ),
+        );
       },
       build: () => _cubit,
       act: (cubit) => cubit.checkoutPayment(_paymentMethods.first),
-      expect: () =>
-          [isA<LoadingPaymentCheckout>(), const LoadedPaymentCheckout(link)],
+      expect: () => [
+        isA<LoadingPaymentCheckout>(),
+        LoadedPaymentCheckout(
+          paymentResults,
+        )
+      ],
     );
 
     blocTest<PaymentCheckoutCubit, PaymentCheckoutState>(

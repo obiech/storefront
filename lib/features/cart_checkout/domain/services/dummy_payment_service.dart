@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
+import 'package:storefront_app/features/order/index.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domains.dart';
@@ -88,13 +89,15 @@ import '../domains.dart';
 @LazySingleton(as: IPaymentRepository, env: [DiEnvironment.dummy])
 class DummyPaymentService implements IPaymentRepository {
   final Uuid uuid;
+  final IOrderRepository orderRepository;
 
-  DummyPaymentService(this.uuid);
+  DummyPaymentService(this.uuid, this.orderRepository);
 
   @override
-  RepoResult<String> checkoutPayment(PaymentMethod method) async {
+  RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
     try {
       if (method == PaymentMethod.PAYMENT_METHOD_GOPAY) {
+        final orderId = uuid.v4();
         final resp = await http.post(
           Uri.parse('https://api.sandbox.midtrans.com/v2/charge'),
           headers: {
@@ -104,10 +107,7 @@ class DummyPaymentService implements IPaymentRepository {
           },
           body: jsonEncode({
             'payment_type': 'gopay',
-            'transaction_details': {
-              'order_id': uuid.v4(),
-              'gross_amount': 1000
-            },
+            'transaction_details': {'order_id': orderId, 'gross_amount': 1000},
             'item_details': {
               'id': 'test-item-1',
               'price': 1000,
@@ -137,7 +137,17 @@ class DummyPaymentService implements IPaymentRepository {
                   (action) => action['name'] == 'deeplink-redirect',
                 )['url'] as String;
 
-            return right(deepLink);
+            final order = (await orderRepository.getOrderById('1')).getRight();
+            orderRepository.addOrder(order.copyWith(id: orderId));
+
+            return right(
+              PaymentResultsModel(
+                paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
+                paymentInformation: PaymentInformationModel(deeplink: deepLink),
+                order: order,
+                expiryTime: DateTime.now(),
+              ),
+            );
           }
         }
       }

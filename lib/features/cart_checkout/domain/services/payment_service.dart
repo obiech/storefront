@@ -3,8 +3,9 @@ import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
-import 'package:storefront_app/features/discovery/domain/repository/i_store_repository.dart';
 
+import '../../../discovery/domain/repository/i_store_repository.dart';
+import '../../../order/index.dart';
 import '../domains.dart';
 
 /// The gRPC payment handling service
@@ -26,8 +27,13 @@ import '../domains.dart';
 class PaymentService implements IPaymentRepository {
   final OrderServiceClient orderServiceClient;
   final IStoreRepository storeRepository;
+  final IOrderRepository orderRepository;
 
-  PaymentService(this.orderServiceClient, this.storeRepository);
+  PaymentService(
+    this.orderServiceClient,
+    this.orderRepository,
+    this.storeRepository,
+  );
 
   @override
   RepoResult<List<PaymentMethodDetails>> getPaymentMethods() async {
@@ -47,32 +53,25 @@ class PaymentService implements IPaymentRepository {
   }
 
   @override
-  RepoResult<String> checkoutPayment(PaymentMethod method) async {
+  RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
     try {
       // TODO(obella465): Fix once minimal submission details are provided
       final storeId = storeRepository.storeStream.valueOrNull;
 
       // TODO(obella): Handle null storeId
+      // TODO(obella): Handle addressId
       final checkoutRequest = CheckoutRequest(
         storeId: storeId,
         addressId: 'address_11',
         paymentMethod: method,
       );
 
-      final checkoutResponse =
-          await orderServiceClient.checkout(checkoutRequest);
+      final response = await orderServiceClient.checkout(checkoutRequest);
 
-      final paymentInfo = checkoutResponse.paymentInformation;
+      final resultsModel = PaymentResultsModel.fromCheckoutResponse(response);
+      orderRepository.addOrder(resultsModel.order);
 
-      switch (paymentInfo.whichFlow()) {
-        case PaymentInformation_Flow.gopayPaymentInfo:
-          return right(paymentInfo.gopayPaymentInfo.deeplink);
-        case PaymentInformation_Flow.vaPaymentInfo:
-          // TODO: implement VA Checkout
-          throw UnimplementedError();
-        case PaymentInformation_Flow.notSet:
-          return left(CheckoutFailure('Missing payment information'));
-      }
+      return right(resultsModel);
     } on Exception catch (e) {
       return left(e.toFailure);
     }

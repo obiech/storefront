@@ -15,14 +15,13 @@ class LoadingPaymentCheckout extends PaymentCheckoutState {}
 
 /// When [PaymentCheckout] link has been returned
 class LoadedPaymentCheckout extends PaymentCheckoutState {
-  /// Checkout link to open in browser or deeplink
-  ///TODO: Handle other payment non-deeplink options in the future
-  final String checkoutLink;
+  /// Payment Results with order & payment info
+  final PaymentResultsModel paymentResults;
 
-  const LoadedPaymentCheckout(this.checkoutLink);
+  const LoadedPaymentCheckout(this.paymentResults);
 
   @override
-  List<Object> get props => [checkoutLink];
+  List<Object> get props => [paymentResults];
 }
 
 /// When an error has occurred when making [PaymentCheckout]

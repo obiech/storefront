@@ -9,5 +9,5 @@ abstract class IPaymentRepository {
   RepoResult<List<PaymentMethodDetails>> getPaymentMethods();
 
   /// Checkout Cart
-  RepoResult<String> checkoutPayment(PaymentMethod method);
+  RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method);
 }
