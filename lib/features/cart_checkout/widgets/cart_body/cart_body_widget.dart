@@ -25,7 +25,11 @@ class CartBodyWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: res.dimens.spacingXxlarge),
+                const CartAddressSelection(
+                  key: CartBodyWidgetKeys.addressSelection,
+                ),
+                const ThickDivider(),
+                SizedBox(height: res.dimens.pagePadding),
                 CartItemsSection(
                   key: CartBodyWidgetKeys.cartItemsInStock,
                   items: state.cart.inStockItems,

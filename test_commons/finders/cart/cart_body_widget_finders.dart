@@ -9,6 +9,14 @@ class CartBodyWidgetFinders {
             widget is CartBodyLoading,
         description: 'Loading widget of CartBodyWidget',
       );
+
+  static Finder get addressSelection => find.byWidgetPredicate(
+        (widget) =>
+            widget.key == CartBodyWidgetKeys.addressSelection &&
+            widget is CartAddressSelection,
+        description: 'Cart delivery address selection',
+      );
+
   static Finder get cartItemsInStock => find.byWidgetPredicate(
         (widget) =>
             widget.key == CartBodyWidgetKeys.cartItemsInStock &&

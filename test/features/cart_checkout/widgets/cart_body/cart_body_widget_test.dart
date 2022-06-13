@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../test_commons/finders/cart/cart_body_widget_finders.dart';
@@ -19,9 +20,16 @@ void main() {
     '[CartBodyWidget]',
     () {
       late CartBloc cartBloc;
+      late DeliveryAddressCubit deliveryAddressCubit;
 
       setUp(() {
         cartBloc = MockCartBloc();
+      });
+
+      setUpAll(() {
+        deliveryAddressCubit = MockDeliveryAddressCubit();
+        when(() => deliveryAddressCubit.state)
+            .thenAnswer((_) => const DeliveryAddressInitial());
       });
 
       testWidgets(
@@ -30,12 +38,16 @@ void main() {
         (tester) async {
           when(() => cartBloc.state).thenReturn(const CartLoading());
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
 
           // should display list of cart items
           expect(CartBodyWidgetFinders.cartBodyLoading, findsOneWidget);
 
           // should not display widgets for success case
+          expect(CartBodyWidgetFinders.addressSelection, findsNothing);
           expect(CartBodyWidgetFinders.cartItemsInStock, findsNothing);
           expect(CartBodyWidgetFinders.cartItemsOutOfStock, findsNothing);
           expect(CartBodyWidgetFinders.paymentSummary, findsNothing);
@@ -51,10 +63,17 @@ void main() {
           const cart = cart_fixtures.mockCartModel;
           when(() => cartBloc.state).thenReturn(CartLoaded.loading(cart));
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
+
+          // should display address selection
+          expect(CartBodyWidgetFinders.addressSelection, findsOneWidget);
 
           // should display list of cart items
           // and its contents are based on State's cart
+
           expect(CartBodyWidgetFinders.cartItemsInStock, findsOneWidget);
           final itemsSection = tester.firstWidget<CartItemsSection>(
             CartBodyWidgetFinders.cartItemsInStock,
@@ -80,10 +99,17 @@ void main() {
           final cart = cart_fixtures.mockCartModelOutOfStock;
           when(() => cartBloc.state).thenReturn(CartLoaded.loading(cart));
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
+
+          // should display address selection
+          expect(CartBodyWidgetFinders.addressSelection, findsOneWidget);
 
           // should display list of cart items
           // and its contents are based on State's cart
+
           expect(CartBodyWidgetFinders.cartItemsInStock, findsOneWidget);
           final itemsSection = tester.firstWidget<CartItemsSection>(
             CartBodyWidgetFinders.cartItemsInStock,
@@ -112,7 +138,10 @@ void main() {
           const cart = cart_fixtures.mockCartModel;
           when(() => cartBloc.state).thenReturn(CartLoaded.loading(cart));
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
 
           // should display list of cart items
           // and its contents are based on State's cart
@@ -145,7 +174,13 @@ void main() {
           final cart = cart_fixtures.mockCartModelOutOfStock;
           when(() => cartBloc.state).thenReturn(CartLoaded.loading(cart));
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
+
+          // should display address selection
+          expect(CartBodyWidgetFinders.addressSelection, findsOneWidget);
 
           // should display list of cart items
           // and its contents are based on State's cart
@@ -178,12 +213,16 @@ void main() {
         (tester) async {
           when(() => cartBloc.state).thenReturn(const CartFailedToLoad());
 
-          await tester.pumpCartBody(cartBloc: cartBloc);
+          await tester.pumpCartBody(
+            cartBloc: cartBloc,
+            deliveryAddressCubit: deliveryAddressCubit,
+          );
 
           // should display an error widget
           expect(CartBodyWidgetFinders.failedToLoad, findsOneWidget);
 
           // should not display widgets for success case
+          expect(CartBodyWidgetFinders.addressSelection, findsNothing);
           expect(CartBodyWidgetFinders.cartItemsInStock, findsNothing);
           expect(CartBodyWidgetFinders.cartItemsOutOfStock, findsNothing);
           expect(CartBodyWidgetFinders.paymentSummary, findsNothing);
@@ -196,10 +235,18 @@ void main() {
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpCartBody({
     required CartBloc cartBloc,
+    required DeliveryAddressCubit deliveryAddressCubit,
   }) async {
     await pumpWidget(
-      BlocProvider<CartBloc>(
-        create: (context) => cartBloc,
+      MultiBlocProvider(
+        providers: [
+          BlocProvider<CartBloc>(
+            create: (context) => cartBloc,
+          ),
+          BlocProvider<DeliveryAddressCubit>(
+            create: (context) => deliveryAddressCubit,
+          ),
+        ],
         child: const MaterialApp(
           home: Scaffold(
             body: CartBodyWidget(),

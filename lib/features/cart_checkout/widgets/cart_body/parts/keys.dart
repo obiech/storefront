@@ -3,6 +3,9 @@ part of '../cart_body_widget.dart';
 class CartBodyWidgetKeys {
   static const _base = 'CartBodyWidget';
 
+  /// Widget for selecting delivery address
+  static const addressSelection = ValueKey('${_base}_addressSelection');
+
   /// Represents user's shopping cart with
   /// items that are in stock
   static const cartItemsInStock = ValueKey('${_base}_cartItemsInStock');
