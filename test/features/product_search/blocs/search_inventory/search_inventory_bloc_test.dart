@@ -3,9 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/product/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
-import '../../fixtures.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -14,8 +14,9 @@ void main() {
   late ISearchHistoryRepository searchHistoryRepository;
 
   String _query = '';
-  const limitPerPage = 5;
+  const limitPerPage = 10;
   const mockStoreId = 'store-id-1';
+  final pageInventory = dummyProducts.take((limitPerPage * 2) - 1);
 
   setUp(() {
     repository = MockProductSearchRepository();
@@ -35,10 +36,9 @@ void main() {
     ).thenAnswer((invocation) async {
       _query = invocation.positionalArguments.first.toString();
       final page = invocation.namedArguments[const Symbol('page')] as int;
-      // final limit = invocation.namedArguments[const Symbol('limit')] as int;
+      final limit = invocation.namedArguments[const Symbol('limit')] as int;
 
-      final pageResults =
-          pageInventory.skip(page * limitPerPage).take(limitPerPage).toList();
+      final pageResults = pageInventory.skip(page * limit).take(limit).toList();
 
       return pageResults.isEmpty
           ? left(NoInventoryResults())

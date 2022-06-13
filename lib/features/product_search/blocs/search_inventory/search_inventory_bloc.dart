@@ -30,7 +30,7 @@ class SearchInventoryBloc
     );
   }
 
-  final int _pageSize = 4;
+  final int _pageSize = 10;
   int _page = 0;
   String _query = '';
   final List<ProductModel> _inventory = [];

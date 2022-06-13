@@ -88,11 +88,11 @@ class _SearchResultsState extends State<SearchResults> {
   ///
   /// * Else skip loading more.
   void _loadMoreItemsFromInventory() {
-    /// Load more items once bottom is almost reached
-    final scrollOffset =
-        _scrollController.position.maxScrollExtent - _scrollController.offset;
+    /// Start loading next page when midway current page
+    final scrollOffset = _scrollController.offset;
+    final nextPageLoadOffset = _scrollController.position.maxScrollExtent / 2;
 
-    if (scrollOffset < INVENTORY_SCROLL_OFFSET) {
+    if (scrollOffset >= nextPageLoadOffset) {
       final inventoryBloc = context.read<SearchInventoryBloc>();
 
       // Only load more items if inventory end is not reached
