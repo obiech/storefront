@@ -104,12 +104,10 @@ class ParentCategoriesGrid extends StatelessWidget {
             ),
           );
         } else if (state is ErrorLoadingParentCategoriesState) {
-          return Center(
+          return DropezyError(
             key: const ValueKey(HomePageKeys.errorParentCategoryWidget),
-            child: Text(
-              state.message,
-              style: context.res.styles.caption1,
-            ),
+            title: context.res.strings.failed,
+            message: state.message,
           );
         }
         return Container();
