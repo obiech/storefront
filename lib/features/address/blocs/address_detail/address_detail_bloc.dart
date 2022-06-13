@@ -24,14 +24,23 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
     on<LoadAddressDetail>((event, emit) async {
       // FIXME: ugly hacks to delay & wait for map creation
       await Future.delayed(const Duration(milliseconds: 500));
-      // TODO (widy): get user location lat & lng
-      emit(state.copyWith(latLng: const LatLng(-6.1754463, 106.8377065)));
+
+      final placeDetails = event.placeDetailsModel;
+      if (placeDetails != null) {
+        emit(
+          state.copyWith(
+            latLng: LatLng(placeDetails.lat, placeDetails.lng),
+            addressDetailsName: placeDetails.name,
+            addressDetails: placeDetails.addressDetails.toPrettyAddress,
+          ),
+        );
+      }
     });
     on<AddressNameChanged>((event, emit) {
       emit(state.copyWith(addressName: event.addressName));
     });
-    on<AddressDetailChanged>((event, emit) {
-      emit(state.copyWith(addressDetail: event.addressDetail));
+    on<AddressDetailNoteChanged>((event, emit) {
+      emit(state.copyWith(addressDetailsNote: event.addressDetailNote));
     });
     on<RecipientNameChanged>((event, emit) {
       emit(state.copyWith(recipientName: event.recipientName));
@@ -52,20 +61,19 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
       // TODO (widy): Fix model passed to repository
       // Notes:
       // - id can be exist if page opened from edit address
-      // - fix address detail model from PlaceDetailsModel
       DeliveryAddressModel(
         id: 'id',
         title: state.addressName,
         isPrimaryAddress: state.isPrimaryAddress,
         lat: state.latLng.latitude,
         lng: state.latLng.longitude,
-        notes: state.addressDetail,
-        recipientName: state.addressName,
+        notes: state.addressDetailsNote,
+        recipientName: state.recipientName,
         recipientPhoneNumber: state.recipientPhoneNumber,
         dateCreated: _dateTimeProvider.now,
-        // TODO (widy): fix this hardcode
-        details: const AddressDetailsModel(
-          street: 'street name',
+        // TODO (widy): fix with proper structure conversion
+        details: AddressDetailsModel(
+          street: state.addressDetails,
         ),
       ),
     );

@@ -2,7 +2,15 @@ part of 'address_detail_bloc.dart';
 
 class AddressDetailState extends Equatable {
   final String addressName;
-  final String addressDetail;
+
+  // The address name that comes from places API and shown below map view
+  final String addressDetailsName;
+
+  /// The address detail that comes from Places API and shown below map view
+  final String addressDetails;
+
+  /// Address detail on form
+  final String addressDetailsNote;
   final String recipientName;
   final String recipientPhoneNumber;
   final bool isPrimaryAddress;
@@ -13,7 +21,9 @@ class AddressDetailState extends Equatable {
 
   const AddressDetailState({
     this.addressName = '',
-    this.addressDetail = '',
+    this.addressDetailsName = '',
+    this.addressDetails = '',
+    this.addressDetailsNote = '',
     this.recipientName = '',
     this.recipientPhoneNumber = '',
     this.isPrimaryAddress = false,
@@ -25,7 +35,9 @@ class AddressDetailState extends Equatable {
 
   AddressDetailState copyWith({
     String? addressName,
-    String? addressDetail,
+    String? addressDetailsName,
+    String? addressDetails,
+    String? addressDetailsNote,
     String? recipientName,
     String? recipientPhoneNumber,
     bool? isPrimaryAddress,
@@ -36,7 +48,9 @@ class AddressDetailState extends Equatable {
   }) {
     return AddressDetailState(
       addressName: addressName ?? this.addressName,
-      addressDetail: addressDetail ?? this.addressDetail,
+      addressDetailsName: addressDetailsName ?? this.addressDetailsName,
+      addressDetails: addressDetails ?? this.addressDetails,
+      addressDetailsNote: addressDetailsNote ?? this.addressDetailsNote,
       recipientName: recipientName ?? this.recipientName,
       recipientPhoneNumber: recipientPhoneNumber ?? this.recipientPhoneNumber,
       isPrimaryAddress: isPrimaryAddress ?? this.isPrimaryAddress,
@@ -50,7 +64,9 @@ class AddressDetailState extends Equatable {
   @override
   List<Object?> get props => [
         addressName,
-        addressDetail,
+        addressDetailsName,
+        addressDetails,
+        addressDetailsNote,
         recipientName,
         recipientPhoneNumber,
         isPrimaryAddress,

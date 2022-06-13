@@ -12,7 +12,10 @@ class AddressDetailPageWrapper extends StatelessWidget
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AddressDetailBloc>()..add(const LoadAddressDetail()),
+      create: (_) => getIt<AddressDetailBloc>()
+        ..add(
+          LoadAddressDetail(placeDetailsModel: placeDetails),
+        ),
       child: this,
     );
   }

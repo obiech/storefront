@@ -1,10 +1,12 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+import '../../../../../test_commons/fixtures/address/places_auto_complete_result.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -42,6 +44,24 @@ void main() {
 
   group('AddressDetailBloc', () {
     blocTest<AddressDetailBloc, AddressDetailState>(
+      'should emit lat, lng, & address detail '
+      'when LoadAddressDetail is added '
+      'and PlaceDetailsModel is provided',
+      // Waiting for map creation (ugly hacks)
+      wait: const Duration(milliseconds: 500),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(LoadAddressDetail(placeDetailsModel: placeDetails)),
+      expect: () => [
+        AddressDetailState(
+          addressDetailsName: placeDetails.name,
+          addressDetails: placeDetails.addressDetails.toPrettyAddress,
+          latLng: LatLng(placeDetails.lat, placeDetails.lng),
+        ),
+      ],
+    );
+
+    blocTest<AddressDetailBloc, AddressDetailState>(
       'should emit address name '
       'when AddressNameChanged is added',
       build: () => bloc,
@@ -55,9 +75,9 @@ void main() {
       'should emit address detail '
       'when AddressDetailChanged is added',
       build: () => bloc,
-      act: (bloc) => bloc.add(const AddressDetailChanged('addressDetail')),
+      act: (bloc) => bloc.add(const AddressDetailNoteChanged('addressDetail')),
       expect: () => [
-        const AddressDetailState(addressDetail: 'addressDetail'),
+        const AddressDetailState(addressDetailsNote: 'addressDetail'),
       ],
     );
 

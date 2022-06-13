@@ -28,6 +28,7 @@ void main() {
     // here, we stub it to do nothing because we're only checking for the
     // route name that's being pushed
     when(() => stackRouter.push(any())).thenAnswer((_) async => null);
+    when(() => stackRouter.popAndPush(any())).thenAnswer((_) async => null);
   });
 
   setUpAll(() {
@@ -90,7 +91,7 @@ void main() {
       );
 
       final capturedRoutes =
-          verify(() => stackRouter.push(captureAny())).captured;
+          verify(() => stackRouter.popAndPush(captureAny())).captured;
 
       // there should only be one route that's being pushed
       expect(capturedRoutes.length, 1);

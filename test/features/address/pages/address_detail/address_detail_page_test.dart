@@ -149,7 +149,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(() => bloc.add(const AddressNameChanged(addressName))).called(1);
-      verify(() => bloc.add(const AddressDetailChanged(addressDetail)))
+      verify(() => bloc.add(const AddressDetailNoteChanged(addressDetail)))
           .called(1);
       verify(() => bloc.add(const RecipientNameChanged(recipientName)))
           .called(1);

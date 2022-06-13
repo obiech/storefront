@@ -6,10 +6,12 @@ abstract class AddressDetailEvent extends Equatable {
 
 /// Initial event when [AddressDetailPage] is loaded
 class LoadAddressDetail extends AddressDetailEvent {
-  const LoadAddressDetail();
+  final PlaceDetailsModel? placeDetailsModel;
+
+  const LoadAddressDetail({this.placeDetailsModel});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [placeDetailsModel];
 }
 
 /// Event to change [addressName] and save it to state
@@ -22,14 +24,14 @@ class AddressNameChanged extends AddressDetailEvent {
   List<Object?> get props => [addressName];
 }
 
-/// Event to change [addressDetail] and save it to state
-class AddressDetailChanged extends AddressDetailEvent {
-  final String addressDetail;
+/// Event to change [addressDetailNote] and save it to state
+class AddressDetailNoteChanged extends AddressDetailEvent {
+  final String addressDetailNote;
 
-  const AddressDetailChanged(this.addressDetail);
+  const AddressDetailNoteChanged(this.addressDetailNote);
 
   @override
-  List<Object?> get props => [addressDetail];
+  List<Object?> get props => [addressDetailNote];
 }
 
 /// Event to change [recipientName] and save it to state

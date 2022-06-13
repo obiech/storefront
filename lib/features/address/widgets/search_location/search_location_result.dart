@@ -47,7 +47,7 @@ class SearchLocationResult extends StatelessWidget {
                       current is LocationSelectSuccess,
                   listener: (context, state) {
                     if (state is LocationSelectSuccess) {
-                      context.pushRoute(
+                      context.router.popAndPush(
                         AddressDetailRoute(
                           placeDetails: state.addressDetails,
                         ),

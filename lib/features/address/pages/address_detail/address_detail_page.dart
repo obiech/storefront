@@ -12,12 +12,7 @@ part 'wrapper.dart';
 // TODO (widy): Request for location permission when page loaded
 // https://dropezy.atlassian.net/browse/STOR-318
 class AddressDetailPage extends StatefulWidget {
-  final PlaceDetailsModel? placeDetailsModel;
-
-  const AddressDetailPage({
-    Key? key,
-    this.placeDetailsModel,
-  }) : super(key: key);
+  const AddressDetailPage({Key? key}) : super(key: key);
 
   @override
   State<AddressDetailPage> createState() => _AddressDetailPageState();
@@ -65,6 +60,9 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                       .read<AddressDetailBloc>()
                                       .add(AddressNameChanged(name));
                                 },
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.next,
                               ),
                               const SizedBox(height: 24),
                               SizedBox(
@@ -103,16 +101,15 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        // TODO (widy): Fix address text based on map
                                         Text(
-                                          'Jalan Kebon Jeruk I',
+                                          state.addressDetailsName,
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
                                           ).withLineHeight(14),
                                         ),
                                         Text(
-                                          'Jl. Rawa Belong, Palmerah, Kec. Palmerah, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta, Indonesia',
+                                          state.addressDetails,
                                           style: const TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w500,
@@ -130,10 +127,13 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                 label: context.res.strings.addressDetail,
                                 hintText: context.res.strings.addressDetailHint,
                                 onChanged: (addressDetail) {
-                                  context
-                                      .read<AddressDetailBloc>()
-                                      .add(AddressDetailChanged(addressDetail));
+                                  context.read<AddressDetailBloc>().add(
+                                        AddressDetailNoteChanged(addressDetail),
+                                      );
                                 },
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.next,
                               ),
                               const SizedBox(height: 24),
                               DropezyTextFormField(
@@ -146,6 +146,9 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                       .read<AddressDetailBloc>()
                                       .add(RecipientNameChanged(name));
                                 },
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.next,
                               ),
                               const SizedBox(height: 24),
                               DropezyTextFormField(
@@ -158,6 +161,8 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                                       .read<AddressDetailBloc>()
                                       .add(RecipientPhoneChanged(phoneNumber));
                                 },
+                                textInputAction: TextInputAction.done,
+                                keyboardType: TextInputType.phone,
                               ),
                               const SizedBox(height: 24),
                               CheckboxListTile(
