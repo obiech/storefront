@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/domain/domains.dart';
 import 'package:storefront_app/features/address/domain/services/delivery_address_service.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
@@ -120,4 +121,31 @@ void main() {
       expect(failure.message, 'An unknown error has occured');
     },
   );
+
+  test(
+      'should set active address '
+      'when addresses are loaded', () async {
+    /// arrange
+    final request = GetProfileRequest();
+    when(() => customerServiceClient.getProfile(request)).thenAnswer(
+      (_) => MockResponseFuture.value(
+        GetProfileResponse(
+          profile: Profile(
+            addresses: sampleDeliveryAddressPbList,
+          ),
+        ),
+      ),
+    );
+
+    expect(deliveryAddressService.activeDeliveryAddress, null);
+
+    /// act
+    await deliveryAddressService.getDeliveryAddresses();
+
+    /// assert
+    expect(
+      deliveryAddressService.activeDeliveryAddress,
+      DeliveryAddressModel.fromPb(sampleDeliveryAddressPbList.first),
+    );
+  });
 }

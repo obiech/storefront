@@ -102,4 +102,14 @@ extension ListDeliveryAddressModelX on List<DeliveryAddressModel> {
   void sortDate() {
     sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
   }
+
+  /// Get the primary delivery address.
+  ///
+  /// If non is found, default to the first
+  DeliveryAddressModel? get primaryAddress => isNotEmpty
+      ? firstWhere(
+          (address) => address.isPrimaryAddress,
+          orElse: () => first,
+        )
+      : null;
 }

@@ -8,6 +8,8 @@ import '../domains.dart';
 /// Contains dummy data for [DeliveryAddressModel]
 @LazySingleton(as: IDeliveryAddressRepository, env: [DiEnvironment.dummy])
 class DummyDeliveryAddressService extends IDeliveryAddressRepository {
+  DeliveryAddressModel? _activeAddress;
+
   static final addressList = [
     DeliveryAddressModel(
       id: 'delivery-address-1',
@@ -129,6 +131,7 @@ class DummyDeliveryAddressService extends IDeliveryAddressRepository {
   RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses() async {
     //  Simulate network loading
     await Future.delayed(const Duration(seconds: 1));
+    _activeAddress = addressList.primaryAddress;
     return right(addressList);
   }
 
@@ -138,10 +141,13 @@ class DummyDeliveryAddressService extends IDeliveryAddressRepository {
       //  Simulate network loading
       await Future.delayed(const Duration(seconds: 1));
       addressList.add(address);
-
+      _activeAddress = addressList.primaryAddress;
       return right(unit);
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  DeliveryAddressModel? get activeDeliveryAddress => _activeAddress;
 }

@@ -6,4 +6,7 @@ import '../domains.dart';
 abstract class IDeliveryAddressRepository {
   RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses();
   RepoResult<Unit> saveAddress(DeliveryAddressModel address);
+
+  /// Pick current primary delivery address
+  DeliveryAddressModel? get activeDeliveryAddress;
 }

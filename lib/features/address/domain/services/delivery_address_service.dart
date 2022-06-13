@@ -9,10 +9,11 @@ import 'package:storefront_app/features/address/index.dart';
 /// using gRPC connection.
 @LazySingleton(as: IDeliveryAddressRepository, env: DiEnvironment.grpcEnvs)
 class DeliveryAddressService implements IDeliveryAddressRepository {
+  DeliveryAddressModel? _activeAddress;
+  final List<DeliveryAddressModel> _addresses;
   final CustomerServiceClient _customerService;
 
-  DeliveryAddressService(CustomerServiceClient customerServiceClient)
-      : _customerService = customerServiceClient;
+  DeliveryAddressService(this._customerService) : _addresses = [];
 
   @override
   RepoResult<List<DeliveryAddressModel>> getDeliveryAddresses() async {
@@ -23,6 +24,10 @@ class DeliveryAddressService implements IDeliveryAddressRepository {
       final profile = response.profile;
       final addresses =
           profile.addresses.map(DeliveryAddressModel.fromPb).toList();
+
+      // Add to addresses cache
+      _addresses.addAll(addresses);
+      _activeAddress = _addresses.primaryAddress;
 
       return right(addresses);
     } on Exception catch (e) {
@@ -40,11 +45,17 @@ class DeliveryAddressService implements IDeliveryAddressRepository {
         contact: addressRequest.contact,
       );
 
-      await _customerService.addAddress(request);
+      // Add addresses cache
+      final addAddressResponse = await _customerService.addAddress(request);
+      _addresses.add(DeliveryAddressModel.fromPb(addAddressResponse.address));
+      _activeAddress = _addresses.primaryAddress;
 
       return right(unit);
     } on Exception catch (e) {
       return left(e.toFailure);
     }
   }
+
+  @override
+  DeliveryAddressModel? get activeDeliveryAddress => _activeAddress;
 }
