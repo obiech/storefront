@@ -108,14 +108,17 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   void _onSuccessfulVerification() {
+    getIt<IPrefsRepository>().setIsOnBoarded(true);
     switch (widget.successAction) {
       case OtpSuccessAction.goToHomePage:
-        getIt<IPrefsRepository>().setIsOnBoarded(true);
         // Removes all previous routes and push HomePage as new route
         context.router.replaceAll([const MainRoute()]);
         break;
-      case OtpSuccessAction.goToPinPage:
-        context.router.push(const PinInputRoute());
+      case OtpSuccessAction.goToRequestLocationAccessPage:
+        context.router.replaceAll([
+          const MainRoute(),
+          const RequestLocationAccessRoute(),
+        ]);
         break;
     }
   }

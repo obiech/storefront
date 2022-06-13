@@ -114,7 +114,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     context.router.push(
       OtpVerificationRoute(
         phoneNumberIntlFormat: enteredPhoneNumberInIntlFormat,
-        successAction: OtpSuccessAction.goToPinPage,
+        successAction: OtpSuccessAction.goToRequestLocationAccessPage,
         timeoutInSeconds: AuthConfig.otpTimeoutInSeconds,
         isRegistration: true,
       ),

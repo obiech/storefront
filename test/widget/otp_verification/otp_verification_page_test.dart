@@ -114,7 +114,7 @@ Future<void> main() async {
       );
 
       testWidgets(
-        '[PinInputPage] if [successBehavior] is set to [goToPinPage]',
+        '[RequestLocationAcccessPage] if [successBehavior] is set to [goToRequestLocationAccessPage]',
         (WidgetTester tester) async {
           when(() => accountVerificationCubit.state)
               .thenReturn(const AccountVerificationInitial());
@@ -132,14 +132,17 @@ Future<void> main() async {
               cubit: accountVerificationCubit,
               navigator: navigator,
               phoneNumberIntlFormat: mockPhoneNumberIntl,
-              successAction: OtpSuccessAction.goToPinPage,
+              successAction: OtpSuccessAction.goToRequestLocationAccessPage,
             ),
           );
 
-          final routes = verify(() => navigator.push(captureAny())).captured;
+          final routeStack = verify(() => navigator.replaceAll(captureAny()))
+              .captured
+              .first as List<PageRouteInfo>;
 
-          expect(routes.length, 1);
-          expect(routes.first, isA<PinInputRoute>());
+          expect(routeStack.length, 2);
+          expect(routeStack.first, isA<MainRoute>());
+          expect(routeStack.elementAt(1), isA<RequestLocationAccessRoute>());
         },
       );
 
