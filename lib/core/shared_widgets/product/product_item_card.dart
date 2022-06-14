@@ -168,6 +168,8 @@ class ProductItemCard extends StatelessWidget {
                     ),
                     Text(
                       product.unit,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: res.styles.caption3.copyWith(
                         color: const Color(0xFF70717D),
                         fontSize: 11,
