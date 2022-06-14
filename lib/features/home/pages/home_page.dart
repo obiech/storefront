@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/core.dart';
 import '../../../di/injection.dart';
-import '../../auth/domain/services/user_credentials_storage.dart';
 import '../index.dart';
 
 part 'keys.dart';
@@ -32,9 +31,7 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
   Widget build(BuildContext context) {
     final res = context.res;
     return Scaffold(
-      appBar: HomeAppBar(
-        userCredentialsStream: getIt<UserCredentialsStorage>().stream,
-      ),
+      appBar: const HomeAppBar(),
       body: SafeArea(
         bottom: false,
         child: SingleChildScrollView(

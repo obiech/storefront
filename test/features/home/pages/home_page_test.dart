@@ -4,9 +4,8 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
+import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 
 import '../../../../test_commons/utils/locale_setup.dart';
@@ -15,8 +14,8 @@ import 'home_page_finder.dart';
 
 void main() {
   late ParentCategoriesCubit parentCategoriesCubit;
+  late DeliveryAddressCubit deliveryAddressCubit;
   late HttpClient httpClient;
-  late UserCredentialsStorage userCredsStorage;
 
   const mockparentCategoryList = [
     ParentCategoryModel(
@@ -32,27 +31,30 @@ void main() {
 
   setUp(() {
     parentCategoriesCubit = MockParentCategoriesCubit();
+    deliveryAddressCubit = MockDeliveryAddressCubit();
+    when(() => deliveryAddressCubit.state)
+        .thenReturn(const DeliveryAddressInitial());
     httpClient = MockHttpClient();
-    userCredsStorage = MockUserCredentialsStorage();
-    when(() => userCredsStorage.stream).thenAnswer((_) => const Stream.empty());
-
-    if (GetIt.I.isRegistered<UserCredentialsStorage>()) {
-      GetIt.I.unregister<UserCredentialsStorage>();
-    }
-
-    GetIt.I.registerSingleton<UserCredentialsStorage>(userCredsStorage);
   });
 
   setUpAll(() {
     setUpLocaleInjection();
   });
 
+  // TODO: convert into extension method
   Future<void> pumpHomePage(WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: BlocProvider<ParentCategoriesCubit>(
-            create: (_) => parentCategoriesCubit,
+          body: MultiBlocProvider(
+            providers: [
+              BlocProvider<ParentCategoriesCubit>(
+                create: (_) => parentCategoriesCubit,
+              ),
+              BlocProvider(
+                create: (context) => deliveryAddressCubit,
+              ),
+            ],
             child: const HomePage(),
           ),
         ),
