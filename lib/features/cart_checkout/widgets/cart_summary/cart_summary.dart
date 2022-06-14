@@ -54,26 +54,6 @@ class CartSummary extends StatelessWidget {
               ),
             ),
           );
-        } else if (state is CartLoading) {
-          return Container(
-            decoration: BoxDecoration(
-              color: res.colors.black,
-              borderRadius: BorderRadius.circular(50),
-            ),
-            margin: const EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
-            padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
-            child: const SkeletonItem(
-              child: CartSummaryDetails(
-                itemCount: 0,
-                hasDiscount: false,
-                total: '000',
-                subTotal: '000',
-                isLoading: true,
-              ),
-            ),
-          );
         } else {
           return const SizedBox();
         }

@@ -44,27 +44,6 @@ void main() {
   });
 
   testWidgets(
-      'should display [CartSummaryDetails] widget with skeleton '
-      'when loading cart', (WidgetTester tester) async {
-    /// arrange
-    when(() => bloc.state).thenAnswer((_) => const CartLoading());
-
-    /// act
-    await tester.pumpCartSummary(bloc);
-    await tester.pump();
-
-    /// assert
-    expect(_loadingFinder, findsOneWidget);
-
-    final cartSummary =
-        tester.firstWidget<CartSummaryDetails>(_cartSummaryFinder);
-    expect(cartSummary.isLoading, true);
-    expect(cartSummary.total, '000');
-    expect(cartSummary.subTotal, '000');
-    expect(cartSummary.itemCount, 0);
-  });
-
-  testWidgets(
       'should display [CartSummaryDetails] widget without skeleton '
       'when not calculating cart summary '
       'and cart is not empty', (WidgetTester tester) async {
