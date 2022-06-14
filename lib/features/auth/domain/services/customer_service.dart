@@ -31,4 +31,19 @@ class CustomerService extends ICustomerRepository {
       return left(e.toFailure);
     }
   }
+
+  @override
+  RepoResult<Unit> updateFullName(String fullName) async {
+    final request = UpdateProfileRequest(
+      profile: Profile(fullName: fullName),
+    );
+
+    try {
+      await _customerServiceClient.updateProfile(request);
+
+      return right(unit);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
+  }
 }

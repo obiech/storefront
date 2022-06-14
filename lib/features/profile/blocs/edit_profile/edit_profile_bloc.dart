@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../index.dart';
+import '../../../auth/index.dart';
 
 part 'edit_profile_event.dart';
 part 'edit_profile_state.dart';
 
 @injectable
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
-  final IProfileRepository _repository;
+  final ICustomerRepository _repository;
 
   EditProfileBloc(this._repository) : super(const EditProfileState()) {
     on<FullNameChanged>(_onNameChanged);
@@ -26,7 +26,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   ) async {
     emit(state.copyWith(loading: true));
 
-    final result = await _repository.saveFullName(state.fullName);
+    final result = await _repository.updateFullName(state.fullName);
 
     result.fold(
       (failure) => emit(

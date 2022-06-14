@@ -8,4 +8,5 @@ import '../services/firebase_auth_service.dart';
 /// For Firebase related actions, see [FirebaseAuthService]
 abstract class ICustomerRepository {
   RepoResult<Unit> registerPhoneNumber(String phoneNumber);
+  RepoResult<Unit> updateFullName(String fullName);
 }

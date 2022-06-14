@@ -3,23 +3,24 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/errors/failure.dart';
+import 'package:storefront_app/features/auth/domain/domain.dart';
 import 'package:storefront_app/features/profile/index.dart';
 
-import '../../mocks.dart';
+import '../../../../src/mock_customer_service_client.dart';
 
 void main() {
-  late IProfileRepository profileRepository;
+  late ICustomerRepository customerRepository;
   late EditProfileBloc editProfileBloc;
 
   const String fullName = 'dummyName';
 
   setUp(() {
-    profileRepository = MockProfileRepository();
-    editProfileBloc = EditProfileBloc(profileRepository);
+    customerRepository = MockCustomerRepository();
+    editProfileBloc = EditProfileBloc(customerRepository);
   });
 
   tearDown(() {
-    verifyNoMoreInteractions(profileRepository);
+    verifyNoMoreInteractions(customerRepository);
   });
 
   group('EditProfileBloc', () {
@@ -37,7 +38,8 @@ void main() {
       'and repository returns failure',
       setUp: () {
         when(
-          () => profileRepository.saveFullName(editProfileBloc.state.fullName),
+          () =>
+              customerRepository.updateFullName(editProfileBloc.state.fullName),
         ).thenAnswer((_) async => left(Failure('Error!')));
       },
       build: () => editProfileBloc,
@@ -48,7 +50,8 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => profileRepository.saveFullName(editProfileBloc.state.fullName),
+          () =>
+              customerRepository.updateFullName(editProfileBloc.state.fullName),
         ).called(1);
       },
     );
@@ -59,7 +62,8 @@ void main() {
       'and repository returns right',
       setUp: () {
         when(
-          () => profileRepository.saveFullName(editProfileBloc.state.fullName),
+          () =>
+              customerRepository.updateFullName(editProfileBloc.state.fullName),
         ).thenAnswer((_) async => right(unit));
       },
       build: () => editProfileBloc,
@@ -70,7 +74,8 @@ void main() {
       ],
       verify: (_) {
         verify(
-          () => profileRepository.saveFullName(editProfileBloc.state.fullName),
+          () =>
+              customerRepository.updateFullName(editProfileBloc.state.fullName),
         ).called(1);
       },
     );

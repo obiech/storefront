@@ -14,6 +14,7 @@ void main() {
     '[CustomerService]',
     () {
       const mockPhoneNumber = '+6281234567890';
+      const mockFullName = 'dummyName';
 
       late CustomerServiceClient customerServiceClient;
       late CustomerService customerService;
@@ -74,6 +75,55 @@ void main() {
           );
         },
       );
+
+      group('[updateFullName()]', () {
+        final mockRequest = UpdateProfileRequest(
+          profile: Profile(fullName: mockFullName),
+        );
+
+        test(
+          'should call [CustomerServiceClient.updateProfile] once '
+          'and return Unit '
+          'when request is successful',
+          () async {
+            when(
+              () => customerServiceClient.updateProfile(mockRequest),
+            ).thenAnswer(
+              (_) => MockResponseFuture.value(UpdateProfileResponse()),
+            );
+
+            final result = await customerService.updateFullName(mockFullName);
+
+            final unit = result.getRight();
+            expect(unit, isA<Unit>());
+
+            verify(() => customerServiceClient.updateProfile(mockRequest))
+                .called(1);
+          },
+        );
+
+        test(
+          'should call [CustomerServiceClient.updateProfile] once '
+          'and return a Failure '
+          'when request is not successful',
+          () async {
+            when(
+              () => customerServiceClient.updateProfile(mockRequest),
+            ).thenAnswer(
+              (_) => MockResponseFuture.error(GrpcError.internal('Error')),
+            );
+
+            final result = await customerService.updateFullName(mockFullName);
+
+            final failure = result.getLeft();
+            expect(failure, isA<NetworkFailure>());
+            expect(failure.message, 'Error');
+
+            verify(() => customerServiceClient.updateProfile(mockRequest))
+                .called(1);
+          },
+        );
+      });
     },
   );
 }
