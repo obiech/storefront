@@ -3,13 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/discovery/domain/repository/i_store_repository.dart';
 import 'package:storefront_app/features/order/domain/domains.dart';
 
+import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
 import '../../../../commons.dart';
 import '../../../../src/mock_customer_service_client.dart';
 import '../../../../src/mock_response_future.dart';
+import '../../../address/mocks.dart';
 import '../../../order/mocks.dart';
 
 void main() {
@@ -17,6 +20,7 @@ void main() {
   late OrderServiceClient orderServiceClient;
   late IOrderRepository orderRepository;
   late IStoreRepository storeRepository;
+  late IDeliveryAddressRepository deliveryAddressRepository;
 
   final paymentMethods = samplePaymentMethods;
 
@@ -25,6 +29,8 @@ void main() {
 
   final order = orderCreated;
   order.orderId = orderId;
+
+  final deliveryAddressModel = sampleDeliveryAddressList.first;
 
   final paymentInformation = mockGoPayPaymentInformation;
 
@@ -35,10 +41,12 @@ void main() {
     orderServiceClient = MockOrderServiceClient();
     orderRepository = MockOrderRepository();
     storeRepository = MockStoreRepository();
+    deliveryAddressRepository = MockDeliveryAddressRepository();
     paymentRepository = PaymentService(
       orderServiceClient,
       orderRepository,
       storeRepository,
+      deliveryAddressRepository,
     );
   });
 
@@ -114,6 +122,10 @@ void main() {
         (_) => BehaviorSubject.seeded(storeId),
       );
 
+      when(() => deliveryAddressRepository.activeDeliveryAddress).thenAnswer(
+        (_) => deliveryAddressModel,
+      );
+
       registerFallbackValue(CheckoutRequest());
       registerFallbackValue(OrderModel.fromPb(order));
 
@@ -139,7 +151,7 @@ void main() {
         () => orderServiceClient.checkout(
           CheckoutRequest(
             storeId: storeId,
-            addressId: 'address_11',
+            addressId: deliveryAddressModel.id,
             paymentMethod: paymentMethod,
           ),
         ),

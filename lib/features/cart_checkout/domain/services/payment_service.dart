@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
+import 'package:storefront_app/features/address/index.dart';
 
 import '../../../discovery/domain/repository/i_store_repository.dart';
 import '../../../order/index.dart';
@@ -28,11 +29,13 @@ class PaymentService implements IPaymentRepository {
   final OrderServiceClient orderServiceClient;
   final IStoreRepository storeRepository;
   final IOrderRepository orderRepository;
+  final IDeliveryAddressRepository deliveryAddressRepository;
 
   PaymentService(
     this.orderServiceClient,
     this.orderRepository,
     this.storeRepository,
+    this.deliveryAddressRepository,
   );
 
   @override
@@ -57,12 +60,13 @@ class PaymentService implements IPaymentRepository {
     try {
       // TODO(obella465): Fix once minimal submission details are provided
       final storeId = storeRepository.storeStream.valueOrNull;
+      final addressId = deliveryAddressRepository.activeDeliveryAddress?.id;
 
       // TODO(obella): Handle null storeId
       // TODO(obella): Handle addressId
       final checkoutRequest = CheckoutRequest(
         storeId: storeId,
-        addressId: 'address_11',
+        addressId: addressId,
         paymentMethod: method,
       );
 
