@@ -10,6 +10,8 @@ import 'package:storefront_app/features/order/index.dart';
 import 'package:uuid/uuid.dart';
 
 import '../features/cart_checkout/index.dart';
+import '../res/strings/base_strings.dart';
+import '../res/strings/base_strings.ext.dart';
 
 @module
 abstract class CoreModule {
@@ -46,4 +48,10 @@ abstract class CoreModule {
   @singleton
   @preResolve
   Future<Box> get prefsBox => Hive.openBox(PREF_BOX);
+
+  /// To access translations in Bloc & repositories,
+  /// [BaseStrings] can be injected
+  /// TODO(obella): Update factory on [Locale] change
+  BaseStrings appStrings(IPrefsRepository prefs) =>
+      prefs.getDeviceLocale().strings;
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
-import 'package:storefront_app/res/strings/english_strings.dart';
 
 import 'colors/app_colors.dart';
 import 'colors/base_colors.dart';
@@ -15,7 +14,7 @@ import 'paths/base_paths.dart';
 import 'paths/english_paths.dart';
 import 'paths/indonesian_paths.dart';
 import 'strings/base_strings.dart';
-import 'strings/indonesian_strings.dart';
+import 'strings/base_strings.ext.dart';
 import 'styles/app_styles.dart';
 import 'styles/base_styles.dart';
 
@@ -25,14 +24,7 @@ class Resources {
 
   Resources(this._context, this._locale);
 
-  BaseStrings get strings {
-    switch (_locale.languageCode) {
-      case 'id':
-        return IndonesianStrings();
-      default:
-        return EnglishStrings();
-    }
-  }
+  BaseStrings get strings => _locale.strings;
 
   BaseColors get colors {
     return AppColors();
