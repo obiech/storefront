@@ -123,29 +123,32 @@ void main() {
   );
 
   test(
-      'should set active address '
-      'when addresses are loaded', () async {
-    /// arrange
-    final request = GetProfileRequest();
-    when(() => customerServiceClient.getProfile(request)).thenAnswer(
-      (_) => MockResponseFuture.value(
-        GetProfileResponse(
-          profile: Profile(
-            addresses: sampleDeliveryAddressPbList,
+    'should set active address '
+    'when addresses are loaded',
+    () async {
+      /// arrange
+      final request = GetProfileRequest();
+      when(() => customerServiceClient.getProfile(request)).thenAnswer(
+        (_) => MockResponseFuture.value(
+          GetProfileResponse(
+            profile: Profile(
+              addresses: sampleDeliveryAddressPbList,
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(deliveryAddressService.activeDeliveryAddress, null);
+      expect(deliveryAddressService.activeDeliveryAddress, null);
 
-    /// act
-    await deliveryAddressService.getDeliveryAddresses();
+      /// act
+      await deliveryAddressService.getDeliveryAddresses();
 
-    /// assert
-    expect(
-      deliveryAddressService.activeDeliveryAddress,
-      DeliveryAddressModel.fromPb(sampleDeliveryAddressPbList.first),
-    );
-  });
+      /// assert
+      expect(
+        deliveryAddressService.activeDeliveryAddress,
+        DeliveryAddressModel.fromPb(sampleDeliveryAddressPbList.first),
+      );
+      verify(() => customerServiceClient.getProfile(request)).called(1);
+    },
+  );
 }
