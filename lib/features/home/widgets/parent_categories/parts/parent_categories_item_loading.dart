@@ -8,21 +8,25 @@ class ParentCategoriesItemLoading extends StatelessWidget {
     return GridTile(
       child: Column(
         children: [
-          const SkeletonItem(
-            child: Flexible(
-              flex: 3,
+          const Flexible(
+            flex: 3,
+            child: SkeletonItem(
               child: DropezyImage(
                 url: '',
                 borderRadius: 16,
               ),
             ),
           ),
-          SkeletonParagraph(
-            style: SkeletonParagraphStyle(
-              spacing: 4,
-              lineStyle: SkeletonLineStyle(
-                height: 8,
-                borderRadius: BorderRadius.circular(8),
+          Flexible(
+            flex: 2,
+            child: SkeletonParagraph(
+              style: SkeletonParagraphStyle(
+                lines: 2,
+                spacing: 4,
+                lineStyle: SkeletonLineStyle(
+                  height: 8,
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           )
