@@ -1,12 +1,7 @@
-import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../index.dart';
 import 'keys.dart';
@@ -22,20 +17,15 @@ class CheckoutButton extends StatelessWidget {
       listener: (context, state) async {
         // Launch payment link
         if (state is LoadedPaymentCheckout) {
-          switch (state.paymentResults.paymentMethod) {
-            case PaymentMethod.PAYMENT_METHOD_GOPAY:
-              await _launchCheckoutLink(
-                state.paymentResults.paymentInformation.deeplink!,
-              );
-              break;
-            case PaymentMethod.PAYMENT_METHOD_VA_BCA:
-              context.router.popAndPush(
-                PaymentInstructionsRoute(paymentResults: state.paymentResults),
-              );
-              break;
-            default:
-              break;
-          }
+          context.router.push(
+            OrderRouter(
+              children: [
+                OrderDetailsRoute(
+                  order: state.paymentResults.order,
+                )
+              ],
+            ),
+          );
         } else if (state is ErrorLoadingPaymentCheckout) {
           context.showToast(
             state.message,
@@ -75,7 +65,8 @@ class CheckoutButton extends StatelessWidget {
     );
   }
 
-  Future<void> _launchCheckoutLink(String link) async {
+  // TODO(obella): Move to Util
+  /*Future<void> _launchCheckoutLink(String link) async {
     try {
       final opened = await launch(link);
 
@@ -92,5 +83,5 @@ class CheckoutButton extends StatelessWidget {
         );
       }
     }
-  }
+  }*/
 }

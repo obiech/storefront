@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,11 +11,16 @@ import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_
 import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../commons.dart';
+import '../../../../src/mock_navigator.dart';
 import '../../mocks.dart';
 
 void main() {
+  late StackRouter stackRouter;
+
   setUpAll(() {
     setUpLocaleInjection();
+    registerFallbackValue(samplePaymentMethods.first.paymentMethod);
+    registerFallbackValue(FakePageRouteInfo());
   });
 
   late CartBloc cartBloc;
@@ -32,7 +38,9 @@ void main() {
 
     paymentMethodCubit = PaymentMethodCubit(paymentRepository);
 
-    registerFallbackValue(samplePaymentMethods.first.paymentMethod);
+    // Navigation
+    stackRouter = MockStackRouter();
+    when(() => stackRouter.push(any())).thenAnswer((_) async => null);
   });
 
   testWidgets(
@@ -110,6 +118,7 @@ void main() {
       cartBloc,
       paymentCheckoutCubit,
       paymentMethodCubit,
+      stackRouter: stackRouter,
     );
     await paymentMethodCubit.queryPaymentMethods();
     await tester.pumpAndSettle();
@@ -187,12 +196,11 @@ void main() {
     );
   });
 
-  /* TODO(obella): Stub URL Launching
-
-      testWidgets('should launch deeplink when checkout is successful',
-      (WidgetTester tester) async {
+  testWidgets(
+      'should got to [OrderDetailsPage] '
+      'with valid arguments '
+      'when checkout is successful', (WidgetTester tester) async {
     // arrange
-    when(() => launch(any())).thenAnswer((invocation) async => true);
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
@@ -209,19 +217,44 @@ void main() {
       cartBloc,
       paymentCheckoutCubit,
       paymentMethodCubit,
+      stackRouter: stackRouter,
     );
 
+    await paymentMethodCubit.queryPaymentMethods();
+    await tester.pumpAndSettle();
+
     await tester.tap(find.byType(CheckoutButton));
+
     // assert
-  });*/
+    final capturedRoutes =
+        verify(() => stackRouter.push(captureAny())).captured;
+
+    expect(capturedRoutes.length, 1);
+
+    final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+    expect(routeInfo, isA<OrderRouter>());
+
+    final orderRouter = routeInfo as OrderRouter;
+    expect(orderRouter.hasChildren, true);
+    expect(orderRouter.initialChildren!.length, 1);
+
+    final orderDetailsRoute = orderRouter.initialChildren!.first;
+    expect(orderDetailsRoute, isA<OrderDetailsRoute>());
+
+    final args = orderDetailsRoute.args as OrderDetailsRouteArgs;
+    expect(args.order, paymentResults.order);
+    // TODO(obella): Add checks for Payment Method & Payment Information
+  });
 }
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpCheckoutButton(
     CartBloc cartBloc,
     PaymentCheckoutCubit paymentCheckoutCubit,
-    PaymentMethodCubit paymentMethodCubit,
-  ) async {
+    PaymentMethodCubit paymentMethodCubit, {
+    StackRouter? stackRouter,
+  }) async {
     await pumpWidget(
       MultiBlocProvider(
         providers: [
@@ -235,10 +268,10 @@ extension WidgetTesterX on WidgetTester {
             create: (context) => paymentMethodCubit,
           ),
         ],
-        child: const MaterialApp(
-          home: Scaffold(
+        child: MaterialApp(
+          home: const Scaffold(
             body: CheckoutButton(),
-          ),
+          ).withRouterScope(stackRouter),
         ),
       ),
     );
