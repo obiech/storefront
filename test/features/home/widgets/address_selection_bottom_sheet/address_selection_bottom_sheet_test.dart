@@ -153,7 +153,7 @@ void main() {
   );
 
   testWidgets(
-    'should move to [AddressDetailPage] '
+    'should move to [SearchLocationPage] '
     'when [AddAddress] is tapped',
     (tester) async {
       await tester.pumpAddressSelection(
@@ -169,7 +169,7 @@ void main() {
       expect(capturedRoutes.length, 1);
 
       final routeInfo = capturedRoutes.first as PageRouteInfo;
-      expect(routeInfo, isA<AddressDetailRoute>());
+      expect(routeInfo, isA<SearchLocationRoute>());
     },
   );
 

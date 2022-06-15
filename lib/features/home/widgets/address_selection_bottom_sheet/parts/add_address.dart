@@ -8,7 +8,7 @@ class AddAddress extends StatelessWidget {
     return ListTile(
       onTap: () {
         Navigator.pop(context);
-        context.pushRoute(AddressDetailRoute());
+        context.pushRoute(const SearchLocationRoute());
       },
       contentPadding: EdgeInsets.zero,
       horizontalTitleGap: 0,
