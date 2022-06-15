@@ -215,8 +215,8 @@ class DummyPaymentService implements IPaymentRepository {
     );
 
     return right([
-      goPaymentChannel.paymentInfo(),
-      bcaPaymentChannel.paymentInfo(),
+      goPaymentChannel.paymentInfo,
+      bcaPaymentChannel.paymentInfo,
     ]);
   }
 }

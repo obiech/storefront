@@ -109,7 +109,7 @@ void main() {
             ),
           );
 
-          final info = method.paymentInfo();
+          final info = method.paymentInfo;
 
           expect(
             (methodLogo.pictureProvider as ExactAssetPicture).assetName,
