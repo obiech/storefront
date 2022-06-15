@@ -9,9 +9,11 @@ extension BuildContextX on BuildContext {
     String message, {
     Color? color,
     Widget? leading,
+    Duration? duration,
   }) {
     return ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
+        duration: duration ?? const Duration(seconds: 3),
         content: Container(
           decoration: BoxDecoration(
             color: color ?? res.colors.black,
