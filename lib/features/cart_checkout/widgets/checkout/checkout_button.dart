@@ -64,24 +64,4 @@ class CheckoutButton extends StatelessWidget {
       },
     );
   }
-
-  // TODO(obella): Move to Util
-  /*Future<void> _launchCheckoutLink(String link) async {
-    try {
-      final opened = await launch(link);
-
-      if (!opened) {
-        throw PlatformException(code: 'ACTIVITY_NOT_FOUND');
-      }
-    } on PlatformException catch (e) {
-      if (e.code == 'ACTIVITY_NOT_FOUND') {
-        /// TODO - Handle different payment methods
-        await launch(
-          Platform.isAndroid
-              ? 'https://play.google.com/store/apps/details?id=com.gojek.app'
-              : 'https://apps.apple.com/us/app/gojek/id944875099',
-        );
-      }
-    }
-  }*/
 }

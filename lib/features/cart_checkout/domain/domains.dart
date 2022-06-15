@@ -11,3 +11,4 @@ export 'repository/i_payment_repository.dart';
 export 'services/cart_service.dart';
 export 'services/dummy_cart_service.dart';
 export 'services/payment_service.dart';
+export 'utils/checkout_utils.dart';
