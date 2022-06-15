@@ -63,5 +63,6 @@ injection.config.dart
 
 # iOs
 ios/firebase_app_id_file.json
+ios/build
 # Fastlane related
 /fastlane/report.xml
