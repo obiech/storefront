@@ -7,8 +7,8 @@ import 'package:injectable/injectable.dart';
 import '../repository/phone_verification_result.dart';
 import 'auth_service.dart';
 import 'firebase_auth_exception_codes.dart';
-import 'user_credentials_storage.dart';
 
+// TODO (leovinsen): refactor and handle errors with Failure
 /// Uses [FirebaseAuth] to handle authentication process.
 ///
 /// Call [initialize] once when app is first created to start
@@ -19,10 +19,9 @@ import 'user_credentials_storage.dart';
 @LazySingleton(as: AuthService)
 class FirebaseAuthService extends AuthService {
   FirebaseAuthService({
-    required UserCredentialsStorage credentialsStorage,
     required this.firebaseAuth,
     @Named('otpTimeOut') required this.otpTimeoutInSeconds,
-  }) : super(credentialsStorage) {
+  }) : super() {
     _subscriptionFirebaseUserChanges =
         firebaseAuth.authStateChanges().listen(onFirebaseUserChanged);
   }
@@ -41,15 +40,7 @@ class FirebaseAuthService extends AuthService {
   /// or when user triggers a sign out event.
   @visibleForTesting
   Future<void> onFirebaseUserChanged(User? user) async {
-    if (user == null) {
-      await storage.unpersistCredentials();
-      return;
-    }
-
-    final token = await user.getIdToken();
-    final phoneNumber = user.phoneNumber;
-
-    storage.persistCredentials(token, phoneNumber!);
+    // TODO (leovinsen): Implement a new Stream for user changes
   }
 
   @override
@@ -151,7 +142,19 @@ class FirebaseAuthService extends AuthService {
 
   @override
   Future<void> signOut() async {
-    await storage.signOutApps();
     await firebaseAuth.signOut();
+  }
+
+  /// Returns an auth token if user has successfully signed in
+  /// with Firebase Auth.
+  /// Otherwise returns [null].
+  @override
+  Future<String?> getToken() async {
+    // TODO (leovinsen): Implement retry backoff
+    try {
+      return firebaseAuth.currentUser?.getIdToken();
+    } catch (e) {
+      return null;
+    }
   }
 }

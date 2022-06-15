@@ -117,7 +117,6 @@ class _PinInputPageState extends State<PinInputPage> {
   ///
   /// Can be called without actually registering PIN, as it's optional
   Future<void> _finishPinRegistrationProcess() async {
-    await getIt<IPrefsRepository>().setIsOnBoarded(true);
     context.router.replaceAll([
       const MainRoute(),
       const RequestLocationAccessRoute(),

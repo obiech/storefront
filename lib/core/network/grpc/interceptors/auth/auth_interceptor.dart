@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
+
+import '../../../../../features/auth/index.dart';
 
 /// Intercepts unary requests and appends 'authorization' metadata
-/// with bearer token obtained from [userCredentialsStorage].
+/// with bearer token obtained from [authService].
 ///
 /// will not intercept for paths in [whitelistedPaths]. To find the path name,
 /// check the generated files for [Client] class.
 class AuthInterceptor extends ClientInterceptor {
   AuthInterceptor({
-    required this.userCredentialsStorage,
+    required this.authService,
     required this.whitelistedPaths,
   });
 
-  final UserCredentialsStorage userCredentialsStorage;
+  final AuthService authService;
   final List<String> whitelistedPaths;
 
   @override
@@ -57,12 +58,12 @@ class AuthInterceptor extends ClientInterceptor {
       return;
     }
 
-    final creds = userCredentialsStorage.getCredentials();
+    final token = await authService.getToken();
 
-    if (creds == null) {
+    if (token == null) {
       return;
     }
 
-    metadata['authorization'] = 'bearer ${creds.authToken}';
+    metadata['authorization'] = 'bearer $token';
   }
 }

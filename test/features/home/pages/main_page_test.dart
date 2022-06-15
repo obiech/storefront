@@ -7,7 +7,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
@@ -78,12 +77,18 @@ void main() {
   late SearchHistoryCubit searchHistoryCubit;
   late DiscoveryCubit discoveryCubit;
   late DeliveryAddressCubit deliveryAddressCubit;
+  late AuthService authService;
 
   setUp(() {
     final prefs = MockIPrefsRepository();
     final orderRepo = MockOrderRepository();
+    authService = MockAuthService();
+
+    // Stub token to ensure CheckAuthStatus guard opens Home page
+    // instead of opening Onboarding page
+    when(() => authService.getToken()).thenAnswer((_) async => 'token-123');
     router = AppRouter(
-      checkAuthStatus: CheckAuthStatus(prefs),
+      checkAuthStatus: CheckAuthStatus(authService),
       checkOrderStatus: CheckOrderStatus(orderRepo),
     );
 
@@ -94,7 +99,6 @@ void main() {
     discoveryCubit = MockDiscoveryCubit();
     deliveryAddressCubit = MockDeliveryAddressCubit();
 
-    late UserCredentialsStorage userCredsStorage;
     late ParentCategoriesCubit parentCategoriesCubit;
 
     when(() => cartBloc.state)
@@ -126,9 +130,6 @@ void main() {
     when(() => deliveryAddressCubit.fetchDeliveryAddresses())
         .thenAnswer((_) async {});
 
-    userCredsStorage = MockUserCredentialsStorage();
-
-    when(() => prefs.isOnBoarded()).thenAnswer((invocation) => true);
     when(() => prefs.getDeviceLocale())
         .thenAnswer((invocation) => const Locale('en', 'EN'));
 
@@ -144,15 +145,6 @@ void main() {
 
     when(() => parentCategoriesCubit.state)
         .thenReturn(InitialParentCategoriesState());
-
-    userCredsStorage = MockUserCredentialsStorage();
-    when(() => userCredsStorage.stream).thenAnswer((_) => const Stream.empty());
-
-    if (GetIt.I.isRegistered<UserCredentialsStorage>()) {
-      GetIt.I.unregister<UserCredentialsStorage>();
-    }
-
-    GetIt.I.registerSingleton<UserCredentialsStorage>(userCredsStorage);
 
     if (GetIt.I.isRegistered<ParentCategoriesCubit>()) {
       GetIt.I.unregister<ParentCategoriesCubit>();

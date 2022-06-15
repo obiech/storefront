@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
-import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
 import 'package:storefront_app/features/auth/index.dart';
 
 import '../src/auth/mock_auth_service.dart';

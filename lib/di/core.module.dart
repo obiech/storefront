@@ -15,10 +15,10 @@ import '../res/strings/base_strings.ext.dart';
 
 @module
 abstract class CoreModule {
-  AppRouter router(IPrefsRepository prefs, IOrderRepository orderRepository) {
+  AppRouter router(AuthService authService, IOrderRepository orderRepository) {
     return AppRouter(
       checkOrderStatus: CheckOrderStatus(orderRepository),
-      checkAuthStatus: CheckAuthStatus(prefs),
+      checkAuthStatus: CheckAuthStatus(authService),
     );
   }
 

@@ -1,8 +1,7 @@
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
+import 'package:storefront_app/features/auth/index.dart';
 
-class MockUserCredentialsStorage extends Mock
-    implements UserCredentialsStorage {}
+class MockAuthService extends Mock implements AuthService {}
 
 class MockClientChannel extends Mock implements ClientChannel {}

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../repository/phone_verification_result.dart';
-import 'user_credentials_storage.dart';
 
 /// Contract for describing a Service that deals with Authentication.
 ///
@@ -19,10 +18,7 @@ import 'user_credentials_storage.dart';
 /// - [PhoneVerificationStatus.verifiedSuccessfully] once phone number is verified
 /// - [PhoneVerificationStatus.error] if there are any errors
 abstract class AuthService {
-  AuthService(this.storage);
-
-  @protected
-  final UserCredentialsStorage storage;
+  AuthService();
 
   final _phoneVerificationStreamController =
       StreamController<PhoneVerificationResult>.broadcast();
@@ -35,6 +31,10 @@ abstract class AuthService {
 
   /// Check submitted OTP against sent OTP
   Future<void> verifyOtp(String otp);
+
+  /// Returns an auth token if user is logged in
+  /// Otherwise returns [null]
+  Future<String?> getToken();
 
   Future<void> signOut();
 

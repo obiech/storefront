@@ -7,7 +7,6 @@ import 'package:storefront_app/core/core.dart';
 
 import '../../../auth/index.dart';
 import '../../domain/repository/phone_verification_result.dart';
-import '../../domain/services/auth_service.dart';
 
 part 'account_verification_state.dart';
 

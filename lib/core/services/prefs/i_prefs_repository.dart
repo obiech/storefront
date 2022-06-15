@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract class IPrefsRepository {
-  /// Preference helpers for user onboarding
-  ///
-  /// Check if user was onboarded
-  bool isOnBoarded();
-
-  /// Mark user as onbaorded
-  Future<void> setIsOnBoarded(bool isOnBoarded);
-
   /// Preference helpers for [UserCredentialStorage]
   ///
   /// Includes setters, getters and clearers for session

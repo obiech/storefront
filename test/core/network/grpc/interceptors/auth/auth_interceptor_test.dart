@@ -2,8 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/network/grpc/interceptors/auth/index.dart';
-import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
+import 'package:storefront_app/features/auth/index.dart';
 
 import '../../../../../src/mock_response_future.dart';
 import 'mocks.dart';
@@ -13,22 +12,19 @@ void main() {
     'Auth gRPC Interceptor',
     () {
       late AuthInterceptor authInterceptor;
-      late UserCredentialsStorage userCredentialsStorage;
+      late AuthService authService;
 
       const whitelistedPath = '/path/to/whitelist';
-      const mockCreds = UserCredentials(
-        authToken: 'token',
-        phoneNumber: '+61234567890',
-      );
+      const mockToken = 'token-123';
       const mockMetadata = {
         'key1': 'value1',
         'key2': 'value2',
       };
 
       setUp(() {
-        userCredentialsStorage = MockUserCredentialsStorage();
+        authService = MockAuthService();
         authInterceptor = AuthInterceptor(
-          userCredentialsStorage: userCredentialsStorage,
+          authService: authService,
           whitelistedPaths: [whitelistedPath],
         );
       });
@@ -91,8 +87,8 @@ void main() {
           test(
             "terminates if key 'authorization' is already set in metadata",
             () async {
-              when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) => mockCreds);
+              when(() => authService.getToken())
+                  .thenAnswer((_) async => mockToken);
 
               final metadata = {
                 'authorization': 'bearer adsf',
@@ -102,7 +98,7 @@ void main() {
 
               // should not attempt to retrieve token
               // nor modifies the metadata
-              verifyNever(() => userCredentialsStorage.getCredentials());
+              verifyNever(() => authService.getToken());
               expect(
                 metadata,
                 {
@@ -115,8 +111,7 @@ void main() {
           test(
             'terminates if token is null (user is not logged in)',
             () async {
-              when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) => null);
+              when(() => authService.getToken()).thenAnswer((_) async => null);
 
               final metadata = {
                 'key1': 'value1',
@@ -125,7 +120,7 @@ void main() {
               await authInterceptor.appendAuthMetadata(metadata, 'randomUri');
 
               // should not modify metadata
-              verify(() => userCredentialsStorage.getCredentials()).called(1);
+              verify(() => authService.getToken()).called(1);
               expect(
                 metadata,
                 {
@@ -138,8 +133,8 @@ void main() {
           test(
             "appends key 'authorization' if not set and user is logged in",
             () async {
-              when(() => userCredentialsStorage.getCredentials())
-                  .thenAnswer((_) => mockCreds);
+              when(() => authService.getToken())
+                  .thenAnswer((_) async => mockToken);
 
               final metadata = {
                 'key1': 'value1',
@@ -148,12 +143,12 @@ void main() {
               await authInterceptor.appendAuthMetadata(metadata, 'randomUri');
 
               // should append key 'authorization'
-              verify(() => userCredentialsStorage.getCredentials()).called(1);
+              verify(() => authService.getToken()).called(1);
               expect(
                 metadata,
                 {
                   'key1': 'value1',
-                  'authorization': 'bearer ${mockCreds.authToken}',
+                  'authorization': 'bearer $mockToken',
                 },
               );
             },

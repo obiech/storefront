@@ -10,7 +10,6 @@ import 'package:storefront_app/di/injection.dart';
 import '../../../home/pages/home_page.dart';
 import '../../blocs/account_verification/account_verification_cubit.dart';
 import '../../domain/domain.dart';
-import '../../domain/services/auth_service.dart';
 import '../pin_input/pin_input_page.dart';
 
 part 'otp_input_field.dart';
@@ -108,7 +107,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   void _onSuccessfulVerification() {
-    getIt<IPrefsRepository>().setIsOnBoarded(true);
     switch (widget.successAction) {
       case OtpSuccessAction.goToHomePage:
         // Removes all previous routes and push HomePage as new route

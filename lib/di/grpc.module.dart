@@ -9,7 +9,7 @@ import '../core/config/grpc_config.dart';
 import '../core/network/grpc/interceptors/auth/index.dart';
 import '../core/network/grpc/interceptors/device_info/device_info_interceptor.dart';
 import '../core/services/device/repository/_exporter.dart';
-import '../features/auth/domain/services/user_credentials_storage.dart';
+import '../features/auth/index.dart';
 
 /// GRPC Dependency Injection Module
 ///
@@ -23,10 +23,10 @@ abstract class GrpcModule {
   /// and registers it to Service Locator [GetIt].
   @lazySingleton
   AuthInterceptor authInterceptor(
-    UserCredentialsStorage userCredentialsStorage,
+    AuthService authService,
   ) =>
       AuthInterceptor(
-        userCredentialsStorage: userCredentialsStorage,
+        authService: authService,
         whitelistedPaths: authWhitelistedPaths,
       );
 

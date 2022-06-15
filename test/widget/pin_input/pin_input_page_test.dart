@@ -55,8 +55,6 @@ void main() {
       getIt.unregister<IPrefsRepository>();
     }
 
-    when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
-    when(() => prefs.isOnBoarded()).thenAnswer((_) => true);
     when(() => prefs.getDeviceLocale())
         .thenAnswer((_) => const Locale('en', 'EN'));
 
@@ -246,8 +244,6 @@ void main() {
         expect(capturedRoutes.length, 2);
         expect(capturedRoutes[0], isA<MainRoute>());
         expect(capturedRoutes[1], isA<RequestLocationAccessRoute>());
-
-        verify(() => prefs.setIsOnBoarded(true)).called(1);
       },
     );
 
@@ -284,8 +280,6 @@ void main() {
         expect(capturedRoutes.length, 2);
         expect(capturedRoutes[0], isA<MainRoute>());
         expect(capturedRoutes[1], isA<RequestLocationAccessRoute>());
-
-        verify(() => prefs.setIsOnBoarded(true)).called(1);
       },
     );
 

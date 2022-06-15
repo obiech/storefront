@@ -1,22 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:storefront_app/core/core.dart';
 
-class CheckAuthStatus extends AutoRouteGuard {
-  final IPrefsRepository prefs;
+import '../services/auth_service.dart';
 
-  CheckAuthStatus(this.prefs);
+class CheckAuthStatus extends AutoRouteGuard {
+  final AuthService authService;
+
+  CheckAuthStatus(this.authService);
 
   @override
-  void onNavigation(
+  Future<void> onNavigation(
     NavigationResolver resolver,
     StackRouter router,
-  ) {
-    // Check if Onboarded & Authenticated
-    final isOnboarded = prefs.isOnBoarded();
+  ) async {
+    final token = await authService.getToken();
 
-    /// TODO - Add [FirebaseAuth] status check
-
-    if (!isOnboarded) {
+    if (token == null) {
       router.replaceAll([OnboardingRoute()]);
     } else {
       resolver.next();

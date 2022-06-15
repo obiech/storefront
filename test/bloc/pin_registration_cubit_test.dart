@@ -4,8 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/auth/domain/repository/user_credentials.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/auth/index.dart';
 
 import '../src/mock_customer_service_client.dart';
@@ -16,15 +14,11 @@ class MockDeviceNameProvider extends Mock implements DeviceNameProvider {}
 class MockDeviceFingerprintProvider extends Mock
     implements DeviceFingerprintProvider {}
 
-class MockUserCredentialsStorage extends Mock
-    implements UserCredentialsStorage {}
-
 void main() {
   group('PinRegistrationCubit', () {
     late CustomerServiceClient customerServiceClient;
     late DeviceNameProvider deviceNameProvider;
     late DeviceFingerprintProvider deviceFingerprintProvider;
-    late UserCredentialsStorage userCredentialsStorage;
     late PinRegistrationCubit pinRegistrationCubit;
 
     /// Convenience for bootstraping Cubit instance
@@ -33,19 +27,11 @@ void main() {
           customerServiceClient: customerServiceClient,
           deviceFingerprintProvider: deviceFingerprintProvider,
           deviceNameProvider: deviceNameProvider,
-          userCredentialsStorage: userCredentialsStorage,
         );
 
     const fakeFingerprint = 'fingerprint';
     const fakeDeviceName = 'Flutter Test Device';
     const fakePin = '123456';
-    const fakeBearerToken = 'abcdef';
-    const fakePhoneNumber = '+6281234567890';
-
-    const fakeUserCredentials = UserCredentials(
-      authToken: fakeBearerToken,
-      phoneNumber: fakePhoneNumber,
-    );
 
     final device = Device(
       name: fakeDeviceName,
@@ -62,7 +48,6 @@ void main() {
 
       deviceFingerprintProvider = MockDeviceFingerprintProvider();
       deviceNameProvider = MockDeviceNameProvider();
-      userCredentialsStorage = MockUserCredentialsStorage();
 
       pinRegistrationCubit = _buildCubit();
     });
@@ -83,7 +68,6 @@ void main() {
           // Mock all dependencies
           _mockDeviceFingerprint(deviceFingerprintProvider, fakeFingerprint);
           _mockDeviceName(deviceNameProvider, fakeDeviceName);
-          _mockUserCredentials(userCredentialsStorage, fakeUserCredentials);
 
           // Mock SavePIN request
           final expectedRequest = RegisterDeviceRequest(
@@ -106,7 +90,6 @@ void main() {
           // Ensure data is retrieved from dependencies
           verify(() => deviceFingerprintProvider.getFingerprint()).called(1);
           verify(() => deviceNameProvider.getDeviceName()).called(1);
-          verify(() => userCredentialsStorage.getCredentials()).called(1);
 
           // Ensure SavePIN request uses informaton provided above
           verify(
@@ -125,7 +108,6 @@ void main() {
             // Mock all dependencies
             _mockDeviceFingerprint(deviceFingerprintProvider, fakeFingerprint);
             _mockDeviceName(deviceNameProvider, fakeDeviceName);
-            _mockUserCredentials(userCredentialsStorage, fakeUserCredentials);
 
             // Mock SavePIN request
             _mockSavePINRequest(
@@ -143,35 +125,11 @@ void main() {
         );
 
         blocTest<PinRegistrationCubit, PinRegistrationState>(
-          'and an error State if user credentials is null',
-          build: () {
-            // Mock all dependencies
-            _mockDeviceFingerprint(deviceFingerprintProvider, fakeFingerprint);
-            _mockDeviceName(deviceNameProvider, fakeDeviceName);
-            _mockUserCredentials(userCredentialsStorage, null);
-
-            // Mock SavePIN request
-            _mockSavePINRequest(
-              customerServiceClient,
-              (_) => MockResponseFuture.value(dummyRegisterDeviceResponse),
-            );
-
-            return _buildCubit();
-          },
-          act: (cubit) => cubit.registerPin(fakePin),
-          expect: () => const [
-            PinRegistrationLoading(),
-            PinRegistrationError('Anda belum melakukan login'),
-          ],
-        );
-
-        blocTest<PinRegistrationCubit, PinRegistrationState>(
           'and an error State if a gRPC error is thrown',
           setUp: () {
             // Mock all dependencies
             _mockDeviceFingerprint(deviceFingerprintProvider, fakeFingerprint);
             _mockDeviceName(deviceNameProvider, fakeDeviceName);
-            _mockUserCredentials(userCredentialsStorage, fakeUserCredentials);
 
             // Mock SavePIN request
             _mockSavePINRequest(
@@ -185,7 +143,6 @@ void main() {
             customerServiceClient: customerServiceClient,
             deviceFingerprintProvider: deviceFingerprintProvider,
             deviceNameProvider: deviceNameProvider,
-            userCredentialsStorage: userCredentialsStorage,
           ),
           act: (cubit) async => cubit.registerPin(fakePin),
           expect: () => const [
@@ -200,7 +157,6 @@ void main() {
             // Mock all dependencies
             _mockDeviceFingerprint(deviceFingerprintProvider, fakeFingerprint);
             _mockDeviceName(deviceNameProvider, fakeDeviceName);
-            _mockUserCredentials(userCredentialsStorage, fakeUserCredentials);
 
             // Mock SavePIN request
             _mockSavePINRequest(
@@ -231,14 +187,6 @@ void _mockDeviceFingerprint(
 
 void _mockDeviceName(DeviceNameProvider provider, String name) {
   when(() => provider.getDeviceName()).thenAnswer((_) async => name);
-}
-
-/// Pass null for [userCredentials] to simulate unauthenticated state
-void _mockUserCredentials(
-  UserCredentialsStorage storage,
-  UserCredentials? userCredentials,
-) {
-  when(() => storage.getCredentials()).thenAnswer((_) => userCredentials);
 }
 
 void _mockSavePINRequest(

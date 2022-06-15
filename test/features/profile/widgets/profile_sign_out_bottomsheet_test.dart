@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/domain/services/auth_service.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 import 'package:storefront_app/features/profile/widgets/widgets.dart';
 
 import '../../../commons.dart';
@@ -15,9 +14,6 @@ import '../../../src/mock_navigator.dart';
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockAuthService extends Mock implements AuthService {}
-
-class MockUserCredentialsStorage extends Mock
-    implements UserCredentialsStorage {}
 
 void main() {
   late StackRouter router;

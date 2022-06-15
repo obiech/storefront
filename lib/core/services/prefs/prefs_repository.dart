@@ -13,11 +13,6 @@ class PrefsRepository implements IPrefsRepository {
   PrefsRepository(@Named(PREF_BOX) this._prefBox);
 
   @override
-  bool isOnBoarded() {
-    return _prefBox.get(PrefsKeys.kIsOnboarded, defaultValue: false);
-  }
-
-  @override
   String? userAuthToken() {
     return _prefBox.get(PrefsKeys.kUserAuthToken);
   }
@@ -55,11 +50,6 @@ class PrefsRepository implements IPrefsRepository {
   @override
   String? getFingerPrint() {
     return _prefBox.get(PrefsKeys.kDeviceFingerPrint);
-  }
-
-  @override
-  Future<void> setIsOnBoarded(bool isOnBoarded) async {
-    await _prefBox.put(PrefsKeys.kIsOnboarded, isOnBoarded);
   }
 
   @override

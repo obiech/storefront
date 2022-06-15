@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../../domain/services/user_credentials_storage.dart';
-
 part 'pin_registration_state.dart';
 
 /// Handles PIN registration which associates the user's current device with
@@ -17,7 +15,7 @@ part 'pin_registration_state.dart';
 ///
 /// Request is sent to storefront backend using
 /// [customerServiceClient] and authentication token is obtained from
-/// [userCredentialsStorage].
+/// [authService].
 @injectable
 class PinRegistrationCubit extends Cubit<PinRegistrationState> {
   // TODO (leovinsen): Depend on Service instead of directly depending on gRPC client
@@ -25,13 +23,11 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
     required this.customerServiceClient,
     required this.deviceFingerprintProvider,
     required this.deviceNameProvider,
-    required this.userCredentialsStorage,
   }) : super(const PinRegistrationInitial());
 
   final CustomerServiceClient customerServiceClient;
   final DeviceFingerprintProvider deviceFingerprintProvider;
   final DeviceNameProvider deviceNameProvider;
-  final UserCredentialsStorage userCredentialsStorage;
 
   /// Registers [pin] for user's current device. Device information
   /// is retrieved with [deviceFingerprintProvider] and [deviceNameProvider].
@@ -47,16 +43,6 @@ class PinRegistrationCubit extends Cubit<PinRegistrationState> {
 
     final fingerprint = await deviceFingerprintProvider.getFingerprint();
     final deviceName = await deviceNameProvider.getDeviceName();
-    final credentials = userCredentialsStorage.getCredentials();
-
-    // In theory, this should never happen as user should already be logged in
-    //TODO(leovinsen): remove this code block and credentials storage as
-    // it's already covered by auth interceptor
-    if (credentials == null) {
-      emit(const PinRegistrationError('Anda belum melakukan login'));
-
-      return;
-    }
 
     final device = Device(
       name: deviceName,

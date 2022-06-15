@@ -44,8 +44,6 @@ Future<void> main() async {
       getIt.unregister<IPrefsRepository>();
     }
 
-    when(() => prefs.setIsOnBoarded(any())).thenAnswer((_) async => {});
-    when(() => prefs.isOnBoarded()).thenAnswer((_) => true);
     when(() => prefs.getDeviceLocale())
         .thenAnswer((_) => const Locale('en', 'EN'));
 
@@ -108,8 +106,6 @@ Future<void> main() async {
 
           expect(routeStack.length, 1);
           expect(routeStack.first, isA<MainRoute>());
-
-          verify(() => prefs.setIsOnBoarded(true)).called(1);
         },
       );
 

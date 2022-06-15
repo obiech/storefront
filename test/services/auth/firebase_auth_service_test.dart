@@ -4,26 +4,19 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/auth/domain/repository/phone_verification_result.dart';
 import 'package:storefront_app/features/auth/domain/services/firebase_auth_exception_codes.dart';
 import 'package:storefront_app/features/auth/domain/services/firebase_auth_service.dart';
-import 'package:storefront_app/features/auth/domain/services/user_credentials_storage.dart';
 
 class MockUser extends Mock implements User {}
-
-class MockUserCredentialsStorage extends Mock
-    implements UserCredentialsStorage {}
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 void main() {
   group('Firebase Auth Service', () {
     late FirebaseAuthService service;
-    late UserCredentialsStorage credentialsStorage;
     late FirebaseAuth firebaseAuth;
 
-    const mockToken = '1234';
     const mockPhoneNumber = '+6281234567890';
 
     setUp(() async {
-      credentialsStorage = MockUserCredentialsStorage();
       firebaseAuth = MockFirebaseAuth();
 
       //  Always return an empty stream
@@ -31,61 +24,22 @@ void main() {
           .thenAnswer((_) => const Stream.empty());
 
       service = FirebaseAuthService(
-        credentialsStorage: credentialsStorage,
         firebaseAuth: firebaseAuth,
         otpTimeoutInSeconds: 10,
       );
     });
 
     test(
-      'should call [UserCredentialsStorage.signOutApps()] and [ FirebaseAuth.instance.signOut()] '
+      'should call [FirebaseAuth.instance.signOut()] '
       'when [FirebaseAuthService.signOut] is called',
       () async {
-        when(() => credentialsStorage.signOutApps()).thenAnswer((_) async {});
         when(() => firebaseAuth.signOut()).thenAnswer((_) async {});
 
         await service.signOut();
 
-        verify(() => credentialsStorage.signOutApps()).called(1);
         verify(() => firebaseAuth.signOut()).called(1);
       },
     );
-
-    group('[onFirebaseUserChanged()]', () {
-      test(
-        'Calls [UserCredentialsStorage.unpersistCredentials()] if user is null',
-        () async {
-          when(() => credentialsStorage.unpersistCredentials())
-              .thenAnswer((_) async {});
-
-          await service.onFirebaseUserChanged(null);
-
-          verify(() => credentialsStorage.unpersistCredentials()).called(1);
-          verifyNever(
-            () => credentialsStorage.persistCredentials(any(), any()),
-          );
-        },
-      );
-
-      test(
-        'Calls [UserCredentialsStorage.persistCredentials()] if user is not null',
-        () async {
-          when(() => credentialsStorage.persistCredentials(any(), any()))
-              .thenAnswer((_) async {});
-
-          /// Mock a Firebase User and use [mockToken] and [mockPhoneNumber]
-          final user = MockUser();
-          when(() => user.getIdToken()).thenAnswer((_) async => mockToken);
-          when(() => user.phoneNumber).thenReturn(mockPhoneNumber);
-
-          await service.onFirebaseUserChanged(user);
-
-          verify(() => credentialsStorage.persistCredentials(any(), any()))
-              .called(1);
-          verifyNever(() => credentialsStorage.unpersistCredentials());
-        },
-      );
-    });
 
     test(
       '[sendOtp()] should call [FirebaseAuth.verifyPhoneNumber()] with '
@@ -178,5 +132,64 @@ void main() {
         },
       );
     });
+
+    test(
+      'should retrieve token from [FirebaseAuth] [User] '
+      'when [getToken()] is called '
+      'and user is currently logged in',
+      () async {
+        // arrange
+        final user = MockUser();
+        when(() => firebaseAuth.currentUser).thenReturn(user);
+        when(() => user.getIdToken()).thenAnswer((_) async => 'token-123');
+
+        // act
+        final token = await service.getToken();
+        expect(token, 'token-123');
+
+        // assert
+        verify(() => firebaseAuth.currentUser?.getIdToken()).called(1);
+      },
+    );
+
+    test(
+      'should return null '
+      'when [getToken()] is called '
+      'and user is logged out',
+      () async {
+        // arrange
+        when(() => firebaseAuth.currentUser).thenReturn(null);
+
+        // act
+        final token = await service.getToken();
+
+        // assert
+        expect(token, null);
+        verify(() => firebaseAuth.currentUser?.getIdToken()).called(1);
+      },
+    );
+
+    test(
+      'should return null '
+      'when [getToken()] is called '
+      'and a [FirebaseAuthException] is thrown',
+      () async {
+        // arrange
+        final user = MockUser();
+        when(() => firebaseAuth.currentUser).thenReturn(user);
+        when(() => user.getIdToken()).thenThrow(
+          FirebaseAuthException(
+            code: FirebaseAuthExceptionCodes.operationNotAllowed,
+          ),
+        );
+
+        // act
+        final token = await service.getToken();
+
+        // assert
+        expect(token, null);
+        verify(() => firebaseAuth.currentUser?.getIdToken()).called(1);
+      },
+    );
   });
 }

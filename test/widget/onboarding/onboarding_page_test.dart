@@ -29,10 +29,6 @@ void main() {
       getIt.unregister<IPrefsRepository>();
     }
 
-    // PrefsRepository stubs
-    when(() => prefsRepository.setIsOnBoarded(any()))
-        .thenAnswer((_) async => {});
-
     when(() => prefsRepository.getDeviceLocale())
         .thenAnswer((_) => const Locale('en', 'EN'));
 
