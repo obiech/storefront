@@ -328,7 +328,7 @@ void main() {
     expect(orderDetailsRoute, isA<OrderDetailsRoute>());
 
     final args = orderDetailsRoute.args as OrderDetailsRouteArgs;
-    expect(args.order, paymentResults);
+    expect(args.id, paymentResults.id);
   });
 
   testWidgets(

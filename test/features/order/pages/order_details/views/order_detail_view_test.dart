@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
@@ -9,37 +10,14 @@ import '../../../../../../test_commons/fixtures/order/order_models.dart';
 import '../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../../src/mock_navigator.dart';
-
-/// Helper functions specific to this test
-extension WidgetTesterX on WidgetTester {
-  Future<void> pumpOrderDetailsView({
-    required OrderModel order,
-    StackRouter? stackRouter,
-  }) async {
-    await pumpWidget(
-      stackRouter != null
-          ? StackRouterScope(
-              controller: stackRouter,
-              stateHash: 0,
-              child: MaterialApp(
-                home: Scaffold(
-                  body: OrderDetailsPage(order: order),
-                ),
-              ),
-            )
-          : MaterialApp(
-              home: Scaffold(
-                body: OrderDetailsPage(order: order),
-              ),
-            ),
-    );
-  }
-}
+import '../mock.dart';
 
 void main() {
   late StackRouter stackRouter;
+  late OrderDetailsCubit cubit;
 
   setUp(() {
+    cubit = MockOrderDetailsCubit();
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
   });
@@ -81,7 +59,8 @@ void main() {
         'list of purchased products, transaction summary, '
         'and a button to contact support',
         (tester) async {
-          await tester.pumpOrderDetailsView(order: orderPaid);
+          when(() => cubit.state).thenReturn(LoadedOrderDetails(orderPaid));
+          await tester.pumpOrderDetailsView(order: orderPaid, cubit: cubit);
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
@@ -97,7 +76,13 @@ void main() {
         'list of purchased products, transaction summary, driver information '
         'and a button to contact support',
         (tester) async {
-          await tester.pumpOrderDetailsView(order: orderInDelivery);
+          when(() => cubit.state)
+              .thenReturn(LoadedOrderDetails(orderInDelivery));
+
+          await tester.pumpOrderDetailsView(
+            order: orderInDelivery,
+            cubit: cubit,
+          );
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
@@ -113,7 +98,9 @@ void main() {
         'list of purchased products, transaction summary, driver and '
         'recipient information, and a button to contact support',
         (tester) async {
-          await tester.pumpOrderDetailsView(order: orderArrived);
+          when(() => cubit.state).thenReturn(LoadedOrderDetails(orderArrived));
+
+          await tester.pumpOrderDetailsView(order: orderArrived, cubit: cubit);
 
           expect(finderStatusHeader, findsOneWidget);
           expect(finderDetailsSection, findsOneWidget);
@@ -127,9 +114,12 @@ void main() {
         'should navigate to Help Page '
         'when Support Button is tapped',
         (tester) async {
+          when(() => cubit.state).thenReturn(LoadedOrderDetails(orderArrived));
+
           await tester.pumpOrderDetailsView(
             order: orderArrived,
             stackRouter: stackRouter,
+            cubit: cubit,
           );
           await tester.tap(finderContactSupportButton);
           await tester.pumpAndSettle();
@@ -153,7 +143,9 @@ void main() {
         (tester) async {
           final orders = fakeOrderModels;
           for (int i = 0; i < orders.length; i++) {
-            await tester.pumpOrderDetailsView(order: orders[i]);
+            when(() => cubit.state).thenReturn(LoadedOrderDetails(orders[i]));
+
+            await tester.pumpOrderDetailsView(order: orders[i], cubit: cubit);
 
             expect(find.byType(PayNowButton), findsNothing);
           }
@@ -161,4 +153,32 @@ void main() {
       );
     },
   );
+}
+
+extension WidgetX on WidgetTester {
+  Future<BuildContext> pumpOrderDetailsView({
+    required OrderModel order,
+    StackRouter? stackRouter,
+    required OrderDetailsCubit cubit,
+  }) async {
+    late BuildContext ctx;
+    await pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            ctx = context;
+            return Scaffold(
+              body: BlocProvider<OrderDetailsCubit>(
+                create: (_) => cubit,
+                child: OrderDetailsPageWrapper(
+                  id: order.id,
+                ),
+              ).withRouterScope(stackRouter),
+            );
+          },
+        ),
+      ),
+    );
+    return ctx;
+  }
 }

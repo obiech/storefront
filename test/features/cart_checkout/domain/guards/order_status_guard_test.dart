@@ -45,14 +45,6 @@ void main() {
     registerFallbackValue(FakePageRouteInfo());
   });
 
-  test(
-      'should get order from repo '
-      'when navigating', () async {
-    await checkOrderStatusGuard.onNavigation(navigationResolver, stackRouter);
-
-    verify(() => orderRepository.getOrderById(orderId)).called(1);
-  });
-
   test('should go to [OrderDetails] page when navigating', () async {
     await checkOrderStatusGuard.onNavigation(navigationResolver, stackRouter);
 
@@ -73,6 +65,6 @@ void main() {
     expect(orderDetailsRoute, isA<OrderDetailsRoute>());
 
     final args = orderDetailsRoute.args as OrderDetailsRouteArgs;
-    expect(args.order, order);
+    expect(args.id, order.id);
   });
 }

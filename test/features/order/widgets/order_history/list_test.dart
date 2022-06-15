@@ -79,7 +79,7 @@ void main() {
           expect(route, isA<OrderDetailsRoute>());
           final args = route.args;
           expect(args, isNotNull);
-          expect(args!.order, orders[i]);
+          expect(args!.id, orders[i].id);
         }
       },
     );

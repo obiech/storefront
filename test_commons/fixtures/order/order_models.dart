@@ -226,3 +226,11 @@ final orderArrived = OrderModel(
   paymentInformation: paymentInfo,
   paymentMethod: paymentMethod,
 );
+
+final refreshOrderList = [orderPaid, orderAwaitingPayment, orderInDelivery];
+
+final notRefreshOrderList = [
+  orderArrived,
+  orderArrived.copyWith(status: OrderStatus.failed),
+  orderArrived.copyWith(status: OrderStatus.unspecified)
+];

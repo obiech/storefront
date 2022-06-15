@@ -43,7 +43,7 @@ class OrderHistoryList extends StatelessWidget {
         behavior: HitTestBehavior.deferToChild,
         onTap: () {
           context.router.push(
-            OrderDetailsRoute(order: orders[index]),
+            OrderDetailsRoute(id: orders[index].id),
           );
         },
         child: OrderHistoryListItem(

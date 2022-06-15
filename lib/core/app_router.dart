@@ -46,7 +46,7 @@ import '../features/profile/index.dart';
       name: 'OrderRouter',
       children: [
         AutoRoute(page: OrderHistoryPageWrapper),
-        AutoRoute(page: OrderDetailsPage),
+        AutoRoute(page: OrderDetailsPageWrapper),
       ],
     ),
 

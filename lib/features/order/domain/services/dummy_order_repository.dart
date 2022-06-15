@@ -329,6 +329,8 @@ class DummyOrderRepository extends IOrderRepository {
 
   @override
   RepoResult<OrderModel> getOrderById(String id) async {
+    //  Simulate network loading
+    await Future.delayed(const Duration(seconds: 1));
     final index = orders.indexById(id);
 
     if (index > -1) {

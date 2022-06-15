@@ -31,10 +31,9 @@ class CheckOrderStatus extends AutoRouteGuard {
     final orderId = resolver.route.queryParams.get('order_id');
     // final status = resolver.route.queryParams.get('result');
     if (orderId != null) {
-      final order = await orderRepository.getOrderById(orderId);
       // TODO(obella): Handle left
       router.push(
-        OrderRouter(children: [OrderDetailsRoute(order: order.getRight())]),
+        OrderRouter(children: [OrderDetailsRoute(id: orderId)]),
       );
     }
     // TODO(obella): Handle all failure

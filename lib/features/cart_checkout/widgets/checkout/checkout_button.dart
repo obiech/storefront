@@ -28,7 +28,7 @@ class CheckoutButton extends StatelessWidget {
 
           context.router.replace(
             OrderRouter(
-              children: [OrderDetailsRoute(order: paymentResults)],
+              children: [OrderDetailsRoute(id: paymentResults.id)],
             ),
           );
 
