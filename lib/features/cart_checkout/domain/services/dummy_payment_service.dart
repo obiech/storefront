@@ -96,8 +96,8 @@ class DummyPaymentService implements IPaymentRepository {
   @override
   RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
     try {
+      final orderId = uuid.v4();
       if (method == PaymentMethod.PAYMENT_METHOD_GOPAY) {
-        final orderId = uuid.v4();
         final resp = await http.post(
           Uri.parse('https://api.sandbox.midtrans.com/v2/charge'),
           headers: {
@@ -122,7 +122,7 @@ class DummyPaymentService implements IPaymentRepository {
             },
             'gopay': {
               'enable_callback': true,
-              'callback_url': 'dropezy://storefront/order/gopay/finish'
+              'callback_url': 'dropezy://storefront/order/finish'
             }
           }),
         );
@@ -144,6 +144,45 @@ class DummyPaymentService implements IPaymentRepository {
               PaymentResultsModel(
                 paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
                 paymentInformation: PaymentInformationModel(deeplink: deepLink),
+                order: order,
+                expiryTime: DateTime.now(),
+              ),
+            );
+          }
+        }
+      } else if (method == PaymentMethod.PAYMENT_METHOD_VA_BCA) {
+        final resp = await http.post(
+          Uri.parse('https://api.sandbox.midtrans.com/v2/charge'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Basic ${dotenv.get('MIDTRANS_SANDBOX_API_KEY', fallback: '')}'
+          },
+          body: jsonEncode({
+            'payment_type': 'bank_transfer',
+            'transaction_details': {'order_id': orderId, 'gross_amount': 1000},
+            'bank_transfer': {'bank': 'bca'}
+          }),
+        );
+
+        if (resp.statusCode == 200) {
+          final data = jsonDecode(resp.body) as Map<String, dynamic>;
+
+          if (data.containsKey('va_numbers')) {
+            final vaInfo = (data['va_numbers'] as List<dynamic>)
+                .map((action) => action as Map<String, dynamic>)
+                .first;
+
+            final order = (await orderRepository.getOrderById('1')).getRight();
+            orderRepository.addOrder(order.copyWith(id: orderId));
+
+            return right(
+              PaymentResultsModel(
+                paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
+                paymentInformation: PaymentInformationModel(
+                  vaNumber: vaInfo['va_number'],
+                  bankName: vaInfo['bank'],
+                ),
                 order: order,
                 expiryTime: DateTime.now(),
               ),

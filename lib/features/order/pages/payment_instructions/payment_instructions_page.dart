@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../index.dart';
 
 class PaymentInstructionsPage extends StatelessWidget {
   const PaymentInstructionsPage({
     Key? key,
-    required this.order,
+    required this.paymentResults,
   }) : super(key: key);
 
-  final OrderModel order;
+  final PaymentResultsModel paymentResults;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +23,13 @@ class PaymentInstructionsPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PaymentInformationSection(order: order),
+                  PaymentInformationSection(paymentResults: paymentResults),
                   const ThickDivider(),
                   const PaymentHelpSection(),
                 ],
               ),
               OrderActions(
-                order: order,
+                order: paymentResults.order,
                 showPayButton: false,
               ),
             ],

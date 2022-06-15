@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../res/resources.dart';
 import '../../../index.dart';
@@ -14,18 +15,18 @@ part 'parts/payment_reminder.dart';
 class PaymentInformationSection extends StatelessWidget {
   const PaymentInformationSection({
     Key? key,
-    required this.order,
+    required this.paymentResults,
     this.currentTime,
   }) : super(key: key);
 
-  final OrderModel order;
+  final PaymentResultsModel paymentResults;
 
   // Used for mocking current time in tests
   final DateTime? currentTime;
 
   @override
   Widget build(BuildContext context) {
-    final expireTime = order.paymentExpiryTime ?? DateTime.now();
+    final expireTime = paymentResults.order.paymentExpiryTime ?? DateTime.now();
     return Padding(
       padding: EdgeInsets.fromLTRB(
         context.res.dimens.pagePadding,
@@ -64,7 +65,7 @@ class PaymentInformationSection extends StatelessWidget {
           //Timer countdown
           CountdownBuilder(
             key: const ValueKey(PaymentInformationSectionKeys.countdown),
-            countdownDuration: order.paymentExpiryTime!
+            countdownDuration: paymentResults.order.paymentExpiryTime!
                 .difference(currentTime ?? DateTime.now())
                 .inSeconds,
             builder: (seconds) {
@@ -96,15 +97,15 @@ class PaymentInformationSection extends StatelessWidget {
               PaymentInformationSectionKeys.virtualAccountTile,
             ),
             ctx: context,
-            virtualAccount: '123456789',
+            virtualAccount: paymentResults.paymentInformation.vaNumber ?? '',
           ),
           InformationsTile.totalBill(
             key: const ValueKey(
               PaymentInformationSectionKeys.totalBillTile,
             ),
-            amount: order.total,
+            amount: paymentResults.order.total,
             ctx: context,
-            order: order,
+            order: paymentResults.order,
           ),
         ],
       ),

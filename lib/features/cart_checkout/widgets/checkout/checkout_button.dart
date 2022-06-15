@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,7 +29,9 @@ class CheckoutButton extends StatelessWidget {
               );
               break;
             case PaymentMethod.PAYMENT_METHOD_VA_BCA:
-              // TODO(obella): Handle BCA result.
+              context.router.popAndPush(
+                PaymentInstructionsRoute(paymentResults: state.paymentResults),
+              );
               break;
             default:
               break;

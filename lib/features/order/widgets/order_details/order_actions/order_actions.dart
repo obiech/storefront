@@ -46,9 +46,10 @@ class OrderActions extends StatelessWidget {
             Expanded(
               child: PayNowButton(
                 onPressed: () {
-                  context.pushRoute(
-                    PaymentInstructionsRoute(order: order),
-                  );
+                  // TODO: open route in BCA or open deeplink for Gojek
+                  // context.pushRoute(
+                  //   PaymentInstructionsRoute(order: order),
+                  // );
                 },
               ),
             ),

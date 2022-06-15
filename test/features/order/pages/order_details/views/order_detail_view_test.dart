@@ -147,7 +147,8 @@ void main() {
         },
       );
 
-      testWidgets(
+      /*TODO(obella): Restore once pay now logic is restored
+          testWidgets(
         'should navigate to Payment Instructions Page '
         'when Pay Now Button is tapped',
         (tester) async {
@@ -169,7 +170,7 @@ void main() {
           // expecting the right route being pushed
           expect(routeInfo, isA<PaymentInstructionsRoute>());
         },
-      );
+      );*/
 
       testWidgets(
         'should not shown Pay Now Button '
