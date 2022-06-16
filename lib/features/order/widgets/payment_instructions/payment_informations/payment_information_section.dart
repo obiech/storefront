@@ -1,3 +1,4 @@
+import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,18 +16,24 @@ part 'parts/payment_reminder.dart';
 class PaymentInformationSection extends StatelessWidget {
   const PaymentInformationSection({
     Key? key,
-    required this.paymentResults,
+    required this.order,
+    this.paymentInformation,
+    this.paymentMethod = PaymentMethod.PAYMENT_METHOD_VA_BCA,
     this.currentTime,
   }) : super(key: key);
 
-  final PaymentResultsModel paymentResults;
+  final OrderModel order;
+
+  // TODO(obella): Retire when payment info is availed as part of order
+  final PaymentInformationModel? paymentInformation;
+  final PaymentMethod paymentMethod;
 
   // Used for mocking current time in tests
   final DateTime? currentTime;
 
   @override
   Widget build(BuildContext context) {
-    final expireTime = paymentResults.order.paymentExpiryTime ?? DateTime.now();
+    final expireTime = order.paymentExpiryTime ?? DateTime.now();
     return Padding(
       padding: EdgeInsets.fromLTRB(
         context.res.dimens.pagePadding,
@@ -65,7 +72,7 @@ class PaymentInformationSection extends StatelessWidget {
           //Timer countdown
           CountdownBuilder(
             key: const ValueKey(PaymentInformationSectionKeys.countdown),
-            countdownDuration: paymentResults.order.paymentExpiryTime!
+            countdownDuration: order.paymentExpiryTime!
                 .difference(currentTime ?? DateTime.now())
                 .inSeconds,
             builder: (seconds) {
@@ -89,23 +96,22 @@ class PaymentInformationSection extends StatelessWidget {
               PaymentInformationSectionKeys.paymentMethodTile,
             ),
             res: context.res,
-            // TODO (Jonathan) : make paymentMethod receive from order
-            paymentMethod: 'BCA Virtual Account',
+            paymentMethod: paymentMethod.paymentInfo,
           ),
           InformationsTile.virtualAccount(
             key: const ValueKey(
               PaymentInformationSectionKeys.virtualAccountTile,
             ),
             ctx: context,
-            virtualAccount: paymentResults.paymentInformation.vaNumber ?? '',
+            virtualAccount: paymentInformation?.vaNumber ?? '',
           ),
           InformationsTile.totalBill(
             key: const ValueKey(
               PaymentInformationSectionKeys.totalBillTile,
             ),
-            amount: paymentResults.order.total,
+            amount: order.total,
             ctx: context,
-            order: paymentResults.order,
+            order: order,
           ),
         ],
       ),

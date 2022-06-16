@@ -1,8 +1,11 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../../test_commons/finders/payment_instructions/list_tile_finders.dart';
@@ -12,7 +15,9 @@ import '../../../../../../src/mock_navigator.dart';
 
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
-  Future<BuildContext> pumpPaymentMethodTile() async {
+  Future<BuildContext> pumpPaymentMethodTile(
+    PaymentMethodDetails paymentMethod,
+  ) async {
     late BuildContext ctx;
     await pumpWidget(
       MaterialApp(
@@ -22,7 +27,7 @@ extension WidgetTesterX on WidgetTester {
             return Material(
               child: InformationsTile.paymentMethod(
                 res: context.res,
-                paymentMethod: '',
+                paymentMethod: paymentMethod,
               ),
             );
           },
@@ -97,7 +102,8 @@ void main() {
       'Should show header text and subtitle with logo and text '
       'when type is [InformationsTile.paymentMethod]',
       (tester) async {
-        final context = await tester.pumpPaymentMethodTile();
+        final paymentMethod = PaymentMethod.PAYMENT_METHOD_VA_BCA.paymentInfo;
+        final context = await tester.pumpPaymentMethodTile(paymentMethod);
 
         expect(
           find.descendant(
@@ -111,6 +117,7 @@ void main() {
           equals(context.res.strings.paymentMethod),
         );
 
+        /// should show payment method logo
         expect(
           find.descendant(
             of: ListTileFinder.finderTile,
@@ -119,12 +126,30 @@ void main() {
           findsOneWidget,
         );
 
+        final svgImageFinder = ListTileFinder.finderSubtitleLogo;
+
+        expect(
+          svgImageFinder,
+          findsOneWidget,
+        );
+
+        final svgImage = tester.widget<SvgPicture>(svgImageFinder);
+        final assetUrl =
+            (svgImage.pictureProvider as ExactAssetPicture).assetName;
+
+        expect(assetUrl, paymentMethod.image);
+
         expect(
           find.descendant(
             of: ListTileFinder.finderTile,
             matching: ListTileFinder.finderSubtitleText,
           ),
           findsOneWidget,
+        );
+
+        expect(
+          tester.widget<Text>(ListTileFinder.finderSubtitleText).data,
+          paymentMethod.title,
         );
 
         expect(

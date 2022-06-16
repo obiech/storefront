@@ -15,7 +15,7 @@ class InformationsTile extends StatelessWidget {
   factory InformationsTile.paymentMethod({
     Key? key,
     required Resources res,
-    required String paymentMethod,
+    required PaymentMethodDetails paymentMethod,
   }) {
     return InformationsTile(
       key: key,
@@ -23,14 +23,14 @@ class InformationsTile extends StatelessWidget {
       subtitle: Row(
         children: [
           SvgPicture.asset(
-            res.paths.bca,
+            paymentMethod.image,
             key: const ValueKey(InformationsTileKeys.subtitleLogo),
           ),
           const SizedBox(width: 16),
           Padding(
             padding: const EdgeInsets.only(bottom: 3.0),
             child: Text(
-              paymentMethod,
+              paymentMethod.title,
               key: const ValueKey(InformationsTileKeys.subtitleText),
               style: res.styles.caption1
                   .copyWith(

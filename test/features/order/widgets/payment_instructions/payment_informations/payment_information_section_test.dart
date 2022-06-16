@@ -19,7 +19,11 @@ extension WidgetTesterX on WidgetTester {
     await pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: PaymentInformationSection(paymentResults: paymentResults),
+          body: PaymentInformationSection(
+            order: paymentResults.order,
+            paymentInformation: paymentResults.paymentInformation,
+            paymentMethod: paymentResults.paymentMethod,
+          ),
         ),
       ),
     );

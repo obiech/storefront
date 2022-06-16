@@ -23,7 +23,7 @@ class PaymentInstructionsPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PaymentInformationSection(paymentResults: paymentResults),
+                  PaymentInformationSection(order: paymentResults.order),
                   const ThickDivider(),
                   const PaymentHelpSection(),
                 ],
