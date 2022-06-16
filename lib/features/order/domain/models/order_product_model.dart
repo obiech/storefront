@@ -33,10 +33,11 @@ class OrderProductModel extends Equatable {
       thumbnailUrl:
           item.product.imagesUrls.isEmpty ? '' : item.product.imagesUrls[0],
       quantity: item.quantity,
-      price: '1500000',
-      discount: '100000',
-      finalPrice: '1400000',
-      grandTotal: (item.quantity * 1500000).toString(),
+      price: item.product.price.toString(),
+      discount: '000',
+      // TODO (Jonathan): change the discount, final, and total
+      finalPrice: item.subTotal,
+      grandTotal: item.grandTotal,
     );
   }
 
@@ -66,4 +67,16 @@ class OrderProductModel extends Equatable {
 
   @override
   List<Object?> get props => [productId, quantity, grandTotal];
+}
+
+extension OrderProductModelX on pb.Item {
+  String get subTotal {
+    // TODO (Jonathan) : Subtract with discount when its available
+
+    return (int.tryParse(product.price.toString()) ?? 0).toString();
+  }
+
+  String get grandTotal {
+    return (quantity * (int.tryParse(subTotal) ?? 0)).toString();
+  }
 }

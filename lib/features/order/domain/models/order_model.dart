@@ -66,26 +66,7 @@ class OrderModel extends Equatable {
       productsBought: order.items.map(OrderProductModel.fromPb).toList(),
       paymentExpiryTime: order.paymentExpiryTime.toDateTime(),
       estimatedArrivalTime: order.estimatedDeliveryTime.toDateTime(),
-      // TODO (Jonathan): Update to order.... when proto updated
-      recipientAddress: DeliveryAddressModel(
-        id: 'delivery-address-1',
-        title: 'Rumah',
-        notes: 'Pagar Silver, paket taruh di depan pintu',
-        isPrimaryAddress: true,
-        lat: -6.175392,
-        lng: 106.827153,
-        recipientName: 'Susi Susanti',
-        recipientPhoneNumber: '08123123123',
-        dateCreated: DateTime(2022, 1, 20),
-        details: const AddressDetailsModel(
-          street: 'Jl. Monas',
-          district: 'Gambir',
-          subDistrict: 'Gambir',
-          municipality: 'Jakarta Pusat',
-          province: 'DKI Jakarta',
-          country: 'Indonesia',
-        ),
-      ),
+      recipientAddress: DeliveryAddressModel.fromPb(order.deliveryInfo),
     );
   }
 
