@@ -30,3 +30,6 @@ class MockDropezyPlacesService extends Mock implements DropezyPlacesService {}
 
 class MockSearchLocationRespository extends Mock
     implements ISearchLocationRepository {}
+
+class MockSearchLocationHistoryRepository extends Mock
+    implements ISearchLocationHistoryRepository {}
