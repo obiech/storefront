@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/profile/blocs/profile_cubit.dart';
+
+import '../../../core/core.dart';
 
 import '../widgets/widgets.dart';
 
@@ -9,18 +8,6 @@ part 'keys.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileCubit()..loadProfile(),
-      child: const ProfileView(),
-    );
-  }
-}
-
-class ProfileView extends StatelessWidget {
-  const ProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

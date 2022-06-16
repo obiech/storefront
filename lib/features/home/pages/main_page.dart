@@ -1,12 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/di/injection.dart';
 
+import '../../../core/core.dart';
+import '../../../di/injection.dart';
 import '../../address/index.dart';
 import '../../cart_checkout/index.dart';
 import '../../discovery/index.dart';
+import '../../profile/index.dart';
 import '../index.dart';
 
 class MainPage extends StatefulWidget {
@@ -33,6 +34,7 @@ class _MainPageState extends State<MainPage> with AfterLayoutMixin {
     // but require auth token to be present.
     context.read<DeliveryAddressCubit>().fetchDeliveryAddresses();
     context.read<DiscoveryCubit>().loadStore();
+    context.read<ProfileCubit>().fetchProfile();
   }
 
   @override

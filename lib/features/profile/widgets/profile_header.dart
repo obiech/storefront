@@ -12,10 +12,10 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO(Jeco): Better State Handling
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state is ProfileLoaded) {
-          final userName = state.name;
           return Padding(
             padding: const EdgeInsets.fromLTRB(24.0, 8.0, 24.0, 24.0),
             child: Row(
@@ -24,9 +24,9 @@ class ProfileHeader extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (userName != null) ...[
+                      if (state.profile.fullName.trim().isNotEmpty) ...[
                         Text(
-                          context.res.strings.hiUser(userName),
+                          context.res.strings.hiUser(state.profile.fullName),
                           key: ProfilePageKeys.userName,
                           style: context.res.styles.subtitle.copyWith(
                             color: DropezyColors.white,
@@ -37,7 +37,7 @@ class ProfileHeader extends StatelessWidget {
                         const SizedBox(height: 4),
                       ],
                       Text(
-                        state.phoneNumber,
+                        state.profile.phoneNumber,
                         key: ProfilePageKeys.userPhoneNumber,
                         style: context.res.styles.subtitle.copyWith(
                           color: DropezyColors.lightBlue,

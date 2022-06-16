@@ -101,6 +101,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     BlocListener<EditProfileBloc, EditProfileState>(
       listenWhen: (previous, current) => current.profileUpdated,
       listener: (context, state) {
+        // Refresh loaded profile with new full name
+        context.read<ProfileCubit>().refreshUpdatedName(state.fullName);
         context.popRoute();
         ScaffoldMessenger.of(context)
           ..removeCurrentSnackBar()

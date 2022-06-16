@@ -35,8 +35,9 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
           loading: false,
         ),
       ),
-      (success) => emit(
+      (fullName) => emit(
         state.copyWith(
+          fullName: fullName,
           loading: false,
           profileUpdated: true,
         ),

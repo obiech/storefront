@@ -11,11 +11,12 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
-import 'package:storefront_app/features/profile/pages/profile_page.dart';
+import 'package:storefront_app/features/profile/index.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../src/mock_customer_service_client.dart';
 import '../../order/mocks.dart';
+import '../../profile/mocks.dart';
 import '../mocks.dart';
 import 'main_page_finder.dart';
 
@@ -29,6 +30,7 @@ extension WidgetTesterX on WidgetTester {
     required SearchHistoryCubit searchHistoryCubit,
     required DiscoveryCubit discoveryCubit,
     required DeliveryAddressCubit deliveryAddressCubit,
+    required ProfileCubit profileCubit,
   }) async {
     late BuildContext ctx;
 
@@ -52,6 +54,9 @@ extension WidgetTesterX on WidgetTester {
           ),
           BlocProvider(
             create: (context) => deliveryAddressCubit,
+          ),
+          BlocProvider(
+            create: (context) => profileCubit,
           ),
         ],
         child: MaterialApp.router(
@@ -77,6 +82,8 @@ void main() {
   late SearchHistoryCubit searchHistoryCubit;
   late DiscoveryCubit discoveryCubit;
   late DeliveryAddressCubit deliveryAddressCubit;
+  late ProfileCubit profileCubit;
+
   late AuthService authService;
 
   setUp(() {
@@ -98,6 +105,7 @@ void main() {
     searchHistoryCubit = MockSearchHistoryCubit();
     discoveryCubit = MockDiscoveryCubit();
     deliveryAddressCubit = MockDeliveryAddressCubit();
+    profileCubit = MockProfileCubit();
 
     late ParentCategoriesCubit parentCategoriesCubit;
 
@@ -129,6 +137,10 @@ void main() {
         .thenReturn(const DeliveryAddressInitial());
     when(() => deliveryAddressCubit.fetchDeliveryAddresses())
         .thenAnswer((_) async {});
+
+    // stubs for profile cubit
+    when(() => profileCubit.state).thenReturn(ProfileInitial());
+    when(() => profileCubit.fetchProfile()).thenAnswer((_) async {});
 
     when(() => prefs.getDeviceLocale())
         .thenAnswer((invocation) => const Locale('en', 'EN'));
@@ -176,6 +188,7 @@ void main() {
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
+        profileCubit: profileCubit,
       );
 
       await tester.pumpAndSettle();
@@ -199,6 +212,7 @@ void main() {
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
+        profileCubit: profileCubit,
       );
 
       await tester.pumpAndSettle();
@@ -222,6 +236,7 @@ void main() {
         homeNavCubit: homeNavCubit,
         discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
+        profileCubit: profileCubit,
       );
 
       await tester.pumpAndSettle();

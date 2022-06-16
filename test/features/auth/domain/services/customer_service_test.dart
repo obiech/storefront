@@ -5,6 +5,7 @@ import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/auth/index.dart';
+import 'package:storefront_app/features/profile/index.dart';
 
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
@@ -83,7 +84,7 @@ void main() {
 
         test(
           'should call [CustomerServiceClient.updateProfile] once '
-          'and return Unit '
+          'and return a String '
           'when request is successful',
           () async {
             when(
@@ -94,8 +95,8 @@ void main() {
 
             final result = await customerService.updateFullName(mockFullName);
 
-            final unit = result.getRight();
-            expect(unit, isA<Unit>());
+            final fullName = result.getRight();
+            expect(fullName, isA<String>());
 
             verify(() => customerServiceClient.updateProfile(mockRequest))
                 .called(1);
@@ -120,6 +121,53 @@ void main() {
             expect(failure.message, 'Error');
 
             verify(() => customerServiceClient.updateProfile(mockRequest))
+                .called(1);
+          },
+        );
+      });
+
+      group('[getProfile()]', () {
+        final mockRequest = GetProfileRequest();
+
+        test(
+          'should call [CustomerServiceClient.getProfile] once '
+          'and return a ProfileModel '
+          'when request is successful',
+          () async {
+            when(
+              () => customerServiceClient.getProfile(mockRequest),
+            ).thenAnswer(
+              (_) => MockResponseFuture.value(GetProfileResponse()),
+            );
+
+            final result = await customerService.getProfile();
+
+            final profile = result.getRight();
+            expect(profile, isA<ProfileModel>());
+
+            verify(() => customerServiceClient.getProfile(mockRequest))
+                .called(1);
+          },
+        );
+
+        test(
+          'should call [CustomerServiceClient.getProfile] once '
+          'and return a Failure '
+          'when request is not successful',
+          () async {
+            when(
+              () => customerServiceClient.getProfile(mockRequest),
+            ).thenAnswer(
+              (_) => MockResponseFuture.error(GrpcError.internal('Error')),
+            );
+
+            final result = await customerService.getProfile();
+
+            final failure = result.getLeft();
+            expect(failure, isA<NetworkFailure>());
+            expect(failure.message, 'Error');
+
+            verify(() => customerServiceClient.getProfile(mockRequest))
                 .called(1);
           },
         );

@@ -18,7 +18,7 @@ class SearchHeader extends StatelessWidget {
         children: [
           Text(
             res.strings.hiWhatAreYouShoppingForToday(
-              //TODO(obella465): Pass name from auth
+              //TODO(Jeco): Pass name and handle profile state
               '',
             ),
             style: res.styles.button.copyWith(

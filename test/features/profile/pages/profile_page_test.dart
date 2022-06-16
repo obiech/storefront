@@ -1,19 +1,26 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/profile/index.dart';
 import 'package:storefront_app/features/profile/widgets/widgets.dart';
 
+import '../../../../test_commons/fixtures/profile/profile_model.dart';
 import '../../../commons.dart';
 import '../../../src/mock_navigator.dart';
+import '../mocks.dart';
 
 void main() {
   late StackRouter stackRouter;
+  late ProfileCubit profileCubit;
 
   setUp(() {
     stackRouter = MockStackRouter();
+    profileCubit = MockProfileCubit();
+
+    when(() => profileCubit.state).thenReturn(const ProfileLoaded(mockProfile));
 
     // if not stubbed, this will throw an UnimplementedError when called
     // here, we stub it to do nothing because we're only checking for the
@@ -31,7 +38,7 @@ void main() {
       'should display Header, Account, and General section '
       'when page is loaded',
       (tester) async {
-        final context = await tester.pumpProfilePage(stackRouter);
+        final context = await tester.pumpProfilePage(stackRouter, profileCubit);
 
         expect(find.byType(ProfileHeader), findsOneWidget);
         expect(find.byType(ProfileAccountSection), findsOneWidget);
@@ -44,7 +51,7 @@ void main() {
       'should navigate to Edit Profile Page '
       'when edit icon is tapped',
       (tester) async {
-        await tester.pumpProfilePage(stackRouter);
+        await tester.pumpProfilePage(stackRouter, profileCubit);
 
         await tester.tap(find.byKey(ProfilePageKeys.editProfileButton));
         await tester.pumpAndSettle();
@@ -67,7 +74,8 @@ void main() {
         'should display all correct menu tiles '
         'when page is rendered',
         (tester) async {
-          final context = await tester.pumpProfilePage(stackRouter);
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
 
           expect(find.text(context.res.strings.myOrders), findsOneWidget);
           expect(find.text(context.res.strings.changeAddress), findsOneWidget);
@@ -79,7 +87,8 @@ void main() {
         'should navigate to Order Page '
         'when My Orders tile is tapped',
         (tester) async {
-          final context = await tester.pumpProfilePage(stackRouter);
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
 
           await tester.tap(find.text(context.res.strings.myOrders));
           await tester.pumpAndSettle();
@@ -101,7 +110,8 @@ void main() {
         'should navigate to Help Page '
         'when Help tile is tapped',
         (tester) async {
-          final context = await tester.pumpProfilePage(stackRouter);
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
 
           await tester.tap(find.text(context.res.strings.help));
           await tester.pumpAndSettle();
@@ -123,7 +133,8 @@ void main() {
         'should navigate to Change Address Page '
         'when Change Address tile is tapped',
         (tester) async {
-          final context = await tester.pumpProfilePage(stackRouter);
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
 
           await tester.tap(find.text(context.res.strings.changeAddress));
           await tester.pumpAndSettle();
@@ -147,7 +158,8 @@ void main() {
         'should display all correct menu tiles '
         'when page is rendered',
         (tester) async {
-          final context = await tester.pumpProfilePage(stackRouter);
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
 
           expect(find.text(context.res.strings.privacyPolicy), findsOneWidget);
           expect(find.text(context.res.strings.help), findsOneWidget);
@@ -162,7 +174,7 @@ void main() {
       'should open Sign Out Bottomsheet '
       'when Sign Out button is tapped',
       (tester) async {
-        final context = await tester.pumpProfilePage(stackRouter);
+        final context = await tester.pumpProfilePage(stackRouter, profileCubit);
 
         await tester.ensureVisible(find.text(context.res.strings.signOut));
 
@@ -176,7 +188,10 @@ void main() {
 }
 
 extension WidgetTesterX on WidgetTester {
-  Future<BuildContext> pumpProfilePage(StackRouter stackRouter) async {
+  Future<BuildContext> pumpProfilePage(
+    StackRouter stackRouter,
+    ProfileCubit profileCubit,
+  ) async {
     late BuildContext ctx;
 
     await pumpWidget(
@@ -187,8 +202,11 @@ extension WidgetTesterX on WidgetTester {
             return StackRouterScope(
               controller: stackRouter,
               stateHash: 0,
-              child: const Scaffold(
-                body: ProfilePage(),
+              child: BlocProvider(
+                create: (context) => profileCubit,
+                child: const Scaffold(
+                  body: ProfilePage(),
+                ),
               ),
             );
           },

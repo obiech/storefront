@@ -21,6 +21,7 @@ import 'features/discovery/index.dart';
 import 'features/home/index.dart';
 import 'features/permission_handler/index.dart';
 import 'features/product_search/index.dart';
+import 'features/profile/index.dart';
 
 Future<void> main() async {
   runZonedGuarded<Future<void>>(
@@ -73,6 +74,11 @@ Future<void> main() async {
             /// Permission
             BlocProvider(
               create: (_) => getIt<PermissionHandlerCubit>(),
+            ),
+
+            // Profile
+            BlocProvider(
+              create: (context) => getIt<ProfileCubit>(),
             )
           ],
           child: AppWidget(

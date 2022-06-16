@@ -64,7 +64,7 @@ void main() {
         when(
           () =>
               customerRepository.updateFullName(editProfileBloc.state.fullName),
-        ).thenAnswer((_) async => right(unit));
+        ).thenAnswer((_) async => right(editProfileBloc.state.fullName));
       },
       build: () => editProfileBloc,
       act: (bloc) => bloc.add(const FormSubmitted()),

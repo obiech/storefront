@@ -2,22 +2,36 @@ part of 'profile_cubit.dart';
 
 abstract class ProfileState extends Equatable {
   const ProfileState();
-}
 
-class ProfileInitial extends ProfileState {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
+/// Initial state of cubit.
+class ProfileInitial extends ProfileState {}
+
+/// When [ProfileCubit] loading user profile
+/// from backend.
+class ProfileLoading extends ProfileState {}
+
+/// When [ProfileCubit] successfully retrieve
+/// user profile from backend.
 class ProfileLoaded extends ProfileState {
-  final String? name;
-  final String phoneNumber;
+  final ProfileModel profile;
 
-  const ProfileLoaded({
-    required this.name,
-    required this.phoneNumber,
-  });
+  const ProfileLoaded(this.profile);
 
   @override
-  List<Object?> get props => [name, phoneNumber];
+  List<Object?> get props => [profile];
+}
+
+/// When [ProfileCubit] failed to retrieve
+/// user profile from backend.
+class ProfileError extends ProfileState {
+  final String message;
+
+  const ProfileError(this.message);
+
+  @override
+  List<Object?> get props => [message];
 }

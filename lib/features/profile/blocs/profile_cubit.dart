@@ -1,17 +1,42 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
+
+import '../../auth/index.dart';
+import '../index.dart';
 
 part 'profile_state.dart';
 
+@injectable
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit() : super(ProfileInitial());
+  ProfileCubit({
+    required this.customerRepository,
+  }) : super(ProfileInitial());
 
-  // TODO: Update with proper logic
-  void loadProfile() {
+  final ICustomerRepository customerRepository;
+
+  /// Fetch profile from backend.
+  Future<void> fetchProfile() async {
+    emit(ProfileLoading());
+
+    final result = await customerRepository.getProfile();
+
+    final newState = result.fold(
+      (failure) => ProfileError(failure.message),
+      (profile) => ProfileLoaded(profile),
+    );
+
+    emit(newState);
+  }
+
+  /// Refresh profile with updated full name.
+  ///
+  /// Do nothing if profile not loaded.
+  void refreshUpdatedName(String fullName) {
+    if (state is! ProfileLoaded) return;
     emit(
-      const ProfileLoaded(
-        name: null,
-        phoneNumber: '0812123400',
+      ProfileLoaded(
+        (state as ProfileLoaded).profile.copyWith(fullName: fullName),
       ),
     );
   }

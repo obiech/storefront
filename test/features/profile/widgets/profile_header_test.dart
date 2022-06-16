@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/profile/index.dart';
 import 'package:storefront_app/features/profile/widgets/profile_header.dart';
 
+import '../../../../test_commons/fixtures/profile/profile_model.dart';
 import '../../../commons.dart';
 import '../mocks.dart';
 
@@ -26,7 +27,7 @@ void main() {
       'and name is not set',
       (tester) async {
         when(() => profileCubit.state).thenReturn(
-          const ProfileLoaded(name: null, phoneNumber: 'phoneNumber'),
+          ProfileLoaded(mockProfile.copyWith(fullName: '')),
         );
 
         await tester.pumpWidget(
@@ -52,7 +53,7 @@ void main() {
       'and name is set',
       (tester) async {
         when(() => profileCubit.state).thenReturn(
-          const ProfileLoaded(name: 'name', phoneNumber: 'phoneNumber'),
+          const ProfileLoaded(mockProfile),
         );
 
         await tester.pumpWidget(
