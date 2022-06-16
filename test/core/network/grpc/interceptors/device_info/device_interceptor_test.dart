@@ -71,7 +71,7 @@ void main() {
           deviceInterceptor.addOsVersion,
           deviceInterceptor.addDeviceModel,
           deviceInterceptor.addAppVersion,
-          deviceInterceptor.addOriginIp,
+          // deviceInterceptor.addOriginIp,
           deviceInterceptor.addXCorrelationID,
           deviceInterceptor.addDeviceLocale,
         ],

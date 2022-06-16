@@ -47,7 +47,7 @@ class DeviceInterceptor extends ClientInterceptor {
           addOsVersion,
           addDeviceModel,
           addAppVersion,
-          addOriginIp,
+          // addOriginIp,
           addXCorrelationID,
           addDeviceLocale,
         ],
