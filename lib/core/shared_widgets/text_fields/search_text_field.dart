@@ -48,6 +48,9 @@ class SearchTextField extends StatefulWidget {
   /// Callback to handle the search action
   final Function(String)? onSearch;
 
+  /// If the search field should be cleared [onSearch]
+  final bool clearOnSearch;
+
   /// FocusNode to toggle focus
   final FocusNode? focusNode;
 
@@ -67,6 +70,7 @@ class SearchTextField extends StatefulWidget {
     this.onFocusChanged,
     this.isEnabled = true,
     this.onSearch,
+    this.clearOnSearch = false,
     this.focusNode,
     this.controller,
     this.onCleared,
@@ -136,8 +140,11 @@ class _SearchTextFieldState extends State<SearchTextField> {
         },
         onSubmitted: (value) {
           widget.onSearch?.call(value);
-          _controller.clear();
-          _updateValueNotifier();
+
+          if (widget.clearOnSearch) {
+            _controller.clear();
+            _updateValueNotifier();
+          }
         },
         style: res.styles.caption1,
         cursorColor: res.colors.black,
