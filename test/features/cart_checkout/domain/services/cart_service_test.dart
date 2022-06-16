@@ -4,10 +4,12 @@ import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/pb_summary_response.dart';
 import '../../../../../test_commons/fixtures/product/variant_models.dart'
     as variant_fixtures;
+import '../../../../src/mock_customer_service_client.dart';
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
@@ -22,10 +24,16 @@ void main() {
 
       late CartServiceClient cartServiceClient;
       late CartService cartService;
+      late IStoreRepository storeRepository;
 
       setUp(() {
         cartServiceClient = MockCartServiceClient();
-        cartService = CartService(cartServiceClient);
+        storeRepository = MockStoreRepository();
+        cartService = CartService(cartServiceClient, storeRepository);
+
+        // Store
+        when(() => storeRepository.activeStoreId)
+            .thenAnswer((_) => mockStoreId);
       });
 
       group(
@@ -43,7 +51,7 @@ void main() {
               );
 
               // act
-              final result = await cartService.loadCart(mockStoreId);
+              final result = await cartService.loadCart();
 
               // assert
               final cart = result.getRight();
@@ -69,7 +77,7 @@ void main() {
               );
 
               // act
-              final result = await cartService.loadCart(mockStoreId);
+              final result = await cartService.loadCart();
 
               // assert
               final failure = result.getLeft();
@@ -109,10 +117,7 @@ void main() {
               );
 
               // act
-              final result = await cartService.addItem(
-                mockRequest.storeId,
-                mockVariant,
-              );
+              final result = await cartService.addItem(mockVariant);
 
               // assert
               final cart = result.getRight();
@@ -142,7 +147,6 @@ void main() {
 
               // act
               final result = await cartService.addItem(
-                mockRequest.storeId,
                 mockVariant,
               );
 
@@ -188,7 +192,6 @@ void main() {
 
               // act
               final result = await cartService.incrementItem(
-                mockRequest.storeId,
                 mockVariant,
                 mockQty,
               );
@@ -221,7 +224,6 @@ void main() {
 
               // act
               final result = await cartService.incrementItem(
-                mockRequest.storeId,
                 mockVariant,
                 mockQty,
               );
@@ -268,7 +270,6 @@ void main() {
 
               // act
               final result = await cartService.decrementItem(
-                mockRequest.storeId,
                 mockVariant,
                 mockQty,
               );
@@ -301,7 +302,6 @@ void main() {
 
               // act
               final result = await cartService.decrementItem(
-                mockRequest.storeId,
                 mockVariant,
                 mockQty,
               );
@@ -347,7 +347,6 @@ void main() {
 
               // act
               final result = await cartService.removeItem(
-                mockRequest.storeId,
                 mockVariant,
               );
 
@@ -379,7 +378,6 @@ void main() {
 
               // act
               final result = await cartService.removeItem(
-                mockRequest.storeId,
                 mockVariant,
               );
 

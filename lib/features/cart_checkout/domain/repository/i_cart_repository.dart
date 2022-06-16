@@ -6,29 +6,25 @@ import '../models/cart_model.dart';
 /// responsible for Cart.
 abstract class ICartRepository {
   /// Loads cart data from remote or local data source.
-  RepoResult<CartModel> loadCart(String storeId);
+  RepoResult<CartModel> loadCart();
 
-  /// Adds a new cart item [variant] to a cart session
-  /// at a store identified with [storeId].
-  RepoResult<CartModel> addItem(String storeId, VariantModel variant);
+  /// Adds a new cart item [variant] to the current active cart session
+  RepoResult<CartModel> addItem(VariantModel variant);
 
   /// Increases the amount of cart item [variant] by [quantity]
-  /// to a cart session at a store identified with [storeId].
+  /// to the current active cart session.
   RepoResult<CartModel> incrementItem(
-    String storeId,
     VariantModel variant,
     int quantity,
   );
 
   /// Subtracts the amount of cart item [variant] by [quantity]
-  /// to a cart session at a store identified with [storeId].
+  /// to the current active cart session.
   RepoResult<CartModel> decrementItem(
-    String storeId,
     VariantModel variant,
     int quantity,
   );
 
-  /// Removes a cart item [variant] from a cart session
-  /// at a store identified with [storeId].
-  RepoResult<CartModel> removeItem(String storeId, VariantModel variant);
+  /// Removes a cart item [variant] from the current active cart session.
+  RepoResult<CartModel> removeItem(VariantModel variant);
 }

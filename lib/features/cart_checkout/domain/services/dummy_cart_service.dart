@@ -40,12 +40,11 @@ class DummyCartService implements ICartRepository {
   );
 
   @override
-  RepoResult<CartModel> loadCart(String storeId) async {
+  RepoResult<CartModel> loadCart() async {
     await Future.delayed(const Duration(seconds: 1));
 
     _cart = CartModel(
       id: 'cart-id-1',
-      storeId: storeId,
       items: const [
         CartItemModel(
           variant: variantMango,
@@ -70,7 +69,7 @@ class DummyCartService implements ICartRepository {
   }
 
   @override
-  RepoResult<CartModel> addItem(String storeId, VariantModel variant) async {
+  RepoResult<CartModel> addItem(VariantModel variant) async {
     await Future.delayed(const Duration(milliseconds: 300));
     _cart = _cart.copyWith(
       items: List.of(_cart.items)
@@ -85,7 +84,6 @@ class DummyCartService implements ICartRepository {
 
   @override
   RepoResult<CartModel> incrementItem(
-    String storeId,
     VariantModel variant,
     int quantity,
   ) async {
@@ -115,7 +113,6 @@ class DummyCartService implements ICartRepository {
 
   @override
   RepoResult<CartModel> decrementItem(
-    String storeId,
     VariantModel variant,
     int quantity,
   ) async {
@@ -145,7 +142,6 @@ class DummyCartService implements ICartRepository {
 
   @override
   RepoResult<CartModel> removeItem(
-    String storeId,
     VariantModel variant,
   ) async {
     // Simulate a short network loading

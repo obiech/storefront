@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../core/core.dart';
+import '../../../discovery/index.dart';
 import '../../../product/domain/domain.dart';
 import '../../domain/domains.dart';
 
@@ -23,14 +24,28 @@ part 'cart_state.dart';
 /// it indicates that cart is still empty.
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc(this.cartRepository) : super(const CartInitial()) {
+  CartBloc(this.cartRepository, this.storeRepository)
+      : super(const CartInitial()) {
     on<LoadCart>(_onLoadCart);
     on<AddCartItem>(_onAddCartItem);
     on<EditCartItem>(_onEditCartItem);
     on<RemoveCartItem>(_onRemoveCartItem);
+
+    // Watch store changes and reload cart
+    _storeSubscription = storeRepository.storeStream.listen((newStoreId) {
+      if (_currentStoreId != newStoreId) {
+        add(const LoadCart());
+        _currentStoreId = newStoreId;
+      }
+    });
   }
 
   final ICartRepository cartRepository;
+  final IStoreRepository storeRepository;
+
+  /// Store management
+  String? _currentStoreId;
+  StreamSubscription<String>? _storeSubscription;
 
   FutureOr<void> _onLoadCart(
     LoadCart event,
@@ -38,11 +53,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     emit(const CartLoading());
 
-    final result = await cartRepository.loadCart(event.storeId);
+    final result = await cartRepository.loadCart();
 
     result.fold(
       (failure) => failure is ResourceNotFoundFailure
-          ? emit(CartLoaded.success(CartModel.empty(event.storeId)))
+          ? emit(CartLoaded.success(CartModel.empty()))
           : emit(const CartFailedToLoad()),
       (cart) => emit(CartLoaded.success(cart)),
     );
@@ -84,10 +99,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ),
     );
 
-    final result = await cartRepository.addItem(
-      currState.cart.storeId,
-      event.variant,
-    );
+    final result = await cartRepository.addItem(event.variant);
 
     result.fold(
       (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
@@ -157,13 +169,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       if (qtyChange > 0) {
         result = await cartRepository.incrementItem(
-          currState.cart.storeId,
           event.variant,
           qtyChange,
         );
       } else {
         result = await cartRepository.decrementItem(
-          currState.cart.storeId,
           event.variant,
           qtyChange.abs(),
         );
@@ -213,14 +223,17 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     emit(CartLoaded.loading(newCart));
 
-    final result = await cartRepository.removeItem(
-      currState.cart.storeId,
-      variant,
-    );
+    final result = await cartRepository.removeItem(variant);
 
     result.fold(
       (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
       (cart) => emit(CartLoaded.success(cart)),
     );
+  }
+
+  @override
+  Future<void> close() {
+    _storeSubscription?.cancel();
+    return super.close();
   }
 }

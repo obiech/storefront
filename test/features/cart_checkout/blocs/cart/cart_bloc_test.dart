@@ -2,27 +2,36 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/core/errors/failure.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 
 import '../../../../../test_commons/fixtures/cart/cart_models.dart'
     as cart_fixtures;
 import '../../../../../test_commons/fixtures/product/variant_models.dart'
     as variant_fixtures;
+import '../../../../src/mock_customer_service_client.dart';
 import '../../mocks.dart';
 
 void main() {
   group(
     '[CartBloc]',
     () {
-      const mockStoreId = 'store-id-1';
       late CartBloc bloc;
       late ICartRepository cartRepository;
+      late IStoreRepository storeRepository;
 
       setUp(() {
         cartRepository = MockCartService();
-        bloc = CartBloc(cartRepository);
+        bloc = CartBloc(cartRepository, storeRepository);
         registerFallbackValue(variant_fixtures.variantMango);
+      });
+
+      setUpAll(() {
+        storeRepository = MockStoreRepository();
+        when(() => storeRepository.storeStream)
+            .thenAnswer((_) => BehaviorSubject());
       });
 
       test(
@@ -34,16 +43,16 @@ void main() {
         'when [LoadCart] event is added',
         () {
           const mockCart = cart_fixtures.mockCartModel;
-          const event = LoadCart(mockStoreId);
+          const event = LoadCart();
+
           void verifyFn(CartBloc bloc) =>
-              verify(() => bloc.cartRepository.loadCart(mockStoreId)).called(1);
+              verify(() => bloc.cartRepository.loadCart()).called(1);
 
           blocTest<CartBloc, CartState>(
             'should emit [CartLoaded] with Cart contents, loading set '
             'to false, and no error message',
             setUp: () {
-              when(() => cartRepository.loadCart(mockStoreId))
-                  .thenAnswer((_) async {
+              when(() => cartRepository.loadCart()).thenAnswer((_) async {
                 return right(mockCart);
               });
             },
@@ -60,8 +69,7 @@ void main() {
             'should emit an empty [CartLoaded.success] '
             'when a [ResourceNotFoundFailure] is returned from cart repository',
             setUp: () {
-              when(() => cartRepository.loadCart(mockStoreId))
-                  .thenAnswer((_) async {
+              when(() => cartRepository.loadCart()).thenAnswer((_) async {
                 return left(ResourceNotFoundFailure());
               });
             },
@@ -69,7 +77,7 @@ void main() {
             act: (bloc) => bloc.add(event),
             expect: () => <CartState>[
               const CartLoading(),
-              CartLoaded.success(CartModel.empty(mockStoreId)),
+              CartLoaded.success(CartModel.empty()),
             ],
             verify: verifyFn,
           );
@@ -78,8 +86,7 @@ void main() {
             'should emit [CartFailedToLoad] '
             'when a [Failure] is returned from cart repository',
             setUp: () {
-              when(() => cartRepository.loadCart(mockStoreId))
-                  .thenAnswer((_) async {
+              when(() => cartRepository.loadCart()).thenAnswer((_) async {
                 return left(Failure('Failed to load cart'));
               });
             },
@@ -123,7 +130,6 @@ void main() {
 
           void verifyFn(CartBloc bloc) => verify(
                 () => bloc.cartRepository.addItem(
-                  initialCart.storeId,
                   event.variant,
                 ),
               ).called(1);
@@ -135,7 +141,6 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.addItem(
-                  any(),
                   event.variant,
                 ),
               ).thenAnswer((_) async {
@@ -159,7 +164,6 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.addItem(
-                  any(),
                   event.variant,
                 ),
               ).thenAnswer((_) async {
@@ -197,7 +201,7 @@ void main() {
                   act: (bloc) => bloc.add(event),
                   expect: () => <CartState>[],
                   verify: (bloc) => verifyNever(
-                    () => bloc.cartRepository.addItem(any(), any()),
+                    () => bloc.cartRepository.addItem(any()),
                   ),
                 );
               }
@@ -210,7 +214,6 @@ void main() {
             () {
               const variantToEdit = variant_fixtures.variantMango;
               final initialCart = cart_fixtures.mockCartModel.copyWith(
-                storeId: mockStoreId,
                 items: [
                   const CartItemModel(
                     variant: variantToEdit,
@@ -244,7 +247,6 @@ void main() {
                   void verifyFn(CartBloc bloc) {
                     verify(
                       () => bloc.cartRepository.incrementItem(
-                        any(),
                         event.variant,
                         8,
                       ),
@@ -258,7 +260,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.incrementItem(
-                          any(),
                           event.variant,
                           8,
                         ),
@@ -289,7 +290,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.incrementItem(
-                          any(),
                           event.variant,
                           8,
                         ),
@@ -335,7 +335,6 @@ void main() {
                   void verifyFn(CartBloc bloc) {
                     verify(
                       () => bloc.cartRepository.decrementItem(
-                        any(),
                         event.variant,
                         1,
                       ),
@@ -349,7 +348,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.decrementItem(
-                          any(),
                           event.variant,
                           1,
                         ),
@@ -380,7 +378,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.decrementItem(
-                          any(),
                           event.variant,
                           1,
                         ),
@@ -417,7 +414,6 @@ void main() {
                   void verifyFn(CartBloc bloc) {
                     verify(
                       () => bloc.cartRepository.removeItem(
-                        mockStoreId,
                         event.variant,
                       ),
                     );
@@ -430,7 +426,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.removeItem(
-                          mockStoreId,
                           event.variant,
                         ),
                       ).thenAnswer((_) async {
@@ -456,7 +451,6 @@ void main() {
                     setUp: () {
                       when(
                         () => cartRepository.removeItem(
-                          mockStoreId,
                           event.variant,
                         ),
                       ).thenAnswer((_) async {
@@ -486,7 +480,6 @@ void main() {
         () {
           const variantToRemove = variant_fixtures.variantMango;
           final initialCart = cart_fixtures.mockCartModel.copyWith(
-            storeId: mockStoreId,
             items: [
               const CartItemModel(
                 variant: variantToRemove,
@@ -503,7 +496,6 @@ void main() {
           void verifyFn(CartBloc bloc) {
             verify(
               () => bloc.cartRepository.removeItem(
-                mockStoreId,
                 event.variant,
               ),
             );
@@ -516,7 +508,6 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.removeItem(
-                  mockStoreId,
                   event.variant,
                 ),
               ).thenAnswer((_) async {
@@ -542,7 +533,6 @@ void main() {
             setUp: () {
               when(
                 () => cartRepository.removeItem(
-                  mockStoreId,
                   event.variant,
                 ),
               ).thenAnswer((_) async {

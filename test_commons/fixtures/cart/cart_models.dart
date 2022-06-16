@@ -4,7 +4,6 @@ import '../product/variant_models.dart';
 
 const mockCartModel = CartModel(
   id: 'cart-1',
-  storeId: 'store-1',
   items: [
     CartItemModel(variant: variantMango, quantity: 1),
   ],
@@ -18,7 +17,6 @@ const mockCartModel = CartModel(
 
 const mockCartModelDiscounted = CartModel(
   id: 'cart-1',
-  storeId: 'store-1',
   items: [
     CartItemModel(variant: variantMango, quantity: 1),
   ],

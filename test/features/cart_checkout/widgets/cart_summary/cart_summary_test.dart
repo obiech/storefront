@@ -66,7 +66,7 @@ void main() {
       'and cart is empty '
       'and [hideWhenEmpty] is false', (WidgetTester tester) async {
     /// arrange
-    final emptyCart = CartModel.empty('store-id');
+    final emptyCart = CartModel.empty();
     when(() => bloc.state).thenAnswer((_) => CartLoaded.success(emptyCart));
 
     /// act
@@ -87,7 +87,7 @@ void main() {
     (WidgetTester tester) async {
       /// arrange
       when(() => bloc.state)
-          .thenAnswer((_) => CartLoaded.success(CartModel.empty('store-id')));
+          .thenAnswer((_) => CartLoaded.success(CartModel.empty()));
 
       /// act
       await tester.pumpCartSummary(bloc);

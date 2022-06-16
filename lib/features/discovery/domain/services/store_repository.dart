@@ -10,7 +10,7 @@ import '../repository/i_store_repository.dart';
 /// Responsible for retrieving stores from [DiscoveryServiceClient].
 ///
 /// May be obsolete once Geofence module is available.
-// TODO (leovinsen): add stream to be subscribed from blocs needing it
+// TODO (obella): add stream to be subscribed from blocs needing it
 @LazySingleton(as: IStoreRepository, env: DiEnvironment.grpcEnvs)
 class StoreRepository extends IStoreRepository {
   StoreRepository(this._discoveryServiceClient)
