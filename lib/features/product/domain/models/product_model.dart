@@ -57,7 +57,14 @@ class ProductModel extends BaseProduct {
     return ProductModel(
       productId: inventoryProduct.productId,
       name: inventoryProduct.name,
-      variants: inventoryProduct.variants.map(VariantModel.fromPb).toList(),
+      variants: inventoryProduct.variants
+          .map(
+            (variant) => VariantModel.fromPbAndProductName(
+              variant,
+              inventoryProduct.name,
+            ),
+          )
+          .toList(),
       defaultProduct: baseVariant.id,
       stock: inventoryProduct.totalStock,
       sku: baseVariant.sku,
