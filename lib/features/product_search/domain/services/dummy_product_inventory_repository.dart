@@ -114,7 +114,6 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
 
   @override
   RepoResult<List<ProductModel>> getProductByCategory(
-    String storeId,
     String categoryId,
   ) async {
     await Future.delayed(const Duration(seconds: 1));

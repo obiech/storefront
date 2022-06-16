@@ -206,7 +206,6 @@ void main() {
       verifyNever(
         () => categoryProductCubit.fetchCategoryProduct(
           activeCategory.toString(),
-          mockStoreId,
         ),
       );
     });

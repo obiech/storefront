@@ -17,11 +17,10 @@ class CategoryProductCubit extends Cubit<CategoryProductState> {
 
   final IProductInventoryRepository productInventoryRepo;
 
-  Future<void> fetchCategoryProduct(String categoryId, String storeId) async {
+  Future<void> fetchCategoryProduct(String categoryId) async {
     emit(LoadingCategoryProductState());
 
     final result = await productInventoryRepo.getProductByCategory(
-      storeId,
       categoryId,
     );
 
