@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
 import '../repository/phone_verification_result.dart';
 import 'auth_service.dart';
@@ -16,11 +15,10 @@ import 'firebase_auth_exception_codes.dart';
 ///
 /// On receiving a new event, it will trigger [onFirebaseUserChanged] which
 /// persists or unpersists user information using [UserCredentialsStorage].
-@LazySingleton(as: AuthService)
 class FirebaseAuthService extends AuthService {
   FirebaseAuthService({
     required this.firebaseAuth,
-    @Named('otpTimeOut') required this.otpTimeoutInSeconds,
+    required this.otpTimeoutInSeconds,
   }) : super() {
     _subscriptionFirebaseUserChanges =
         firebaseAuth.authStateChanges().listen(onFirebaseUserChanged);

@@ -33,3 +33,11 @@ To quickly toggle between repositories in the whole application, change the env 
 ENABLE_DUMMY_REPOS=TRUE
 ```
 
+## Disabling Firebase Auth 
+
+Setting up Firebase Auth emulator or a production instance is quite cumbersome and to disable it, set the env variable `ENABLE_FIREBASE_AUTH` to FALSE. By default it is TRUE.
+
+```
+ENABLE_FIREBASE_AUTH=FALSE
+```
+

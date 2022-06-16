@@ -12,6 +12,8 @@ In order to run the app on your local development machine, make sure you have pe
 2) Perform Firebase Setup and Environment Variables as described below.
 3) Additionally if you need to test Firebase Auth features, we recommend using [Firebase Auth Emulator](https://dropezy.atlassian.net/wiki/spaces/STOR/pages/6619165/Firebase+Auth+Emulator).
 
+NOTE: to disable Firebase Auth in your development environemnt, see [Disabling Firebase Auth](lib/di/README.md#disabling-firebase-auth).
+
 ## Firebase Setup
 
 Create a new project on your Firebase Console for development purposes.
