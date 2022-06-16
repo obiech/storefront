@@ -665,6 +665,9 @@ class IndonesianStrings implements BaseStrings {
   String cannotBeEmpty(String field) => '$field tidak boleh kosong';
 
   @override
+  String get makeSureFieldsFilled => 'Harap pastikan semua kolom telah terisi';
+
+  @override
   String get viewCart => 'Lihat Keranjang';
 
   @override

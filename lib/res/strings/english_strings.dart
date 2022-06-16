@@ -665,6 +665,9 @@ class EnglishStrings implements BaseStrings {
   String cannotBeEmpty(String field) => '$field can not be empty';
 
   @override
+  String get makeSureFieldsFilled => 'Please make sure all fields are filled';
+
+  @override
   String get viewCart => 'View Cart';
 
   @override

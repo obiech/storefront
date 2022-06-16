@@ -1,4 +1,5 @@
 export 'app_router.gr.dart';
+export 'common/_exporter.dart';
 export 'config/_exporter.dart';
 export 'constants/_exporter.dart';
 export 'dropezy_icons.dart';

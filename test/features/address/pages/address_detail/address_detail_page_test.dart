@@ -109,6 +109,13 @@ void main() {
         ),
         findsOneWidget,
       );
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.text(
+          context.res.strings.makeSureFieldsFilled,
+        ),
+        findsOneWidget,
+      );
     },
   );
 

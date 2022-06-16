@@ -191,7 +191,14 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
                           label: context.res.strings.saveAddress,
                           isLoading: state.loading,
                           onPressed: () {
+                            dismissKeyboard(context);
+
                             if (!_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                DropezySnackBar.info(
+                                  context.res.strings.makeSureFieldsFilled,
+                                ),
+                              );
                               return;
                             }
 

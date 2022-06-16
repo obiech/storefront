@@ -442,6 +442,8 @@ abstract class BaseStrings {
   /// Error message
   String cannotBeEmpty(String field);
 
+  String get makeSureFieldsFilled;
+
   /// Help Page
   String get contactUs;
 
