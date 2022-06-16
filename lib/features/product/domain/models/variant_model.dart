@@ -1,7 +1,6 @@
 import 'package:dropezy_proto/v1/inventory/inventory.pb.dart';
 
-import 'base_product.dart';
-import 'variant_model.ext.dart';
+import '../domain.dart';
 
 /// Representation of a product variant sold in Dropezy.
 ///
@@ -31,11 +30,16 @@ class VariantModel extends BaseProduct {
         );
 
   /// Creates a [VariantModel] from gRPC [Variant]
+  ///
+  /// P.S: Variant Name come from Concatenating
+  /// [Variant.name], [Variant.variantValue] & [Variant.variantQuantifier]
   factory VariantModel.fromPb(Variant productVariant) {
     final imageUrls = productVariant.toImageUrls;
     return VariantModel(
       variantId: productVariant.variantId,
-      name: productVariant.name,
+      name:
+          '${productVariant.name} ${productVariant.variantValue}${productVariant.variantQuantifier}'
+              .trim(),
       imagesUrls: imageUrls,
       defaultImageUrl: imageUrls.isEmpty ? '' : imageUrls.first,
       price: productVariant.price.num,
