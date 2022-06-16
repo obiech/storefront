@@ -18,11 +18,13 @@ class VariantsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sortedVariants = product.variants.sortOutOfStock();
+
     return ListView.separated(
       controller: controller,
       physics: const ClampingScrollPhysics(),
       itemBuilder: (context, index) {
-        final variant = product.variants[index];
+        final variant = sortedVariants[index];
         return VariantTile(
           key: ValueKey('variant-${variant.sku}'),
           variant: variant,
@@ -30,7 +32,7 @@ class VariantsListView extends StatelessWidget {
         );
       },
       shrinkWrap: true,
-      itemCount: product.variants.length,
+      itemCount: sortedVariants.length,
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 5,

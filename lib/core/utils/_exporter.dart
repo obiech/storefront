@@ -1,5 +1,6 @@
 export 'after_layout.mixin.dart';
 export 'bloc.ext.dart';
+export 'bool.ext.dart';
 export 'bottom_sheet_utils.dart';
 export 'build_context.ext.dart';
 export 'dartz.ext.dart';

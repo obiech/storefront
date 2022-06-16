@@ -3,7 +3,7 @@ import 'package:dropezy_proto/v1/product/product.pbenum.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/product/index.dart';
 
-extension VariantModelListX on List<Variant> {
+extension VariantListX on List<Variant> {
   /// Convert list of [Variant]s to [VariantModel]s
   List<VariantModel> get toModels => map(VariantModel.fromPb).toList();
 
@@ -32,4 +32,14 @@ extension VariantModelX on Variant {
   /// Concatenate [Variant.variantValue] & [Variant.variantQuantifier]
   /// to user understandable unit
   String get toUnit => '$variantValue $variantQuantifier';
+}
+
+extension VariantModelListX on List<VariantModel> {
+  List<VariantModel> sortOutOfStock() {
+    final newList = List<VariantModel>.from(this);
+    newList.sort(
+      (a, b) => a.isOutOfStock.toInt().compareTo(b.isOutOfStock.toInt()),
+    );
+    return newList;
+  }
 }
