@@ -6,6 +6,8 @@ extension ExceptionToFailureX on Exception {
   Failure get toFailure {
     if (this is GrpcError) {
       return NetworkFailure.fromGrpcError(this as GrpcError);
+    } else if (this is SocketException) {
+      return NoInternetFailure();
     } else if (this is TimeoutException) {
       debugPrint('Encountered ${(this as TimeoutException).duration}');
       return TimeoutFailure();

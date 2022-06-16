@@ -18,7 +18,7 @@ class NetworkFailure extends Failure {
       case StatusCode.unauthenticated:
         return UnauthenticatedFailure(error.message);
       case StatusCode.unavailable:
-        return ServerUnavailableFailure(error.message);
+        return NoInternetFailure();
       case StatusCode.notFound:
         return ResourceNotFoundFailure(error.message);
       case StatusCode.permissionDenied:
