@@ -31,6 +31,9 @@ abstract class IPrefsRepository {
   /// Retrieve a user's finger print
   String? getFingerPrint();
 
+  /// This is used to check if fingerPrint is saved.
+  bool isDeviceFingerPrintCached();
+
   /// Store user's finger print
   Future<void> setFingerPrint(String fingerPrint);
 

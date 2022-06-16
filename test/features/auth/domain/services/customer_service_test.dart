@@ -16,13 +16,27 @@ void main() {
     () {
       const mockPhoneNumber = '+6281234567890';
       const mockFullName = 'dummyName';
+      const mockFingerPrint = 'FingerPrintMock';
+      const mockDeviceName = 'MockDeviceName';
 
       late CustomerServiceClient customerServiceClient;
       late CustomerService customerService;
+      late IPrefsRepository sharedPreferences;
+      late DeviceFingerprintProvider deviceFingerprintProvider;
+      late DeviceNameProvider deviceNameProvider;
 
       setUp(() {
         customerServiceClient = MockCustomerServiceClient();
-        customerService = CustomerService(customerServiceClient);
+        sharedPreferences = MockIPrefsRepository();
+        deviceFingerprintProvider = MockDeviceFingerprintProvider();
+        deviceNameProvider = MockDeviceNameProvider();
+
+        customerService = CustomerService(
+          customerServiceClient,
+          sharedPreferences: sharedPreferences,
+          deviceFingerprintProvider: deviceFingerprintProvider,
+          deviceNameProvider: deviceNameProvider,
+        );
       });
 
       group(
@@ -172,6 +186,109 @@ void main() {
           },
         );
       });
+      group(
+        '[registerDeviceFingerPrint()]',
+        () {
+          final mockDevice = Device(
+            fingerprint: mockFingerPrint,
+            name: mockDeviceName,
+            pin: '',
+          );
+
+          setUp(() {
+            when(
+              () => customerServiceClient
+                  .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+            ).thenAnswer(
+              (_) => MockResponseFuture.value(RegisterDeviceResponse()),
+            );
+
+            when(
+              () => deviceFingerprintProvider.getFingerprint(),
+            ).thenAnswer(
+              (_) => MockResponseFuture.value(mockFingerPrint),
+            );
+
+            when(
+              () => deviceNameProvider.getDeviceName(),
+            ).thenAnswer(
+              (_) => MockResponseFuture.value(mockDeviceName),
+            );
+          });
+          test(
+            'should return Unit '
+            'and register a new device finger print '
+            'when device has not been registered before',
+            () async {
+              final result = await customerService.registerDeviceFingerPrint();
+
+              final unit = result.getRight();
+              expect(unit, isA<Unit>());
+
+              verify(() => deviceFingerprintProvider.getFingerprint())
+                  .called(1);
+              verify(() => deviceNameProvider.getDeviceName()).called(1);
+              verify(
+                () => customerServiceClient
+                    .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+              ).called(1);
+            },
+          );
+
+          test(
+            'should return a Failure '
+            'when request is not successful',
+            () async {
+              when(
+                () => customerServiceClient
+                    .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+              ).thenAnswer(
+                (_) => MockResponseFuture.error(Exception('Error')),
+              );
+
+              final result = await customerService.registerDeviceFingerPrint();
+
+              final failure = result.getLeft();
+              expect(failure, isA<Failure>());
+
+              verify(() => deviceFingerprintProvider.getFingerprint())
+                  .called(1);
+              verify(() => deviceNameProvider.getDeviceName()).called(1);
+              verify(
+                () => customerServiceClient
+                    .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+              ).called(1);
+            },
+          );
+          test(
+            'should return a Unit '
+            'when device is already registered',
+            () async {
+              when(
+                () => customerServiceClient
+                    .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+              ).thenAnswer(
+                (_) => MockResponseFuture.error(
+                  AlreadyExistFailure('Already Exist'),
+                ),
+              );
+
+              final result = await customerService.registerDeviceFingerPrint();
+
+              final unit = result.getRight();
+              expect(unit, isA<Unit>());
+
+              verify(() => deviceFingerprintProvider.getFingerprint())
+                  .called(1);
+              verify(() => deviceNameProvider.getDeviceName()).called(1);
+              verify(
+                () => customerServiceClient
+                    .registerDevice(RegisterDeviceRequest(device: mockDevice)),
+              ).called(1);
+            },
+          );
+        },
+      );
     },
   );
 }

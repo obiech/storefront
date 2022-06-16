@@ -53,6 +53,11 @@ class PrefsRepository implements IPrefsRepository {
   }
 
   @override
+  bool isDeviceFingerPrintCached() {
+    return _prefBox.containsKey(PrefsKeys.kDeviceFingerPrint);
+  }
+
+  @override
   Future<void> clear() async {
     await _prefBox.clear();
   }

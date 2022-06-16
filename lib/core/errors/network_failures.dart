@@ -23,6 +23,8 @@ class NetworkFailure extends Failure {
         return ResourceNotFoundFailure(error.message);
       case StatusCode.permissionDenied:
         return ResourceForbiddenFailure(error.message);
+      case StatusCode.alreadyExists:
+        return AlreadyExistFailure(error.message);
       default:
         return NetworkFailure(error.message);
     }
@@ -94,5 +96,15 @@ class ServerUnavailableFailure extends NetworkFailure {
       : super(
           message ??
               'Sorry, our servers are currently busy. Please try again later.',
+        );
+}
+
+/// The entity that we attempted to create already exists.
+///
+/// e.g Attempting to register a device that is already registered.
+class AlreadyExistFailure extends NetworkFailure {
+  AlreadyExistFailure([String? message])
+      : super(
+          message ?? 'This resource already exists in our database.',
         );
 }

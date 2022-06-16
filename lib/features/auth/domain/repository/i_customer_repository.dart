@@ -11,4 +11,7 @@ abstract class ICustomerRepository {
   RepoResult<Unit> registerPhoneNumber(String phoneNumber);
   RepoResult<String> updateFullName(String fullName);
   RepoResult<ProfileModel> getProfile();
+
+  // Registers device finger print for new devices.
+  RepoResult<Unit> registerDeviceFingerPrint([String pin]);
 }

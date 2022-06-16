@@ -52,6 +52,7 @@ class AccountVerificationCubit extends Cubit<AccountVerificationState> {
         break;
 
       case PhoneVerificationStatus.verifiedSuccessfully:
+        await _customerRepository.registerDeviceFingerPrint();
         emit(const AccountVerificationSuccess());
         break;
 

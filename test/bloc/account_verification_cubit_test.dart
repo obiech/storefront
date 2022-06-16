@@ -15,6 +15,18 @@ void main() {
     late ICustomerRepository customerRepository;
     late AuthService authService;
 
+    const fakeFingerprint = 'fingerprint';
+    const fakeDeviceName = 'Flutter Test Device';
+    const fakePin = '000000';
+
+    final device = Device(
+      name: fakeDeviceName,
+      fingerprint: fakeFingerprint,
+      pin: fakePin,
+    );
+
+    final dummyRegisterDeviceResponse = RegisterDeviceResponse(device: device);
+
     const dummyPhoneNumber = '+6281234567890';
 
     final Profile dummyProfile = Profile(
@@ -29,6 +41,8 @@ void main() {
     setUpAll(() {
       registerFallbackValue(RegisterRequest(phoneNumber: dummyPhoneNumber));
       registerFallbackValue(dummyRegisterResponse);
+      registerFallbackValue(RegisterDeviceRequest(device: device));
+      registerFallbackValue(dummyRegisterDeviceResponse);
     });
 
     setUp(() {
@@ -172,30 +186,6 @@ void main() {
           AccountVerificationLoading(),
         ],
       );
-
-      // blocTest<AccountVerificationCubit, AccountVerificationState>(
-      //   'should return error state if [otpIsSent] is false',
-      //   setUp: () {
-      //     /// Return an empty stream
-      //     mockPhoneVerificationStream(authService, []);
-
-      //     // /// Stub sendOtp function
-      //     when(() => authService.verifyOtp(any())).thenAnswer((_) async {});
-      //   },
-      //   build: () {
-      //     final cubit = AccountVerificationCubit(
-      //       authService,
-      //       customerRepository,
-      //       false,
-      //     );
-      //     cubit.otpIsSent = false;
-      //     return cubit;
-      //   },
-      //   act: (cubit) => cubit.verifyOtp(dummyPhoneNumber),
-      //   expect: () => const [
-      //     AccountVerificationError('OTP belum terkirim!'),
-      //   ],
-      // );
     });
 
     group(' -- react to events from [AuthService.phoneVerificationStream]', () {
@@ -205,6 +195,7 @@ void main() {
           final mockEvents = [
             PhoneVerificationResult(status: PhoneVerificationStatus.otpSent)
           ];
+          mockRegisterDeviceFingerPrint(customerRepository);
           mockPhoneVerificationStream(authService, mockEvents);
         },
         build: () => AccountVerificationCubit(
@@ -227,7 +218,7 @@ void main() {
               status: PhoneVerificationStatus.verifiedSuccessfully,
             )
           ];
-
+          mockRegisterDeviceFingerPrint(customerRepository);
           mockPhoneVerificationStream(authService, mockEvents);
         }
 
@@ -253,6 +244,10 @@ void main() {
           expect: () => const [
             AccountVerificationSuccess(),
           ],
+          verify: (_) {
+            verify(() => customerRepository.registerDeviceFingerPrint())
+                .called(1);
+          },
         );
       });
 
@@ -327,4 +322,11 @@ void mockCustomerServiceRegister(
 ) {
   when(() => customerRepository.registerPhoneNumber(any()))
       .thenAnswer(mockCallback);
+}
+
+void mockRegisterDeviceFingerPrint(ICustomerRepository customerRepository) {
+  when(() => customerRepository.registerDeviceFingerPrint())
+      .thenAnswer((_) async {
+    return right(unit);
+  });
 }

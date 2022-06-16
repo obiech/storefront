@@ -12,7 +12,18 @@ import '../domain.dart';
 /// For Firebase related actions, see [FirebaseAuthService].
 @LazySingleton(as: ICustomerRepository)
 class CustomerService extends ICustomerRepository {
-  CustomerService(this._customerServiceClient);
+  CustomerService(
+    this._customerServiceClient, {
+    required this.sharedPreferences,
+    required this.deviceFingerprintProvider,
+    required this.deviceNameProvider,
+  });
+
+  final IPrefsRepository sharedPreferences;
+
+  final DeviceFingerprintProvider deviceFingerprintProvider;
+
+  final DeviceNameProvider deviceNameProvider;
 
   final CustomerServiceClient _customerServiceClient;
 
@@ -60,6 +71,34 @@ class CustomerService extends ICustomerRepository {
       return right(profile.fullName);
     } on Exception catch (e) {
       return left(e.toFailure);
+    }
+  }
+
+  /// Device information includes:
+  /// - device name obtained with [deviceNameProvider].
+  /// - device fingerprint obtained with [deviceFingerprintProvider].
+  ///
+  /// Request is sent to storefront backend using
+  /// [customerServiceClient].
+  @override
+  RepoResult<Unit> registerDeviceFingerPrint([String? pin = '']) async {
+    try {
+      final fingerprint = await deviceFingerprintProvider.getFingerprint();
+      final deviceName = await deviceNameProvider.getDeviceName();
+
+      final device = Device(
+        name: deviceName,
+        fingerprint: fingerprint,
+        pin: pin,
+      );
+      final request = RegisterDeviceRequest(device: device);
+
+      await _customerServiceClient.registerDevice(request);
+      return const Right(unit);
+    } on AlreadyExistFailure catch (_) {
+      return const Right(unit);
+    } on Exception catch (e) {
+      return Left(e.toFailure);
     }
   }
 }
