@@ -6,7 +6,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/index.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
-import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
@@ -36,5 +35,3 @@ class MockCartBloc extends MockBloc<CartEvent, CartState> implements CartBloc {}
 class MockSearchHistoryCubit
     extends MockBloc<SearchHistoryEvent, SearchHistoryState>
     implements SearchHistoryCubit {}
-
-class MockDiscoveryCubit extends MockCubit<String?> implements DiscoveryCubit {}

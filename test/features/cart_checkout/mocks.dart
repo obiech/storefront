@@ -3,7 +3,6 @@ import 'package:dropezy_proto/v1/cart/cart.pbgrpc.dart' as cart_proto;
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
-import 'package:storefront_app/features/discovery/index.dart';
 
 class MockPaymentMethodRepository extends Mock implements IPaymentRepository {}
 
@@ -19,8 +18,6 @@ class MockPaymentMethodCubit extends MockCubit<PaymentMethodState>
 
 class MockPaymentCheckoutCubit extends MockCubit<PaymentCheckoutState>
     implements PaymentCheckoutCubit {}
-
-class MockDiscoveryCubit extends MockCubit<String?> implements DiscoveryCubit {}
 
 class MockDeliveryAddressCubit extends MockCubit<DeliveryAddressState>
     implements DeliveryAddressCubit {}

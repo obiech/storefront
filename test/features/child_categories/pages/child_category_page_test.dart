@@ -7,7 +7,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/child_categories/index.dart';
-import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 
 import '../../../../test_commons/fixtures/cart/cart_models.dart';
@@ -21,11 +20,8 @@ import 'child_category_page_finder.dart';
 void main() {
   late ChildCategoryCubit childCategoryCubit;
   late CategoryProductCubit categoryProductCubit;
-  late DiscoveryCubit discoveryCubit;
   late CartBloc cartBloc;
   late StackRouter stackRouter;
-
-  const mockStoreId = 'store-id-1';
 
   const activeCategory = 0;
 
@@ -56,12 +52,6 @@ void main() {
     categoryProductCubit = MockCategoryProductCubit();
     cartBloc = MockCartBloc();
 
-    discoveryCubit = MockDiscoveryCubit();
-    whenListen(
-      discoveryCubit,
-      Stream.fromIterable([mockStoreId]),
-    );
-
     // Navigation
     registerFallbackValue(FakePageRouteInfo());
 
@@ -89,7 +79,6 @@ void main() {
                 ),
                 BlocProvider(create: (_) => categoryProductCubit),
                 BlocProvider(create: (_) => cartBloc),
-                BlocProvider(create: (_) => discoveryCubit),
               ],
               child: const ChildCategoriesPage(
                 parentCategoryModel: mockParentCategoryList,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../../../commons.dart';
@@ -11,14 +10,9 @@ import '../../mocks.dart';
 import 'test.ext.dart';
 
 void main() {
-  const mockStoreId = 'store-id-1';
-
   late SearchInventoryBloc searchInventoryBloc;
-  late DiscoveryCubit discoveryCubit;
   setUp(() {
     searchInventoryBloc = MockSearchInventoryBloc();
-    discoveryCubit = MockDiscoveryCubit();
-    when(() => discoveryCubit.state).thenReturn(mockStoreId);
   });
 
   setUpAll(() {
@@ -30,7 +24,6 @@ void main() {
         .thenReturn(SearchingForItemInInventory());
     await tester.pumpSearchResultsWidget(
       searchInventoryBloc,
-      discoveryCubit,
     );
 
     for (int i = 0; i < 5; i++) {
@@ -43,7 +36,7 @@ void main() {
   testWidgets('When no state is available nothing is shown',
       (WidgetTester tester) async {
     when(() => searchInventoryBloc.state).thenReturn(SearchInventoryInitial());
-    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
 
     expect(find.byType(SizedBox), findsNWidgets(1));
   });
@@ -53,7 +46,7 @@ void main() {
       (WidgetTester tester) async {
     when(() => searchInventoryBloc.state)
         .thenReturn(const InventoryItemResults(pageInventory));
-    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
 
     expect(find.byType(GridView), findsOneWidget);
 

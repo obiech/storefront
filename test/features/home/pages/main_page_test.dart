@@ -1,4 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -28,7 +29,6 @@ extension WidgetTesterX on WidgetTester {
     required HomeNavCubit homeNavCubit,
     required SearchInventoryBloc searchInventoryBloc,
     required SearchHistoryCubit searchHistoryCubit,
-    required DiscoveryCubit discoveryCubit,
     required DeliveryAddressCubit deliveryAddressCubit,
     required ProfileCubit profileCubit,
   }) async {
@@ -48,9 +48,6 @@ extension WidgetTesterX on WidgetTester {
           ),
           BlocProvider(
             create: (context) => searchHistoryCubit,
-          ),
-          BlocProvider(
-            create: (context) => discoveryCubit,
           ),
           BlocProvider(
             create: (context) => deliveryAddressCubit,
@@ -80,7 +77,7 @@ void main() {
   late HomeNavCubit homeNavCubit;
   late SearchInventoryBloc searchInventoryBloc;
   late SearchHistoryCubit searchHistoryCubit;
-  late DiscoveryCubit discoveryCubit;
+  late IStoreRepository storeRepository;
   late DeliveryAddressCubit deliveryAddressCubit;
   late ProfileCubit profileCubit;
 
@@ -103,7 +100,7 @@ void main() {
     homeNavCubit = MockHomeNavCubit();
     searchInventoryBloc = MockSearchInventoryBloc();
     searchHistoryCubit = MockSearchHistoryCubit();
-    discoveryCubit = MockDiscoveryCubit();
+    storeRepository = MockStoreRepository();
     deliveryAddressCubit = MockDeliveryAddressCubit();
     profileCubit = MockProfileCubit();
 
@@ -130,7 +127,8 @@ void main() {
     when(() => searchHistoryCubit.close()).thenAnswer((_) async {});
 
     // stubs for discovery cubit
-    when(() => discoveryCubit.loadStore()).thenAnswer((_) async {});
+    when(() => storeRepository.getStore())
+        .thenAnswer((_) async => const Right('dummy-store-id'));
 
     // stubs for delivery cubit
     when(() => deliveryAddressCubit.state)
@@ -174,6 +172,10 @@ void main() {
     if (!GetIt.I.isRegistered<IPrefsRepository>()) {
       GetIt.I.registerSingleton<IPrefsRepository>(prefs);
     }
+
+    if (!GetIt.I.isRegistered<IStoreRepository>()) {
+      GetIt.I.registerSingleton<IStoreRepository>(storeRepository);
+    }
   });
 
   testWidgets(
@@ -186,7 +188,6 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
-        discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
         profileCubit: profileCubit,
       );
@@ -210,7 +211,6 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
-        discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
         profileCubit: profileCubit,
       );
@@ -234,7 +234,6 @@ void main() {
         searchInventoryBloc: searchInventoryBloc,
         searchHistoryCubit: searchHistoryCubit,
         homeNavCubit: homeNavCubit,
-        discoveryCubit: discoveryCubit,
         deliveryAddressCubit: deliveryAddressCubit,
         profileCubit: profileCubit,
       );

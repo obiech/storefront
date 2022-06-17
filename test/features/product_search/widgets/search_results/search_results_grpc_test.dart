@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/discovery/blocs/discovery/discovery_cubit.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
 import '../../../../commons.dart';
@@ -16,15 +15,10 @@ Future<void> main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'env/.env');
 
-  const mockStoreId = 'store-id-1';
-
   late SearchInventoryBloc searchInventoryBloc;
-  late DiscoveryCubit discoveryCubit;
 
   setUp(() {
     searchInventoryBloc = MockSearchInventoryBloc();
-    discoveryCubit = MockDiscoveryCubit();
-    when(() => discoveryCubit.state).thenReturn(mockStoreId);
   });
 
   setUpAll(() {
@@ -66,7 +60,7 @@ Future<void> main() async {
     );
 
     /// act
-    await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
+    await tester.pumpSearchResultsWidget(searchInventoryBloc);
     searchInventoryBloc.add(SearchInventory('susu'));
 
     await tester.runAsync(() async {

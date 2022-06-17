@@ -33,7 +33,8 @@ class _MainPageState extends State<MainPage> with AfterLayoutMixin {
     // initialize blocs or cubits that need to be present on app start
     // but require auth token to be present.
     context.read<DeliveryAddressCubit>().fetchDeliveryAddresses();
-    context.read<DiscoveryCubit>().loadStore();
+    // TODO(obella): Handle store retrieval failure
+    getIt<IStoreRepository>().getStore();
     context.read<ProfileCubit>().fetchProfile();
   }
 
