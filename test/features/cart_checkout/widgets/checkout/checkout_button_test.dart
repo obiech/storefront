@@ -21,6 +21,7 @@ void main() {
     setUpLocaleInjection();
     registerFallbackValue(samplePaymentMethods.first.paymentMethod);
     registerFallbackValue(FakePageRouteInfo());
+    registerFallbackValue(const LoadCart());
   });
 
   late CartBloc cartBloc;
@@ -199,9 +200,11 @@ void main() {
   testWidgets(
       'should got to [OrderDetailsPage] '
       'with valid arguments '
+      'and reload the cart '
       'when checkout is successful', (WidgetTester tester) async {
     // arrange
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
+    when(() => cartBloc.add(any())).thenAnswer((_) {});
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
       (_) async => right(samplePaymentMethods.toPaymentDetails()),
@@ -226,6 +229,8 @@ void main() {
     await tester.tap(find.byType(CheckoutButton));
 
     // assert
+    verify(() => cartBloc.add(const LoadCart())).called(1);
+
     final capturedRoutes =
         verify(() => stackRouter.replace(captureAny())).captured;
 
