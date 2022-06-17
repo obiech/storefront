@@ -29,6 +29,7 @@ class ProductCategoryGrid extends StatelessWidget {
             columns: columns,
             productModelList: state.productModelList,
             scaleFactor: scaleFactor,
+            cardBorderRadius: 16,
           );
         } else if (state is LoadingCategoryProductState) {
           return ProductGridLoading(
