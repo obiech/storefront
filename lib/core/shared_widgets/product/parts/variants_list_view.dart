@@ -35,7 +35,6 @@ class VariantsListView extends StatelessWidget {
       itemCount: sortedVariants.length,
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
-        vertical: 5,
       ),
       separatorBuilder: (BuildContext context, int index) {
         return const Divider();

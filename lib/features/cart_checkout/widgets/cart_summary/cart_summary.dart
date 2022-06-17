@@ -14,9 +14,12 @@ class CartSummary extends StatelessWidget {
   const CartSummary({
     Key? key,
     this.hideWhenEmpty = true,
+    this.margin,
   }) : super(key: key);
 
   final bool hideWhenEmpty;
+
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +33,10 @@ class CartSummary extends StatelessWidget {
               color: res.colors.black,
               borderRadius: BorderRadius.circular(50),
             ),
-            margin: const EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
+            margin: margin ??
+                const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
             padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
             child: Skeleton(
               isLoading: state.isCalculatingSummary,

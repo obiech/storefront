@@ -17,8 +17,8 @@ class ProductVariantsList extends StatelessWidget {
     final res = context.res;
     return DropezyDismissable(
       child: DraggableScrollableSheet(
-        maxChildSize: context.childSize(product.variants.length),
-        initialChildSize: context.childSize(product.variants.length),
+        maxChildSize: context.childSize(product.variants.length, 10),
+        initialChildSize: context.childSize(product.variants.length, 10),
         builder: (_, controller) {
           return Container(
             decoration: res.styles.bottomSheetStyle,
@@ -51,6 +51,7 @@ class ProductVariantsList extends StatelessWidget {
                         ),
                       ),
                       const CartSummary(
+                        margin: EdgeInsets.all(10),
                         hideWhenEmpty: false,
                       ),
                       SizedBox(
@@ -74,14 +75,14 @@ class ProductVariantsList extends StatelessWidget {
 
 extension BottomSheetSizeX on BuildContext {
   /// Get and fix initialChildSize & maxChildSize for bottom sheet
-  double childSize(int itemsCount) {
+  double childSize(int itemsCount, double bottomPadding) {
     final itemsPadding = 10 * (itemsCount - 1);
     const cartSummaryHeight = 42;
 
     final approxItemsHeight = 85.0 * itemsCount +
         itemsPadding +
         cartSummaryHeight +
-        MediaQuery.of(this).padding.bottom;
+        bottomPadding * 2;
 
     final height = MediaQuery.of(this).size.height;
 
