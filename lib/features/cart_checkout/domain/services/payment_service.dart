@@ -57,7 +57,7 @@ class PaymentService implements IPaymentRepository {
 
   @override
   RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
-    try {
+    return safeCall(() async {
       // TODO(obella465): Fix once minimal submission details are provided
       final storeId = storeRepository.storeStream.valueOrNull;
       final addressId = deliveryAddressRepository.activeDeliveryAddress?.id;
@@ -76,8 +76,6 @@ class PaymentService implements IPaymentRepository {
       orderRepository.addOrder(resultsModel.order);
 
       return right(resultsModel);
-    } on Exception catch (e) {
-      return left(e.toFailure);
-    }
+    });
   }
 }
