@@ -34,26 +34,32 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
       appBar: const HomeAppBar(),
       body: SafeArea(
         bottom: false,
-        child: SingleChildScrollView(
+        child: NestedScrollView(
           physics: const ClampingScrollPhysics(),
-          child: Column(
-            children: [
-              const SearchHeader(),
-              Container(
-                decoration: res.styles.bottomSheetStyle,
-                padding: EdgeInsets.only(
-                  left: res.dimens.spacingLarge,
-                  right: res.dimens.spacingLarge,
-                  bottom: 80,
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [const SearchHeader()],
                 ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    ParentCategoriesGrid(),
-                  ],
+              ),
+            ];
+          },
+          body: Container(
+            decoration: res.styles.bottomSheetStyle,
+            padding: EdgeInsets.only(
+              left: res.dimens.spacingLarge,
+              right: res.dimens.spacingLarge,
+              bottom: 80,
+            ),
+            child: const CustomScrollView(
+              physics: ClampingScrollPhysics(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: ParentCategoriesGrid(),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
