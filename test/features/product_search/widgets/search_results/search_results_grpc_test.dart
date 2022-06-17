@@ -62,13 +62,12 @@ Future<void> main() async {
     when(() => searchInventoryBloc.state).thenReturn(
       InventoryItemResults(
         inventoryResponse.results.toModel,
-        mockStoreId,
       ),
     );
 
     /// act
     await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
-    searchInventoryBloc.add(SearchInventory('susu', mockStoreId));
+    searchInventoryBloc.add(SearchInventory('susu'));
 
     await tester.runAsync(() async {
       await Future.delayed(const Duration(milliseconds: 400));

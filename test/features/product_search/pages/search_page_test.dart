@@ -99,7 +99,6 @@ void main() {
     when(
       () => repository.searchInventoryForItems(
         any(),
-        any(),
         limit: any(named: 'limit'),
       ),
     ).thenAnswer((_) async => right(pageInventory));
@@ -146,7 +145,6 @@ void main() {
     when(
       () => repository.searchInventoryForItems(
         any(),
-        any(),
         limit: any(named: 'limit'),
       ),
     ).thenAnswer((_) async => right(pageInventory));
@@ -177,7 +175,6 @@ void main() {
       verify(
         () => repository.searchInventoryForItems(
           query,
-          any(),
           limit: any(named: 'limit'),
         ),
       ).called(1);

@@ -52,7 +52,7 @@ void main() {
       'When inventory items are available, show GridList  list of items',
       (WidgetTester tester) async {
     when(() => searchInventoryBloc.state)
-        .thenReturn(const InventoryItemResults(pageInventory, mockStoreId));
+        .thenReturn(const InventoryItemResults(pageInventory));
     await tester.pumpSearchResultsWidget(searchInventoryBloc, discoveryCubit);
 
     expect(find.byType(GridView), findsOneWidget);

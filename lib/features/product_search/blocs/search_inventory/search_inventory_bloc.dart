@@ -47,7 +47,6 @@ class SearchInventoryBloc
 
     final _failureOrResult = await repository.searchInventoryForItems(
       _query,
-      event.storeId,
       limit: _pageSize,
     );
 
@@ -59,7 +58,6 @@ class SearchInventoryBloc
       emit(
         InventoryItemResults(
           List.of(_inventory),
-          event.storeId,
           isAtEnd: inventory.length < _pageSize,
         ),
       );
@@ -81,14 +79,12 @@ class SearchInventoryBloc
       emit(
         InventoryItemResults(
           currentState.results,
-          currentState.storeId,
           isLoadingMore: true,
         ),
       );
 
       final _resultOrFailure = await repository.searchInventoryForItems(
         _query,
-        currentState.storeId,
         page: _page + 1,
         limit: _pageSize,
       );
@@ -98,16 +94,12 @@ class SearchInventoryBloc
           emit(
             InventoryItemResults(
               List.of(_inventory),
-              currentState.storeId,
               isAtEnd: true,
             ),
           );
         } else {
           emit(
-            InventoryItemResults(
-              List.of(_inventory),
-              currentState.storeId,
-            ),
+            InventoryItemResults(List.of(_inventory)),
           );
         }
       }, (inventory) {
@@ -116,7 +108,6 @@ class SearchInventoryBloc
         emit(
           InventoryItemResults(
             List.of(_inventory),
-            currentState.storeId,
             isAtEnd: inventory.length < _pageSize,
           ),
         );

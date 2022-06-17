@@ -3,6 +3,7 @@ import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
+import 'package:storefront_app/features/discovery/index.dart';
 
 import '../../../product/index.dart';
 import '../../index.dart';
@@ -10,8 +11,9 @@ import '../../index.dart';
 @LazySingleton(as: IProductSearchRepository, env: DiEnvironment.grpcEnvs)
 class ProductSearchService implements IProductSearchRepository {
   final SearchServiceClient searchService;
+  final IStoreRepository storeRepository;
 
-  ProductSearchService(this.searchService);
+  ProductSearchService(this.searchService, this.storeRepository);
 
   @override
   RepoResult<List<String>> getSearchSuggestions(
@@ -35,8 +37,7 @@ class ProductSearchService implements IProductSearchRepository {
 
   @override
   RepoResult<List<ProductModel>> searchInventoryForItems(
-    String query,
-    String storeId, {
+    String query, {
     int page = 0,
     int limit = 10,
   }) async {
@@ -44,7 +45,7 @@ class ProductSearchService implements IProductSearchRepository {
       final _result = await searchService.searchInventory(
         SearchInventoryRequest(
           query: query,
-          storeId: storeId,
+          storeId: storeRepository.activeStoreId,
           pageCurrent: page,
           pageSize: limit,
         ),

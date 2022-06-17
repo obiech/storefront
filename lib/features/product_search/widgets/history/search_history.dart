@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 
-import '../../../discovery/blocs/discovery/discovery_cubit.dart';
 import '../../index.dart';
 
 part 'keys.dart';
@@ -69,10 +68,7 @@ class SearchHistory extends StatelessWidget {
                             .removeSearchQuery,
                         onSelect: (query) {
                           context.read<SearchInventoryBloc>().add(
-                                SearchInventory(
-                                  query,
-                                  context.read<DiscoveryCubit>().state ?? '',
-                                ),
+                                SearchInventory(query),
                               );
 
                           onItemTapped?.call();
