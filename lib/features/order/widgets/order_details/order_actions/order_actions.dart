@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/domain/utils/launch_go_pay.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../index.dart';
 
@@ -14,6 +17,9 @@ class OrderActions extends StatelessWidget {
     required this.order,
     this.showReorderButton = false,
     this.showPayButton = true,
+    this.paymentInformation,
+    this.paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY,
+    this.launchGoPay = const LaunchGoPay(),
   }) : super(key: key);
 
   // toggle to show Reorder button
@@ -23,6 +29,13 @@ class OrderActions extends StatelessWidget {
   final bool showPayButton;
 
   final OrderModel order;
+
+  // TODO(obella): Retire when payment info is availed as part of order
+  final PaymentInformationModel? paymentInformation;
+  final PaymentMethod paymentMethod;
+
+  // Gojek link launcher
+  final LaunchGoPay launchGoPay;
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +58,10 @@ class OrderActions extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: PayNowButton(
-                onPressed: () {
-                  // TODO: open route in BCA or open deeplink for Gojek
-                  // context.pushRoute(
-                  //   PaymentInstructionsRoute(order: order),
-                  // );
-                },
+                key: const ValueKey(
+                  OrderDetailsPageKeys.buttonPayNow,
+                ),
+                onPressed: () => _payNow(context),
               ),
             ),
           ],
@@ -77,5 +88,31 @@ class OrderActions extends StatelessWidget {
 
   void _initiateReorderFlow() {
     // TODO (leovinsen): add re-order flow
+  }
+
+  /// Pay now
+  void _payNow(BuildContext context) {
+    if (paymentInformation == null) {
+      context.showToast('Payment Info in order still in work');
+      return;
+    }
+
+    switch (paymentMethod) {
+      case PaymentMethod.PAYMENT_METHOD_GOPAY:
+        launchGoPay(paymentInformation?.deeplink ?? '');
+        break;
+      case PaymentMethod.PAYMENT_METHOD_VA_BCA:
+        context.pushRoute(
+          PaymentInstructionsRoute(
+            order: order,
+            paymentInformation: paymentInformation,
+            paymentMethod: paymentMethod,
+          ),
+        );
+        break;
+      default:
+        // TODO(obella): Message for unspecified payment method
+        break;
+    }
   }
 }

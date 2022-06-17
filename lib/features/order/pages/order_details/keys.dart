@@ -5,4 +5,7 @@ class OrderDetailsPageKeys {
 
   /// For button responsible to initiate re-order flow
   static const buttonOrderAgain = '${_base}_buttonOrderAgain';
+
+  /// For button responsible to launch payment
+  static const buttonPayNow = '${_base}_buttonPayNow';
 }
