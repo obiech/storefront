@@ -40,7 +40,7 @@ void main() {
 
     // Navigation
     stackRouter = MockStackRouter();
-    when(() => stackRouter.push(any())).thenAnswer((_) async => null);
+    when(() => stackRouter.replace(any())).thenAnswer((_) async => null);
   });
 
   testWidgets(
@@ -227,7 +227,7 @@ void main() {
 
     // assert
     final capturedRoutes =
-        verify(() => stackRouter.push(captureAny())).captured;
+        verify(() => stackRouter.replace(captureAny())).captured;
 
     expect(capturedRoutes.length, 1);
 

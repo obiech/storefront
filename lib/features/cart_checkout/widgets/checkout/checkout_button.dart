@@ -17,7 +17,7 @@ class CheckoutButton extends StatelessWidget {
       listener: (context, state) async {
         // Launch payment link
         if (state is LoadedPaymentCheckout) {
-          context.router.push(
+          context.router.replace(
             OrderRouter(
               children: [
                 OrderDetailsRoute(
