@@ -249,7 +249,8 @@ void main() {
 
     final args = orderDetailsRoute.args as OrderDetailsRouteArgs;
     expect(args.order, paymentResults.order);
-    // TODO(obella): Add checks for Payment Method & Payment Information
+    expect(args.paymentMethod, paymentResults.paymentMethod);
+    expect(args.paymentInformation, paymentResults.paymentInformation);
   });
 }
 

@@ -25,6 +25,8 @@ class CheckoutButton extends StatelessWidget {
               children: [
                 OrderDetailsRoute(
                   order: state.paymentResults.order,
+                  paymentMethod: state.paymentResults.paymentMethod,
+                  paymentInformation: state.paymentResults.paymentInformation,
                 )
               ],
             ),

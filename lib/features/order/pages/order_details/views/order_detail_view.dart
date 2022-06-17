@@ -4,9 +4,15 @@ class OrderDetailsView extends StatelessWidget {
   const OrderDetailsView({
     Key? key,
     required this.order,
+    this.paymentInformation,
+    this.paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY,
   }) : super(key: key);
 
   final OrderModel order;
+
+  // TODO(obella): Retire when payment info is availed as part of order
+  final PaymentInformationModel? paymentInformation;
+  final PaymentMethod paymentMethod;
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +66,18 @@ class OrderDetailsView extends StatelessWidget {
                       subtotal: order.subTotal,
                       deliveryFee: order.deliveryFee,
                       isFreeDelivery: true,
-                      paymentMethod: 'Gopay',
+                      paymentMethod: paymentMethod.paymentInfo.title,
                       grandTotal: order.total,
                     ),
                   ],
                 ),
               ),
             ),
-            OrderActions(order: order),
+            OrderActions(
+              order: order,
+              paymentInformation: paymentInformation,
+              paymentMethod: paymentMethod,
+            ),
           ],
         ),
       ),

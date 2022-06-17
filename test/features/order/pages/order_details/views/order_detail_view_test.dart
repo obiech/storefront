@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
@@ -15,6 +17,10 @@ extension WidgetTesterX on WidgetTester {
   Future<void> pumpOrderDetailsView({
     required OrderModel order,
     StackRouter? stackRouter,
+
+    // TODO(obella): Retire when payment info is availed as part of order
+    PaymentInformationModel? paymentInformation,
+    PaymentMethod paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY,
   }) async {
     await pumpWidget(
       stackRouter != null
@@ -23,7 +29,11 @@ extension WidgetTesterX on WidgetTester {
               stateHash: 0,
               child: MaterialApp(
                 home: Scaffold(
-                  body: OrderDetailsPage(order: order),
+                  body: OrderDetailsPage(
+                    order: order,
+                    paymentInformation: paymentInformation,
+                    paymentMethod: paymentMethod,
+                  ),
                 ),
               ),
             )
@@ -146,31 +156,6 @@ void main() {
           expect(routeInfo, isA<HelpRoute>());
         },
       );
-
-      /*TODO(obella): Restore once pay now logic is restored
-          testWidgets(
-        'should navigate to Payment Instructions Page '
-        'when Pay Now Button is tapped',
-        (tester) async {
-          await tester.pumpOrderDetailsView(
-            order: orderAwaitingPayment,
-            stackRouter: stackRouter,
-          );
-          await tester.tap(find.byType(PayNowButton));
-          await tester.pumpAndSettle();
-
-          final capturedRoutes =
-              verify(() => stackRouter.push(captureAny())).captured;
-
-          // there should only be one route that's being pushed
-          expect(capturedRoutes.length, 1);
-
-          final routeInfo = capturedRoutes.first as PageRouteInfo;
-
-          // expecting the right route being pushed
-          expect(routeInfo, isA<PaymentInstructionsRoute>());
-        },
-      );*/
 
       testWidgets(
         'should not shown Pay Now Button '
