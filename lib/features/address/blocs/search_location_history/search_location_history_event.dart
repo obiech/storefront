@@ -10,3 +10,12 @@ class LoadSearchLocationHistory extends SearchLocationHistoryEvent {
   @override
   List<Object?> get props => [];
 }
+
+class AddNewSearchQuery extends SearchLocationHistoryEvent {
+  final PlaceModel place;
+
+  const AddNewSearchQuery(this.place);
+
+  @override
+  List<Object?> get props => [place];
+}

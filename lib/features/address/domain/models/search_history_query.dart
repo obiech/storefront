@@ -1,14 +1,22 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/domain/domains.dart';
 
-class SearchHistoryQuery extends Equatable {
-  final String query;
+part 'search_history_query.g.dart';
+
+@HiveType(typeId: HiveTypeIds.searchLocationHistoryQuery)
+class SearchLocationHistoryQuery extends Equatable {
+  @HiveField(SearchHistoryQueryModelHiveFieldIds.placeModel)
+  final PlaceModel placeModel;
+  @HiveField(SearchHistoryQueryModelHiveFieldIds.createdAt)
   final DateTime createdAt;
 
-  const SearchHistoryQuery({
-    required this.query,
+  const SearchLocationHistoryQuery({
+    required this.placeModel,
     required this.createdAt,
   });
 
   @override
-  List<Object?> get props => [query, createdAt];
+  List<Object?> get props => [placeModel, createdAt];
 }

@@ -37,6 +37,8 @@ Future<void> main() async {
       await FirebaseAppCheck.instance.activate();
 
       await Hive.initFlutter();
+      Hive.registerAdapter(SearchLocationHistoryQueryAdapter());
+      Hive.registerAdapter(PlaceModelAdapter());
 
       // Dependency Injection
       await configureInjection(determineEnvironment());

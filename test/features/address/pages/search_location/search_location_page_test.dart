@@ -15,14 +15,18 @@ import '../../mocks.dart';
 void main() {
   late StackRouter stackRouter;
   late SearchLocationBloc searchLocationBloc;
+  late SearchLocationHistoryBloc searchLocationHistoryBloc;
 
   setUp(() {
     stackRouter = MockStackRouter();
     searchLocationBloc = MockSearchLocationBloc();
+    searchLocationHistoryBloc = MockSearchLocationHistoryBloc();
 
     // default state
     when(() => searchLocationBloc.state)
         .thenReturn(const SearchLocationInitial());
+    when(() => searchLocationHistoryBloc.state)
+        .thenReturn(const SearchLocationHistoryLoading());
 
     // if not stubbed, this will throw an UnimplementedError when called
     // here, we stub it to do nothing because we're only checking for the
@@ -46,6 +50,7 @@ void main() {
       await tester.pumpSearchLocationPage(
         bloc: searchLocationBloc,
         stackRouter: stackRouter,
+        historyBloc: searchLocationHistoryBloc,
       );
 
       expect(find.byType(SearchLocationHeader), findsOneWidget);
@@ -63,6 +68,7 @@ void main() {
       await tester.pumpSearchLocationPage(
         bloc: searchLocationBloc,
         stackRouter: stackRouter,
+        historyBloc: searchLocationHistoryBloc,
       );
 
       expect(find.byType(SearchLocationHeader), findsOneWidget);
@@ -88,6 +94,7 @@ void main() {
       await tester.pumpSearchLocationPage(
         stackRouter: stackRouter,
         bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
       );
 
       final capturedRoutes =
@@ -121,6 +128,7 @@ void main() {
       await tester.pumpSearchLocationPage(
         stackRouter: stackRouter,
         bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
       );
 
       await tester.pump();
@@ -132,12 +140,66 @@ void main() {
       );
     },
   );
+
+  group('search location history', () {
+    final placeModelList = placesResultList
+        .map((place) => PlaceModel.fromPlacesService(place))
+        .toList();
+
+    testWidgets(
+      'should add LoadSearchLocationHistory to SearchLocationHistoryBloc '
+      'when state is SearchLocationInitial',
+      (tester) async {
+        whenListen(
+          searchLocationBloc,
+          Stream.fromIterable([
+            const SearchLocationInitial(),
+          ]),
+        );
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+        );
+
+        await tester.pump();
+
+        verify(
+          () =>
+              searchLocationHistoryBloc.add(const LoadSearchLocationHistory()),
+        ).called(1);
+      },
+    );
+
+    testWidgets(
+      'should display SearchHistoryList '
+      'when state is SearchLocationInitial',
+      (tester) async {
+        when(() => searchLocationBloc.state)
+            .thenReturn(const SearchLocationInitial());
+        when(() => searchLocationHistoryBloc.state)
+            .thenReturn(SearchLocationHistoryLoaded(placeModelList));
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+        );
+
+        await tester.pump();
+
+        expect(find.byType(SearchLocationHistoryList), findsOneWidget);
+      },
+    );
+  });
 }
 
 extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpSearchLocationPage({
     required StackRouter stackRouter,
     required SearchLocationBloc bloc,
+    required SearchLocationHistoryBloc historyBloc,
   }) async {
     late BuildContext ctx;
 
@@ -150,8 +212,15 @@ extension WidgetTesterX on WidgetTester {
               controller: stackRouter,
               stateHash: 0,
               child: Scaffold(
-                body: BlocProvider.value(
-                  value: bloc,
+                body: MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: bloc,
+                    ),
+                    BlocProvider.value(
+                      value: historyBloc,
+                    ),
+                  ],
                   child: const SearchLocationPage(),
                 ),
               ),

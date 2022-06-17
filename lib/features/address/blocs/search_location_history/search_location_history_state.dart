@@ -12,19 +12,12 @@ class SearchLocationHistoryLoading extends SearchLocationHistoryState {
 }
 
 class SearchLocationHistoryLoaded extends SearchLocationHistoryState {
-  final List<String> queries;
+  final List<PlaceModel> placeList;
 
-  const SearchLocationHistoryLoaded(this.queries);
-
-  @override
-  List<Object?> get props => [queries];
-}
-
-class SearchLocationHistoryLoadedEmpty extends SearchLocationHistoryState {
-  const SearchLocationHistoryLoadedEmpty();
+  const SearchLocationHistoryLoaded(this.placeList);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [placeList];
 }
 
 class SearchLocationHistoryError extends SearchLocationHistoryState {

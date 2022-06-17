@@ -41,6 +41,16 @@ class SearchLocationResult extends StatelessWidget {
           Flexible(
             child: MultiBlocListener(
               listeners: [
+                BlocListener<SearchLocationBloc, SearchLocationState>(
+                  listenWhen: (prev, current) =>
+                      current is SearchLocationInitial,
+                  listener: (context, state) {
+                    context
+                        .read<SearchLocationHistoryBloc>()
+                        .add(const LoadSearchLocationHistory());
+                  },
+                ),
+
                 /// Handle when getting location detail is success
                 BlocListener<SearchLocationBloc, SearchLocationState>(
                   listenWhen: (prev, current) =>
@@ -78,6 +88,11 @@ class SearchLocationResult extends StatelessWidget {
                         return PlaceSuggestionTile(
                           place: place,
                           onTap: () {
+                            context.read<SearchLocationHistoryBloc>().add(
+                                  AddNewSearchQuery(
+                                    PlaceModel.fromPlacesService(place),
+                                  ),
+                                );
                             context
                                 .read<SearchLocationBloc>()
                                 .add(LocationSelected(place.placeId ?? ''));
@@ -90,9 +105,7 @@ class SearchLocationResult extends StatelessWidget {
                       },
                     );
                   } else if (state is SearchLocationInitial) {
-                    // TODO (widy): show search history
-                    // https://dropezy.atlassian.net/browse/STOR-621
-                    return const SizedBox.shrink();
+                    return const SearchLocationHistoryList();
                   } else if (state is SearchLocationLoadedEmpty) {
                     return const Text("Can't find address");
                   } else {

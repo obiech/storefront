@@ -4,6 +4,7 @@ import 'package:grpc/grpc.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/index.dart';
 
 import '../../config.dart';
 
@@ -32,6 +33,13 @@ abstract class ServiceModule {
   @preResolve
   Future<Box<DateTime>> get searchHistoryBox =>
       Hive.openBox<DateTime>(searchHistoryBoxKey);
+
+  /// Search History Query Box
+  @preResolve
+  Future<Box<SearchLocationHistoryQuery>> get searchLocationHistoryQueryBox =>
+      Hive.openBox<SearchLocationHistoryQuery>(
+        searchLocationHistoryQueryBoxKey,
+      );
 
   /// Creates a gRPC [Client] responsible for communicating with
   /// storefront-backend Inventories Service,

@@ -1,8 +1,9 @@
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/address/domain/domains.dart';
 
 abstract class ISearchLocationHistoryRepository {
-  RepoResult<List<String>> getSearchHistory();
-  Future<void> addSearchQuery(String query);
-  Future<void> removeSearchQuery(String query);
+  RepoResult<List<PlaceModel>> getSearchHistory();
+  Future<void> addSearchQuery(PlaceModel place);
+  Future<void> removeSearchQuery(PlaceModel place);
   Future<void> clearSearchQueries();
 }

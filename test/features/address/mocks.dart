@@ -1,5 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
@@ -33,3 +34,10 @@ class MockSearchLocationRespository extends Mock
 
 class MockSearchLocationHistoryRepository extends Mock
     implements ISearchLocationHistoryRepository {}
+
+class MockSearchLocationHistoryBloc
+    extends MockBloc<SearchLocationHistoryEvent, SearchLocationHistoryState>
+    implements SearchLocationHistoryBloc {}
+
+class MockSearchHistoryBox extends Mock
+    implements Box<SearchLocationHistoryQuery> {}

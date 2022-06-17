@@ -6,8 +6,16 @@ class SearchLocationPageWrapper extends StatelessWidget
 
   @override
   Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<SearchLocationBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<SearchLocationBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => getIt<SearchLocationHistoryBloc>()
+            ..add(const LoadSearchLocationHistory()),
+        )
+      ],
       child: this,
     );
   }
