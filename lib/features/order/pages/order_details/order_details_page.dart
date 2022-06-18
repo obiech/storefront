@@ -26,6 +26,10 @@ class OrderDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OrderDetailsView(order: order);
+    return OrderDetailsView(
+      order: order,
+      paymentInformation: paymentInformation,
+      paymentMethod: paymentMethod,
+    );
   }
 }
