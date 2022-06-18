@@ -12,6 +12,7 @@ part 'parts/caption.dart';
 part 'parts/delivery_progress_bar.dart';
 part 'parts/delivery_status_indicator.dart';
 part 'parts/delivery_time_remaining.dart';
+part 'parts/skeleton.dart';
 
 class OrderStatusHeader extends StatelessWidget {
   const OrderStatusHeader({

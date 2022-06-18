@@ -6,6 +6,7 @@ import '../../../../../../res/resources.dart';
 import '../../../domain/models/order_product_model.dart';
 
 part 'parts/products_list.dart';
+part 'parts/skeleton.dart';
 
 /// Section with heading 'Order Details' and consists of list of
 /// purchased products.

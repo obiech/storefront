@@ -6,6 +6,7 @@ import '../../../features/address/index.dart';
 
 part 'parts/address_column.dart';
 part 'parts/chevron_button.dart';
+part 'parts/skeleton.dart';
 
 /// Widget for delivery address detail
 /// that consists of:
