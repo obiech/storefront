@@ -37,9 +37,14 @@ class OrderHistoryPage extends StatelessWidget {
     } else if (state is OrderHistoryLoaded) {
       return state.orders.isNotEmpty
           // TODO (leovinsen): Improve UI for 'No Orders' state
-          ? OrderHistoryList(
-              key: const ValueKey(OrderHistoryKeys.orderListWidget),
-              orders: state.orders,
+          ? Padding(
+              padding: EdgeInsets.only(
+                bottom: context.res.dimens.minOffsetForCartSummary,
+              ),
+              child: OrderHistoryList(
+                key: const ValueKey(OrderHistoryKeys.orderListWidget),
+                orders: state.orders,
+              ),
             )
           : Center(
               key: const ValueKey(OrderHistoryKeys.noOrdersWidget),

@@ -65,4 +65,12 @@ class PhoneDimensions implements BaseDimensions {
 
   @override
   double get appBarSize => AppBar().preferredSize.height;
+
+  /// offset = cart height + margin * 2
+  /// cart height is 42
+  /// margin is 12
+  ///
+  /// Dimensions taken from Figma,
+  @override
+  double get minOffsetForCartSummary => 66;
 }

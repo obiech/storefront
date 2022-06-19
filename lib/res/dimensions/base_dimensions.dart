@@ -43,4 +43,7 @@ abstract class BaseDimensions {
 
   // AppBar size
   double get appBarSize;
+
+  /// minimum offset to "clear" a widget above a floating Cart Summary
+  double get minOffsetForCartSummary;
 }
