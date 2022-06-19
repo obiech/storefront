@@ -29,8 +29,8 @@ class ProductDetailsSubHeader extends StatelessWidget {
               Expanded(
                 child: Text(
                   product.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: res.styles.subtitle
                       .copyWith(fontWeight: FontWeight.w500)
                       .withLineHeight(24),

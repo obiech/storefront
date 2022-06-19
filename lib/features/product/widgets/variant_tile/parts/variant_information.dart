@@ -20,6 +20,8 @@ class VariantInformation extends StatelessWidget {
           variant.name,
           key: VariantTileKeys.variantNameKey,
           style: context.res.styles.caption1,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 4),
         Text(

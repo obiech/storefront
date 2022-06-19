@@ -58,7 +58,7 @@ class VariantTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                VariantInformation(variant: variant),
+                Expanded(child: VariantInformation(variant: variant)),
               ],
             ),
           ),
