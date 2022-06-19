@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storefront_app/core/dropezy_icons.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../../../../test_commons/fixtures/product/variant_models.dart'
@@ -19,12 +19,20 @@ void main() {
     '[CartItemTile]',
     () {
       late CartItemModel cartItemInStock;
+      late CartItemModel cartItemMaxOrder;
       late CartItemModel cartItemOutOfStock;
       late CartBloc cartBloc;
 
       setUpAll(() {
         cartItemInStock = CartItemModel(
           variant: variant_fixtures.variantMango.copyWith(stock: 10),
+          quantity: 5,
+        );
+        cartItemMaxOrder = CartItemModel(
+          variant: variant_fixtures.variantMango.copyWith(
+            stock: 10,
+            maxQty: 6,
+          ),
           quantity: 5,
         );
         cartItemOutOfStock = CartItemModel(
@@ -117,6 +125,77 @@ void main() {
               ).called(1);
             },
           );
+
+          testWidgets(
+            'should show a Maximum Order warning message '
+            'when plus button is tapped '
+            'and maximum order quantity is reached ',
+            (WidgetTester tester) async {
+              // arrange
+              final ctx = await tester.pumpCartItemTile(
+                item: cartItemMaxOrder,
+                cartBloc: cartBloc,
+              );
+
+              final originalQty = cartItemMaxOrder.quantity;
+              final newQty = originalQty + 1;
+              final finderPlusButton = find.byIcon(DropezyIcons.plus);
+
+              // act
+              await tester.tap(finderPlusButton);
+              await tester.pumpAndSettle();
+
+              // assert
+              expect(find.text(newQty.toString()), findsOneWidget);
+              expect(
+                find.text(
+                  ctx.res.strings.maximumQty(cartItemMaxOrder.variant.maxQty!),
+                ),
+                findsOneWidget,
+              );
+              verify(
+                () => cartBloc.add(
+                  EditCartItem(cartItemMaxOrder.variant, newQty),
+                ),
+              ).called(1);
+            },
+          );
+
+          testWidgets(
+            'should remove Maximum Order warning message '
+            'when minus button is tapped '
+            'and maximum order quantity is currently shown ',
+            (WidgetTester tester) async {
+              // arrange
+              final cartItem = cartItemMaxOrder.copyWith(quantity: 6);
+              final ctx = await tester.pumpCartItemTile(
+                item: cartItem,
+                cartBloc: cartBloc,
+              );
+
+              final originalQty = cartItem.quantity;
+              final newQty = originalQty - 1;
+              final finderMinusButton = find.byIcon(DropezyIcons.minus);
+
+              // act
+              await tester.tap(finderMinusButton);
+              await tester.pumpAndSettle();
+
+              // assert
+              expect(find.text(newQty.toString()), findsOneWidget);
+              expect(
+                find.text(
+                  ctx.res.strings.maximumQty(cartItem.variant.maxQty!),
+                ),
+                findsNothing,
+              );
+              verify(
+                () => cartBloc.add(
+                  EditCartItem(cartItem.variant, newQty),
+                ),
+              ).called(1);
+            },
+          );
         },
       );
 
@@ -177,19 +256,27 @@ void main() {
 
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
-  Future<void> pumpCartItemTile({
+  Future<BuildContext> pumpCartItemTile({
     required CartItemModel item,
     required CartBloc cartBloc,
   }) async {
+    late BuildContext ctx;
     await pumpWidget(
       BlocProvider.value(
         value: cartBloc,
         child: MaterialApp(
           home: Scaffold(
-            body: CartItemTile(item: item),
+            body: Builder(
+              builder: (context) {
+                ctx = context;
+                return CartItemTile(item: item);
+              },
+            ),
           ),
         ),
       ),
     );
+
+    return ctx;
   }
 }

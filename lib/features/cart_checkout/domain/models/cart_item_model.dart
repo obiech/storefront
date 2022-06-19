@@ -23,4 +23,14 @@ class CartItemModel extends Equatable {
 
   @override
   List<Object?> get props => [variant, quantity];
+
+  CartItemModel copyWith({
+    VariantModel? variant,
+    int? quantity,
+  }) {
+    return CartItemModel(
+      variant: variant ?? this.variant,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }

@@ -21,11 +21,25 @@ class DummyCartService implements ICartRepository {
     sku: 'mango-sku',
     name: 'Sweet Mangoes',
     price: '3000000',
-    stock: 3,
+    stock: 4,
+    maxQty: 2,
     discount: '1000000',
     defaultImageUrl: 'image-url',
     imagesUrls: ['image-url'],
     unit: '500g',
+  );
+
+  static const variantWine = VariantModel(
+    variantId: 'wine-id',
+    sku: 'wine-sku',
+    name: 'Cabernet Sauvignon Vintage 2019',
+    price: '80000000',
+    stock: 5,
+    maxQty: 1,
+    discount: '20000000',
+    defaultImageUrl: 'image-url',
+    imagesUrls: ['image-url'],
+    unit: '750mL',
   );
 
   static const variantApple = VariantModel(
@@ -53,6 +67,10 @@ class DummyCartService implements ICartRepository {
         CartItemModel(
           variant: variantApple,
           quantity: 3,
+        ),
+        CartItemModel(
+          variant: variantWine,
+          quantity: 1,
         ),
       ],
       paymentSummary: CartPaymentSummaryModel(

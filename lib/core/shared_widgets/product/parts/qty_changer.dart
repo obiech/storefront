@@ -50,6 +50,9 @@ class _QtyChangerState extends State<QtyChanger> {
   @override
   void initState() {
     _valueNotifier = ValueNotifier<int>(max(widget.value, 0));
+    if (isAtMaxQty) {
+      widget.onMaxAvailableQtyChanged?.call(true);
+    }
     super.initState();
   }
 
@@ -153,17 +156,13 @@ class _QtyChangerState extends State<QtyChanger> {
     super.dispose();
   }
 
+  /// When quantity has reached the maximum amount a user can purchase
   bool get isAtMaxQty =>
-      widget.maxValue != null && widget.stock > widget.maxValue!;
+      widget.maxValue != null && _valueNotifier.value >= widget.maxValue!;
 
   /// Check if maximum quantity has been reached
   bool get hasReachedMaximumValue {
     // If maximum product quantity is provided, compare with it
-    if (isAtMaxQty) {
-      return _valueNotifier.value >= widget.maxValue!;
-    }
-
-    // else compare with stock
-    return _valueNotifier.value >= widget.stock;
+    return isAtMaxQty || _valueNotifier.value >= widget.stock;
   }
 }
