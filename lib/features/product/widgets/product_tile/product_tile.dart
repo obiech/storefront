@@ -20,7 +20,9 @@ part 'parts/skeleton.dart';
 ///
 /// Design wise is similar to a [ListTile].
 
-// TODO: Update to use new Product Base model
+//TODO (2022-06-19): if design diverges further from search's variant list
+// delete this classs and move contents into CartItemTile
+
 class ProductTile extends StatelessWidget {
   const ProductTile({
     Key? key,
@@ -59,7 +61,7 @@ class ProductTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                ProductInformation(variant: variant),
+                Expanded(child: ProductInformation(variant: variant)),
               ],
             ),
           ),

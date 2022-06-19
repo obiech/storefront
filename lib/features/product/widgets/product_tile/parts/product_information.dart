@@ -38,6 +38,7 @@ class ProductInformation extends StatelessWidget {
               ),
             ],
           ),
+        const SizedBox(height: 4),
         Text(
           variant.name,
           style: context.res.styles.caption2,
