@@ -563,7 +563,7 @@ class EnglishStrings implements BaseStrings {
       "Let's activate location access so we can send your shopping easily";
 
   @override
-  String get activateNow => 'Activate Now';
+  String get activateNow => 'Activate';
 
   @override
   String get later => 'Later';

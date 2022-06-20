@@ -560,7 +560,7 @@ class IndonesianStrings implements BaseStrings {
       'Yuk aktifkan akses lokasi agar kami bisa mengirimkan belanjaanmu dengan mudah';
 
   @override
-  String get activateNow => 'Aktifkan Sekarang';
+  String get activateNow => 'Aktifkan';
 
   @override
   String get later => 'Nanti Saja';

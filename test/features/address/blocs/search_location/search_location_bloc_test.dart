@@ -33,6 +33,9 @@ void main() {
     searchRepository = MockSearchLocationRespository();
     geolocator = MockDropezyGeolocator();
     searchLocationBloc = SearchLocationBloc(searchRepository, geolocator);
+
+    when(() => geolocator.isLocationServiceEnabled())
+        .thenAnswer((_) async => right(true));
   });
 
   test('initial state should be SearchLocationInitial', () {
@@ -162,6 +165,26 @@ void main() {
     expect: () => [
       const SearchLocationLoading(),
       const LocationSelectError('Error!'),
+      const SearchLocationInitial(),
+    ],
+  );
+
+  const locationErrorMessage = 'Location services are disabled.';
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectError '
+    'when LocationSelected event is added '
+    'and location service is disabled',
+    setUp: () {
+      when(() => geolocator.isLocationServiceEnabled())
+          .thenAnswer((_) async => left(Failure(locationErrorMessage)));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const UseCurrentLocation()),
+    expect: () => [
+      const SearchLocationLoading(),
+      const LocationSelectError(locationErrorMessage),
+      const SearchLocationInitial(),
     ],
   );
 }

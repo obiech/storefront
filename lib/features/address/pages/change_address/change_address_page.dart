@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
-import 'package:storefront_app/features/permission_handler/index.dart';
 
 part 'keys.dart';
 
@@ -22,26 +20,6 @@ class ChangeAddressPage extends StatelessWidget {
             listenWhen: (previous, current) => previous != current,
             listener: (context, state) =>
                 _onDeliveryAddressUpdated(state, context),
-          ),
-
-          /// Handle when requested permission is granted
-          BlocListener<PermissionHandlerCubit, PermissionHandlerState>(
-            listenWhen: (previous, current) => current is PermissionGranted,
-            listener: (context, state) => _onPermissionGranted(context),
-          ),
-
-          /// Handle when requested permission is denied
-          BlocListener<PermissionHandlerCubit, PermissionHandlerState>(
-            listenWhen: (previous, current) => current is PermissionDenied,
-            listener: (context, state) => _onPermissionDenied(context),
-          ),
-
-          /// Handle when requested permission is permanently denied
-          BlocListener<PermissionHandlerCubit, PermissionHandlerState>(
-            listenWhen: (previous, current) =>
-                current is PermissionPermanentlyDenied,
-            listener: (context, state) =>
-                _onPermissionPermanentlyDenied(context),
           ),
         ],
         child: BlocBuilder<DeliveryAddressCubit, DeliveryAddressState>(
@@ -79,9 +57,7 @@ class ChangeAddressPage extends StatelessWidget {
                         color: DropezyColors.blue,
                       ),
                       onPressed: () {
-                        context
-                            .read<PermissionHandlerCubit>()
-                            .requestPermission(Permission.location);
+                        context.pushRoute(const SearchLocationRoute());
                       },
                     ),
                   ],
@@ -98,22 +74,6 @@ class ChangeAddressPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onPermissionPermanentlyDenied(BuildContext context) {
-    context.pushRoute(const RequestLocationAccessRoute());
-  }
-
-  void _onPermissionDenied(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      DropezySnackBar.info(
-        context.res.strings.locationAccessRationale,
-      ),
-    );
-  }
-
-  void _onPermissionGranted(BuildContext context) {
-    context.pushRoute(const SearchLocationRoute());
   }
 
   void _onDeliveryAddressUpdated(

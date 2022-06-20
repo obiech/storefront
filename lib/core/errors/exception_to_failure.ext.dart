@@ -20,6 +20,10 @@ extension ExceptionToFailureX on Exception {
       final errorMessage = (this as PlacesApiException).message;
 
       return Failure(errorMessage);
+    } else if (this is ServiceException) {
+      final errorMessage = (this as ServiceException).message;
+
+      return Failure(errorMessage);
     } else {
       debugPrint('Encountered unhandled Exceptions: ${toString()}');
       return Failure('An unknown error has occured');

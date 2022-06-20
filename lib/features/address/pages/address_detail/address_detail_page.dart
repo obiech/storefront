@@ -9,8 +9,6 @@ import 'package:storefront_app/features/address/index.dart';
 part 'keys.dart';
 part 'wrapper.dart';
 
-// TODO (widy): Request for location permission when page loaded
-// https://dropezy.atlassian.net/browse/STOR-318
 class AddressDetailPage extends StatefulWidget {
   const AddressDetailPage({Key? key}) : super(key: key);
 

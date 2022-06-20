@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:storefront_app/core/app_router.gr.dart';
 import 'package:storefront_app/features/address/index.dart';
+import 'package:storefront_app/features/permission_handler/bloc/permission_handler_cubit.dart';
 
 import '../../../../../test_commons/fixtures/address/places_auto_complete_result.dart';
 import '../../../../commons.dart';
@@ -16,17 +18,24 @@ void main() {
   late StackRouter stackRouter;
   late SearchLocationBloc searchLocationBloc;
   late SearchLocationHistoryBloc searchLocationHistoryBloc;
+  late PermissionHandlerCubit permissionCubit;
+
+  const locationPermission = Permission.location;
 
   setUp(() {
     stackRouter = MockStackRouter();
     searchLocationBloc = MockSearchLocationBloc();
     searchLocationHistoryBloc = MockSearchLocationHistoryBloc();
+    permissionCubit = MockPermissionHandlerCubit();
 
     // default state
     when(() => searchLocationBloc.state)
         .thenReturn(const SearchLocationInitial());
     when(() => searchLocationHistoryBloc.state)
         .thenReturn(const SearchLocationHistoryLoading());
+    when(() => permissionCubit.state).thenReturn(const PermissionDenied());
+    when(() => permissionCubit.requestPermission(locationPermission))
+        .thenAnswer((_) => Future.value());
 
     // if not stubbed, this will throw an UnimplementedError when called
     // here, we stub it to do nothing because we're only checking for the
@@ -51,6 +60,7 @@ void main() {
         bloc: searchLocationBloc,
         stackRouter: stackRouter,
         historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
       );
 
       expect(find.byType(SearchLocationHeader), findsOneWidget);
@@ -69,6 +79,7 @@ void main() {
         bloc: searchLocationBloc,
         stackRouter: stackRouter,
         historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
       );
 
       expect(find.byType(SearchLocationHeader), findsOneWidget);
@@ -95,6 +106,7 @@ void main() {
         stackRouter: stackRouter,
         bloc: searchLocationBloc,
         historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
       );
 
       final capturedRoutes =
@@ -129,6 +141,7 @@ void main() {
         stackRouter: stackRouter,
         bloc: searchLocationBloc,
         historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
       );
 
       await tester.pump();
@@ -142,23 +155,99 @@ void main() {
   );
 
   testWidgets(
-    'should add UseCurrentLocation to bloc '
-    'when use current location button is pressed',
+    'should request location permission '
+    'when use current location button is pressed ',
     (tester) async {
       await tester.pumpSearchLocationPage(
         stackRouter: stackRouter,
         bloc: searchLocationBloc,
         historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
       );
 
       await tester
           .tap(find.byKey(SearchLocationPageKeys.useCurrentLocationButton));
       await tester.pumpAndSettle();
 
-      verify(() => searchLocationBloc.add(const UseCurrentLocation()))
+      verify(() => permissionCubit.requestPermission(locationPermission))
           .called(1);
     },
   );
+
+  group('location permission handler', () {
+    testWidgets(
+      'should add UseCurrentLocation to bloc '
+      'when permission is granted',
+      (tester) async {
+        whenListen(
+          permissionCubit,
+          Stream.fromIterable([
+            const PermissionGranted(),
+          ]),
+        );
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
+        );
+
+        await tester.pumpAndSettle();
+
+        verify(() => searchLocationBloc.add(const UseCurrentLocation()))
+            .called(1);
+      },
+    );
+
+    testWidgets(
+      'should open RequestLocationBottomSheet '
+      'when permission is denied',
+      (tester) async {
+        whenListen(
+          permissionCubit,
+          Stream.fromIterable([
+            const PermissionDenied(),
+          ]),
+        );
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(RequestLocationBottomSheet), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'should open RequestLocationBottomSheet '
+      'when permission is permanently denied',
+      (tester) async {
+        whenListen(
+          permissionCubit,
+          Stream.fromIterable([
+            const PermissionPermanentlyDenied(),
+          ]),
+        );
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(find.byType(RequestLocationBottomSheet), findsOneWidget);
+      },
+    );
+  });
 
   group('search location history', () {
     final placeModelList = placesResultList
@@ -180,6 +269,7 @@ void main() {
           stackRouter: stackRouter,
           bloc: searchLocationBloc,
           historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
         );
 
         await tester.pump();
@@ -204,6 +294,7 @@ void main() {
           stackRouter: stackRouter,
           bloc: searchLocationBloc,
           historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
         );
 
         await tester.pump();
@@ -219,6 +310,7 @@ extension WidgetTesterX on WidgetTester {
     required StackRouter stackRouter,
     required SearchLocationBloc bloc,
     required SearchLocationHistoryBloc historyBloc,
+    required PermissionHandlerCubit permissionHandlerCubit,
   }) async {
     late BuildContext ctx;
 
@@ -238,6 +330,9 @@ extension WidgetTesterX on WidgetTester {
                     ),
                     BlocProvider.value(
                       value: historyBloc,
+                    ),
+                    BlocProvider.value(
+                      value: permissionHandlerCubit,
                     ),
                   ],
                   child: const SearchLocationPage(),

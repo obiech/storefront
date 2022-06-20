@@ -76,20 +76,31 @@ class SearchLocationBloc
   Future<void> _onUseCurrentLocation(Emitter<SearchLocationState> emit) async {
     emit(const SearchLocationLoading());
 
-    final position = await _geolocator.getCurrentPosition();
-    final result = await _searchRepository.getCurrentLocation(
-      LatLng(
-        position.latitude,
-        position.longitude,
-      ),
-    );
+    final serviceEnabled = await _geolocator.isLocationServiceEnabled();
 
-    result.fold(
+    await serviceEnabled.fold(
       (failure) {
         emit(LocationSelectError(failure.message));
+        emit(const SearchLocationInitial());
       },
-      (address) {
-        emit(LocationSelectSuccess(address));
+      (_) async {
+        final position = await _geolocator.getCurrentPosition();
+        final result = await _searchRepository.getCurrentLocation(
+          LatLng(
+            position.latitude,
+            position.longitude,
+          ),
+        );
+
+        result.fold(
+          (failure) {
+            emit(LocationSelectError(failure.message));
+            emit(const SearchLocationInitial());
+          },
+          (address) {
+            emit(LocationSelectSuccess(address));
+          },
+        );
       },
     );
   }

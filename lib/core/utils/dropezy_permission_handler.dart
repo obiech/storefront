@@ -10,4 +10,8 @@ class DropezyPermissionHandler {
 
     return status;
   }
+
+  static Future<bool> openAppSettings() {
+    return openAppSettings();
+  }
 }

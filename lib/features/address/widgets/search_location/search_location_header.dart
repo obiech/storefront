@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
+import 'package:storefront_app/features/permission_handler/index.dart';
 
 class SearchLocationHeader extends StatelessWidget {
   const SearchLocationHeader({Key? key}) : super(key: key);
@@ -18,11 +20,9 @@ class SearchLocationHeader extends StatelessWidget {
               TextButton.icon(
                 key: SearchLocationPageKeys.useCurrentLocationButton,
                 onPressed: () {
-                  // TODO (widy): move location permission prompt here
-                  // https://dropezy.atlassian.net/browse/STOR-804
                   context
-                      .read<SearchLocationBloc>()
-                      .add(const UseCurrentLocation());
+                      .read<PermissionHandlerCubit>()
+                      .requestPermission(Permission.location);
                 },
                 icon: const Icon(DropezyIcons.pin),
                 label: Text(context.res.strings.useCurrentLocation),

@@ -61,7 +61,6 @@ void main() {
         await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.byType(AddressLoadingView), findsOneWidget);
@@ -78,7 +77,6 @@ void main() {
         final context = await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.text(context.res.strings.addressEmpty), findsOneWidget);
@@ -94,7 +92,6 @@ void main() {
         await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.byType(ListView), findsOneWidget);
@@ -113,7 +110,6 @@ void main() {
         await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.byType(ListView), findsOneWidget);
@@ -145,7 +141,6 @@ void main() {
         final context = await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.byType(ListView), findsOneWidget);
@@ -191,7 +186,6 @@ void main() {
         await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         expect(find.byType(ListView), findsOneWidget);
@@ -208,7 +202,7 @@ void main() {
     );
 
     testWidgets(
-      'should request location permission '
+      'should navigate to search location page '
       'when add address button is tapped',
       (tester) async {
         const locationPermission = Permission.location;
@@ -218,107 +212,21 @@ void main() {
         await tester.pumpChangeAddressPage(
           stackRouter: stackRouter,
           deliveryAddressCubit: deliveryAddressCubit,
-          permissionHandlerCubit: permissionHandlerCubit,
         );
 
         await tester.tap(find.byKey(ChangeAddressPageKeys.addAddressButton));
+        await tester.pumpAndSettle();
 
-        verify(
-          () => permissionHandlerCubit.requestPermission(locationPermission),
-        ).called(1);
-      },
-    );
+        final capturedRoutes =
+            verify(() => stackRouter.push(captureAny())).captured;
 
-    group(
-      'Permission Handler',
-      () {
-        testWidgets(
-          'should navigate to SearchLocationPage '
-          'when permission is granted',
-          (tester) async {
-            whenListen(
-              permissionHandlerCubit,
-              Stream.fromIterable([
-                const PermissionGranted(),
-              ]),
-            );
+        // there should only be one route that's being pushed
+        expect(capturedRoutes.length, 1);
 
-            await tester.pumpChangeAddressPage(
-              stackRouter: stackRouter,
-              deliveryAddressCubit: deliveryAddressCubit,
-              permissionHandlerCubit: permissionHandlerCubit,
-            );
+        final routeInfo = capturedRoutes.first as PageRouteInfo;
 
-            final capturedRoutes =
-                verify(() => stackRouter.push(captureAny())).captured;
-
-            // there should only be one route that's being pushed
-            expect(capturedRoutes.length, 1);
-
-            final routeInfo = capturedRoutes.first as PageRouteInfo;
-
-            // expecting the right route being pushed
-            expect(routeInfo, isA<SearchLocationRoute>());
-          },
-        );
-
-        testWidgets(
-          'should show snack bar '
-          'when permission is denied',
-          (tester) async {
-            whenListen(
-              permissionHandlerCubit,
-              Stream.fromIterable([
-                const PermissionDenied(),
-              ]),
-            );
-
-            final context = await tester.pumpChangeAddressPage(
-              stackRouter: stackRouter,
-              deliveryAddressCubit: deliveryAddressCubit,
-              permissionHandlerCubit: permissionHandlerCubit,
-            );
-            await tester.pumpAndSettle();
-
-            expect(find.byType(SnackBar), findsOneWidget);
-            expect(
-              find.text(
-                context.res.strings.locationAccessRationale,
-              ),
-              findsOneWidget,
-            );
-          },
-        );
-
-        testWidgets(
-          'should navigate to RequestLocationAccessPage '
-          'when permission is permanently denied',
-          (tester) async {
-            whenListen(
-              permissionHandlerCubit,
-              Stream.fromIterable([
-                const PermissionPermanentlyDenied(),
-              ]),
-            );
-
-            await tester.pumpChangeAddressPage(
-              stackRouter: stackRouter,
-              deliveryAddressCubit: deliveryAddressCubit,
-              permissionHandlerCubit: permissionHandlerCubit,
-            );
-
-            final capturedRoutes =
-                verify(() => stackRouter.push(captureAny())).captured;
-
-            // there should only be one route that's being pushed
-            expect(capturedRoutes.length, 1);
-
-            final routeInfo = capturedRoutes.first as PageRouteInfo;
-
-            // expecting the right route being pushed
-            expect(routeInfo, isA<RequestLocationAccessRoute>());
-          },
-        );
+        // expecting the right route being pushed
+        expect(routeInfo, isA<SearchLocationRoute>());
       },
     );
   });
@@ -328,7 +236,6 @@ extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpChangeAddressPage({
     required StackRouter stackRouter,
     required DeliveryAddressCubit deliveryAddressCubit,
-    required PermissionHandlerCubit permissionHandlerCubit,
   }) async {
     late BuildContext ctx;
 
@@ -345,9 +252,6 @@ extension WidgetTesterX on WidgetTester {
                   providers: [
                     BlocProvider<DeliveryAddressCubit>.value(
                       value: deliveryAddressCubit,
-                    ),
-                    BlocProvider<PermissionHandlerCubit>.value(
-                      value: permissionHandlerCubit,
                     ),
                   ],
                   child: const ChangeAddressPage(),
