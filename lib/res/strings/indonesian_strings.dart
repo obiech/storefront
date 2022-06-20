@@ -505,6 +505,17 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get delete => 'Hapus';
 
+  /// Empty Cart
+  @override
+  String get emptyCartTitle => 'Yuk, isi dulu keranjangmu!';
+
+  @override
+  String get emptyCartCaption =>
+      'Mulai belanja super ezy dengan Dropezy sekarang';
+
+  @override
+  String get shopNow => 'Belanja Sekarang';
+
   @override
   String get clearAll => 'Hapus Semua';
 

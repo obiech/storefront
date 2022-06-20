@@ -326,6 +326,13 @@ abstract class BaseStrings {
 
   String get delete;
 
+  /// Empty Cart
+  String get emptyCartTitle;
+
+  String get emptyCartCaption;
+
+  String get shopNow;
+
   /// Home Page
   String hiWhatAreYouShoppingForToday(String name);
 

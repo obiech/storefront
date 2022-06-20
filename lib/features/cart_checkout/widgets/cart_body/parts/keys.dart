@@ -27,3 +27,12 @@ class CartBodyWidgetKeys {
   /// Widget for state [CartFailedToLoad]
   static const failedToLoad = ValueKey('${_base}_failedToLoad');
 }
+
+class CartBodyEmptyKeys {
+  static const _base = 'CartBodyEmpty';
+
+  static const imageAsset = ValueKey('${_base}_imageAsset');
+
+  /// Button that redirect users back to Home page
+  static const buttonShopNow = ValueKey('${_base}_buttonToHome');
+}

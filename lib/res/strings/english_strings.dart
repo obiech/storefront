@@ -504,6 +504,20 @@ class EnglishStrings implements BaseStrings {
   @override
   String get delete => 'Delete';
 
+  /// Empty Cart
+
+  // TODO (leovinsen): Update english copy
+  @override
+  String get emptyCartTitle => "Let's add more things to the cart";
+
+  // TODO (leovinsen): Update english copy
+  @override
+  String get emptyCartCaption =>
+      'Begin your super ezy shopping experience with Dropezy';
+
+  @override
+  String get shopNow => 'Shop Now';
+
   @override
   String get clearAll => 'Clear All';
 
