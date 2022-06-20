@@ -16,7 +16,7 @@ class CartItemModel extends Equatable {
 
   factory CartItemModel.fromPb(Item item) {
     return CartItemModel(
-      variant: VariantModel.fromPb(item.variant),
+      variant: VariantModel.fromPb(item.variant, item.productId),
       quantity: item.quantity,
     );
   }

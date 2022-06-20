@@ -15,6 +15,7 @@ void main() {
   late CartBloc bloc;
 
   const variant = VariantModel(
+    productId: 'product-id',
     variantId: 'variant',
     name: 'Variant Name',
     imagesUrls: [],

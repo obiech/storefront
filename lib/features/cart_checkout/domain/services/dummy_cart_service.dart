@@ -17,7 +17,8 @@ class DummyCartService implements ICartRepository {
   static const deliveryFee = 1500000;
 
   static const variantMango = VariantModel(
-    variantId: 'mango-id',
+    productId: 'mango-id',
+    variantId: 'mango-id-0',
     sku: 'mango-sku',
     name: 'Sweet Mangoes',
     price: '3000000',
@@ -30,7 +31,8 @@ class DummyCartService implements ICartRepository {
   );
 
   static const variantWine = VariantModel(
-    variantId: 'wine-id',
+    productId: 'wine-id',
+    variantId: 'wine-id-0',
     sku: 'wine-sku',
     name: 'Cabernet Sauvignon Vintage 2019',
     price: '80000000',
@@ -43,7 +45,8 @@ class DummyCartService implements ICartRepository {
   );
 
   static const variantApple = VariantModel(
-    variantId: 'fuji-apples-id',
+    productId: 'fuji-apples-id',
+    variantId: 'fuji-apples-id-0',
     sku: 'fuji-apples-sku',
     name: 'Fuji Apples',
     price: '1900000',

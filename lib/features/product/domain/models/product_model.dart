@@ -52,14 +52,17 @@ class ProductModel extends BaseProduct {
 
   /// Creates a [ProductModel] from gRPC [Product]
   factory ProductModel.fromPb(Product inventoryProduct) {
-    final baseVariant = inventoryProduct.variants.defaultVariant;
+    final baseVariant = inventoryProduct.variants.defaultVariant(
+      inventoryProduct.productId,
+    );
 
     return ProductModel(
       productId: inventoryProduct.productId,
       name: inventoryProduct.name,
       variants: inventoryProduct.variants
           .map(
-            (variant) => VariantModel.fromPb(variant),
+            (variant) =>
+                VariantModel.fromPb(variant, inventoryProduct.productId),
           )
           .toList(),
       defaultProduct: baseVariant.id,

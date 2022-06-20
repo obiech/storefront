@@ -8,6 +8,7 @@ import '../../../finders.dart';
 
 void main() {
   const variant = VariantModel(
+    productId: 'product-id',
     variantId: '0-variant-id',
     name: '250ml / Pcs',
     defaultImageUrl: 'https://i.imgur.com/rHfndKT.jpeg',

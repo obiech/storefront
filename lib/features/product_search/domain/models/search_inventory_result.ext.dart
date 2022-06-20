@@ -5,7 +5,7 @@ import 'package:storefront_app/features/product/domain/domain.dart';
 
 extension SearchInventoryResultX on SearchInventoryResult {
   ProductModel get toProduct {
-    final defaultVariant = variants.defaultVariant;
+    final defaultVariant = variants.defaultVariant(productId);
 
     final defaultVariantImages = defaultVariant.imagesUrls;
 
@@ -24,8 +24,9 @@ extension SearchInventoryResultX on SearchInventoryResult {
       status: overallStock < 1
           ? ProductModelStatus.OUT_OF_STOCK
           : ProductModelStatus.ACTIVE,
-      variants:
-          variants.map((variant) => VariantModel.fromPb(variant)).toList(),
+      variants: variants
+          .map((variant) => VariantModel.fromPb(variant, productId))
+          .toList(),
       defaultProduct: defaultVariant.id,
     );
   }

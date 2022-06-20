@@ -1,6 +1,7 @@
 import 'package:storefront_app/features/product/domain/models/variant_model.dart';
 
 const variantMango = VariantModel(
+  productId: 'mango-id',
   variantId: 'variant-mango-id',
   name: 'Sweet mangoes',
   defaultImageUrl: 'mango-image-url-1',
@@ -12,6 +13,7 @@ const variantMango = VariantModel(
 );
 
 const variantRice = VariantModel(
+  productId: 'mango-id',
   variantId: 'variant-rice-id',
   name: 'White rice',
   defaultImageUrl: 'rice-image-url-1',

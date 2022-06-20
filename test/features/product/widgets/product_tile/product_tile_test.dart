@@ -10,7 +10,8 @@ void main() {
   /// Base model for test has to have a null discount
   /// because it affects the outcome
   const mockVariant = VariantModel(
-    variantId: 'selada-romaine-id',
+    productId: 'selada-romaine-id',
+    variantId: 'selada-romaine-id-0',
     sku: 'selada-romaine-sku',
     name: 'Selada Romaine',
     price: '15000',

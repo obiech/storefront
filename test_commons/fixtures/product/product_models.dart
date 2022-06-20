@@ -57,6 +57,7 @@ const seledaRomaine = ProductModel(
   discount: '20000',
   variants: [
     VariantModel(
+      productId: 'selada-romaine-id',
       variantId: '',
       name: '',
       imagesUrls: ['default-url'],
@@ -90,6 +91,7 @@ const pomegranate = ProductModel(
   marketStatus: MarketStatus.FLASH_SALE,
   variants: [
     VariantModel(
+      productId: 'pomegranate-id',
       variantId: 'pomegranate-500g-variant-id',
       name: '500g',
       defaultImageUrl: 'https://source.unsplash.com/XiWQbLEhFyo/600x600',
@@ -103,6 +105,7 @@ const pomegranate = ProductModel(
       unit: '500g',
     ),
     VariantModel(
+      productId: 'pomegranate-id',
       variantId: 'pomegranate-1kg-variant-id',
       name: '1kg',
       defaultImageUrl: 'https://source.unsplash.com/XiWQbLEhFyo/600x600',

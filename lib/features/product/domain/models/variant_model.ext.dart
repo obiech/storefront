@@ -5,7 +5,8 @@ import 'package:storefront_app/features/product/index.dart';
 
 extension VariantListX on List<Variant> {
   /// Convert list of [Variant]s to [VariantModel]s
-  List<VariantModel> get toModels => map(VariantModel.fromPb).toList();
+  List<VariantModel> toModels(String productId) =>
+      map((variant) => VariantModel.fromPb(variant, productId)).toList();
 
   /// Total Stock from all variants
   int get overallStock => fold(
@@ -14,12 +15,13 @@ extension VariantListX on List<Variant> {
       );
 
   /// Get default variant
-  VariantModel get defaultVariant => VariantModel.fromPb(
+  VariantModel defaultVariant(String productId) => VariantModel.fromPb(
         firstWhere(
           (variant) =>
               variant.variantStatus == VariantStatus.VARIANT_STATUS_DEFAULT,
           orElse: () => first,
         ),
+        productId,
       );
 }
 

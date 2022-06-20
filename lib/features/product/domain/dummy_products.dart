@@ -11,6 +11,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: 'teh-botol-sosro-original-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/rHfndKT.jpeg',
@@ -24,6 +25,7 @@ const dummyProducts = [
         unit: '250ml / Pcs',
       ),
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: 'teh-botol-sosro-original-variant-1',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/JxNPDNU.jpeg',
@@ -36,6 +38,7 @@ const dummyProducts = [
         unit: '330ml / Pcs',
       ),
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: 'teh-botol-sosro-original-variant-2',
         name: '450ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/3hGn49J.jpeg',
@@ -68,6 +71,7 @@ const dummyProducts = [
     maxQty: 5,
     variants: [
       VariantModel(
+        productId: 'teh-kotak-melati',
         variantId: 'teh-kotak-melati-variant-0',
         name: '200 + 100ml / Pack',
         defaultImageUrl: 'https://i.imgur.com/nqVZDQd.jpeg',
@@ -96,6 +100,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'ultra-milk-sari-kacang-hijau',
         variantId: 'ultra-milk-sari-kacang-hijau-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/h31ZPb2.jpeg',
@@ -123,6 +128,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'schweppes-soda-water-kaleng',
         variantId: 'schweppes-soda-water-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/Tt6mcoq.jpeg',
@@ -150,6 +156,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'indocafe-original-blend---kopi',
         variantId: 'indocafe-original-blend---kopi-variant-0',
         name: '180gr / Pcs',
         defaultImageUrl: 'https://i.imgur.com/VvVI90a.jpeg',
@@ -162,6 +169,7 @@ const dummyProducts = [
         unit: '180gr / Pcs',
       ),
       VariantModel(
+        productId: 'indocafe-original-blend---kopi',
         variantId: 'indocafe-original-blend---kopi-variant-1',
         name: '50 x 2gr / Pack',
         defaultImageUrl: 'https://i.imgur.com/eNL4hzN.jpeg',
@@ -192,6 +200,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'nescafe-classic---kopi',
         variantId: 'nescafe-classic---kopi-variant-0',
         name: '200gr / Botol',
         defaultImageUrl: 'https://i.imgur.com/Ktvt26m.jpeg',
@@ -219,6 +228,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'good-day-cappuccino---kopi',
         variantId: 'good-day-cappuccino---kopi-variant-0',
         name: '250ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/Ws9y6cV.jpeg',
@@ -246,6 +256,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'pocari-sweat-kaleng',
         variantId: 'pocari-sweat-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/LtRpmAC.jpeg',
@@ -273,6 +284,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'kopiko-78-coffee-latte',
         variantId: 'kopiko-78-coffee-latte-variant-0',
         name: '240ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/GwfJOhP.jpeg',
@@ -300,6 +312,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'scheweppes-tonic-water-kaleng',
         variantId: 'scheweppes-tonic-water-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/zxiDu3s.jpeg',
@@ -327,6 +340,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'larutan-cap-kaki-tiga-plain',
         variantId: 'larutan-cap-kaki-tiga-plain-variant-0',
         name: '200ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/rjAvUxS.jpeg',
@@ -354,6 +368,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-celup-sosro',
         variantId: 'teh-celup-sosro-variant-0',
         name: 'isi 30 / Pack',
         defaultImageUrl: 'https://i.imgur.com/QyzaGpG.jpeg',
@@ -381,6 +396,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'coca-cola-kaleng',
         variantId: 'coca-cola-kaleng-variant-0',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/B5IRlgv.jpeg',
@@ -408,6 +424,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-sari-wangi',
         variantId: 'teh-sari-wangi-variant-0',
         name: '50 sachet / Pack',
         defaultImageUrl: 'https://i.imgur.com/52dHUA4.jpeg',
@@ -435,6 +452,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'abc-mr-jussie-milky-strawberry',
         variantId: 'abc-mr-jussie-milky-strawberry-variant-0',
         name: '90ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/0duir3S.jpeg',
@@ -462,6 +480,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-pucuk-harum',
         variantId: 'teh-pucuk-harum-variant-0',
         name: '350ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ZwqfakS.jpeg',
@@ -489,6 +508,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'minute-maid-pulpy-orange-botol',
         variantId: 'minute-maid-pulpy-orange-botol-variant-0',
         name: '300ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/uFrU0vv.jpeg',
@@ -516,6 +536,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'schweppes-ginger-ale-kaleng',
         variantId: 'schweppes-ginger-ale-kaleng-variant-0',
         name: '330ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/WMeuxsp.jpeg',
@@ -543,6 +564,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'sosro-teh-botol',
         variantId: 'sosro-teh-botol-variant-0',
         name: '350ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/3jqy4dv.jpeg',
@@ -569,6 +591,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'indocafe-fine-blend-refill',
         variantId: 'indocafe-fine-blend-refill-variant-0',
         name: '100gr / Pack',
         defaultImageUrl: 'https://i.imgur.com/vPsyE8l.jpeg',
@@ -596,6 +619,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'marjan-syrup-melon',
         variantId: 'marjan-syrup-melon-variant-0',
         name: '460ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ZhdPcaP.jpeg',
@@ -623,6 +647,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'kapal-api-kopi-bubuk-special',
         variantId: 'kapal-api-kopi-bubuk-special-variant-0',
         name: '165gr / Pcs',
         defaultImageUrl: 'https://i.imgur.com/msIvu9Q.jpeg',
@@ -650,6 +675,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'san-pellegrino-sparkling',
         variantId: 'san-pellegrino-sparkling-variant-0',
         name: '750ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/TFZSmuU.jpeg',
@@ -677,6 +703,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'le-minerale',
         variantId: 'le-minerale-variant-0',
         name: '600ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/kje6NUi.jpeg',
@@ -704,6 +731,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-pucuk-harum-less-sugar',
         variantId: 'teh-pucuk-harum-less-sugar-variant-0',
         name: '500ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/Bd0kCtV.jpeg',
@@ -731,6 +759,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'fruit-tea-sosro-rasa-apel',
         variantId: 'fruit-tea-sosro-rasa-apel-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/MCUbq3P.jpeg',
@@ -758,6 +787,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'fruit-tea-sosro-blackcurrent',
         variantId: 'fruit-tea-sosro-blackcurrent-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/ElTLAgb.jpeg',
@@ -785,6 +815,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-botol-sosro-kotak-less-sugar',
         variantId: 'teh-botol-sosro-kotak-less-sugar-variant-0',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/ePJsHy4.jpeg',
@@ -812,6 +843,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 's-tee-kotak',
         variantId: 's-tee-kotak-variant-0',
         name: '200ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/AOeIVD3.jpeg',
@@ -839,6 +871,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'prim-a',
         variantId: 'prim-a-variant-0',
         name: '600ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/pyzgB9D.jpeg',
@@ -866,6 +899,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'vit-air-mineral',
         variantId: 'vit-air-mineral-variant-0',
         name: '330ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/AfxwJni.jpeg',
@@ -878,6 +912,7 @@ const dummyProducts = [
         unit: '330ml / Botol',
       ),
       VariantModel(
+        productId: 'vit-air-mineral',
         variantId: 'vit-air-mineral-variant-1',
         name: '550ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/cGkgRIf.jpeg',
@@ -908,6 +943,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'mizone-breakfree-cherry-blossom',
         variantId: 'mizone-breakfree-cherry-blossom-variant-0',
         name: '500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/tGEbKRs.jpeg',
@@ -935,6 +971,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'aqua-air-mineral',
         variantId: 'aqua-air-mineral-variant-0',
         name: '1500ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/1xhR84I.jpeg',
@@ -947,6 +984,7 @@ const dummyProducts = [
         unit: '1500ml / Botol',
       ),
       VariantModel(
+        productId: 'aqua-air-mineral',
         variantId: 'aqua-air-mineral-variant-1',
         name: '330ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/Vn9FJxX.jpeg',
@@ -959,6 +997,7 @@ const dummyProducts = [
         unit: '330ml / Botol',
       ),
       VariantModel(
+        productId: 'aqua-air-mineral',
         variantId: 'aqua-air-mineral-variant-2',
         name: '600ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/5o44nby.jpeg',
@@ -990,6 +1029,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'kiranti-datang-bulan',
         variantId: 'kiranti-datang-bulan-variant-0',
         name: '150ml/ Botol',
         defaultImageUrl: 'https://i.imgur.com/qRV8U3P.jpeg',
@@ -1017,6 +1057,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'nutrijel-jely-shake-lecy',
         variantId: 'nutrijel-jely-shake-lecy-variant-0',
         name: '340ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/BcT2Bfy.jpeg',
@@ -1044,6 +1085,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'nescafe-capuccino',
         variantId: 'nescafe-capuccino-variant-0',
         name: '220ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/Ck1PZfQ.jpeg',
@@ -1071,6 +1113,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'delmotne-boba-taro',
         variantId: 'delmotne-boba-taro-variant-0',
         name: '240ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/5rUbcMq.jpeg',
@@ -1098,6 +1141,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'delmonte-boba-caramel-cheese',
         variantId: 'delmonte-boba-caramel-cheese-variant-0',
         name: '240ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/vjQKXz7.jpeg',
@@ -1125,6 +1169,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'redbull-energy-drink',
         variantId: 'redbull-energy-drink-variant-0',
         name: '250ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/ahmnyCE.jpeg',
@@ -1152,6 +1197,7 @@ const dummyProducts = [
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'panda-grass-jelly',
         variantId: 'panda-grass-jelly-variant-0',
         name: '310ml / Kaleng',
         defaultImageUrl: 'https://i.imgur.com/AuBZ9k8.jpeg',

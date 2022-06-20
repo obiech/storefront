@@ -16,6 +16,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: '0-variant-id',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/rHfndKT.jpeg',
@@ -28,6 +29,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
         unit: '250ml / Pcs',
       ),
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: '1-variant-id',
         name: '330ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/JxNPDNU.jpeg',
@@ -40,6 +42,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
         unit: '330ml / Pcs',
       ),
       VariantModel(
+        productId: 'teh-botol-sosro-original',
         variantId: '2-variant-id',
         name: '450ml / Botol',
         defaultImageUrl: 'https://i.imgur.com/3hGn49J.jpeg',
@@ -72,6 +75,7 @@ class DummyProductInventoryRepository extends IProductInventoryRepository {
     stock: 50,
     variants: [
       VariantModel(
+        productId: 'ultra-milk-sari-kacang-hijau',
         variantId: '0-variant-id',
         name: '250ml / Pcs',
         defaultImageUrl: 'https://i.imgur.com/h31ZPb2.jpeg',

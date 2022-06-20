@@ -6,6 +6,7 @@ import '../domain.dart';
 ///
 class VariantModel extends BaseProduct {
   const VariantModel({
+    required this.productId,
     required String variantId,
     required String name,
     required List<String> imagesUrls,
@@ -29,10 +30,20 @@ class VariantModel extends BaseProduct {
           maxQty,
         );
 
+  /// Product to which the variant belongs
+  final String productId;
+
   /// Creates a [VariantModel] from gRPC [Variant]
-  factory VariantModel.fromPb(Variant productVariant) {
+  ///
+  /// The [productId] simplifies variant backtracking to product
+  ///
+  /// PS: [productVariant.name] from backend is empty from backend
+  /// for inventory search, however for Cart [Item], the name
+  /// is provided fine.
+  factory VariantModel.fromPb(Variant productVariant, String productId) {
     final imageUrls = productVariant.toImageUrls;
     return VariantModel(
+      productId: productId,
       variantId: productVariant.variantId,
       name: productVariant.name,
       imagesUrls: imageUrls,
@@ -47,6 +58,7 @@ class VariantModel extends BaseProduct {
 
   /// Create copy of object
   VariantModel copyWith({
+    String? productId,
     String? id,
     String? name,
     List<String>? imagesUrls,
@@ -59,6 +71,7 @@ class VariantModel extends BaseProduct {
     String? unit,
   }) =>
       VariantModel(
+        productId: productId ?? this.productId,
         variantId: id ?? this.id,
         name: name ?? this.name,
         imagesUrls: imagesUrls ?? this.imagesUrls,
