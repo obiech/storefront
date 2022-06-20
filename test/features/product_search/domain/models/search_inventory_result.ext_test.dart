@@ -16,7 +16,6 @@ Future<void> main() async {
       name: 'milkuat cokelat malt uht 115ml  pcs',
       brandName: 'milkuat',
       description: 'Dummy description',
-      imagesUrls: ['milkuatcokelatmaltuht115mlpcs.jpg'],
       storeId: 'store_11',
       variants: [
         Variant(
