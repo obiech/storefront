@@ -2,9 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/profile/blocs/language_selection/language_selection_cubit.dart';
 import 'package:storefront_app/features/profile/index.dart';
+import 'package:storefront_app/features/profile/widgets/language_selection/language_selection_bottomsheet.dart';
 import 'package:storefront_app/features/profile/widgets/widgets.dart';
 
 import '../../../../test_commons/fixtures/profile/profile_model.dart';
@@ -15,10 +18,12 @@ import '../mocks.dart';
 void main() {
   late StackRouter stackRouter;
   late ProfileCubit profileCubit;
+  late LanguageSelectionCubit languageSelectionCubit;
 
   setUp(() {
     stackRouter = MockStackRouter();
     profileCubit = MockProfileCubit();
+    languageSelectionCubit = MockLanguageSelectionCubit();
 
     when(() => profileCubit.state).thenReturn(const ProfileLoaded(mockProfile));
 
@@ -107,29 +112,6 @@ void main() {
       );
 
       testWidgets(
-        'should navigate to Help Page '
-        'when Help tile is tapped',
-        (tester) async {
-          final context =
-              await tester.pumpProfilePage(stackRouter, profileCubit);
-
-          await tester.tap(find.text(context.res.strings.help));
-          await tester.pumpAndSettle();
-
-          final capturedRoutes =
-              verify(() => stackRouter.push(captureAny())).captured;
-
-          // there should only be one route that's being pushed
-          expect(capturedRoutes.length, 1);
-
-          final routeInfo = capturedRoutes.first as PageRouteInfo;
-
-          // expecting the right route being pushed
-          expect(routeInfo, isA<HelpRoute>());
-        },
-      );
-
-      testWidgets(
         'should navigate to Change Address Page '
         'when Change Address tile is tapped',
         (tester) async {
@@ -151,6 +133,28 @@ void main() {
           expect(routeInfo, isA<ChangeAddressRoute>());
         },
       );
+
+      testWidgets(
+        'should open Language Selection bottom sheet '
+        'when Select Language tile is tapped',
+        (tester) async {
+          when(() => languageSelectionCubit.state).thenReturn(
+            const LanguageSelectionState(locale: Locale('id', 'ID')),
+          );
+
+          GetIt.instance.registerSingleton<LanguageSelectionCubit>(
+            languageSelectionCubit,
+          );
+
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
+
+          await tester.tap(find.text(context.res.strings.selectLanguage));
+          await tester.pumpAndSettle();
+
+          expect(find.byType(LanguageSelectionBottomSheet), findsOneWidget);
+        },
+      );
     });
 
     group('ProfileGeneralSection', () {
@@ -166,6 +170,29 @@ void main() {
           expect(find.text(context.res.strings.termsOfUse), findsOneWidget);
           expect(find.text(context.res.strings.howItWorks), findsOneWidget);
           expect(find.text(context.res.strings.aboutUs), findsOneWidget);
+        },
+      );
+
+      testWidgets(
+        'should navigate to Help Page '
+        'when Help tile is tapped',
+        (tester) async {
+          final context =
+              await tester.pumpProfilePage(stackRouter, profileCubit);
+
+          await tester.tap(find.text(context.res.strings.help));
+          await tester.pumpAndSettle();
+
+          final capturedRoutes =
+              verify(() => stackRouter.push(captureAny())).captured;
+
+          // there should only be one route that's being pushed
+          expect(capturedRoutes.length, 1);
+
+          final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+          // expecting the right route being pushed
+          expect(routeInfo, isA<HelpRoute>());
         },
       );
     });

@@ -39,7 +39,7 @@ class DropezyBottomSheet extends StatelessWidget {
   /// [buttonOnLabel] -- label for the Primary Button
   /// [buttonOnPressed] -- callback for the Primary Button
   factory DropezyBottomSheet.singleButton({
-    required String svgIconPath,
+    String? svgIconPath,
     required Widget content,
     required String buttonLabel,
     required VoidCallback buttonOnPressed,
@@ -52,7 +52,7 @@ class DropezyBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SvgPicture.asset(svgIconPath),
+          if (svgIconPath != null) SvgPicture.asset(svgIconPath),
           const SizedBox(height: 16),
           content,
           const SizedBox(height: 16),

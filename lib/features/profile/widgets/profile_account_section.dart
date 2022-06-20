@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:storefront_app/core/core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/core.dart';
+import '../../../di/injection.dart';
+import '../blocs/language_selection/language_selection_cubit.dart';
+import 'language_selection/language_selection_bottomsheet.dart';
 import 'widgets.dart';
 
 class ProfileAccountSection extends StatelessWidget {
@@ -39,11 +43,18 @@ class ProfileAccountSection extends StatelessWidget {
               );
             },
           ),
-          // TODO (widy): Handle Select Language
           ProfileMenuTile.icon(
             icon: DropezyIcons.language,
             title: context.res.strings.selectLanguage,
-            onTap: () {},
+            onTap: () {
+              showDropezyBottomSheet(
+                context,
+                (_) => BlocProvider.value(
+                  value: getIt<LanguageSelectionCubit>(),
+                  child: const LanguageSelectionBottomSheet(),
+                ),
+              );
+            },
           ),
         ],
       ),
