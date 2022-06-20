@@ -76,6 +76,13 @@ extension CartModelX on CartModel {
   List<CartItemModel> get outOfStockItems =>
       items.where((item) => item.variant.isOutOfStock).toList();
 
+  /// Total product items in cart
+  int productStockInCart(String productId) =>
+      items.where((item) => item.variant.productId == productId).fold(
+            0,
+            (prev, cartItem) => prev + cartItem.quantity,
+          );
+
   /// Returns [true] if cart is empty
   bool get isEmpty => items.isEmpty;
 }

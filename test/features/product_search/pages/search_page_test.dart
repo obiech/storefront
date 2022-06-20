@@ -4,10 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/home/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../commons.dart';
+import '../../cart_checkout/mocks.dart';
 import '../fixtures.dart';
 import '../mocks.dart';
 
@@ -17,6 +20,7 @@ extension WidgetTesterX on WidgetTester {
     AutosuggestionBloc autosuggestionBloc,
     SearchHistoryCubit historyCubit,
     HomeNavCubit homeNavCubit,
+    CartBloc cartBloc,
   ) async {
     await pumpWidget(
       MultiBlocProvider(
@@ -25,6 +29,7 @@ extension WidgetTesterX on WidgetTester {
           BlocProvider(create: (context) => autosuggestionBloc),
           BlocProvider(create: (context) => historyCubit),
           BlocProvider(create: (context) => homeNavCubit),
+          BlocProvider(create: (context) => cartBloc),
         ],
         child: const MaterialApp(
           home: Scaffold(
@@ -43,6 +48,7 @@ void main() {
   late HomeNavCubit homeNavCubit;
   late ISearchHistoryRepository searchHistoryRepository;
   late IProductSearchRepository repository;
+  late CartBloc cartBloc;
 
   setUp(() {
     repository = MockProductSearchRepository();
@@ -60,6 +66,12 @@ void main() {
     autosuggestionBloc = AutosuggestionBloc(repository);
     historyCubit = SearchHistoryCubit(searchHistoryRepository);
     homeNavCubit = HomeNavCubit();
+
+    // Cart
+    cartBloc = MockCartBloc();
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(mockCartModel));
   });
 
   setUpAll(() {
@@ -74,6 +86,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      cartBloc,
     );
 
     await tester.pumpAndSettle();
@@ -101,6 +114,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      cartBloc,
     );
 
     await tester.pumpAndSettle();
@@ -143,6 +157,7 @@ void main() {
       autosuggestionBloc,
       historyCubit,
       homeNavCubit,
+      cartBloc,
     );
 
     await tester.pumpAndSettle();

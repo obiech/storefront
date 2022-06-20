@@ -14,19 +14,23 @@ class ProductAction extends StatefulWidget {
   /// available quantity is reached
   final Function(bool)? onMaxAvailableQtyChanged;
 
+  /// Toggle widget enabled state
+  final bool isEnabled;
+
   const ProductAction({
     Key? key,
     this.scaleFactor = 1,
     this.productQuantity = 0,
     required this.product,
     this.onMaxAvailableQtyChanged,
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
-  State<ProductAction> createState() => _ProductActionState();
+  State<ProductAction> createState() => _CardProductActionState();
 }
 
-class _ProductActionState extends State<ProductAction> {
+class _CardProductActionState extends State<ProductAction> {
   late Resources res;
 
   // Add to cart / Quantity Changer State
@@ -60,6 +64,7 @@ class _ProductActionState extends State<ProductAction> {
                     '${widget.product.id}_qty_changer',
                   ),
                   scaleFactor: widget.scaleFactor,
+                  isEnabled: widget.isEnabled,
                   onQtyChanged: (qty) => _updateCart(context, qty),
                   value: _qty,
                   stock: widget.product.stock,
@@ -115,13 +120,9 @@ class _ProductActionState extends State<ProductAction> {
     if (widget.product is ProductModel) {
       final product = widget.product as ProductModel;
       if (product.hasMultipleVariants) {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: Colors.transparent,
-          builder: (ctx) {
-            return ProductVariantsList(product: product);
-          },
+        ProductCardUtils.launchVariantBottomSheet(
+          context,
+          product,
         );
       } else {
         if (product.variants.isEmpty) return;
@@ -130,7 +131,10 @@ class _ProductActionState extends State<ProductAction> {
         _isInCart.value = true;
       }
     } else {
-      _addVariantToCart(context, widget.product as VariantModel);
+      _addVariantToCart(
+        context,
+        widget.product as VariantModel,
+      );
 
       _qty = 1;
       _isInCart.value = true;

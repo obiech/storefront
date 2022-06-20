@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../commons.dart';
+import '../../../cart_checkout/mocks.dart';
 import '../../fixtures.dart';
 import '../../mocks.dart';
 import 'test.ext.dart';
 
 void main() {
   late SearchInventoryBloc searchInventoryBloc;
+  late CartBloc cartBloc;
+
   setUp(() {
     searchInventoryBloc = MockSearchInventoryBloc();
+    cartBloc = MockCartBloc();
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(mockCartModel));
   });
 
   setUpAll(() {
@@ -24,6 +33,7 @@ void main() {
         .thenReturn(SearchingForItemInInventory());
     await tester.pumpSearchResultsWidget(
       searchInventoryBloc,
+      cartBloc,
     );
 
     for (int i = 0; i < 5; i++) {
@@ -36,7 +46,7 @@ void main() {
   testWidgets('When no state is available nothing is shown',
       (WidgetTester tester) async {
     when(() => searchInventoryBloc.state).thenReturn(SearchInventoryInitial());
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, cartBloc);
 
     expect(find.byType(SizedBox), findsNWidgets(1));
   });
@@ -46,7 +56,7 @@ void main() {
       (WidgetTester tester) async {
     when(() => searchInventoryBloc.state)
         .thenReturn(const InventoryItemResults(pageInventory));
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, cartBloc);
 
     expect(find.byType(GridView), findsOneWidget);
 

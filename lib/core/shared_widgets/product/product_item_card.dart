@@ -12,9 +12,11 @@ import '../../../features/product/index.dart';
 import '../bottom_sheet/drag_handle.dart';
 import '../buttons/pill_button.dart';
 
+part 'parts/card_product_action.dart';
 part 'parts/out_of_stock_overdraw.dart';
 part 'parts/product_action.dart';
 part 'parts/product_badge.dart';
+part 'parts/product_card_utils.dart';
 part 'parts/product_item_card_loading.dart';
 part 'parts/product_variants_list.dart';
 part 'parts/qty_changer.dart';
@@ -179,13 +181,9 @@ class ProductItemCard extends StatelessWidget {
                     SizedBox(
                       height: 30 * scaleFactor,
                       width: double.infinity,
-                      child: ProductAction(
-                        productQuantity: itemQuantity,
-                        product: product,
+                      child: CardProductAction(
                         scaleFactor: scaleFactor,
-                        onMaxAvailableQtyChanged: (isAtMaxQty) {
-                          // TODO(obella) - Handle for Product Card
-                        },
+                        product: product,
                       ),
                     )
                   ],

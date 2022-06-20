@@ -1,84 +1,64 @@
-import 'package:dropezy_proto/v1/inventory/inventory.pb.dart';
-import 'package:dropezy_proto/v1/search/search.pbgrpc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/product_search/index.dart';
 
+import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../commons.dart';
+import '../../../cart_checkout/mocks.dart';
+import '../../fixtures.dart';
 import '../../mocks.dart';
 import 'test.ext.dart';
 
-Future<void> main() async {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: 'env/.env');
-
+void main() {
   late SearchInventoryBloc searchInventoryBloc;
+  late CartBloc cartBloc;
 
   setUp(() {
     searchInventoryBloc = MockSearchInventoryBloc();
+    cartBloc = MockCartBloc();
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(mockCartModel));
   });
 
   setUpAll(() {
     setUpLocaleInjection();
   });
 
-  testWidgets('When stock is zero, gray out card', (WidgetTester tester) async {
-    /// arrange
-    const productId = '51d44faf';
-
-    final SearchInventoryResponse inventoryResponse = SearchInventoryResponse(
-      results: [
-        SearchInventoryResult(
-          productId: productId,
-          name: 'milkuat cokelat malt uht 115ml  pcs',
-          brandName: 'milkuat',
-          description: 'Dummy description',
-          storeId: 'store_11',
-          variants: [
-            Variant(
-              variantId: 'variant-id',
-              imagesUrls: ['milkuatcokelatmaltuht115mlpcs.jpg'],
-              variantQuantifier: 'ml',
-              variantValue: '500 ml',
-              name: '500 ml',
-              sku: 'sku-000',
-              stock: 0,
-            )
-          ],
-        ),
-      ],
+  testWidgets('When loading, a shimmer is shown', (WidgetTester tester) async {
+    when(() => searchInventoryBloc.state)
+        .thenReturn(SearchingForItemInInventory());
+    await tester.pumpSearchResultsWidget(
+      searchInventoryBloc,
+      cartBloc,
     );
 
-    when(() => searchInventoryBloc.state).thenReturn(
-      InventoryItemResults(
-        inventoryResponse.results.toModel,
-      ),
-    );
+    await tester.pump(const Duration(milliseconds: 400));
 
-    /// act
-    await tester.pumpSearchResultsWidget(searchInventoryBloc);
-    searchInventoryBloc.add(SearchInventory('susu'));
+    expect(find.byType(ProductGridLoading), findsOneWidget);
+  });
 
-    await tester.runAsync(() async {
-      await Future.delayed(const Duration(milliseconds: 400));
+  testWidgets('When no state is available nothing is shown',
+      (WidgetTester tester) async {
+    when(() => searchInventoryBloc.state).thenReturn(SearchInventoryInitial());
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, cartBloc);
 
-      await tester.pumpAndSettle();
+    expect(find.byType(SizedBox), findsNWidgets(1));
+  });
 
-      expect(find.byType(GridView), findsOneWidget);
+  testWidgets(
+      'When inventory items are available, show GridList  list of items',
+      (WidgetTester tester) async {
+    when(() => searchInventoryBloc.state)
+        .thenReturn(const InventoryItemResults(pageInventory));
+    await tester.pumpSearchResultsWidget(searchInventoryBloc, cartBloc);
 
-      final productItemFinder = find.byKey(const ValueKey('product_item0'));
+    expect(find.byType(GridView), findsOneWidget);
 
-      expect(productItemFinder, findsOneWidget);
-      expect(
-        find.descendant(
-          of: productItemFinder,
-          matching: find.byType(OutOfStockOverdraw),
-        ),
-        findsOneWidget,
-      );
-    });
+    final _productWidgets = tester.widgetList(find.byType(ProductItemCard));
+    expect(_productWidgets.length, pageInventory.length);
   });
 }

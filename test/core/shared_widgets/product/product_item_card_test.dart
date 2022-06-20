@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/product/domain/domain.dart';
 import 'package:storefront_app/res/strings/english_strings.dart';
 
+import '../../../../test_commons/fixtures/cart/cart_models.dart'
+    as cart_fixtures;
 import '../../../../test_commons/fixtures/product/product_models.dart';
 import '../../../../test_commons/utils/locale_setup.dart';
+import '../../../features/cart_checkout/mocks.dart';
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpProductItemCard(
-    ProductModel productModel, {
+    ProductModel productModel,
+    CartBloc cartBloc, {
     int itemQuantity = 0,
     ProductCallback? onTap,
   }) async {
     await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: AspectRatio(
-            aspectRatio: 13 / 25,
-            child: ProductItemCard(
-              product: productModel,
-              itemQuantity: itemQuantity,
-              onTap: onTap,
+      BlocProvider(
+        create: (context) => cartBloc,
+        child: MaterialApp(
+          home: Scaffold(
+            body: AspectRatio(
+              aspectRatio: 13 / 25,
+              child: ProductItemCard(
+                product: productModel,
+                onTap: onTap,
+              ),
             ),
           ),
         ),
@@ -32,6 +41,14 @@ extension WidgetTesterX on WidgetTester {
 
 void main() {
   const product = seledaRomaine;
+  late CartBloc cartBloc;
+  const mockCart = cart_fixtures.mockCartModel;
+
+  setUp(() {
+    cartBloc = MockCartBloc();
+
+    when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(mockCart));
+  });
 
   setUpAll(() {
     setUpLocaleInjection();
@@ -46,6 +63,7 @@ void main() {
         stock: 0,
         status: ProductModelStatus.OUT_OF_STOCK,
       ),
+      cartBloc,
     );
 
     expect(find.byType(OutOfStockOverdraw), findsOneWidget);
@@ -64,7 +82,7 @@ void main() {
 
   testWidgets('should display product name', (WidgetTester tester) async {
     /// arrange
-    await tester.pumpProductItemCard(product);
+    await tester.pumpProductItemCard(product, cartBloc);
 
     /// assert
     expect(find.text(product.name.capitalize()), findsOneWidget);
@@ -72,7 +90,7 @@ void main() {
 
   testWidgets('should display product unit', (WidgetTester tester) async {
     /// arrange
-    await tester.pumpProductItemCard(product);
+    await tester.pumpProductItemCard(product, cartBloc);
 
     /// assert
     expect(find.text(product.unit), findsOneWidget);
@@ -80,7 +98,7 @@ void main() {
 
   testWidgets('should display product price', (WidgetTester tester) async {
     /// arrange
-    await tester.pumpProductItemCard(product);
+    await tester.pumpProductItemCard(product, cartBloc);
 
     /// assert
     expect(find.text(product.price.toCurrency()), findsOneWidget);
@@ -92,6 +110,7 @@ void main() {
     bool isTapped = false;
     await tester.pumpProductItemCard(
       product,
+      cartBloc,
       onTap: (_) {
         isTapped = true;
       },

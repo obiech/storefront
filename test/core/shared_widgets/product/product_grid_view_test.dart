@@ -1,24 +1,32 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
 
+import '../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../test_commons/fixtures/product/product_models.dart'
     as fixtures;
 import '../../../../test_commons/utils/locale_setup.dart';
+import '../../../features/cart_checkout/mocks.dart';
 import '../../../src/mock_navigator.dart';
 
 extension WidgetTesterX on WidgetTester {
-  Future<void> pumpProductGridView({
+  Future<void> pumpProductGridView(
+    CartBloc cartBloc, {
     StackRouter? stackRouter,
   }) async {
     await pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: ProductGridView(
-            productModelList: fixtures.fakeCategoryProductList,
-            columns: 2,
+      BlocProvider(
+        create: (context) => cartBloc,
+        child: MaterialApp(
+          home: Scaffold(
+            body: ProductGridView(
+              productModelList: fixtures.fakeCategoryProductList,
+              columns: 2,
+            ),
           ),
         ),
       ).withRouterScope(stackRouter),
@@ -27,6 +35,15 @@ extension WidgetTesterX on WidgetTester {
 }
 
 void main() {
+  late CartBloc cartBloc;
+
+  setUp(() {
+    cartBloc = MockCartBloc();
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(mockCartModel));
+  });
+
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
     setUpLocaleInjection();
@@ -34,7 +51,7 @@ void main() {
 
   testWidgets('Should display a grid of [ProductItemCard]',
       (WidgetTester tester) async {
-    await tester.pumpProductGridView();
+    await tester.pumpProductGridView(cartBloc);
 
     expect(find.byType(GridView), findsOneWidget);
     expect(
@@ -50,7 +67,7 @@ void main() {
     final stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((_) async => null);
 
-    await tester.pumpProductGridView(stackRouter: stackRouter);
+    await tester.pumpProductGridView(cartBloc, stackRouter: stackRouter);
 
     /// act
     final productList = fixtures.fakeCategoryProductList;

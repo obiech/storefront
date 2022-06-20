@@ -28,6 +28,9 @@ class QtyChanger extends StatefulWidget {
   /// Widget, Scale factor
   final double scaleFactor;
 
+  /// Toggle widget enabled state
+  final bool isEnabled;
+
   const QtyChanger({
     Key? key,
     required this.onQtyChanged,
@@ -37,7 +40,7 @@ class QtyChanger extends StatefulWidget {
     this.scaleFactor = 1,
     this.onMaxAvailableQtyChanged,
     this.maxValue,
-    // required this.stock,
+    this.isEnabled = true,
   }) : super(key: key);
 
   @override
@@ -75,16 +78,18 @@ class _QtyChangerState extends State<QtyChanger> {
               fillColor: res.colors.blue,
               elevation: 0,
               shape: const CircleBorder(),
-              onPressed: () {
-                if (_valueNotifier.value > 0) {
-                  _valueNotifier.value--;
-                  widget.onQtyChanged(_valueNotifier.value);
+              onPressed: widget.isEnabled
+                  ? () {
+                      if (_valueNotifier.value > 0) {
+                        _valueNotifier.value--;
+                        widget.onQtyChanged(_valueNotifier.value);
 
-                  if (_valueNotifier.value + 1 == widget.maxValue) {
-                    widget.onMaxAvailableQtyChanged?.call(false);
-                  }
-                }
-              },
+                        if (_valueNotifier.value + 1 == widget.maxValue) {
+                          widget.onMaxAvailableQtyChanged?.call(false);
+                        }
+                      }
+                    }
+                  : () {},
               child: Icon(
                 DropezyIcons.minus,
                 size: widget.iconSize * widget.scaleFactor,
