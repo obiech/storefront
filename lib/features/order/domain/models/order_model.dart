@@ -31,20 +31,26 @@ class OrderModel extends Equatable {
   });
 
   factory OrderModel.fromPb(pb.Order order) {
-    // TODO (leovinsen): Implement mapping to status inDelivery
     late OrderStatus orderStatus;
     switch (order.state) {
       case pb.OrderState.ORDER_STATE_CANCELLED:
         orderStatus = OrderStatus.cancelled;
         break;
       case pb.OrderState.ORDER_STATE_CREATED:
+      case pb.OrderState.ORDER_STATE_WAITING_FOR_PAYMENT:
         orderStatus = OrderStatus.awaitingPayment;
         break;
-      case pb.OrderState.ORDER_STATE_DONE:
-        orderStatus = OrderStatus.arrived;
-        break;
       case pb.OrderState.ORDER_STATE_PAID:
+      case pb.OrderState.ORDER_STATE_CONFIRMED:
+      case pb.OrderState.ORDER_STATE_IN_PROCESS:
         orderStatus = OrderStatus.paid;
+        break;
+      case pb.OrderState.ORDER_STATE_IN_DELIVERY:
+        orderStatus = OrderStatus.inDelivery;
+        break;
+      case pb.OrderState.ORDER_STATE_DONE:
+      case pb.OrderState.ORDER_STATE_IN_COMPLETED:
+        orderStatus = OrderStatus.arrived;
         break;
       case pb.OrderState.ORDER_STATE_FAILED:
         orderStatus = OrderStatus.failed;
