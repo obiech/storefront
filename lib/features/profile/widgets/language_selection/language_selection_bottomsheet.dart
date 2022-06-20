@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storefront_app/features/home/index.dart';
 
 import '../../../../core/core.dart';
 import '../../blocs/language_selection/language_selection_cubit.dart';
@@ -12,8 +13,11 @@ const Locale _id = Locale('id', 'ID');
 const Locale _en = Locale('en', 'EN');
 
 class LanguageSelectionBottomSheet extends StatelessWidget {
+  final BuildContext mainContext;
+
   const LanguageSelectionBottomSheet({
     Key? key,
+    required this.mainContext,
   }) : super(key: key);
 
   @override
@@ -22,6 +26,10 @@ class LanguageSelectionBottomSheet extends StatelessWidget {
       listenWhen: (previous, current) => current.localeUpdated,
       listener: (context, state) {
         Navigator.pop(context);
+
+        /// Refresh main page to get updated string
+        /// and refresh C1 with updated locale
+        MainPage.refreshPage(mainContext);
       },
       child: DropezyBottomSheet.singleButton(
         marginTop: 36,

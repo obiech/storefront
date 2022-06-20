@@ -51,7 +51,9 @@ class ProfileAccountSection extends StatelessWidget {
                 context,
                 (_) => BlocProvider.value(
                   value: getIt<LanguageSelectionCubit>(),
-                  child: const LanguageSelectionBottomSheet(),
+                  child: LanguageSelectionBottomSheet(
+                    mainContext: context,
+                  ),
                 ),
               );
             },

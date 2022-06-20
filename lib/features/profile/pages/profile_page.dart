@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropezyScaffold.textTitle(
-      title: 'Profile',
+      title: context.res.strings.profile,
       header: const ProfileHeader(),
       child: SingleChildScrollView(
         child: SafeArea(

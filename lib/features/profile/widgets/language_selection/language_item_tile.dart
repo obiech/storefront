@@ -19,6 +19,9 @@ class LanguageItemTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         onTap: onTap,
         child: Column(

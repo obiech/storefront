@@ -139,7 +139,7 @@ extension WidgetTesterX on WidgetTester {
             return Scaffold(
               body: BlocProvider<LanguageSelectionCubit>(
                 create: (_) => languageSelectionCubit,
-                child: const LanguageSelectionBottomSheet(),
+                child: LanguageSelectionBottomSheet(mainContext: context),
               ),
             );
           },
