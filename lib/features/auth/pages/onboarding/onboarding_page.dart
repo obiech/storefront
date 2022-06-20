@@ -24,6 +24,7 @@ class _OnboardingPageState extends State<OnboardingPage> with AfterLayoutMixin {
         context.res.strings.youveLogoutSuccesfully,
         color: DropezyColors.green,
         leading: const Icon(DropezyIcons.radio_checked),
+        duration: const Duration(seconds: 2),
       );
     }
   }
