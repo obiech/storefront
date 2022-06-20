@@ -616,6 +616,25 @@ class EnglishStrings implements BaseStrings {
   String updatedAddressSnackBarContent(String newAddress) =>
       'Address successfully changed to $newAddress';
 
+  /// Search Address
+  @override
+  String get useCurrentLocation => 'Use current location';
+
+  @override
+  String get viewMap => 'View Map';
+
+  @override
+  String get typeYourAddress => 'Type Your Address';
+
+  @override
+  String get searchAddressEmpty => "Can't find address";
+
+  @override
+  String get searchHistory => 'Search History';
+
+  @override
+  String get searchSuggestion => 'Suggestions';
+
   /// Address Detail
   @override
   String get addressName => 'Address Name';
@@ -675,9 +694,6 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get locationConfirm => 'Location Confirm';
-
-  @override
-  String get viewMap => 'View Map';
 
   /// Help Page
   @override

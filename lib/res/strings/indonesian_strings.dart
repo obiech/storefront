@@ -616,6 +616,25 @@ class IndonesianStrings implements BaseStrings {
   String updatedAddressSnackBarContent(String newAddress) =>
       'Alamat berhasil diubah ke $newAddress';
 
+  /// Search Address
+  @override
+  String get useCurrentLocation => 'Gunakan lokasi saat ini';
+
+  @override
+  String get viewMap => 'Lihat Peta';
+
+  @override
+  String get typeYourAddress => 'Ketik Alamat';
+
+  @override
+  String get searchAddressEmpty => 'Tidak dapat menemukan alamat';
+
+  @override
+  String get searchHistory => 'Terakhir Dicari';
+
+  @override
+  String get searchSuggestion => 'Saran';
+
   /// Address Detail
   @override
   String get addressName => 'Nama Alamat';
@@ -675,9 +694,6 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get locationConfirm => 'Konfirmasi Lokasi';
-
-  @override
-  String get viewMap => 'Lihat Peta';
 
   /// Help Page
   @override

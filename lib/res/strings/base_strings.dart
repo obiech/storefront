@@ -409,6 +409,17 @@ abstract class BaseStrings {
 
   String updatedAddressSnackBarContent(String newAddress);
 
+  /// Search Address
+  String get useCurrentLocation;
+
+  String get typeYourAddress;
+
+  String get searchAddressEmpty;
+
+  String get searchHistory;
+
+  String get searchSuggestion;
+
   /// Address Detail
   String get addressName;
 

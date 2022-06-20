@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
-// TODO (widy): Fix translations
-// https://dropezy.atlassian.net/browse/STOR-622
 class SearchLocationResult extends StatelessWidget {
   const SearchLocationResult({Key? key}) : super(key: key);
 
@@ -20,7 +18,7 @@ class SearchLocationResult extends StatelessWidget {
             builder: (context, state) {
               if (state is SearchLocationInitial) {
                 return Text(
-                  'Terakhir Dicari',
+                  context.res.strings.searchHistory,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -28,7 +26,7 @@ class SearchLocationResult extends StatelessWidget {
                 );
               } else {
                 return Text(
-                  'Saran',
+                  context.res.strings.searchSuggestion,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -107,7 +105,9 @@ class SearchLocationResult extends StatelessWidget {
                   } else if (state is SearchLocationInitial) {
                     return const SearchLocationHistoryList();
                   } else if (state is SearchLocationLoadedEmpty) {
-                    return const Text("Can't find address");
+                    return Text(context.res.strings.searchAddressEmpty);
+                  } else if (state is SearchLocationError) {
+                    return Text(state.message);
                   } else {
                     return const CircularProgressIndicator();
                   }
