@@ -46,7 +46,9 @@ class ParentCategoriesGrid extends StatelessWidget {
               crossAxisSpacing: horizontalSpacing,
               mainAxisSpacing: verticalSpacing,
             ),
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(
+              bottom: context.res.dimens.minOffsetForCartSummary,
+            ),
             itemCount: state.parentCategoryList.length,
             itemBuilder: (context, index) {
               return GridTile(
