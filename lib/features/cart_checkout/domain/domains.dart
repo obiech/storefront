@@ -12,3 +12,4 @@ export 'services/cart_service.dart';
 export 'services/dummy_cart_service.dart';
 export 'services/payment_service.dart';
 export 'utils/checkout_utils.dart';
+export 'utils/launch_go_pay.dart';

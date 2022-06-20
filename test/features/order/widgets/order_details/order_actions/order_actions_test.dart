@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/cart_checkout/domain/utils/launch_go_pay.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../commons.dart';
 import '../../../../../src/mock_navigator.dart';
+import '../../../mocks.dart';
 
 void main() {
   late StackRouter stackRouter;
@@ -109,5 +109,3 @@ extension WidgetTesterX on WidgetTester {
     );
   }
 }
-
-class MockGoPayLaunch extends Mock implements LaunchGoPay {}

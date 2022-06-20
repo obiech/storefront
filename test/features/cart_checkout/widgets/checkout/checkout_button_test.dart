@@ -12,10 +12,12 @@ import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
 import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
+import '../../../order/mocks.dart';
 import '../../mocks.dart';
 
 void main() {
   late StackRouter stackRouter;
+  late LaunchGoPay goPayLauncher;
 
   setUpAll(() {
     setUpLocaleInjection();
@@ -39,6 +41,10 @@ void main() {
 
     paymentMethodCubit = PaymentMethodCubit(paymentRepository);
 
+    // GoPay
+    goPayLauncher = MockGoPayLaunch();
+    when(() => goPayLauncher.call(any())).thenAnswer((_) async {});
+
     // Navigation
     stackRouter = MockStackRouter();
     when(() => stackRouter.replace(any())).thenAnswer((_) async => null);
@@ -58,6 +64,7 @@ void main() {
       cartBloc,
       paymentCheckoutCubit,
       paymentMethodCubit,
+      launchGoPay: goPayLauncher,
     );
     await tester.pumpAndSettle();
 
@@ -85,6 +92,7 @@ void main() {
       cartBloc,
       paymentCheckoutCubit,
       paymentMethodCubit,
+      launchGoPay: goPayLauncher,
     );
     await tester.pumpAndSettle();
 
@@ -120,6 +128,7 @@ void main() {
       paymentCheckoutCubit,
       paymentMethodCubit,
       stackRouter: stackRouter,
+      launchGoPay: goPayLauncher,
     );
     await paymentMethodCubit.queryPaymentMethods();
     await tester.pumpAndSettle();
@@ -165,6 +174,7 @@ void main() {
       cartBloc,
       paymentCheckoutCubit,
       paymentMethodCubit,
+      launchGoPay: goPayLauncher,
     );
     await tester.pumpAndSettle();
     await paymentMethodCubit.queryPaymentMethods();
@@ -221,6 +231,7 @@ void main() {
       paymentCheckoutCubit,
       paymentMethodCubit,
       stackRouter: stackRouter,
+      launchGoPay: goPayLauncher,
     );
 
     await paymentMethodCubit.queryPaymentMethods();
@@ -252,6 +263,55 @@ void main() {
     expect(args.paymentMethod, paymentResults.paymentMethod);
     expect(args.paymentInformation, paymentResults.paymentInformation);
   });
+
+  testWidgets(
+      'should got to launch [Gojek] '
+      'when checkout is successful '
+      'and payment method is [GOPAY]', (WidgetTester tester) async {
+    // arrange
+    when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
+    when(() => cartBloc.add(any())).thenAnswer((_) {});
+
+    when(() => paymentRepository.getPaymentMethods()).thenAnswer(
+      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+    );
+
+    final paymentResults = mockGoPayPaymentResults;
+
+    when(() => paymentRepository.checkoutPayment(any()))
+        .thenAnswer((_) async => right(paymentResults));
+
+    String? calledDeeplink;
+
+    when(() => goPayLauncher.call(any())).thenAnswer((invocation) async {
+      calledDeeplink = invocation.positionalArguments.first as String;
+    });
+
+    // act
+    await tester.pumpCheckoutButton(
+      cartBloc,
+      paymentCheckoutCubit,
+      paymentMethodCubit,
+      stackRouter: stackRouter,
+      launchGoPay: goPayLauncher,
+    );
+
+    await paymentMethodCubit.queryPaymentMethods();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(CheckoutButton));
+
+    // assert
+    verify(
+      () => goPayLauncher
+          .call(mockGoPayPaymentResults.paymentInformation.deeplink ?? ''),
+    ).called(1);
+
+    expect(
+      mockGoPayPaymentResults.paymentInformation.deeplink ?? '',
+      calledDeeplink,
+    );
+  });
 }
 
 extension WidgetTesterX on WidgetTester {
@@ -260,6 +320,7 @@ extension WidgetTesterX on WidgetTester {
     PaymentCheckoutCubit paymentCheckoutCubit,
     PaymentMethodCubit paymentMethodCubit, {
     StackRouter? stackRouter,
+    required LaunchGoPay launchGoPay,
   }) async {
     await pumpWidget(
       MultiBlocProvider(
@@ -275,8 +336,10 @@ extension WidgetTesterX on WidgetTester {
           ),
         ],
         child: MaterialApp(
-          home: const Scaffold(
-            body: CheckoutButton(),
+          home: Scaffold(
+            body: CheckoutButton(
+              launchGoPay: launchGoPay,
+            ),
           ).withRouterScope(stackRouter),
         ),
       ),

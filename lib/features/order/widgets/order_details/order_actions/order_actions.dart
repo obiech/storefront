@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/cart_checkout/domain/utils/launch_go_pay.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../index.dart';

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:storefront_app/core/core.dart';
@@ -8,7 +9,10 @@ import 'keys.dart';
 
 /// Handles payment method checkout and deep-linking
 class CheckoutButton extends StatelessWidget {
-  const CheckoutButton({Key? key}) : super(key: key);
+  const CheckoutButton({Key? key, this.launchGoPay = const LaunchGoPay()})
+      : super(key: key);
+
+  final LaunchGoPay launchGoPay;
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +24,25 @@ class CheckoutButton extends StatelessWidget {
           // Reload Cart
           context.read<CartBloc>().add(const LoadCart());
 
+          final paymentResults = state.paymentResults;
+
           context.router.replace(
             OrderRouter(
               children: [
                 OrderDetailsRoute(
-                  order: state.paymentResults.order,
-                  paymentMethod: state.paymentResults.paymentMethod,
-                  paymentInformation: state.paymentResults.paymentInformation,
+                  order: paymentResults.order,
+                  paymentMethod: paymentResults.paymentMethod,
+                  paymentInformation: paymentResults.paymentInformation,
                 )
               ],
             ),
           );
+
+          // Open GoPay app
+          if (paymentResults.paymentMethod ==
+              PaymentMethod.PAYMENT_METHOD_GOPAY) {
+            launchGoPay(paymentResults.paymentInformation.deeplink ?? '');
+          }
         } else if (state is ErrorLoadingPaymentCheckout) {
           context.showToast(
             state.message,
