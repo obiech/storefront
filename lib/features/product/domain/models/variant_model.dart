@@ -30,36 +30,11 @@ class VariantModel extends BaseProduct {
         );
 
   /// Creates a [VariantModel] from gRPC [Variant]
-  ///
-  /// P.S: Variant Name is empty
   factory VariantModel.fromPb(Variant productVariant) {
     final imageUrls = productVariant.toImageUrls;
     return VariantModel(
       variantId: productVariant.variantId,
       name: productVariant.name,
-      imagesUrls: imageUrls,
-      defaultImageUrl: imageUrls.isEmpty ? '' : imageUrls.first,
-      price: productVariant.price.num,
-      sku: productVariant.sku,
-      stock: productVariant.stock,
-      unit: productVariant.toUnit,
-      maxQty: productVariant.maximumOrder,
-    );
-  }
-
-  /// Creates a [VariantModel] from gRPC [Variant]
-  ///
-  /// P.S: Variant Name come from Concatenating
-  /// [ProductModel.name], [Variant.variantValue] & [Variant.variantQuantifier]
-  factory VariantModel.fromPbAndProductName(
-    Variant productVariant,
-    String productName,
-  ) {
-    final imageUrls = productVariant.toImageUrls;
-    return VariantModel(
-      variantId: productVariant.variantId,
-      name:
-          '$productName ${productVariant.variantValue} ${productVariant.variantQuantifier}',
       imagesUrls: imageUrls,
       defaultImageUrl: imageUrls.isEmpty ? '' : imageUrls.first,
       price: productVariant.price.num,

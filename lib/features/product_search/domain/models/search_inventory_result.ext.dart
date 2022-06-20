@@ -24,9 +24,8 @@ extension SearchInventoryResultX on SearchInventoryResult {
       status: overallStock < 1
           ? ProductModelStatus.OUT_OF_STOCK
           : ProductModelStatus.ACTIVE,
-      variants: variants
-          .map((variant) => VariantModel.fromPbAndProductName(variant, name))
-          .toList(),
+      variants:
+          variants.map((variant) => VariantModel.fromPb(variant)).toList(),
       defaultProduct: defaultVariant.id,
     );
   }

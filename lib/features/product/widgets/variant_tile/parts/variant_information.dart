@@ -17,7 +17,7 @@ class VariantInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          variant.name,
+          variant.unit,
           key: VariantTileKeys.variantNameKey,
           style: context.res.styles.caption1,
           maxLines: 3,

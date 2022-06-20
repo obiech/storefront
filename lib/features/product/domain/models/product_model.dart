@@ -59,10 +59,7 @@ class ProductModel extends BaseProduct {
       name: inventoryProduct.name,
       variants: inventoryProduct.variants
           .map(
-            (variant) => VariantModel.fromPbAndProductName(
-              variant,
-              inventoryProduct.name,
-            ),
+            (variant) => VariantModel.fromPb(variant),
           )
           .toList(),
       defaultProduct: baseVariant.id,
