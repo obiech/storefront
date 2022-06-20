@@ -40,7 +40,7 @@ class OrderDetailsView extends StatelessWidget {
                     if (order.status == OrderStatus.inDelivery ||
                         order.status == OrderStatus.arrived) ...[
                       DriverAndRecipientSection(
-                        driverModel: order.driver!,
+                        driverModel: order.driver,
                         recipientModel: order.recipient,
                       ),
                       const ThickDivider(),

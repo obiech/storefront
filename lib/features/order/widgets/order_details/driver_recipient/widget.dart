@@ -18,7 +18,7 @@ class DriverAndRecipientSection extends StatelessWidget {
     this.recipientModel,
   }) : super(key: key);
 
-  final OrderDriverModel driverModel;
+  final OrderDriverModel? driverModel;
 
   final OrderRecipientModel? recipientModel;
 
@@ -38,17 +38,18 @@ class DriverAndRecipientSection extends StatelessWidget {
             ),
           ),
           SizedBox(height: context.res.dimens.spacingMedium),
-          _PersonInfoWidget(
-            key: const ValueKey(
-              DriverAndRecipientSectionKeys.driverInformation,
+          if (driverModel != null)
+            _PersonInfoWidget(
+              key: const ValueKey(
+                DriverAndRecipientSectionKeys.driverInformation,
+              ),
+              imageUrl: driverModel!.imageUrl,
+              personName: driverModel!.fullName,
+              additionalDescription: driverModel!.vehicleLicenseNumber,
+              trailing: _ContactDriverButton(
+                onPressed: () => _contactDriverOnWhatsapp(context),
+              ),
             ),
-            imageUrl: driverModel.imageUrl,
-            personName: driverModel.fullName,
-            additionalDescription: driverModel.vehicleLicenseNumber,
-            trailing: _ContactDriverButton(
-              onPressed: () => _contactDriverOnWhatsapp(context),
-            ),
-          ),
           if (recipientModel != null) ...[
             Divider(
               // margin of 12 dp on both vertical sides
@@ -79,7 +80,7 @@ class DriverAndRecipientSection extends StatelessWidget {
 
   Future<void> _contactDriverOnWhatsapp(BuildContext context) async {
     final whatsappDeeplink = context.res.links.whatsappDeeplink(
-      driverModel.whatsappNumber,
+      driverModel!.whatsappNumber,
     );
 
     if (await canLaunch(whatsappDeeplink)) {
