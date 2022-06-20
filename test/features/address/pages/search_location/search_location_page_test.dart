@@ -141,6 +141,25 @@ void main() {
     },
   );
 
+  testWidgets(
+    'should add UseCurrentLocation to bloc '
+    'when use current location button is pressed',
+    (tester) async {
+      await tester.pumpSearchLocationPage(
+        stackRouter: stackRouter,
+        bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
+      );
+
+      await tester
+          .tap(find.byKey(SearchLocationPageKeys.useCurrentLocationButton));
+      await tester.pumpAndSettle();
+
+      verify(() => searchLocationBloc.add(const UseCurrentLocation()))
+          .called(1);
+    },
+  );
+
   group('search location history', () {
     final placeModelList = placesResultList
         .map((place) => PlaceModel.fromPlacesService(place))

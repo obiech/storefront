@@ -5,6 +5,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+part 'keys.dart';
 part 'wrapper.dart';
 
 class SearchLocationPage extends StatelessWidget {

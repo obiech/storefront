@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/domain/services/search_location_service.dart';
@@ -12,6 +13,7 @@ void main() {
   late SearchLocationService searchLocationService;
 
   const query = 'Lebak Bulus';
+  const latLng = LatLng(-6.1754463, 106.8377065);
 
   setUp(() {
     placesService = MockDropezyPlacesService();
@@ -88,6 +90,43 @@ void main() {
         expect(failure, isA<Failure>());
         expect(failure.message, 'An unknown error has occured');
         verify(() => placesService.getPlaceDetailsModel(id)).called(1);
+      },
+    );
+  });
+
+  group('getCurrentLocation', () {
+    test(
+      'should return AddressDetailsModel '
+      'when getCurrentLocation is called '
+      'and request is successful',
+      () async {
+        when(() => placesService.getPlaceDetailsFromLocation(latLng))
+            .thenAnswer((_) async => placeDetails);
+
+        final result = await searchLocationService.getCurrentLocation(latLng);
+
+        expect(result, right(placeDetails));
+        verify(() => placesService.getPlaceDetailsFromLocation(latLng))
+            .called(1);
+      },
+    );
+
+    test(
+      'should return failure '
+      'when getCurrentLocation is called '
+      'and exception is thrown',
+      () async {
+        final exception = Exception('Error!');
+        when(() => placesService.getPlaceDetailsFromLocation(latLng))
+            .thenThrow(exception);
+
+        final result = await searchLocationService.getCurrentLocation(latLng);
+
+        final failure = result.getLeft();
+        expect(failure, isA<Failure>());
+        expect(failure.message, 'An unknown error has occured');
+        verify(() => placesService.getPlaceDetailsFromLocation(latLng))
+            .called(1);
       },
     );
   });

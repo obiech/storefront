@@ -7,6 +7,7 @@ export 'dartz.ext.dart';
 export 'date_time_provider.dart';
 export 'datetime.ext.dart';
 export 'dotenv.ext.dart';
+export 'dropezy_geolocator.dart';
 export 'dropezy_places_service.dart';
 export 'exceptions.dart';
 export 'is_test_mode.dart';

@@ -1,6 +1,8 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
@@ -10,14 +12,27 @@ import '../../mocks.dart';
 
 void main() {
   late ISearchLocationRepository searchRepository;
+  late DropezyGeolocator geolocator;
   late SearchLocationBloc searchLocationBloc;
 
   const query = 'Lebak Bulus';
   const placeId = 'placeId';
+  const latLng = LatLng(-6.1754463, 106.8377065);
+  final position = Position(
+    longitude: latLng.longitude,
+    latitude: latLng.latitude,
+    timestamp: DateTime.now(),
+    accuracy: 0,
+    altitude: 0,
+    heading: 0,
+    speed: 0,
+    speedAccuracy: 0,
+  );
 
   setUp(() {
     searchRepository = MockSearchLocationRespository();
-    searchLocationBloc = SearchLocationBloc(searchRepository);
+    geolocator = MockDropezyGeolocator();
+    searchLocationBloc = SearchLocationBloc(searchRepository, geolocator);
   });
 
   test('initial state should be SearchLocationInitial', () {
@@ -108,6 +123,42 @@ void main() {
     },
     build: () => searchLocationBloc,
     act: (bloc) => bloc.add(const LocationSelected(placeId)),
+    expect: () => [
+      const SearchLocationLoading(),
+      const LocationSelectError('Error!'),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectSuccess '
+    'when UseCurrentLocation event is added '
+    'and repository return address details',
+    setUp: () {
+      when(() => geolocator.getCurrentPosition())
+          .thenAnswer((_) async => position);
+      when(() => searchRepository.getCurrentLocation(latLng))
+          .thenAnswer((_) async => right(placeDetails));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const UseCurrentLocation()),
+    expect: () => [
+      const SearchLocationLoading(),
+      LocationSelectSuccess(placeDetails),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectError '
+    'when LocationSelected event is added '
+    'and repository return failure',
+    setUp: () {
+      when(() => geolocator.getCurrentPosition())
+          .thenAnswer((_) async => position);
+      when(() => searchRepository.getCurrentLocation(latLng))
+          .thenAnswer((_) async => left(Failure('Error!')));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const UseCurrentLocation()),
     expect: () => [
       const SearchLocationLoading(),
       const LocationSelectError('Error!'),

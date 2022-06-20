@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:places_service/places_service.dart';
 import 'package:storefront_app/core/core.dart';
@@ -29,6 +30,18 @@ class SearchLocationService implements ISearchLocationRepository {
       final addressDetail = await _placesService.getPlaceDetailsModel(id);
 
       return right(addressDetail);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
+  }
+
+  @override
+  RepoResult<PlaceDetailsModel> getCurrentLocation(LatLng latLng) async {
+    try {
+      final placeDetails =
+          await _placesService.getPlaceDetailsFromLocation(latLng);
+
+      return right(placeDetails);
     } on Exception catch (e) {
       return left(e.toFailure);
     }

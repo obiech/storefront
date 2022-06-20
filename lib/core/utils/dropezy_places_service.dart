@@ -1,3 +1,4 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:injectable/injectable.dart';
 import 'package:places_service/places_service.dart';
@@ -13,6 +14,8 @@ class DropezyPlacesService extends PlacesService {
 
   String? _sessionToken;
   bool _resetSessionTokenForNextAutoComplete = false;
+
+  static const _radius = 50;
 
   /// Returns the session token last used to get auto-complete results from the
   /// Places API
@@ -116,6 +119,30 @@ class DropezyPlacesService extends PlacesService {
           lat: response.result.geometry!.location.lat,
           lng: response.result.geometry!.location.lng,
         );
+      } else {
+        throw PlacesApiException(
+          message: 'Could not get places from Google Maps',
+        );
+      }
+    } catch (exception) {
+      const errorMessage = 'A problem occurred making the places request.';
+      throw PlacesApiException(message: errorMessage, exception: exception);
+    }
+  }
+
+  Future<PlaceDetailsModel> getPlaceDetailsFromLocation(LatLng latLng) async {
+    try {
+      final response = await _places.searchNearbyWithRadius(
+        Location(lat: latLng.latitude, lng: latLng.longitude),
+        _radius,
+      );
+
+      if (response.isOkay) {
+        final placeIds =
+            response.results.map((result) => result.placeId).toList();
+
+        // Return the first nearby place
+        return getPlaceDetailsModel(placeIds.first);
       } else {
         throw PlacesApiException(
           message: 'Could not get places from Google Maps',

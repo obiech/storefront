@@ -41,3 +41,5 @@ class MockSearchLocationHistoryBloc
 
 class MockSearchHistoryBox extends Mock
     implements Box<SearchLocationHistoryQuery> {}
+
+class MockDropezyGeolocator extends Mock implements DropezyGeolocator {}

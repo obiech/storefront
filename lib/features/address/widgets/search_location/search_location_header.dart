@@ -16,9 +16,13 @@ class SearchLocationHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton.icon(
+                key: SearchLocationPageKeys.useCurrentLocationButton,
                 onPressed: () {
-                  // TODO (widy): handle use current location
-                  // https://dropezy.atlassian.net/browse/STOR-623
+                  // TODO (widy): move location permission prompt here
+                  // https://dropezy.atlassian.net/browse/STOR-804
+                  context
+                      .read<SearchLocationBloc>()
+                      .add(const UseCurrentLocation());
                 },
                 icon: const Icon(DropezyIcons.pin),
                 label: Text(context.res.strings.useCurrentLocation),

@@ -28,3 +28,10 @@ class LocationSelected extends SearchLocationEvent {
   @override
   List<Object?> get props => [placeId];
 }
+
+class UseCurrentLocation extends SearchLocationEvent {
+  const UseCurrentLocation();
+
+  @override
+  List<Object?> get props => [];
+}

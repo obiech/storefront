@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:places_service/places_service.dart';
 import 'package:storefront_app/core/core.dart';
@@ -12,15 +13,19 @@ part 'search_location_state.dart';
 class SearchLocationBloc
     extends Bloc<SearchLocationEvent, SearchLocationState> {
   final ISearchLocationRepository _searchRepository;
+  final DropezyGeolocator _geolocator;
 
-  SearchLocationBloc(this._searchRepository)
-      : super(const SearchLocationInitial()) {
+  SearchLocationBloc(
+    this._searchRepository,
+    this._geolocator,
+  ) : super(const SearchLocationInitial()) {
     on<QueryChanged>(
       (event, emit) => _onQueryChanged(emit, event),
       transformer: debounce(const Duration(milliseconds: 500)),
     );
     on<QueryDeleted>((event, emit) => _onQueryDeleted(emit));
     on<LocationSelected>((event, emit) => _onLocationSelected(emit, event));
+    on<UseCurrentLocation>((event, emit) => _onUseCurrentLocation(emit));
   }
 
   Future<void> _onLocationSelected(
@@ -66,5 +71,26 @@ class SearchLocationBloc
 
   void _onQueryDeleted(Emitter<SearchLocationState> emit) {
     emit(const SearchLocationInitial());
+  }
+
+  Future<void> _onUseCurrentLocation(Emitter<SearchLocationState> emit) async {
+    emit(const SearchLocationLoading());
+
+    final position = await _geolocator.getCurrentPosition();
+    final result = await _searchRepository.getCurrentLocation(
+      LatLng(
+        position.latitude,
+        position.longitude,
+      ),
+    );
+
+    result.fold(
+      (failure) {
+        emit(LocationSelectError(failure.message));
+      },
+      (address) {
+        emit(LocationSelectSuccess(address));
+      },
+    );
   }
 }
