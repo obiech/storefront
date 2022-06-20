@@ -30,6 +30,13 @@ class ProductCategoryGrid extends StatelessWidget {
             productModelList: state.productModelList,
             scaleFactor: scaleFactor,
             cardBorderRadius: 16,
+            padding: EdgeInsets.only(
+              top: context.res.dimens.spacingMedium,
+              left: context.res.dimens.spacingMedium,
+              right: context.res.dimens.spacingMedium,
+              bottom: context.res.dimens.spacingMedium +
+                  context.res.dimens.minOffsetForCartSummary,
+            ),
           );
         } else if (state is LoadingCategoryProductState) {
           return ProductGridLoading(

@@ -28,7 +28,13 @@ class OrderHistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: EdgeInsets.all(context.res.dimens.spacingLarge),
+      padding: EdgeInsets.only(
+        top: context.res.dimens.spacingLarge,
+        left: context.res.dimens.spacingLarge,
+        right: context.res.dimens.spacingLarge,
+        bottom: context.res.dimens.spacingLarge +
+            context.res.dimens.minOffsetForCartSummary,
+      ),
       itemCount: orders.length,
       separatorBuilder: (_, __) => SizedBox(
         height: context.res.dimens.spacingMiddle,

@@ -180,6 +180,8 @@ void main() {
     testWidgets(
         'should do nothing '
         'when active C2 category is tapped', (tester) async {
+      when(() => categoryProductCubit.fetchCategoryProduct(any()))
+          .thenAnswer((invocation) async {});
       await pumpChildCategoriesPage(tester);
 
       await tester.tap(find.byType(ListView).at(activeCategory));

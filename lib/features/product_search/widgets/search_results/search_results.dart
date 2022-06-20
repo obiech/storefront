@@ -48,17 +48,18 @@ class _SearchResultsState extends State<SearchResults> {
               List.generate(columns, (_) => ProductModel.loading()),
             );
           }
-          return Padding(
+          return ProductGridView(
+            columns: columns,
+            productModelList: inventoryProducts,
+            physics: const ClampingScrollPhysics(),
+            scaleFactor: scaleFactor,
+            controller: _scrollController,
             padding: EdgeInsets.only(
-              bottom: context.res.dimens.minOffsetForCartSummary,
-            ),
-            child: ProductGridView(
-              columns: columns,
-              productModelList: inventoryProducts,
-              physics: const ClampingScrollPhysics(),
-              padding: EdgeInsets.all(res.dimens.spacingLarge),
-              scaleFactor: scaleFactor,
-              controller: _scrollController,
+              top: context.res.dimens.spacingLarge,
+              left: context.res.dimens.spacingLarge,
+              right: context.res.dimens.spacingLarge,
+              bottom: context.res.dimens.spacingLarge +
+                  context.res.dimens.minOffsetForCartSummary,
             ),
           );
         } else if (state is SearchingForItemInInventory) {

@@ -19,6 +19,9 @@ class ChildCategoriesList extends StatelessWidget {
           key: const ValueKey(ChildCategoryKeys.childCategoryListWidget),
           shrinkWrap: true,
           itemCount: state.childCategoriesList.length,
+          padding: EdgeInsets.only(
+            bottom: context.res.dimens.minOffsetForCartSummary,
+          ),
           itemBuilder: (context, index) {
             final childCategory = state.childCategoriesList[index];
             final isActive = state.selectedChildCategory.categoryId ==

@@ -59,10 +59,8 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.23,
             child: Padding(
-              padding: EdgeInsets.only(
-                left: context.res.dimens.spacingMedium,
-                right: context.res.dimens.spacingMedium,
-                bottom: context.res.dimens.minOffsetForCartSummary,
+              padding: EdgeInsets.symmetric(
+                horizontal: context.res.dimens.spacingMedium,
               ),
               child: const ChildCategoriesList(),
             ),
@@ -77,14 +75,7 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
               ),
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: context.res.dimens.minOffsetForCartSummary,
-              ),
-              child: const ProductCategoryGrid(),
-            ),
-          ),
+          const Expanded(child: ProductCategoryGrid()),
         ],
       ),
     );
