@@ -49,7 +49,7 @@ class CartBodyWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                 ],
-                if (!state.cart.isEmpty)
+                if (state.cart.inStockItems.isNotEmpty)
                   _PaymentSummary(
                     isLoading: state.isCalculatingSummary,
                     paymentSummary: state.cart.paymentSummary,

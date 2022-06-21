@@ -83,6 +83,9 @@ extension CartModelX on CartModel {
             (prev, cartItem) => prev + cartItem.quantity,
           );
 
-  /// Returns [true] if cart is empty
+  /// Returns [true] if cart is completely empty.
+  ///
+  /// This does not account for items that are OoS,
+  /// and will return [false] if there are OoS items.
   bool get isEmpty => items.isEmpty;
 }
