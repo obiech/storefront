@@ -16,7 +16,7 @@ void main() {
 
   final bcaPaymentResults = mockBcaPaymentResults;
   final goPayPaymentResults = mockGoPayPaymentResults;
-  final deepLink = goPayPaymentResults.paymentInformation.deeplink!;
+  final deepLink = goPayPaymentResults.paymentInformation.deeplink;
 
   setUp(() {
     goPayLauncher = MockGoPayLaunch();
@@ -49,18 +49,13 @@ void main() {
     });
 
     await tester.pumpOrderActions(
-      paymentResults: PaymentResultsModel(
-        order: goPayPaymentResults,
-        paymentInformation: goPayPaymentResults.paymentInformation,
-        paymentMethod: goPayPaymentResults.paymentMethod,
-        expiryTime: goPayPaymentResults.paymentExpiryTime ?? DateTime.now(),
-      ),
+      order: goPayPaymentResults,
       launchGoPay: goPayLauncher,
     );
 
     await tester.tap(payNowButtonFinder);
 
-    verify(() => goPayLauncher.call(deepLink)).called(1);
+    verify(() => goPayLauncher.call(deepLink ?? '')).called(1);
 
     expect(deepLink, calledDeeplink);
   });
@@ -69,12 +64,7 @@ void main() {
       'should go to [PaymentInstructionsPage] '
       'when [Pay Now] is tapped & payment method is [VA]', (tester) async {
     await tester.pumpOrderActions(
-      paymentResults: PaymentResultsModel(
-        order: bcaPaymentResults,
-        paymentInformation: bcaPaymentResults.paymentInformation,
-        paymentMethod: bcaPaymentResults.paymentMethod,
-        expiryTime: bcaPaymentResults.paymentExpiryTime ?? DateTime.now(),
-      ),
+      order: bcaPaymentResults,
       launchGoPay: goPayLauncher,
       stackRouter: stackRouter,
     );
@@ -99,7 +89,7 @@ void main() {
 
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpOrderActions({
-    required PaymentResultsModel paymentResults,
+    required OrderModel order,
     required LaunchGoPay launchGoPay,
     StackRouter? stackRouter,
   }) async {
@@ -107,9 +97,7 @@ extension WidgetTesterX on WidgetTester {
       MaterialApp(
         home: Scaffold(
           body: OrderActions(
-            order: paymentResults.order,
-            paymentMethod: paymentResults.paymentMethod,
-            paymentInformation: paymentResults.paymentInformation,
+            order: order,
             launchGoPay: launchGoPay,
           ).withRouterScope(stackRouter),
         ),

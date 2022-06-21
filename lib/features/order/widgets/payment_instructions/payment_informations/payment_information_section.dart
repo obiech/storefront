@@ -1,4 +1,3 @@
-import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,16 +16,10 @@ class PaymentInformationSection extends StatelessWidget {
   const PaymentInformationSection({
     Key? key,
     required this.order,
-    this.paymentInformation,
-    this.paymentMethod = PaymentMethod.PAYMENT_METHOD_VA_BCA,
     this.currentTime,
   }) : super(key: key);
 
   final OrderModel order;
-
-  // TODO(obella): Retire when payment info is availed as part of order
-  final PaymentInformationModel? paymentInformation;
-  final PaymentMethod paymentMethod;
 
   // Used for mocking current time in tests
   final DateTime? currentTime;
@@ -72,9 +65,8 @@ class PaymentInformationSection extends StatelessWidget {
           //Timer countdown
           CountdownBuilder(
             key: const ValueKey(PaymentInformationSectionKeys.countdown),
-            countdownDuration: order.paymentExpiryTime!
-                .difference(currentTime ?? DateTime.now())
-                .inSeconds,
+            countdownDuration:
+                expireTime.difference(currentTime ?? DateTime.now()).inSeconds,
             builder: (seconds) {
               return TimingText(
                 color: context.res.colors.orange,
@@ -96,14 +88,14 @@ class PaymentInformationSection extends StatelessWidget {
               PaymentInformationSectionKeys.paymentMethodTile,
             ),
             res: context.res,
-            paymentMethod: paymentMethod.paymentInfo,
+            paymentMethod: order.paymentMethod.paymentInfo,
           ),
           InformationsTile.virtualAccount(
             key: const ValueKey(
               PaymentInformationSectionKeys.virtualAccountTile,
             ),
             ctx: context,
-            virtualAccount: paymentInformation?.vaNumber ?? '',
+            virtualAccount: order.paymentInformation.vaNumber ?? '',
           ),
           InformationsTile.totalBill(
             key: const ValueKey(

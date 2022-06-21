@@ -1,10 +1,8 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
@@ -17,10 +15,6 @@ extension WidgetTesterX on WidgetTester {
   Future<void> pumpOrderDetailsView({
     required OrderModel order,
     StackRouter? stackRouter,
-
-    // TODO(obella): Retire when payment info is availed as part of order
-    PaymentInformationModel? paymentInformation,
-    PaymentMethod paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY,
   }) async {
     await pumpWidget(
       stackRouter != null
@@ -29,11 +23,7 @@ extension WidgetTesterX on WidgetTester {
               stateHash: 0,
               child: MaterialApp(
                 home: Scaffold(
-                  body: OrderDetailsPage(
-                    order: order,
-                    paymentInformation: paymentInformation,
-                    paymentMethod: paymentMethod,
-                  ),
+                  body: OrderDetailsPage(order: order),
                 ),
               ),
             )

@@ -16,8 +16,6 @@ class OrderActions extends StatelessWidget {
     required this.order,
     this.showReorderButton = false,
     this.showPayButton = true,
-    this.paymentInformation,
-    this.paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY,
     this.launchGoPay = const LaunchGoPay(),
   }) : super(key: key);
 
@@ -28,10 +26,6 @@ class OrderActions extends StatelessWidget {
   final bool showPayButton;
 
   final OrderModel order;
-
-  // TODO(obella): Retire when payment info is availed as part of order
-  final PaymentInformationModel? paymentInformation;
-  final PaymentMethod paymentMethod;
 
   // Gojek link launcher
   final LaunchGoPay launchGoPay;
@@ -91,22 +85,13 @@ class OrderActions extends StatelessWidget {
 
   /// Pay now
   void _payNow(BuildContext context) {
-    if (paymentInformation == null) {
-      context.showToast('Payment Info in order still in work');
-      return;
-    }
-
-    switch (paymentMethod) {
+    switch (order.paymentMethod) {
       case PaymentMethod.PAYMENT_METHOD_GOPAY:
-        launchGoPay(paymentInformation?.deeplink ?? '');
+        launchGoPay(order.paymentInformation.deeplink ?? '');
         break;
       case PaymentMethod.PAYMENT_METHOD_VA_BCA:
         context.pushRoute(
-          PaymentInstructionsRoute(
-            order: order,
-            paymentInformation: paymentInformation,
-            paymentMethod: paymentMethod,
-          ),
+          PaymentInstructionsRoute(order: order),
         );
         break;
       default:

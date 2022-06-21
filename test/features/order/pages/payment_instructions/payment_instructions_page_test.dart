@@ -10,16 +10,12 @@ import '../../../../../test_commons/utils/locale_setup.dart';
 /// Helper functions specific to this test
 extension WidgetTesterX on WidgetTester {
   Future<void> pumpPaymentInstructionsPage({
-    required PaymentResultsModel paymentResults,
+    required OrderModel order,
   }) async {
     await pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: PaymentInstructionsPage(
-            order: paymentResults.order,
-            paymentMethod: paymentResults.paymentMethod,
-            paymentInformation: paymentResults.paymentInformation,
-          ),
+          body: PaymentInstructionsPage(order: order),
         ),
       ),
     );
@@ -38,14 +34,13 @@ void main() {
     'when [PaymentInstructionsPage] is shown',
     (tester) async {
       await tester.pumpPaymentInstructionsPage(
-        paymentResults: PaymentResultsModel(
-          order: orderAwaitingPayment,
+        order: orderAwaitingPayment.copyWith(
+          paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
           paymentInformation: const PaymentInformationModel(
             vaNumber: _vaNumber,
             bankName: 'bca',
           ),
-          paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
-          expiryTime: DateTime.now(),
+          paymentExpiryTime: DateTime.now(),
         ),
       );
 
