@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +34,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with AfterLayoutMixin {
   int activeIndex = 0;
   Key key = UniqueKey();
+  late StreamSubscription _cartErrorSubscription;
 
   /// Specifies whetever to return [CartSummary]
   /// based on tabs active index
@@ -64,6 +67,14 @@ class _MainPageState extends State<MainPage> with AfterLayoutMixin {
     // TODO(obella): Handle store retrieval failure
     getIt<IStoreRepository>().getStore();
     context.read<ProfileCubit>().fetchProfile();
+
+    // Favoring a stream over BlocListener because when two subsequent
+    // cart states have the same error message, they will be considered
+    // identical by BlocListener. As a result, the toast will not be triggered.
+    _cartErrorSubscription =
+        context.read<CartBloc>().errorMsgStream.listen((err) {
+      context.showToast(err, color: context.res.colors.red);
+    });
   }
 
   @override
@@ -132,5 +143,11 @@ class _MainPageState extends State<MainPage> with AfterLayoutMixin {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cartErrorSubscription.cancel();
+    super.dispose();
   }
 }

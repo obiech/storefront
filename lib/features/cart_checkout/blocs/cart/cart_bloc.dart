@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../../core/core.dart';
 import '../../../discovery/index.dart';
@@ -25,7 +26,8 @@ part 'cart_state.dart';
 @injectable
 class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc(this.cartRepository, this.storeRepository)
-      : super(const CartInitial()) {
+      : _errorMsgStream = BehaviorSubject(),
+        super(const CartInitial()) {
     on<LoadCart>(_onLoadCart);
     on<AddCartItem>(_onAddCartItem);
     on<EditCartItem>(_onEditCartItem);
@@ -46,6 +48,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   /// Store management
   String? _currentStoreId;
   StreamSubscription<String>? _storeSubscription;
+
+  /// Stream of error messages for events [AddCartItem],
+  /// [EditCartItem] and [RemoveCartItem].
+  final BehaviorSubject<String> _errorMsgStream;
+  BehaviorSubject<String> get errorMsgStream => _errorMsgStream;
 
   FutureOr<void> _onLoadCart(
     LoadCart event,
@@ -102,8 +109,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final result = await cartRepository.addItem(event.variant);
 
     result.fold(
-      (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
-      (cart) => emit(CartLoaded.success(cart)),
+      (failure) {
+        emit(CartLoaded.error(currState.cart, failure.message));
+        _addFailureToStream(failure);
+      },
+      (cart) {
+        emit(CartLoaded.success(cart));
+      },
     );
   }
 
@@ -180,8 +192,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
 
       result.fold(
-        (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
-        (result) => emit(CartLoaded.success(result)),
+        (failure) {
+          emit(CartLoaded.error(currState.cart, failure.message));
+          _addFailureToStream(failure);
+        },
+        (result) {
+          emit(CartLoaded.success(result));
+        },
       );
     }
   }
@@ -226,14 +243,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final result = await cartRepository.removeItem(variant);
 
     result.fold(
-      (failure) => emit(CartLoaded.error(currState.cart, failure.message)),
-      (cart) => emit(CartLoaded.success(cart)),
+      (failure) {
+        emit(CartLoaded.error(currState.cart, failure.message));
+        _addFailureToStream(failure);
+      },
+      (cart) {
+        emit(CartLoaded.success(cart));
+      },
     );
   }
+
+  void _addFailureToStream(Failure f) => _errorMsgStream.add(f.message);
 
   @override
   Future<void> close() {
     _storeSubscription?.cancel();
+    _errorMsgStream.close();
     return super.close();
   }
 }

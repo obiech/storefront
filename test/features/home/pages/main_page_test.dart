@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/auth/domain/domain.dart';
@@ -80,6 +81,7 @@ void main() {
   late IStoreRepository storeRepository;
   late DeliveryAddressCubit deliveryAddressCubit;
   late ProfileCubit profileCubit;
+  late BehaviorSubject<String> cartErrorMsgStream;
 
   late AuthService authService;
 
@@ -103,11 +105,13 @@ void main() {
     storeRepository = MockStoreRepository();
     deliveryAddressCubit = MockDeliveryAddressCubit();
     profileCubit = MockProfileCubit();
+    cartErrorMsgStream = BehaviorSubject();
 
     late ParentCategoriesCubit parentCategoriesCubit;
 
     when(() => cartBloc.state)
         .thenAnswer((_) => CartLoaded.success(mockCartModel));
+    when(() => cartBloc.errorMsgStream).thenAnswer((_) => cartErrorMsgStream);
 
     when(() => searchInventoryBloc.state).thenReturn(SearchInventoryInitial());
     whenListen(
@@ -244,6 +248,37 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ProfilePage), findsOneWidget);
       expect(MainPageFinders.cartSummary, findsNothing);
+    },
+  );
+
+  testWidgets(
+    'should display a Toast displaying error message '
+    'when cart error stream returns',
+    (tester) async {
+      await tester.pumpMainPage(
+        cartBloc: cartBloc,
+        router: router,
+        searchInventoryBloc: searchInventoryBloc,
+        searchHistoryCubit: searchHistoryCubit,
+        homeNavCubit: homeNavCubit,
+        deliveryAddressCubit: deliveryAddressCubit,
+        profileCubit: profileCubit,
+      );
+
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsNothing);
+
+      cartErrorMsgStream.add('New error');
+
+      await tester.pumpAndSettle();
+      expect(find.byType(SnackBar), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(SnackBar),
+          matching: find.text('New error'),
+        ),
+        findsOneWidget,
+      );
     },
   );
 }
