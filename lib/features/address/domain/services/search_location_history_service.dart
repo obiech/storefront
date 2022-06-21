@@ -7,19 +7,25 @@ import 'package:storefront_app/features/address/domain/domains.dart';
 @LazySingleton(as: ISearchLocationHistoryRepository)
 class SearchLocationHistoryService extends ISearchLocationHistoryRepository {
   final Box<SearchLocationHistoryQuery> searchHistoryQueryBox;
-
   final DateTimeProvider _dateTimeProvider;
+
+  static const maxSearchHistory = 5;
 
   SearchLocationHistoryService(
     this.searchHistoryQueryBox,
     this._dateTimeProvider,
   );
 
+  /// Return latest [maxSearchHistory] queries
   @override
   RepoResult<List<PlaceModel>> getSearchHistory() {
     try {
-      final placeList = searchHistoryQueryBox.values
-          .map((searchHistory) => searchHistory.placeModel)
+      final queryList = searchHistoryQueryBox.values.toList();
+
+      queryList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      final placeList = queryList
+          .take(maxSearchHistory)
+          .map((query) => query.placeModel)
           .toList();
 
       return Future.value(right(placeList));
