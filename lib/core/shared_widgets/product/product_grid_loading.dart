@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:storefront_app/core/core.dart';
+import '../../core.dart';
 
 /// Show the skeleton of product card
 /// whenever the state is still in loading
@@ -49,9 +49,12 @@ class ProductGridLoading extends StatelessWidget {
     return GridView.builder(
       physics: const ClampingScrollPhysics(),
       padding: padding ??
-          EdgeInsets.symmetric(
-            horizontal: res.dimens.spacingLarge,
-            vertical: res.dimens.spacingLarge,
+          EdgeInsets.only(
+            top: res.dimens.spacingLarge,
+            left: res.dimens.spacingLarge,
+            right: res.dimens.spacingLarge,
+            bottom:
+                res.dimens.spacingLarge + res.dimens.minOffsetForCartSummary,
           ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: columns,

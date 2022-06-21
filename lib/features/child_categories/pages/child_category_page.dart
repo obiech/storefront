@@ -48,7 +48,7 @@ class ChildCategoriesPage extends StatelessWidget implements AutoRouteWrapper {
       actions: [
         IconButton(
           onPressed: () {
-            context.router.push(const GlobalSearchRoute());
+            context.router.push(GlobalSearchRoute());
           },
           icon: const Icon(DropezyIcons.search),
         )

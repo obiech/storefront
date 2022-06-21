@@ -68,7 +68,11 @@ class _MainPageState extends State<MainPage> with AfterLayoutMixin {
       child: AutoTabsRouter.declarative(
         activeIndex: activeIndex,
         navigatorObservers: () => [getIt<HomeNavObserver>()],
-        routes: const [HomeRoute(), SearchRoute(), ProfileRoute()],
+        routes: [
+          const HomeRoute(),
+          SearchRoute(isShowCartSummary: false),
+          const ProfileRoute()
+        ],
         builder: (context, child, animation) {
           final tabsRouter = AutoTabsRouter.of(context);
 

@@ -46,7 +46,7 @@ class ProductDetailPage extends StatelessWidget {
       toolbarHeight: res.dimens.appBarSize + 20,
       bodyAlignment: Alignment.topCenter,
       title: GestureDetector(
-        onTap: () => context.router.push(const GlobalSearchRoute()),
+        onTap: () => context.router.push(GlobalSearchRoute()),
         child: SearchTextField(
           placeholder: res.strings.findYourNeeds,
           isEnabled: false,

@@ -14,33 +14,6 @@ import '../../cart_checkout/mocks.dart';
 import '../fixtures.dart';
 import '../mocks.dart';
 
-extension WidgetTesterX on WidgetTester {
-  Future<void> pumpSearchPage(
-    SearchInventoryBloc inventoryCubit,
-    AutosuggestionBloc autosuggestionBloc,
-    SearchHistoryCubit historyCubit,
-    HomeNavCubit homeNavCubit,
-    CartBloc cartBloc,
-  ) async {
-    await pumpWidget(
-      MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => inventoryCubit),
-          BlocProvider(create: (context) => autosuggestionBloc),
-          BlocProvider(create: (context) => historyCubit),
-          BlocProvider(create: (context) => homeNavCubit),
-          BlocProvider(create: (context) => cartBloc),
-        ],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: SearchPage(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 void main() {
   late SearchInventoryBloc searchInventoryCubit;
   late AutosuggestionBloc autosuggestionBloc;
@@ -77,6 +50,42 @@ void main() {
   setUpAll(() {
     setUpLocaleInjection();
   });
+  testWidgets(
+    'should not display cart summary when isShowCartSummary is false',
+    (WidgetTester tester) async {
+      await tester.pumpSearchPage(
+        searchInventoryCubit,
+        autosuggestionBloc,
+        historyCubit,
+        homeNavCubit,
+        cartBloc,
+        isShowCartSummary: false,
+      );
+
+      expect(
+        find.byType(CartSummary),
+        findsNothing,
+      );
+    },
+  );
+
+  testWidgets(
+    'should display cart summary when isShowCartSummary is true',
+    (WidgetTester tester) async {
+      await tester.pumpSearchPage(
+        searchInventoryCubit,
+        autosuggestionBloc,
+        historyCubit,
+        homeNavCubit,
+        cartBloc,
+      );
+
+      expect(
+        find.byType(CartSummary),
+        findsOneWidget,
+      );
+    },
+  );
 
   testWidgets('When Page State  is DEFAULT, show the Default Page',
       (WidgetTester tester) async {
@@ -188,4 +197,32 @@ void main() {
       expect(_productWidgets.length, pageInventory.length);
     });
   });
+}
+
+extension WidgetTesterX on WidgetTester {
+  Future<void> pumpSearchPage(
+    SearchInventoryBloc inventoryCubit,
+    AutosuggestionBloc autosuggestionBloc,
+    SearchHistoryCubit historyCubit,
+    HomeNavCubit homeNavCubit,
+    CartBloc cartBloc, {
+    bool isShowCartSummary = true,
+  }) async {
+    await pumpWidget(
+      MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => inventoryCubit),
+          BlocProvider(create: (context) => autosuggestionBloc),
+          BlocProvider(create: (context) => historyCubit),
+          BlocProvider(create: (context) => homeNavCubit),
+          BlocProvider(create: (context) => cartBloc),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: SearchPage(isShowCartSummary: isShowCartSummary),
+          ),
+        ),
+      ),
+    );
+  }
 }

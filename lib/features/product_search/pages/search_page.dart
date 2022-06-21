@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:storefront_app/core/core.dart';
 
+import '../../../core/core.dart';
+import '../../cart_checkout/index.dart';
 import '../../home/index.dart';
 import '../index.dart';
 
@@ -53,7 +54,12 @@ import '../index.dart';
 ///
 /// - However, if no search was made before, proceed as a fresh search.
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  final bool isShowCartSummary;
+
+  const SearchPage({
+    Key? key,
+    this.isShowCartSummary = true,
+  }) : super(key: key);
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -68,6 +74,7 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
   @override
   Widget build(BuildContext context) {
     final res = context.res;
+
     return BlocListener<HomeNavCubit, HomeNavState>(
       listenWhen: (prevState, currentState) =>
           prevState.route != SearchRoute.name &&
@@ -81,6 +88,9 @@ class _SearchPageState extends State<SearchPage> with RouteAware {
         useRoundedBody: true,
         toolbarHeight: res.dimens.appBarSize + 20,
         bodyAlignment: Alignment.topCenter,
+        floatingActionButton:
+            widget.isShowCartSummary ? const CartSummary() : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         title: SearchTextField(
           focusNode: _focusNode,
           controller: _controller,
