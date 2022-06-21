@@ -1,4 +1,5 @@
 import 'package:dropezy_proto/v1/cart/cart.pbgrpc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
@@ -9,11 +10,13 @@ import 'package:storefront_app/features/discovery/index.dart';
 import '../../../../../test_commons/fixtures/cart/pb_summary_response.dart';
 import '../../../../../test_commons/fixtures/product/variant_models.dart'
     as variant_fixtures;
+import '../../../../commons.dart';
 import '../../../../src/mock_customer_service_client.dart';
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
 void main() {
+  setupFirebaseCrashlyticsMocks();
   group(
     '[CartService]',
     () {
@@ -34,6 +37,10 @@ void main() {
         // Store
         when(() => storeRepository.activeStoreId)
             .thenAnswer((_) => mockStoreId);
+      });
+
+      setUpAll(() async {
+        await Firebase.initializeApp();
       });
 
       group(

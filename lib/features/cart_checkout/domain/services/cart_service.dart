@@ -1,12 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dropezy_proto/v1/cart/cart.pbgrpc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:storefront_app/core/models/repo_result.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
 import 'package:storefront_app/features/discovery/index.dart';
 import 'package:storefront_app/features/product/index.dart';
 
-import '../../../../core/errors/failure.dart';
 import '../domains.dart';
 
 /// [ICartRepository] that communicates with storefront-backend
@@ -29,7 +28,7 @@ class CartService extends ICartRepository {
   /// to get latest cart contents and payment summary.
   @override
   RepoResult<CartModel> loadCart() async {
-    try {
+    return safeCall(() async {
       final response = await _cartServiceClient.summary(
         SummaryRequest(
           storeId: _storeRepository.activeStoreId,
@@ -37,16 +36,14 @@ class CartService extends ICartRepository {
       );
 
       return right(CartModel.fromPb(response));
-    } on Exception catch (e) {
-      return left(e.toFailure);
-    }
+    });
   }
 
   /// First sends an add item request to storefront-backend.
   /// Then calls [loadCart] to receive latest cart session.
   @override
   RepoResult<CartModel> addItem(VariantModel variant) async {
-    try {
+    return safeCall(() async {
       final req = AddRequest(
         storeId: _storeRepository.activeStoreId,
         item: UpdateItem(
@@ -58,10 +55,8 @@ class CartService extends ICartRepository {
       // Ignore value returned
       await _cartServiceClient.add(req);
 
-      return await loadCart();
-    } on Exception catch (e) {
-      return left(e.toFailure);
-    }
+      return loadCart();
+    });
   }
 
   @override
@@ -104,7 +99,7 @@ class CartService extends ICartRepository {
     required int? quantity,
     required UpdateAction action,
   }) async {
-    try {
+    return safeCall(() async {
       final req = UpdateRequest(
         storeId: _storeRepository.activeStoreId,
         item: UpdateItem(
@@ -117,9 +112,7 @@ class CartService extends ICartRepository {
       // Ignore value returned
       await _cartServiceClient.update(req);
 
-      return await loadCart();
-    } on Exception catch (e) {
-      return left(e.toFailure);
-    }
+      return loadCart();
+    });
   }
 }

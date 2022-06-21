@@ -11,6 +11,21 @@ typedef Callback = void Function(MethodCall call);
 
 final List<MethodCall> methodCallLog = <MethodCall>[];
 
+/// Call this before any test code
+/// and make sure to initialize Firebase in setUpAll block.
+///
+/// ```dart
+///void main() {
+///   setupFirebaseCrashlyticsMocks(); // before any test code
+///
+///   setUpAll(() async {
+///     await Firebase.initializeApp();
+///   });
+///
+///   // other setup code
+///   // your test cases
+/// }
+/// ```
 void setupFirebaseCrashlyticsMocks([Callback? customHandlers]) {
   TestWidgetsFlutterBinding.ensureInitialized();
 
