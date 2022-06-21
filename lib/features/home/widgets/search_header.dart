@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 
@@ -44,8 +43,7 @@ class SearchHeader extends StatelessWidget {
               ),
             ),
             style: res.styles.caption1,
-            onTap: () => AutoTabsRouter.of(context)
-                .setActiveIndex(BottomNav.SEARCH.index),
+            onTap: () => MainPage.setToSearch(context),
           ),
         ],
       ),

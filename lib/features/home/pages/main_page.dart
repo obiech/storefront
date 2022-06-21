@@ -19,6 +19,12 @@ class MainPage extends StatefulWidget {
     context.findAncestorStateOfType<_MainPageState>()?.refreshPage();
   }
 
+  static void setToSearch(BuildContext context) {
+    context
+        .findAncestorStateOfType<_MainPageState>()
+        ?.setActiveIndex(BottomNav.SEARCH.index);
+  }
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
