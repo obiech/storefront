@@ -91,6 +91,7 @@ class _VariantActionState extends State<_VariantAction> {
                 }
 
                 return ProductAction(
+                  key: UniqueKey(),
                   product: widget.variant,
                   productQuantity: productQty,
                   onMaxAvailableQtyChanged: (isAtMaxQty) async {
