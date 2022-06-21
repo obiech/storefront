@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../order/index.dart';
 import '../../domain/domains.dart';
 
 part 'payment_checkout_state.dart';
@@ -18,11 +19,11 @@ class PaymentCheckoutCubit extends Cubit<PaymentCheckoutState> {
   Future<void> checkoutPayment(PaymentMethodDetails paymentMethod) async {
     emit(LoadingPaymentCheckout());
 
-    final checkoutLinkResponse =
+    final checkoutResponse =
         await paymentRepository.checkoutPayment(paymentMethod.method);
 
     emit(
-      checkoutLinkResponse.fold(
+      checkoutResponse.fold(
         (failure) {
           if (failure is PaymentMethodNotSupported) {
             return const ErrorLoadingPaymentCheckout(
@@ -32,7 +33,7 @@ class PaymentCheckoutCubit extends Cubit<PaymentCheckoutState> {
 
           return const ErrorLoadingPaymentCheckout('Error checking out');
         },
-        (checkoutLink) => LoadedPaymentCheckout(checkoutLink),
+        (checkoutOrder) => LoadedPaymentCheckout(checkoutOrder),
       ),
     );
   }

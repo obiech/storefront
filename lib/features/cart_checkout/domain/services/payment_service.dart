@@ -56,7 +56,7 @@ class PaymentService implements IPaymentRepository {
   }
 
   @override
-  RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
+  RepoResult<OrderModel> checkoutPayment(PaymentMethod method) async {
     return safeCall(() async {
       // TODO(obella465): Fix once minimal submission details are provided
       final storeId = storeRepository.storeStream.valueOrNull;
@@ -72,10 +72,14 @@ class PaymentService implements IPaymentRepository {
 
       final response = await orderServiceClient.checkout(checkoutRequest);
 
-      final resultsModel = PaymentResultsModel.fromCheckoutResponse(response);
-      orderRepository.addOrder(resultsModel.order);
+      final order = OrderModel.fromOrderAndPaymentInfo(
+        response.order,
+        response.paymentInformation,
+      );
 
-      return right(resultsModel);
+      orderRepository.addOrder(order);
+
+      return right(order);
     });
   }
 }

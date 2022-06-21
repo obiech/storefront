@@ -24,13 +24,13 @@ class CheckoutButton extends StatelessWidget {
           // Reload Cart
           context.read<CartBloc>().add(const LoadCart());
 
-          final paymentResults = state.paymentResults;
+          final paymentResults = state.order;
 
           context.router.replace(
             OrderRouter(
               children: [
                 OrderDetailsRoute(
-                  order: paymentResults.order,
+                  order: paymentResults,
                   paymentMethod: paymentResults.paymentMethod,
                   paymentInformation: paymentResults.paymentInformation,
                 )

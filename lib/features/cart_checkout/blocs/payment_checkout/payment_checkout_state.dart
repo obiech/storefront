@@ -15,13 +15,13 @@ class LoadingPaymentCheckout extends PaymentCheckoutState {}
 
 /// When [PaymentCheckout] link has been returned
 class LoadedPaymentCheckout extends PaymentCheckoutState {
-  /// Payment Results with order & payment info
-  final PaymentResultsModel paymentResults;
+  /// Result with order
+  final OrderModel order;
 
-  const LoadedPaymentCheckout(this.paymentResults);
+  const LoadedPaymentCheckout(this.order);
 
   @override
-  List<Object> get props => [paymentResults];
+  List<Object> get props => [order];
 }
 
 /// When an error has occurred when making [PaymentCheckout]

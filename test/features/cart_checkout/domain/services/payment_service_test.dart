@@ -30,12 +30,15 @@ void main() {
   // Order Data
   const orderId = 'abcdefg';
 
-  final order = orderCreated;
-  order.orderId = orderId;
+  final mockOrder = orderCreated;
+  mockOrder.orderId = orderId;
+
+  final order = OrderData(
+    order: mockOrder,
+    paymentInformation: mockGoPayPaymentInformation,
+  );
 
   final deliveryAddressModel = sampleDeliveryAddressList.first;
-
-  final paymentInformation = mockGoPayPaymentInformation;
 
   /// Store Data
   const storeId = 'mock_store_id';
@@ -131,18 +134,13 @@ void main() {
       );
 
       registerFallbackValue(CheckoutRequest());
-      registerFallbackValue(
-        OrderModel.fromOrderAndPaymentInfo(
-          order,
-          mockGoPayPaymentInformation,
-        ),
-      );
+      registerFallbackValue(OrderModel.fromPb(order));
 
       when(() => orderServiceClient.checkout(any())).thenAnswer(
         (_) => MockResponseFuture.value(
           CheckoutResponse(
-            order: order,
-            paymentInformation: paymentInformation,
+            order: order.order,
+            paymentInformation: order.paymentInformation,
           ),
         ),
       );
@@ -181,14 +179,12 @@ void main() {
       expect(response.isRight(), true);
 
       final result = response.getRight();
-      expect(result.paymentMethod, paymentInformation.paymentMethod);
-      final orderModel =
-          OrderModel.fromOrderAndPaymentInfo(order, paymentInformation);
-      expect(result.order, orderModel);
+      expect(result.paymentMethod, order.paymentInformation.paymentMethod);
+      expect(result, OrderModel.fromPb(order));
 
       // assert
       verify(
-        () => orderRepository.addOrder(orderModel),
+        () => orderRepository.addOrder(OrderModel.fromPb(order)),
       ).called(1);
     });
 
@@ -206,9 +202,7 @@ void main() {
 
       // assert
       verifyNever(
-        () => orderRepository.addOrder(
-          OrderModel.fromOrderAndPaymentInfo(order, paymentInformation),
-        ),
+        () => orderRepository.addOrder(OrderModel.fromPb(order)),
       );
     });
   });

@@ -94,7 +94,7 @@ class DummyPaymentService implements IPaymentRepository {
   DummyPaymentService(this.uuid, this.orderRepository);
 
   @override
-  RepoResult<PaymentResultsModel> checkoutPayment(PaymentMethod method) async {
+  RepoResult<OrderModel> checkoutPayment(PaymentMethod method) async {
     try {
       final orderId = uuid.v4();
       if (method == PaymentMethod.PAYMENT_METHOD_GOPAY) {
@@ -137,17 +137,15 @@ class DummyPaymentService implements IPaymentRepository {
                   (action) => action['name'] == 'deeplink-redirect',
                 )['url'] as String;
 
-            final order = (await orderRepository.getOrderById('1')).getRight();
-            orderRepository.addOrder(order.copyWith(id: orderId));
-
-            return right(
-              PaymentResultsModel(
-                paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
-                paymentInformation: PaymentInformationModel(deeplink: deepLink),
-                order: order,
-                expiryTime: DateTime.now(),
-              ),
+            var order = (await orderRepository.getOrderById('1')).getRight();
+            order = order.copyWith(
+              paymentMethod: PaymentMethod.PAYMENT_METHOD_GOPAY,
+              paymentInformation: PaymentInformationModel(deeplink: deepLink),
+              id: orderId,
             );
+            orderRepository.addOrder(order);
+
+            return right(order);
           }
         }
       } else if (method == PaymentMethod.PAYMENT_METHOD_VA_BCA) {
@@ -173,20 +171,18 @@ class DummyPaymentService implements IPaymentRepository {
                 .map((action) => action as Map<String, dynamic>)
                 .first;
 
-            final order = (await orderRepository.getOrderById('1')).getRight();
-            orderRepository.addOrder(order.copyWith(id: orderId));
-
-            return right(
-              PaymentResultsModel(
-                paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
-                paymentInformation: PaymentInformationModel(
-                  vaNumber: vaInfo['va_number'],
-                  bankName: vaInfo['bank'],
-                ),
-                order: order,
-                expiryTime: DateTime.now(),
+            var order = (await orderRepository.getOrderById('1')).getRight();
+            order = order.copyWith(
+              paymentMethod: PaymentMethod.PAYMENT_METHOD_VA_BCA,
+              paymentInformation: PaymentInformationModel(
+                vaNumber: vaInfo['va_number'],
+                bankName: vaInfo['bank'],
               ),
+              id: orderId,
             );
+            orderRepository.addOrder(order);
+
+            return right(order);
           }
         }
       }

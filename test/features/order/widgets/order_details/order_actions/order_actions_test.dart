@@ -49,7 +49,12 @@ void main() {
     });
 
     await tester.pumpOrderActions(
-      paymentResults: goPayPaymentResults,
+      paymentResults: PaymentResultsModel(
+        order: goPayPaymentResults,
+        paymentInformation: goPayPaymentResults.paymentInformation,
+        paymentMethod: goPayPaymentResults.paymentMethod,
+        expiryTime: goPayPaymentResults.paymentExpiryTime ?? DateTime.now(),
+      ),
       launchGoPay: goPayLauncher,
     );
 
@@ -64,7 +69,12 @@ void main() {
       'should go to [PaymentInstructionsPage] '
       'when [Pay Now] is tapped & payment method is [VA]', (tester) async {
     await tester.pumpOrderActions(
-      paymentResults: bcaPaymentResults,
+      paymentResults: PaymentResultsModel(
+        order: bcaPaymentResults,
+        paymentInformation: bcaPaymentResults.paymentInformation,
+        paymentMethod: bcaPaymentResults.paymentMethod,
+        expiryTime: bcaPaymentResults.paymentExpiryTime ?? DateTime.now(),
+      ),
       launchGoPay: goPayLauncher,
       stackRouter: stackRouter,
     );
@@ -83,9 +93,7 @@ void main() {
     expect(routeInfo, isA<PaymentInstructionsRoute>());
 
     final args = routeInfo.args;
-    expect(args!.order, bcaPaymentResults.order);
-    expect(args.paymentMethod, bcaPaymentResults.paymentMethod);
-    expect(args.paymentInformation, bcaPaymentResults.paymentInformation);
+    expect(args!.order, bcaPaymentResults);
   });
 }
 
