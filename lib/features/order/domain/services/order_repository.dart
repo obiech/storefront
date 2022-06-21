@@ -25,6 +25,7 @@ class OrderRepository extends IOrderRepository {
       final response =
           await orderServiceClient.getOrderHistory(GetOrderHistoryRequest());
 
+      orders.clear();
       orders.addAll(response.ordersData.map(OrderModel.fromPb).toList());
 
       return right(orders);

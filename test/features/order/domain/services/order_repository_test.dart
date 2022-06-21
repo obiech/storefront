@@ -79,6 +79,30 @@ void main() {
         );
 
         test(
+          'should clear old orders '
+          'when there are subsequent calls',
+          () async {
+            // ARRANGE
+            when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
+              (_) => MockResponseFuture.value(
+                GetOrderHistoryResponse(
+                  ordersData: mockPbOrders,
+                ),
+              ),
+            );
+
+            // ACT
+            await grpcOrderRepository.getUserOrders();
+            await grpcOrderRepository.getUserOrders();
+
+            // ASSERT
+            verify(() => orderServiceClient.getOrderHistory(any())).called(2);
+
+            expect(grpcOrderRepository.orders.length, mockPbOrders.length);
+          },
+        );
+
+        test(
           'should map Exceptions to Failure',
           () async {
             // ARRANGE
