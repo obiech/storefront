@@ -6,10 +6,9 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/core.dart';
 import '../../../../res/resources.dart';
-import '../../domain/models/order_model.dart';
-import '../../domain/models/order_product_model.dart';
+import '../../../cart_checkout/index.dart';
+import '../../index.dart';
 import '../../utils/order_products_summarizer.dart';
-import '../../widgets/order_status_chip.dart';
 
 part 'parts/keys.dart';
 part 'parts/list_item.dart';

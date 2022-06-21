@@ -6,6 +6,8 @@ import 'package:storefront_app/features/cart_checkout/index.dart';
 
 import '../../../index.dart';
 
+part 'parts/pay_now.dart';
+
 /// Widgets that will be shown at the bottom of [OrderDetailsPage]
 /// By default it only shows Contact Support button
 ///
@@ -54,7 +56,11 @@ class OrderActions extends StatelessWidget {
                 key: const ValueKey(
                   OrderDetailsPageKeys.buttonPayNow,
                 ),
-                onPressed: () => _payNow(context),
+                onPressed: () => PayNow(
+                  order: order,
+                  context: context,
+                  launchGoPay: launchGoPay,
+                ),
               ),
             ),
           ],
@@ -81,22 +87,5 @@ class OrderActions extends StatelessWidget {
 
   void _initiateReorderFlow() {
     // TODO (leovinsen): add re-order flow
-  }
-
-  /// Pay now
-  void _payNow(BuildContext context) {
-    switch (order.paymentMethod) {
-      case PaymentMethod.PAYMENT_METHOD_GOPAY:
-        launchGoPay(order.paymentInformation.deeplink ?? '');
-        break;
-      case PaymentMethod.PAYMENT_METHOD_VA_BCA:
-        context.pushRoute(
-          PaymentInstructionsRoute(order: order),
-        );
-        break;
-      default:
-        // TODO(obella): Message for unspecified payment method
-        break;
-    }
   }
 }

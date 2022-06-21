@@ -5,51 +5,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
-import 'package:storefront_app/features/order/domain/models/order_model.dart';
-import 'package:storefront_app/features/order/widgets/order_widgets.dart';
+import 'package:storefront_app/features/cart_checkout/index.dart';
+import 'package:storefront_app/features/order/index.dart';
 
+import '../../../../../../test_commons/fixtures/checkout/payment_results.dart';
 import '../../../../../../test_commons/fixtures/order/order_models.dart';
 import '../../../../../../test_commons/utils/locale_setup.dart';
 import '../../../../../../test_commons/utils/sample_order_models.dart';
 import '../../../../../src/mock_navigator.dart';
+import '../../../mocks.dart';
 
 /// Helper functions specific to this test
 
 extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpListItem({
     required OrderModel order,
+    required LaunchGoPay launchGoPay,
     StackRouter? stackRouter,
     DateTime? currentTime,
   }) async {
     late BuildContext ctx;
     await pumpWidget(
-      stackRouter != null
-          ? StackRouterScope(
-              controller: stackRouter,
-              stateHash: 0,
-              child: MaterialApp(
-                home: Builder(
-                  builder: (context) {
-                    ctx = context;
-                    return OrderHistoryListItem(
-                      order: order,
-                      currentTime: currentTime,
-                    );
-                  },
-                ),
-              ),
-            )
-          : MaterialApp(
-              home: Builder(
-                builder: (context) {
-                  ctx = context;
-                  return OrderHistoryListItem(
-                    order: order,
-                    currentTime: currentTime,
-                  );
-                },
-              ),
-            ),
+      MaterialApp(
+        home: Builder(
+          builder: (context) {
+            ctx = context;
+            return OrderHistoryListItem(
+              order: order,
+              currentTime: currentTime,
+              launchGoPay: launchGoPay,
+            );
+          },
+        ),
+      ).withRouterScope(stackRouter),
     );
 
     return ctx;
@@ -58,8 +46,13 @@ extension WidgetTesterX on WidgetTester {
 
 void main() {
   late StackRouter stackRouter;
+  late LaunchGoPay goPayLauncher;
 
   setUp(() {
+    goPayLauncher = MockGoPayLaunch();
+
+    when(() => goPayLauncher.call(any())).thenAnswer((_) async {});
+
     stackRouter = MockStackRouter();
     when(() => stackRouter.push(any())).thenAnswer((invocation) async => null);
   });
@@ -77,6 +70,7 @@ void main() {
       for (final o in sampleOrderModels) {
         await tester.pumpListItem(
           order: o,
+          launchGoPay: goPayLauncher,
         );
         expect(find.byType(OrderSummarySection), findsOneWidget);
         expect(find.byType(OrderStatusChip), findsOneWidget);
@@ -108,6 +102,7 @@ void main() {
       final context = await tester.pumpListItem(
         currentTime: mockCurrentTime,
         order: order,
+        launchGoPay: goPayLauncher,
       );
 
       // assert
@@ -156,6 +151,7 @@ void main() {
         await tester.pumpListItem(
           currentTime: mockCurrentTime,
           order: order,
+          launchGoPay: goPayLauncher,
         );
 
         // assert
@@ -233,6 +229,7 @@ void main() {
       // act
       await tester.pumpListItem(
         order: order,
+        launchGoPay: goPayLauncher,
       );
 
       // assert
@@ -249,6 +246,77 @@ void main() {
       // and should display order completion date & time
       final df = DateFormat('d MMM y • HH:mm');
       expect(timingText.timeLabel, df.format(order.orderCompletionTime!));
+    },
+  );
+
+  testWidgets(
+    'should trigger GoPay launcher '
+    'when [Continue Payment] is tapped & payment method is [GoPay]',
+    (tester) async {
+      String? calledDeeplink;
+
+      when(() => goPayLauncher.call(any())).thenAnswer((invocation) async {
+        calledDeeplink = invocation.positionalArguments.first as String;
+      });
+      final order = mockGoPayPaymentResults;
+      final deepLink = order.paymentInformation.deeplink;
+
+      final mockCurrentTime =
+          order.paymentExpiryTime.subtract(const Duration(seconds: 900));
+
+      // act
+      final context = await tester.pumpListItem(
+        currentTime: mockCurrentTime,
+        order: order,
+        launchGoPay: goPayLauncher,
+      );
+
+      final btn = tester.widget<DropezyButton>(find.byType(DropezyButton));
+      expect(btn.label, context.res.strings.continuePayment);
+
+      await tester.tap(find.text(btn.label));
+
+      verify(() => goPayLauncher.call(deepLink ?? '')).called(1);
+
+      expect(deepLink, calledDeeplink);
+    },
+  );
+
+  testWidgets(
+    'should go to [PaymentInstructionsPage] '
+    'when [Pay Now] is tapped & payment method is [VA]',
+    (tester) async {
+      final order = mockBcaPaymentResults;
+
+      final mockCurrentTime =
+          order.paymentExpiryTime.subtract(const Duration(seconds: 900));
+
+      final context = await tester.pumpListItem(
+        currentTime: mockCurrentTime,
+        order: order,
+        launchGoPay: goPayLauncher,
+        stackRouter: stackRouter,
+      );
+
+      final btn = tester.widget<DropezyButton>(find.byType(DropezyButton));
+      expect(btn.label, context.res.strings.continuePayment);
+
+      await tester.tap(find.text(btn.label));
+
+      verifyNever(() => goPayLauncher.call(any()));
+
+      // Route should go to payment instructions page
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+
+      expect(capturedRoutes.length, 1);
+
+      final routeInfo = capturedRoutes.first as PaymentInstructionsRoute;
+
+      expect(routeInfo, isA<PaymentInstructionsRoute>());
+
+      final args = routeInfo.args;
+      expect(args!.order, order);
     },
   );
 

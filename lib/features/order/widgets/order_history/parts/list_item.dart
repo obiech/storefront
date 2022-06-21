@@ -23,12 +23,16 @@ class OrderHistoryListItem extends StatelessWidget {
     Key? key,
     required this.order,
     this.currentTime,
+    this.launchGoPay = const LaunchGoPay(),
   }) : super(key: key);
 
   final OrderModel order;
 
   /// Used for mocking current time in tests
   final DateTime? currentTime;
+
+  // Gojek link launcher
+  final LaunchGoPay launchGoPay;
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +119,11 @@ class OrderHistoryListItem extends StatelessWidget {
               label: context.res.strings.continuePayment,
               onPressed: () {
                 // context.pushRoute(PaymentInstructionsRoute(order: order));
+                PayNow(
+                  order: order,
+                  context: context,
+                  launchGoPay: launchGoPay,
+                );
                 // TODO(obella) : for Deeplink Payment
               },
               padding: EdgeInsets.symmetric(
