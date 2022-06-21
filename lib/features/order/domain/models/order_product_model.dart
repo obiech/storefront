@@ -33,7 +33,7 @@ class OrderProductModel extends Equatable {
       thumbnailUrl:
           item.product.imagesUrls.isEmpty ? '' : item.product.imagesUrls[0],
       quantity: item.quantity,
-      price: item.product.price.toString(),
+      price: item.product.price.num,
       discount: '000',
       // TODO (Jonathan): change the discount, final, and total
       finalPrice: item.subTotal,
@@ -73,7 +73,7 @@ extension OrderProductModelX on pb.Item {
   String get subTotal {
     // TODO (Jonathan) : Subtract with discount when its available
 
-    return (int.tryParse(product.price.toString()) ?? 0).toString();
+    return (int.tryParse(product.price.num) ?? 0).toString();
   }
 
   String get grandTotal {
