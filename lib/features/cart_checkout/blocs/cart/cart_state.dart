@@ -124,3 +124,14 @@ class CartLoaded extends CartState {
         errorMessage,
       ];
 }
+
+extension CartStateX on CartState {
+  /// Cart is deemed valid for checkout when these conditions are satisfied:
+  /// 1. state is CartLoaded (not in error state)
+  /// 2. cart is not empty
+  /// 3. cart is not currently waiting for payment summary
+  bool get isValidForCheckout =>
+      this is CartLoaded &&
+      (this as CartLoaded).cart.inStockItems.isNotEmpty &&
+      !(this as CartLoaded).isCalculatingSummary;
+}

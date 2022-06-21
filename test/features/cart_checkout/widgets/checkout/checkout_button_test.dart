@@ -10,6 +10,8 @@ import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_
 
 import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
+import '../../../../../test_commons/fixtures/product/variant_models.dart'
+    as variant_fixtures;
 import '../../../../commons.dart';
 import '../../../../src/mock_navigator.dart';
 import '../../../order/mocks.dart';
@@ -86,6 +88,73 @@ void main() {
     );
 
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.loading(cartModel));
+
+    /// act
+    await tester.pumpCheckoutButton(
+      cartBloc,
+      paymentCheckoutCubit,
+      paymentMethodCubit,
+      launchGoPay: goPayLauncher,
+    );
+    await tester.pumpAndSettle();
+
+    /// assert
+    expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+    expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
+
+    final checkoutElevatedButton = tester
+        .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton);
+    expect(checkoutElevatedButton.enabled, false);
+  });
+
+  testWidgets(
+      'When cart is empty '
+      'should be disabled', (WidgetTester tester) async {
+    /// arrange
+    when(() => paymentRepository.getPaymentMethods()).thenAnswer(
+      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+    );
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(CartModel.empty()));
+
+    /// act
+    await tester.pumpCheckoutButton(
+      cartBloc,
+      paymentCheckoutCubit,
+      paymentMethodCubit,
+      launchGoPay: goPayLauncher,
+    );
+    await tester.pumpAndSettle();
+
+    /// assert
+    expect(CartCheckoutPageFinders.buyButton, findsOneWidget);
+    expect(CartCheckoutPageFinders.buyElevatedButton, findsOneWidget);
+
+    final checkoutElevatedButton = tester
+        .widget<ElevatedButton>(CartCheckoutPageFinders.buyElevatedButton);
+    expect(checkoutElevatedButton.enabled, false);
+  });
+
+  testWidgets(
+      'When all cart items are out of stock '
+      'should be disabled', (WidgetTester tester) async {
+    /// arrange
+    when(() => paymentRepository.getPaymentMethods()).thenAnswer(
+      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+    );
+
+    final cartOutOfStock = mockCartModel.copyWith(
+      items: [
+        CartItemModel(
+          variant: variant_fixtures.variantMango.copyWith(stock: 0),
+          quantity: 1,
+        ),
+      ],
+    );
+
+    when(() => cartBloc.state)
+        .thenAnswer((_) => CartLoaded.success(cartOutOfStock));
 
     /// act
     await tester.pumpCheckoutButton(

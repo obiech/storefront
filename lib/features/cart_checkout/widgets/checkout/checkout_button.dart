@@ -49,8 +49,6 @@ class CheckoutButton extends StatelessWidget {
           builder: (context, cartState) {
             return BlocBuilder<PaymentMethodCubit, PaymentMethodState>(
               builder: (context, paymentMethodState) {
-                final isCalculatingSummary =
-                    cartState is CartLoaded && cartState.isCalculatingSummary;
                 return DropezyButton.primary(
                   key: const ValueKey(CheckoutKeys.buy),
                   label: res.strings.pay,
@@ -61,7 +59,7 @@ class CheckoutButton extends StatelessWidget {
                   ),
                   isLoading: checkoutState is LoadingPaymentCheckout,
                   onPressed: paymentMethodState is LoadedPaymentMethods &&
-                          !isCalculatingSummary
+                          cartState.isValidForCheckout
                       ? () async =>
                           context.read<PaymentCheckoutCubit>().checkoutPayment(
                                 paymentMethodState.activePaymentMethod,
