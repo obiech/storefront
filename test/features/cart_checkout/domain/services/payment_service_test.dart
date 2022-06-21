@@ -131,7 +131,12 @@ void main() {
       );
 
       registerFallbackValue(CheckoutRequest());
-      registerFallbackValue(OrderModel.fromPb(order));
+      registerFallbackValue(
+        OrderModel.fromOrderAndPaymentInfo(
+          order,
+          mockGoPayPaymentInformation,
+        ),
+      );
 
       when(() => orderServiceClient.checkout(any())).thenAnswer(
         (_) => MockResponseFuture.value(
@@ -177,11 +182,13 @@ void main() {
 
       final result = response.getRight();
       expect(result.paymentMethod, paymentInformation.paymentMethod);
-      expect(result.order, OrderModel.fromPb(order));
+      final orderModel =
+          OrderModel.fromOrderAndPaymentInfo(order, paymentInformation);
+      expect(result.order, orderModel);
 
       // assert
       verify(
-        () => orderRepository.addOrder(OrderModel.fromPb(order)),
+        () => orderRepository.addOrder(orderModel),
       ).called(1);
     });
 
@@ -199,7 +206,9 @@ void main() {
 
       // assert
       verifyNever(
-        () => orderRepository.addOrder(OrderModel.fromPb(order)),
+        () => orderRepository.addOrder(
+          OrderModel.fromOrderAndPaymentInfo(order, paymentInformation),
+        ),
       );
     });
   });

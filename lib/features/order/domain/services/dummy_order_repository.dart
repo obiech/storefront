@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:dropezy_proto/v1/order/order.pbenum.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 
 import '../../../../core/core.dart';
 import '../../../../di/di_environment.dart';
@@ -86,6 +88,10 @@ class DummyOrderRepository extends IOrderRepository {
     ),
   );
 
+  // Payment Info
+  final paymentMethod = PaymentMethod.PAYMENT_METHOD_GOPAY;
+  final paymentInfo = const PaymentInformationModel(deeplink: 'gojek://');
+
   DummyOrderRepository() {
     orders = [
       OrderModel(
@@ -119,6 +125,8 @@ class DummyOrderRepository extends IOrderRepository {
         ],
         paymentExpiryTime: DateTime.now().add(const Duration(hours: 1)),
         recipientAddress: deliveryAddress,
+        paymentInformation: paymentInfo,
+        paymentMethod: paymentMethod,
       ),
       OrderModel(
         id: '2',
@@ -182,6 +190,8 @@ class DummyOrderRepository extends IOrderRepository {
         ],
         estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
         recipientAddress: deliveryAddress,
+        paymentInformation: paymentInfo,
+        paymentMethod: paymentMethod,
       ),
       OrderModel(
         id: '3',
@@ -252,6 +262,8 @@ class DummyOrderRepository extends IOrderRepository {
           imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
         ),
         recipientAddress: deliveryAddress,
+        paymentInformation: paymentInfo,
+        paymentMethod: paymentMethod,
       ),
       OrderModel(
         id: '4',
@@ -302,6 +314,8 @@ class DummyOrderRepository extends IOrderRepository {
           imageUrl: 'https://randomuser.me/api/portraits/women/51.jpg',
         ),
         recipientAddress: deliveryAddress,
+        paymentInformation: paymentInfo,
+        paymentMethod: paymentMethod,
       ),
     ];
   }

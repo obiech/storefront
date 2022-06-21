@@ -17,7 +17,10 @@ void main() {
   late StackRouter stackRouter;
 
   const orderId = 'abcdefg';
-  final order = OrderModel.fromPb(orderCreated).copyWith(id: orderId);
+  final order = OrderModel.fromOrderAndPaymentInfo(
+    orderCreated,
+    mockGoPayPaymentInformation,
+  ).copyWith(id: orderId);
 
   setUp(() {
     orderRepository = MockOrderRepository();

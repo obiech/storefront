@@ -1,7 +1,9 @@
 import 'package:dropezy_proto/v1/order/order.pb.dart' as pb;
 import 'package:equatable/equatable.dart';
+import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 
 import '../../../address/index.dart';
+import 'order_model.ext.dart';
 import 'order_product_model.dart';
 
 part 'order_driver_model.dart';
@@ -28,38 +30,22 @@ class OrderModel extends Equatable {
     this.driver,
     this.recipient,
     required this.recipientAddress,
+    required this.paymentInformation,
+    required this.paymentMethod,
   });
 
-  factory OrderModel.fromPb(pb.Order order) {
-    late OrderStatus orderStatus;
-    switch (order.state) {
-      case pb.OrderState.ORDER_STATE_CANCELLED:
-        orderStatus = OrderStatus.cancelled;
-        break;
-      case pb.OrderState.ORDER_STATE_CREATED:
-      case pb.OrderState.ORDER_STATE_WAITING_FOR_PAYMENT:
-        orderStatus = OrderStatus.awaitingPayment;
-        break;
-      case pb.OrderState.ORDER_STATE_PAID:
-      case pb.OrderState.ORDER_STATE_CONFIRMED:
-      case pb.OrderState.ORDER_STATE_IN_PROCESS:
-        orderStatus = OrderStatus.paid;
-        break;
-      case pb.OrderState.ORDER_STATE_IN_DELIVERY:
-        orderStatus = OrderStatus.inDelivery;
-        break;
-      case pb.OrderState.ORDER_STATE_DONE:
-      case pb.OrderState.ORDER_STATE_IN_COMPLETED:
-        orderStatus = OrderStatus.arrived;
-        break;
-      case pb.OrderState.ORDER_STATE_FAILED:
-        orderStatus = OrderStatus.failed;
-        break;
-      case pb.OrderState.ORDER_STATE_UNSPECIFIED:
-        orderStatus = OrderStatus.unspecified;
-        break;
-    }
+  factory OrderModel.fromPb(pb.OrderData orderData) {
+    // TODO (widy): Add new properties related to order timestamp
+    return OrderModel.fromOrderAndPaymentInfo(
+      orderData.order,
+      orderData.paymentInformation,
+    );
+  }
 
+  factory OrderModel.fromOrderAndPaymentInfo(
+    pb.Order order,
+    pb.PaymentInformation paymentInformation,
+  ) {
     // TODO (widy): Add new properties related to order timestamp
     return OrderModel(
       id: order.orderId,
@@ -67,12 +53,19 @@ class OrderModel extends Equatable {
       discount: order.paymentSummary.discount.num,
       subTotal: order.paymentSummary.subtotal.num,
       total: order.paymentSummary.total.num,
-      status: orderStatus,
+      status: order.state.toStatus,
       orderDate: order.orderDate.toDateTime(),
       productsBought: order.items.map(OrderProductModel.fromPb).toList(),
       paymentExpiryTime: order.paymentExpiryTime.toDateTime(),
       estimatedArrivalTime: order.estimatedDeliveryTime.toDateTime(),
-      recipientAddress: DeliveryAddressModel.fromPb(order.deliveryInfo),
+      orderCompletionTime: order.orderCompletedTime.toDateTime(),
+      recipientAddress:
+          DeliveryAddressModel.fromPb(order.deliveryInfo.addressInfo),
+      driver: OrderDriverModel.fromPb(order.deliveryInfo.driverInfo),
+      recipient: OrderRecipientModel.fromPb(order.deliveryInfo.recipientInfo),
+      paymentInformation:
+          PaymentInformationModel.fromPaymentInfo(paymentInformation),
+      paymentMethod: paymentInformation.paymentMethod,
     );
   }
 
@@ -136,6 +129,11 @@ class OrderModel extends Equatable {
   final OrderRecipientModel? recipient;
 
   final DeliveryAddressModel recipientAddress;
+
+  /// Payment Information
+  final PaymentInformationModel paymentInformation;
+
+  final pb.PaymentMethod paymentMethod;
 
   @override
   List<Object?> get props => [id];

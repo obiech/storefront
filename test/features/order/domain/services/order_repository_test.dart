@@ -8,6 +8,7 @@ import 'package:storefront_app/features/order/domain/services/order_repository.d
 
 import '../../../../../test_commons/fixtures/order/order_pb_models.dart'
     as pb_orders;
+import '../../../../commons.dart';
 import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
@@ -19,9 +20,18 @@ void main() {
       late OrderRepository grpcOrderRepository;
 
       final mockPbOrders = [
-        pb_orders.orderCreated,
-        pb_orders.orderPaid,
-        pb_orders.orderDone,
+        OrderData(
+          order: pb_orders.orderCreated,
+          paymentInformation: mockGoPayPaymentInformation,
+        ),
+        OrderData(
+          order: pb_orders.orderPaid,
+          paymentInformation: mockGoPayPaymentInformation,
+        ),
+        OrderData(
+          order: pb_orders.orderDone,
+          paymentInformation: mockGoPayPaymentInformation,
+        ),
       ];
 
       setUp(() {
@@ -40,7 +50,7 @@ void main() {
             when(() => orderServiceClient.getOrderHistory(any())).thenAnswer(
               (_) => MockResponseFuture.value(
                 GetOrderHistoryResponse(
-                  orders: mockPbOrders,
+                  ordersData: mockPbOrders,
                 ),
               ),
             );
@@ -124,16 +134,16 @@ void main() {
               final mockPbOrder = mockPbOrders[0];
               when(
                 () => orderServiceClient
-                    .get(GetRequest(orderId: mockPbOrder.orderId)),
+                    .get(GetRequest(orderId: mockPbOrder.order.orderId)),
               ).thenAnswer(
                 (_) => MockResponseFuture.value(
-                  GetResponse(order: mockPbOrder),
+                  GetResponse(orderData: mockPbOrder),
                 ),
               );
 
               // ACT
-              final result =
-                  await grpcOrderRepository.getOrderById(mockPbOrder.orderId);
+              final result = await grpcOrderRepository
+                  .getOrderById(mockPbOrder.order.orderId);
 
               // ASSERT
               // should fetch from gRPC service

@@ -18,4 +18,14 @@ class OrderRecipientModel {
 
   /// URL to recipient's photo taken by driver
   final String imageUrl;
+
+  /// Cast [recipientInfo] to [OrderRecipientModel]
+  factory OrderRecipientModel.fromPb(pb.RecipientInfo recipientInfo) {
+    return OrderRecipientModel(
+      fullName: recipientInfo.name,
+      relationToCustomer: recipientInfo.role,
+      // TODO(Obella): Update when proto includes recipient image
+      imageUrl: '',
+    );
+  }
 }

@@ -40,8 +40,12 @@ class PaymentResultsModel extends Equatable {
         throw Exception('No payment info');
     }
 
+    // TODO(obella): Return only Order
     return PaymentResultsModel(
-      order: OrderModel.fromPb(response.order),
+      order: OrderModel.fromOrderAndPaymentInfo(
+        response.order,
+        response.paymentInformation,
+      ),
       paymentInformation: paymentInformation,
       paymentMethod: paymentMethod,
       expiryTime: response.paymentInformation.paymentExpiryTime.toDateTime(),

@@ -327,8 +327,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "5f1664d"
-      resolved-ref: "5f1664dc47c6a65830efa42948b173a14d6e1b6e"
+      ref: "373ae8e"
+      resolved-ref: "373ae8e09d010f5b6a2ae879fe2d3aa7b5ed2261"
       url: "https://github.com/dropezy/proto.git"
     source: git
     version: "0.0.1"

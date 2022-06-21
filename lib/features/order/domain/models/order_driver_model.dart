@@ -7,10 +7,12 @@ class OrderDriverModel {
     required this.vehicleLicenseNumber,
     required this.imageUrl,
     required this.whatsappNumber,
-  }) : assert(
+  });
+
+  /*TODO(obella): Restore when affirmed assert(
           whatsappNumber.startsWith('+62'),
           "Driver's WhatsApp Number has to be in international format",
-        );
+        );*/
 
   final String fullName;
 
@@ -22,4 +24,15 @@ class OrderDriverModel {
 
   /// Driver's number registered in WhatsApp in international format
   final String whatsappNumber;
+
+  /// Cast [DriverInfo] to [OrderDriverModel]
+  factory OrderDriverModel.fromPb(pb.DriverInfo driverInfo) {
+    return OrderDriverModel(
+      fullName: driverInfo.name,
+      whatsappNumber: driverInfo.phoneNumber,
+      vehicleLicenseNumber: driverInfo.vehicleNumber,
+      // TODO(Obella): Update when proto includes driver image
+      imageUrl: '',
+    );
+  }
 }

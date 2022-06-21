@@ -25,7 +25,7 @@ class OrderRepository extends IOrderRepository {
       final response =
           await orderServiceClient.getOrderHistory(GetOrderHistoryRequest());
 
-      orders.addAll(response.orders.map(OrderModel.fromPb).toList());
+      orders.addAll(response.ordersData.map(OrderModel.fromPb).toList());
 
       return right(orders);
     } on Exception catch (e) {
@@ -46,7 +46,7 @@ class OrderRepository extends IOrderRepository {
       final req = GetRequest(orderId: id);
       final response = await orderServiceClient.get(req);
 
-      return right(OrderModel.fromPb(response.order));
+      return right(OrderModel.fromPb(response.orderData));
     } on Exception catch (e) {
       return left(e.toFailure);
     }

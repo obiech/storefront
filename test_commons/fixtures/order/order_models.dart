@@ -1,7 +1,13 @@
+import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/domain/domains.dart';
 
 import '../address/delivery_address_models.dart';
+import '../checkout/payment_results.dart';
 import '../product/product_models.dart';
+
+final paymentInfo =
+    PaymentInformationModel.fromPaymentInfo(mockGoPayPaymentInformation);
+final paymentMethod = mockGoPayPaymentInformation.paymentMethod;
 
 final orderAwaitingPayment = OrderModel(
   id: 'order-awaiting-payment',
@@ -39,6 +45,8 @@ final orderAwaitingPayment = OrderModel(
     ),
   ),
   recipientAddress: sampleDeliveryAddressList[0],
+  paymentInformation: paymentInfo,
+  paymentMethod: paymentMethod,
 );
 
 final orderPaid = OrderModel(
@@ -98,6 +106,8 @@ final orderPaid = OrderModel(
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
   recipientAddress: sampleDeliveryAddressList[0],
+  paymentInformation: paymentInfo,
+  paymentMethod: paymentMethod,
 );
 
 final orderInDelivery = OrderModel(
@@ -163,6 +173,8 @@ final orderInDelivery = OrderModel(
     imageUrl: 'https://randomuser.me/api/portraits/men/1.jpg',
   ),
   recipientAddress: sampleDeliveryAddressList[0],
+  paymentInformation: paymentInfo,
+  paymentMethod: paymentMethod,
 );
 
 final orderArrived = OrderModel(
@@ -211,4 +223,6 @@ final orderArrived = OrderModel(
     imageUrl: 'https://randomuser.me/api/portraits/women/51.jpg',
   ),
   recipientAddress: sampleDeliveryAddressList[0],
+  paymentInformation: paymentInfo,
+  paymentMethod: paymentMethod,
 );
