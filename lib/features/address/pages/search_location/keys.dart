@@ -5,4 +5,5 @@ class SearchLocationPageKeys {
 
   static const useCurrentLocationButton =
       Key('${_page}_useCurrentLocationButton');
+  static const viewMapChip = Key('${_page}_viewMapChip');
 }

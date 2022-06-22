@@ -3,6 +3,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:storefront_app/core/app_router.gr.dart';
@@ -21,6 +22,7 @@ void main() {
   late PermissionHandlerCubit permissionCubit;
 
   const locationPermission = Permission.location;
+  const latLng = LatLng(-6.1754463, 106.8377065);
 
   setUp(() {
     stackRouter = MockStackRouter();
@@ -169,16 +171,115 @@ void main() {
           .tap(find.byKey(SearchLocationPageKeys.useCurrentLocationButton));
       await tester.pumpAndSettle();
 
-      verify(() => permissionCubit.requestPermission(locationPermission))
-          .called(1);
+      verify(
+        () => searchLocationBloc.add(
+          const RequestLocationPermission(
+            SearchLocationAction.useCurrentLocation,
+          ),
+        ),
+      ).called(1);
+    },
+  );
+
+  testWidgets(
+    'should request location permission '
+    'when view map button is pressed ',
+    (tester) async {
+      await tester.pumpSearchLocationPage(
+        stackRouter: stackRouter,
+        bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
+      );
+
+      await tester.tap(find.byKey(SearchLocationPageKeys.viewMapChip));
+      await tester.pumpAndSettle();
+
+      verify(
+        () => searchLocationBloc.add(
+          const RequestLocationPermission(
+            SearchLocationAction.viewMap,
+          ),
+        ),
+      ).called(1);
+    },
+  );
+
+  testWidgets(
+    'should navigate to AddressPinpointPage '
+    'and then AddressDetailPage '
+    'when state is OnViewMap '
+    'and route return address',
+    (tester) async {
+      whenListen(
+        searchLocationBloc,
+        Stream.fromIterable([
+          const OnViewMap(latLng),
+        ]),
+      );
+      when(() => stackRouter.push(AddressPinpointRoute(cameraTarget: latLng)))
+          .thenAnswer((_) async => placeDetails);
+
+      await tester.pumpSearchLocationPage(
+        stackRouter: stackRouter,
+        bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
+      );
+
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+
+      final routeInfo = capturedRoutes.last as PageRouteInfo;
+
+      // expecting the right route being pushed
+      expect(routeInfo, isA<AddressDetailRoute>());
+    },
+  );
+
+  testWidgets(
+    'should navigate to AddressPinpointPage '
+    'when state is OnViewMap '
+    'and route return null',
+    (tester) async {
+      whenListen(
+        searchLocationBloc,
+        Stream.fromIterable([
+          const OnViewMap(latLng),
+        ]),
+      );
+      when(() => stackRouter.push(AddressPinpointRoute(cameraTarget: latLng)))
+          .thenAnswer((_) async => null);
+
+      await tester.pumpSearchLocationPage(
+        stackRouter: stackRouter,
+        bloc: searchLocationBloc,
+        historyBloc: searchLocationHistoryBloc,
+        permissionHandlerCubit: permissionCubit,
+      );
+
+      final capturedRoutes =
+          verify(() => stackRouter.push(captureAny())).captured;
+
+      final routeInfo = capturedRoutes.last as PageRouteInfo;
+
+      // expecting the right route being pushed
+      expect(routeInfo, isA<AddressPinpointRoute>());
     },
   );
 
   group('location permission handler', () {
     testWidgets(
       'should add UseCurrentLocation to bloc '
-      'when permission is granted',
+      'when permission is granted '
+      'and action is useCurrentLocation',
       (tester) async {
+        whenListen(
+          searchLocationBloc,
+          Stream.fromIterable([
+            const OnRequestPermission(SearchLocationAction.useCurrentLocation),
+          ]),
+        );
         whenListen(
           permissionCubit,
           Stream.fromIterable([
@@ -193,10 +294,41 @@ void main() {
           permissionHandlerCubit: permissionCubit,
         );
 
-        await tester.pumpAndSettle();
+        await tester.pump();
 
         verify(() => searchLocationBloc.add(const UseCurrentLocation()))
             .called(1);
+      },
+    );
+
+    testWidgets(
+      'should add ViewMap to bloc '
+      'when permission is granted '
+      'and action is viewMap',
+      (tester) async {
+        whenListen(
+          searchLocationBloc,
+          Stream.fromIterable([
+            const OnRequestPermission(SearchLocationAction.viewMap),
+          ]),
+        );
+        whenListen(
+          permissionCubit,
+          Stream.fromIterable([
+            const PermissionGranted(),
+          ]),
+        );
+
+        await tester.pumpSearchLocationPage(
+          stackRouter: stackRouter,
+          bloc: searchLocationBloc,
+          historyBloc: searchLocationHistoryBloc,
+          permissionHandlerCubit: permissionCubit,
+        );
+
+        await tester.pump();
+
+        verify(() => searchLocationBloc.add(const ViewMap())).called(1);
       },
     );
 

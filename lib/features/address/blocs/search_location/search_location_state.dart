@@ -60,3 +60,23 @@ class LocationSelectError extends SearchLocationState {
   @override
   List<Object?> get props => [message];
 }
+
+/// state to request permission and [action] that triggers it
+class OnRequestPermission extends SearchLocationState {
+  final SearchLocationAction action;
+
+  const OnRequestPermission(this.action);
+
+  @override
+  List<Object?> get props => [action];
+}
+
+/// state to getting user location & passed to Map view
+class OnViewMap extends SearchLocationState {
+  final LatLng latLng;
+
+  const OnViewMap(this.latLng);
+
+  @override
+  List<Object?> get props => [latLng];
+}

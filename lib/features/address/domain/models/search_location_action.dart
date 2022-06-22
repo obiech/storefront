@@ -1,0 +1,4 @@
+enum SearchLocationAction {
+  useCurrentLocation,
+  viewMap,
+}

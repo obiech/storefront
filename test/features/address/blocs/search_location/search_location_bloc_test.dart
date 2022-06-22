@@ -187,4 +187,52 @@ void main() {
       const SearchLocationInitial(),
     ],
   );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit LocationSelectError '
+    'when ViewMap event is added '
+    'and location service is disabled',
+    setUp: () {
+      when(() => geolocator.isLocationServiceEnabled())
+          .thenAnswer((_) async => left(Failure(locationErrorMessage)));
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const ViewMap()),
+    expect: () => [
+      const SearchLocationLoading(),
+      const LocationSelectError(locationErrorMessage),
+      const SearchLocationInitial(),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit OnViewMap with latlng '
+    'when ViewMap event is added '
+    'and location service is enabled',
+    setUp: () {
+      when(() => geolocator.getCurrentPosition())
+          .thenAnswer((_) async => position);
+    },
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(const ViewMap()),
+    expect: () => [
+      const SearchLocationLoading(),
+      const OnViewMap(latLng),
+      const SearchLocationInitial(),
+    ],
+  );
+
+  blocTest<SearchLocationBloc, SearchLocationState>(
+    'should emit OnRequestPermission '
+    'when RequestPermission event is added ',
+    build: () => searchLocationBloc,
+    act: (bloc) => bloc.add(
+      const RequestLocationPermission(SearchLocationAction.useCurrentLocation),
+    ),
+    expect: () => [
+      const SearchLocationLoading(),
+      const OnRequestPermission(SearchLocationAction.useCurrentLocation),
+      const SearchLocationInitial(),
+    ],
+  );
 }

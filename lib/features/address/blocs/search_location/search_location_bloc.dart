@@ -25,7 +25,20 @@ class SearchLocationBloc
     );
     on<QueryDeleted>((event, emit) => _onQueryDeleted(emit));
     on<LocationSelected>((event, emit) => _onLocationSelected(emit, event));
+    on<RequestLocationPermission>(
+      (event, emit) => _onRequestLocationPermission(emit, event),
+    );
     on<UseCurrentLocation>((event, emit) => _onUseCurrentLocation(emit));
+    on<ViewMap>((event, emit) => _onViewMap(emit));
+  }
+
+  void _onRequestLocationPermission(
+    Emitter<SearchLocationState> emit,
+    RequestLocationPermission event,
+  ) {
+    emit(const SearchLocationLoading());
+    emit(OnRequestPermission(event.action));
+    emit(const SearchLocationInitial());
   }
 
   Future<void> _onLocationSelected(
@@ -101,6 +114,31 @@ class SearchLocationBloc
             emit(LocationSelectSuccess(address));
           },
         );
+      },
+    );
+  }
+
+  Future<void> _onViewMap(Emitter<SearchLocationState> emit) async {
+    emit(const SearchLocationLoading());
+
+    final serviceEnabled = await _geolocator.isLocationServiceEnabled();
+
+    await serviceEnabled.fold(
+      (failure) {
+        emit(LocationSelectError(failure.message));
+        emit(const SearchLocationInitial());
+      },
+      (_) async {
+        final position = await _geolocator.getCurrentPosition();
+        emit(
+          OnViewMap(
+            LatLng(
+              position.latitude,
+              position.longitude,
+            ),
+          ),
+        );
+        emit(const SearchLocationInitial());
       },
     );
   }

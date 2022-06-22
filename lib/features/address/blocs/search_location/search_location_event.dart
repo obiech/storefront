@@ -29,8 +29,24 @@ class LocationSelected extends SearchLocationEvent {
   List<Object?> get props => [placeId];
 }
 
+class RequestLocationPermission extends SearchLocationEvent {
+  final SearchLocationAction action;
+
+  const RequestLocationPermission(this.action);
+
+  @override
+  List<Object?> get props => [action];
+}
+
 class UseCurrentLocation extends SearchLocationEvent {
   const UseCurrentLocation();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ViewMap extends SearchLocationEvent {
+  const ViewMap();
 
   @override
   List<Object?> get props => [];
