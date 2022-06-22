@@ -327,6 +327,8 @@ class DummyOrderRepository extends IOrderRepository {
 
   @override
   RepoResult<List<OrderModel>> getUserOrders() async {
+    //  Simulate network loading
+    await Future.delayed(const Duration(seconds: 1));
     return right(orders);
   }
 

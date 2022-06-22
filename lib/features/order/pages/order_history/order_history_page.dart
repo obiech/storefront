@@ -27,15 +27,18 @@ class OrderHistoryPage extends StatelessWidget {
     );
   }
 
+  // TODO (leovinsen): Rewrite into non-function widget
   Widget _mapStateToWidget(BuildContext context, OrderHistoryState state) {
+    late Widget child;
+
     if (state is OrderHistoryLoading) {
       // TODO (leovinsen): Implement skeleton loader
-      return const Center(
+      child = const Center(
         key: ValueKey(OrderHistoryKeys.loadingWidget),
         child: CircularProgressIndicator(),
       );
     } else if (state is OrderHistoryLoaded) {
-      return state.orders.isNotEmpty
+      child = state.orders.isNotEmpty
           // TODO (leovinsen): Improve UI for 'No Orders' state
           ? OrderHistoryList(
               key: const ValueKey(OrderHistoryKeys.orderListWidget),
@@ -50,15 +53,27 @@ class OrderHistoryPage extends StatelessWidget {
             );
     } else if (state is OrderHistoryLoadingError) {
       //TODO (leovinsen): Improve UI for displaying error
-      return Center(
+      child = Center(
         key: const ValueKey(OrderHistoryKeys.errorWidget),
-        child: Text(
-          state.message,
-          style: context.res.styles.caption1,
+        child: DropezyEmptyState(
+          message: state.message,
+          showRetry: true,
+          onRetry: () async => _onRefresh(context, state),
         ),
       );
+    } else {
+      child = const SizedBox.shrink();
     }
 
-    return Container();
+    return RefreshIndicator(
+      child: child,
+      onRefresh: () async => _onRefresh(context, state),
+    );
+  }
+
+  void _onRefresh(BuildContext context, OrderHistoryState state) {
+    if (state is! OrderHistoryLoading) {
+      context.read<OrderHistoryCubit>().fetchUserOrderHistory();
+    }
   }
 }

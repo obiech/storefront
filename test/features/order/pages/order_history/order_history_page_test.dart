@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/features/order/finders/order_history_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
-import '../../../../../test_commons/utils/locale_setup.dart';
+import '../../../../../test_commons/fixtures/order/order_models.dart';
 import '../../../../../test_commons/utils/sample_order_models.dart';
+import '../../../../commons.dart';
 import '../../../cart_checkout/mocks.dart';
 import '../../mocks.dart';
 
@@ -25,22 +27,30 @@ void main() {
     setUpLocaleInjection();
   });
 
-  Future<void> pumpOrderHistoryPage(WidgetTester tester) async {
+  Future<BuildContext> pumpOrderHistoryPage(WidgetTester tester) async {
+    late BuildContext ctx;
     await tester.pumpWidget(
       MaterialApp(
-        home: MultiBlocProvider(
-          providers: [
-            BlocProvider<OrderHistoryCubit>(
-              create: (_) => orderHistoryCubit,
-            ),
-            BlocProvider(
-              create: (context) => cartBloc,
-            ),
-          ],
-          child: const OrderHistoryPage(),
+        home: Builder(
+          builder: (context) {
+            ctx = context;
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<OrderHistoryCubit>(
+                  create: (_) => orderHistoryCubit,
+                ),
+                BlocProvider(
+                  create: (context) => cartBloc,
+                ),
+              ],
+              child: const OrderHistoryPage(),
+            );
+          },
         ),
       ),
     );
+
+    return ctx;
   }
 
   group('[OrderHistoryPage]', () {
@@ -97,7 +107,8 @@ void main() {
     );
 
     testWidgets(
-      'should display list of Orders when state is [OrderHistoryLoadingError]',
+      'should display error messsage '
+      'when state is [OrderHistoryLoadingError]',
       (tester) async {
         when(() => orderHistoryCubit.state)
             .thenAnswer((_) => const OrderHistoryLoadingError('fake error'));
@@ -106,6 +117,54 @@ void main() {
 
         expect(OrderHistoryFinders.errorWidget, findsOneWidget);
         expect(find.text('fake error'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'should be able to pull-to-refresh '
+      'when state is [OrderHistoryLoaded]',
+      (tester) async {
+        // arrange
+        when(() => orderHistoryCubit.state)
+            .thenAnswer((invocation) => OrderHistoryLoaded(refreshOrderList));
+        when(() => orderHistoryCubit.fetchUserOrderHistory())
+            .thenAnswer((_) async {});
+
+        // act
+        await pumpOrderHistoryPage(tester);
+
+        await tester.pullFromTop(find.byType(RefreshIndicator));
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => orderHistoryCubit.fetchUserOrderHistory()).called(1);
+      },
+    );
+
+    testWidgets(
+      'should trigger a refresh '
+      'when state is [OrderHistoryError] '
+      'and button "Try Again" is tapped',
+      (tester) async {
+        // arrange
+        when(() => orderHistoryCubit.state)
+            .thenAnswer((_) => const OrderHistoryLoadingError('Dummy error'));
+        when(() => orderHistoryCubit.fetchUserOrderHistory())
+            .thenAnswer((_) async {});
+
+        // act
+        final context = await pumpOrderHistoryPage(tester);
+
+        await tester.tap(
+          find.descendant(
+            of: find.byType(ElevatedButton),
+            matching: find.text(context.res.strings.retry),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        //assert
+        verify(() => orderHistoryCubit.fetchUserOrderHistory()).called(1);
       },
     );
   });
