@@ -53,6 +53,25 @@ void main() {
     },
   );
 
+  test(
+    '[isZeroCurrency] should return whether a string evaluates to zero',
+    () {
+      expect(''.isZeroCurrency, true);
+      expect('0'.isZeroCurrency, true);
+      expect('00'.isZeroCurrency, true);
+      expect('000'.isZeroCurrency, true);
+      expect('0000'.isZeroCurrency, true);
+      expect('00000'.isZeroCurrency, true);
+      expect('00000000'.isZeroCurrency, true);
+      expect('abcdef'.isZeroCurrency, true);
+      expect('a1c2ef'.isZeroCurrency, true);
+
+      expect('100'.isZeroCurrency, false);
+      expect('25000'.isZeroCurrency, false);
+      expect('12345'.isZeroCurrency, false);
+    },
+  );
+
   test('should not return cents component if cents is zero', () {
     const noCents = '10000';
     expect(noCents.toCurrency(), 'Rp 100');

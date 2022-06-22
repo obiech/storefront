@@ -31,6 +31,15 @@ extension StringX on String {
     return '$body,$cents';
   }
 
+  /// Whether a given currency string evaluates to a zero value
+  /// such as '0', '00', '000', ''.
+  ///
+  /// Useful to determine whether a value is present, for example
+  /// delivery fee and discount.
+  ///
+  /// Returns [true] for alphanumerical strings.
+  bool get isZeroCurrency => isEmpty || (int.tryParse(this) ?? 0) == 0;
+
   /// Takes in a string number and formats it using separator
   String formatNumber(String separator) {
     if (!isNumeric()) return '';
