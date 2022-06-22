@@ -1,9 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
-import 'package:storefront_app/features/permission_handler/index.dart';
 
 class AddressEmptyView extends StatelessWidget {
   const AddressEmptyView({Key? key}) : super(key: key);
@@ -23,9 +21,7 @@ class AddressEmptyView extends StatelessWidget {
             color: context.res.colors.blue,
           ),
           onPressed: () {
-            context
-                .read<PermissionHandlerCubit>()
-                .requestPermission(Permission.location);
+            context.pushRoute(const SearchLocationRoute());
           },
         )
       ],
