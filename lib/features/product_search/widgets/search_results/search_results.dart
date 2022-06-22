@@ -35,7 +35,7 @@ class _SearchResultsState extends State<SearchResults> {
     /// * 0.008 scale factor from figma
     scaleFactor =
         ((MediaQuery.of(context).size.width - (12 * columns)) / columns) *
-            0.008;
+            0.0074;
 
     return BlocBuilder<SearchInventoryBloc, SearchInventoryState>(
       builder: (context, state) {

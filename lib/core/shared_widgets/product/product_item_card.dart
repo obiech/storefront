@@ -136,15 +136,14 @@ class ProductItemCard extends StatelessWidget {
                       product.price.toCurrency(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: res.styles.caption2.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: res.styles.caption2.fontSize,
-                      ),
+                      style: res.styles.caption2
+                          .copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          )
+                          .withLineHeight(15.85),
                     ),
                     if (product.discount != null) ...[
-                      SizedBox(
-                        height: 3 * scaleFactor,
-                      ),
                       Text(
                         product.discount!.toCurrency(),
                         maxLines: 1,
@@ -152,30 +151,28 @@ class ProductItemCard extends StatelessWidget {
                         style: res.styles.discountText,
                       )
                     ],
-                    SizedBox(
-                      height: 3 * scaleFactor,
-                    ),
                     Text(
                       product.name.capitalize(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: res.styles.caption3.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: res.colors.black,
-                        fontSize: res.styles.caption3.fontSize,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2 * scaleFactor,
+                      style: res.styles.caption3
+                          .copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: res.colors.black,
+                            fontSize: 11,
+                          )
+                          .withLineHeight(14.63),
                     ),
                     Text(
                       product.unit,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: res.styles.caption3.copyWith(
-                        color: const Color(0xFF70717D),
-                        fontSize: 11,
-                      ),
+                      style: res.styles.caption3
+                          .copyWith(
+                            color: const Color(0xFF70717D),
+                            fontSize: 9,
+                          )
+                          .withLineHeight(16),
                     ),
                     const Expanded(child: SizedBox()),
                     SizedBox(

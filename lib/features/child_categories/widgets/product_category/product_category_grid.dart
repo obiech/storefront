@@ -19,7 +19,7 @@ class ProductCategoryGrid extends StatelessWidget {
     // TODO (Jonathan) : Change the scale so it looks bigger
     final double scaleFactor =
         ((MediaQuery.of(context).size.width - (12 * columns)) / columns) *
-            0.005;
+            0.006;
 
     return BlocBuilder<CategoryProductCubit, CategoryProductState>(
       builder: (context, state) {
