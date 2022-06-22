@@ -109,6 +109,11 @@ class OrderDetailsView extends StatelessWidget {
                   ),
                 ],
               );
+            } else if (state is LoadingErrorOrderDetails) {
+              return DropezyError(
+                title: context.res.strings.failed,
+                message: state.message,
+              );
             } else {
               return Container();
             }

@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../test_commons/fixtures/order/order_models.dart';
@@ -37,6 +38,26 @@ void main() {
       expect: () => [
         LoadingOrderDetails(),
         LoadedOrderDetails(orderAwaitingPayment),
+      ],
+      verify: (cubit) {
+        verify(() => repository.getOrderById(orderAwaitingPayment.id))
+            .called(1);
+      },
+    );
+
+    blocTest<OrderDetailsCubit, OrderDetailsState>(
+      'Should show [LoadingErrorOrderDetails] '
+      'when [IOrderRepository.getOrderById()] return failure',
+      setUp: () {
+        when(() => repository.getOrderById(orderAwaitingPayment.id)).thenAnswer(
+          (_) async => left(Failure('An unexpected error occured.')),
+        );
+      },
+      build: () => createCubit(),
+      act: (cubit) => cubit.getUserOrderDetails(orderAwaitingPayment.id),
+      expect: () => [
+        LoadingOrderDetails(),
+        const LoadingErrorOrderDetails('An unexpected error occured.'),
       ],
       verify: (cubit) {
         verify(() => repository.getOrderById(orderAwaitingPayment.id))
