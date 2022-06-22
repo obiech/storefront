@@ -42,15 +42,17 @@ class ParentCategoriesGrid extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: columns,
-              childAspectRatio: 3 / 5,
+              childAspectRatio: 8 / 13,
               crossAxisSpacing: horizontalSpacing,
               mainAxisSpacing: verticalSpacing,
             ),
             padding: EdgeInsets.only(
+              top: context.res.dimens.spacingLarge,
               bottom: context.res.dimens.minOffsetForCartSummary,
             ),
             itemCount: state.parentCategoryList.length,
             itemBuilder: (context, index) {
+              // Using fixed width since phone and tablet size is the same
               return GridTile(
                 child: GestureDetector(
                   onTap: () {
@@ -61,22 +63,24 @@ class ParentCategoriesGrid extends StatelessWidget {
                     );
                   },
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Flexible(
-                        flex: 3,
-                        child: DropezyImage(
-                          url: state.parentCategoryList[index].thumbnailUrl,
-                          borderRadius: 16,
-                        ),
+                      DropezyImage(
+                        padding: EdgeInsets.zero,
+                        url: state.parentCategoryList[index].thumbnailUrl,
+                        borderRadius: 16,
                       ),
-                      const SizedBox(height: 4),
-                      Flexible(
-                        flex: 2,
-                        child: Text(
-                          state.parentCategoryList[index].name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 13),
-                        ),
+                      const SizedBox(height: 6),
+                      Text(
+                        state.parentCategoryList[index].name,
+                        textAlign: TextAlign.center,
+                        style: context.res.styles.caption3
+                            .copyWith(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: DropezyColors.grey6,
+                            )
+                            .withLineHeight(13),
                       ),
                     ],
                   ),

@@ -11,6 +11,7 @@ class DropezyColors {
   static const grey2 = Color(0xFFC4C4C4);
   static const grey3 = Color(0xFF9496AD);
   static const grey5 = Color(0xFF787C8F);
+  static const grey6 = Color(0xFF666666);
 
   /// Used for [TextField] [BoxDecoration] [Border] color
   static const textFieldBorderGrey = Color(0xFFDBDFE3);
