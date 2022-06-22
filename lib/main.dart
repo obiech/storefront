@@ -12,6 +12,8 @@ import 'package:storefront_app/di/config/di_config.dart';
 
 import 'app.dart';
 import 'core/core.dart';
+import 'core/services/geofence/models/dropezy_latlng.dart';
+import 'core/services/geofence/models/dropezy_polygon.dart';
 import 'di/config/di_config.dart';
 import 'di/di_environment.dart';
 import 'di/injection.dart';
@@ -39,6 +41,8 @@ Future<void> main() async {
       await Hive.initFlutter();
       Hive.registerAdapter(SearchLocationHistoryQueryAdapter());
       Hive.registerAdapter(PlaceModelAdapter());
+      Hive.registerAdapter(DropezyLatLngAdapter());
+      Hive.registerAdapter(DropezyPolygonAdapter());
 
       // Dependency Injection
       await configureInjection(determineEnvironment());

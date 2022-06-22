@@ -1,8 +1,9 @@
 import 'package:injectable/injectable.dart';
 import 'package:maps_toolkit/maps_toolkit.dart';
-import 'i_geofence_repository.dart';
-import 'models/dropezy_latlng.dart';
-import 'models/dropezy_polygon.dart';
+
+import '../models/dropezy_latlng.dart';
+import '../models/dropezy_polygon.dart';
+import '../repository/i_geofence_repository.dart';
 
 @LazySingleton(as: IGeofenceRepository)
 class GeofenceRepository implements IGeofenceRepository {

@@ -1,10 +1,17 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as maps_toolkit;
 
+import '../../../core.dart';
 import 'dropezy_latlng.dart';
 
+part 'dropezy_polygon.g.dart';
+
+@HiveType(typeId: HiveTypeIds.dropezyPolygon)
 class DropezyPolygon {
+  @HiveField(DropezyPolygonHiveFieldIds.id)
   final String id;
+  @HiveField(DropezyPolygonHiveFieldIds.points)
   List<DropezyLatLng> points;
 
   DropezyPolygon({

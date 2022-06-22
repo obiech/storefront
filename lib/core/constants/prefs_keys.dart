@@ -15,3 +15,6 @@ class PrefsKeys {
 
 /// DI Hive box named key
 const PREF_BOX = 'PREF_BOX';
+
+/// DI Hive box named key for Geofence Box
+const GEOFENCE_PREF_BOX = 'GEOFENCE_PREF_BOX';

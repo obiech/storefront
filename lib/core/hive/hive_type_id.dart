@@ -4,6 +4,8 @@ import 'package:storefront_app/features/address/index.dart';
 class HiveTypeIds {
   static const searchLocationHistoryQuery = 1;
   static const placeModel = 2;
+  static const dropezyPolygon = 3;
+  static const dropezyLatLng = 4;
 }
 
 /// Unique [SearchLocationHistoryQuery] hive fields ids
@@ -18,4 +20,16 @@ class PlaceModelHiveFieldIds {
   static const mainText = 2;
   static const description = 3;
   static const secondaryText = 4;
+}
+
+/// Unique [DropezyPolygon] hive fields ids
+class DropezyPolygonHiveFieldIds {
+  static const id = 1;
+  static const points = 2;
+}
+
+/// Unique [DropezyLatLng] hive fields ids
+class DropezyLatLngHiveFieldIds {
+  static const latitude = 1;
+  static const longitude = 2;
 }

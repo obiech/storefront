@@ -1,9 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:storefront_app/core/services/geofence/geofence_repository.dart';
-import 'package:storefront_app/core/services/geofence/i_geofence_repository.dart';
 import 'package:storefront_app/core/services/geofence/models/dropezy_latlng.dart';
 import 'package:storefront_app/core/services/geofence/models/dropezy_polygon.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_repository.dart';
+import 'package:storefront_app/core/services/geofence/services/geofence_repository.dart';
 
 void main() {
   late IGeofenceRepository repo;

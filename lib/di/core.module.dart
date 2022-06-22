@@ -49,6 +49,11 @@ abstract class CoreModule {
   @preResolve
   Future<Box> get prefsBox => Hive.openBox(PREF_BOX);
 
+  @Named(GEOFENCE_PREF_BOX)
+  @singleton
+  @preResolve
+  Future<Box> get geofencePrefsBox => Hive.openBox(GEOFENCE_PREF_BOX);
+
   /// To access translations in Bloc & repositories,
   /// [BaseStrings] can be injected
   /// TODO(obella): Update factory on [Locale] change

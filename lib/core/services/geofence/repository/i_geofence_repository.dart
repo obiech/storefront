@@ -1,5 +1,5 @@
-import 'models/dropezy_latlng.dart';
-import 'models/dropezy_polygon.dart';
+import '../models/dropezy_latlng.dart';
+import '../models/dropezy_polygon.dart';
 
 abstract class IGeofenceRepository {
   /// Computes whether the given point lies inside the specified polygon.
