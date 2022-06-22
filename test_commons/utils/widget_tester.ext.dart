@@ -46,4 +46,15 @@ extension WidgetTesterX on WidgetTester {
       await pump(const Duration(milliseconds: 50));
     }
   }
+
+  /// Convenience method for simulating a pull starting from top of [finder].
+  ///
+  /// Useful for simulating pull-to-refresh scenarios.
+  Future<void> pullFromTop(
+    Finder finder, {
+    Offset offset = const Offset(0.0, 300.0),
+    double speed = 1000,
+  }) async {
+    await fling(finder, offset, speed);
+  }
 }
