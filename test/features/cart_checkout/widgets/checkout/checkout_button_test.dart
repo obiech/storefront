@@ -50,11 +50,10 @@ void main() {
     // Navigation
     stackRouter = MockStackRouter();
     when(
-      () => stackRouter.pushAndPopUntil(
+      () => stackRouter.replaceAll(
         any(),
-        predicate: any(named: 'predicate'),
       ),
-    ).thenAnswer((_) async => null);
+    ).thenAnswer((_) async {});
   });
 
   testWidgets(
@@ -316,25 +315,26 @@ void main() {
     verify(() => cartBloc.add(const LoadCart())).called(1);
 
     final capturedRoutes = verify(
-      () => stackRouter.pushAndPopUntil(
+      () => stackRouter.replaceAll(
         captureAny(),
-        predicate: any(named: 'predicate'),
       ),
     ).captured;
 
     expect(capturedRoutes.length, 1);
+    expect(capturedRoutes.first, [isA<MainRoute>(), isA<OrderRouter>()]);
 
-    final routeInfo = capturedRoutes.first as PageRouteInfo;
+    final routeInfo = capturedRoutes.first.last as PageRouteInfo;
 
     expect(routeInfo, isA<OrderRouter>());
 
     final orderRouter = routeInfo as OrderRouter;
     expect(orderRouter.hasChildren, true);
-    expect(orderRouter.initialChildren!.length, 1);
+    expect(orderRouter.initialChildren, [
+      isA<OrderHistoryRoute>(),
+      isA<OrderDetailsRoute>(),
+    ]);
 
-    final orderDetailsRoute = orderRouter.initialChildren!.first;
-    expect(orderDetailsRoute, isA<OrderDetailsRoute>());
-
+    final orderDetailsRoute = orderRouter.initialChildren![1];
     final args = orderDetailsRoute.args as OrderDetailsRouteArgs;
     expect(args.id, paymentResults.id);
   });
@@ -419,15 +419,16 @@ void main() {
 
     // assert
     final capturedRoutes = verify(
-      () => stackRouter.pushAndPopUntil(
-        captureAny(),
-        predicate: any(named: 'predicate'),
-      ),
+      () => stackRouter.replaceAll(captureAny()),
     ).captured;
 
-    expect(capturedRoutes.length, 1);
+    expect(capturedRoutes.first, [
+      isA<MainRoute>(),
+      isA<OrderRouter>(),
+      isA<PaymentInstructionsRoute>(),
+    ]);
 
-    final routeInfo = capturedRoutes.first as PageRouteInfo;
+    final routeInfo = capturedRoutes.first[2] as PageRouteInfo;
 
     expect(routeInfo, isA<PaymentInstructionsRoute>());
 
