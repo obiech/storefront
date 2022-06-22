@@ -63,6 +63,7 @@ dependencies:
   maps_toolkit: ^2.0.0
   modal_bottom_sheet: ^2.0.0
   package_info_plus: ^1.4.0
+  path: ^1.8.0
   percent_indicator: ^4.0.0
   permission_handler: ^9.2.0
   pin_code_fields: ^7.3.0

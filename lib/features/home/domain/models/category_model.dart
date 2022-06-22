@@ -1,5 +1,6 @@
 import 'package:dropezy_proto/v1/category/category.pb.dart';
 import 'package:equatable/equatable.dart';
+import 'package:storefront_app/core/core.dart';
 
 //Enum for category level
 
@@ -35,10 +36,11 @@ class ParentCategoryModel extends CategoryModel {
   final List<ChildCategoryModel> childCategories;
 
   factory ParentCategoryModel.fromPb(Category category) {
+    final imageUrls = category.toImageUrls;
     return ParentCategoryModel(
       id: category.categoryId,
       name: category.name,
-      thumbnailUrl: category.imagesUrls.isEmpty ? '' : category.imagesUrls[0],
+      thumbnailUrl: imageUrls.isEmpty ? '' : imageUrls.first,
       childCategories:
           category.childCategories.map(ChildCategoryModel.fromPb).toList(),
     );
@@ -58,10 +60,11 @@ class ChildCategoryModel extends CategoryModel {
         );
 
   factory ChildCategoryModel.fromPb(Category category) {
+    final imageUrls = category.toImageUrls;
     return ChildCategoryModel(
       id: category.categoryId,
       name: category.name,
-      thumbnailUrl: category.imagesUrls.isEmpty ? '' : category.imagesUrls[0],
+      thumbnailUrl: imageUrls.isEmpty ? '' : imageUrls.first,
     );
   }
 }
@@ -70,4 +73,10 @@ class ChildCategoryModel extends CategoryModel {
 extension ParentCategoryModelX on ParentCategoryModel {
   List<ChildCategoryModel> get sortChildrenByName =>
       List.of(childCategories)..sort((a, b) => a.name.compareTo(b.name));
+}
+
+extension CategoryX on Category {
+  /// list of image URL string
+  List<String> get toImageUrls =>
+      imagesUrls.map((url) => url.toImageUrl).toList();
 }

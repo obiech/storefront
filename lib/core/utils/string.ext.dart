@@ -1,3 +1,5 @@
+import 'package:path/path.dart';
+
 import '../core.dart';
 
 /// Extension methods for [String] data
@@ -73,5 +75,8 @@ extension StringX on String {
       isNotEmpty ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
 
   /// Append image URL source to path from backend
-  String get toImageUrl => '${AssetsConfig.assetsUrl}$this';
+  String get toImageUrl {
+    final context = Context(style: Style.posix);
+    return context.join(AssetsConfig.assetsUrl, this);
+  }
 }

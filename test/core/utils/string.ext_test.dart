@@ -1,5 +1,6 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:storefront_app/core/utils/string.ext.dart';
+import 'package:storefront_app/core/core.dart';
 
 /// Unit tests for Currency conversion
 void main() {
@@ -99,6 +100,20 @@ void main() {
       expect('SOME STUFF'.capitalize(), 'Some stuff');
       expect('Some Stuff'.capitalize(), 'Some stuff');
       expect('SoMe STuFf'.capitalize(), 'Some stuff');
+    });
+  });
+
+  group('[String].toImageUrl()', () {
+    test('should join img url with host', () async {
+      dotenv.testLoad(fileInput: '''ASSETS_URL=https://test.dropezy.com''');
+      expect(
+        'storefront/image.webp'.toImageUrl,
+        'https://test.dropezy.com/storefront/image.webp',
+      );
+      expect(
+        'storefront/123.webp'.toImageUrl,
+        'https://test.dropezy.com/storefront/123.webp',
+      );
     });
   });
 }

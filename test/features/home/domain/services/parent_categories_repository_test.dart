@@ -1,4 +1,5 @@
 import 'package:dropezy_proto/v1/category/category.pbgrpc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,6 +21,7 @@ void main() {
     final List<ParentCategoryModel> expectedParentModels = [];
 
     setUpAll(() {
+      dotenv.testLoad(fileInput: '''ASSETS_URL=https://test.dropezy.com''');
       registerFallbackValue(GetRequest());
       categoryServiceClient = MockCategoryServiceClient();
       repository = ParentCategoriesRepository(categoryServiceClient);
