@@ -21,7 +21,7 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
   })  : _repository = repository,
         _dateTimeProvider = dateTimeProvider,
         super(const AddressDetailState()) {
-    on<LoadAddressDetail>((event, emit) async {
+    on<LoadPlaceDetail>((event, emit) async {
       // FIXME: ugly hacks to delay & wait for map creation
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -35,6 +35,25 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
           ),
         );
       }
+    });
+    on<LoadDeliveryAddress>((event, emit) async {
+      // FIXME: ugly hacks to delay & wait for map creation
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      final deliveryAddress = event.deliveryAddressModel;
+      emit(
+        state.copyWith(
+          id: deliveryAddress.id,
+          latLng: LatLng(deliveryAddress.lat, deliveryAddress.lng),
+          addressDetails: deliveryAddress.details?.toPrettyAddress,
+          addressName: deliveryAddress.title,
+          addressDetailsNote: deliveryAddress.notes,
+          recipientName: deliveryAddress.recipientName,
+          recipientPhoneNumber: deliveryAddress.recipientPhoneNumber,
+          isPrimaryAddress: deliveryAddress.isPrimaryAddress,
+          isEditMode: true,
+        ),
+      );
     });
     on<AddressNameChanged>((event, emit) {
       emit(state.copyWith(addressName: event.addressName));
@@ -51,46 +70,60 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
     on<PrimaryAddressChanged>((event, emit) {
       emit(state.copyWith(isPrimaryAddress: event.isPrimaryAddress));
     });
-    on<FormSubmitted>((event, emit) => _onFormSubmitted(emit));
+    on<FormSubmitted>(
+      (event, emit) => _onFormSubmitted(emit),
+    );
   }
 
-  Future<void> _onFormSubmitted(Emitter<AddressDetailState> emit) async {
+  Future<void> _onFormSubmitted(
+    Emitter<AddressDetailState> emit,
+  ) async {
     emit(state.copyWith(loading: true));
 
-    final result = await _repository.saveAddress(
-      // TODO (widy): Fix model passed to repository
-      // Notes:
-      // - id can be exist if page opened from edit address
-      DeliveryAddressModel(
-        id: 'id',
-        title: state.addressName,
-        isPrimaryAddress: state.isPrimaryAddress,
-        lat: state.latLng.latitude,
-        lng: state.latLng.longitude,
-        notes: state.addressDetailsNote,
-        recipientName: state.recipientName,
-        recipientPhoneNumber: state.recipientPhoneNumber,
-        dateCreated: _dateTimeProvider.now,
-        // TODO (widy): fix with proper structure conversion
-        details: AddressDetailsModel(
-          street: state.addressDetails,
-        ),
-      ),
-    );
-
-    result.fold(
-      (failure) => emit(
-        state.copyWith(
-          errorMessage: failure.message,
-          loading: false,
-        ),
-      ),
-      (success) => emit(
+    if (state.isEditMode) {
+      ///TODO(jeco): Adding backend implementation
+      emit(
         state.copyWith(
           loading: false,
           addressUpdated: true,
         ),
-      ),
-    );
+      );
+    } else {
+      final result = await _repository.saveAddress(
+        // TODO (widy): Fix model passed to repository
+        // Notes:
+        // - id can be exist if page opened from edit address
+        DeliveryAddressModel(
+          id: 'id',
+          title: state.addressName,
+          isPrimaryAddress: state.isPrimaryAddress,
+          lat: state.latLng.latitude,
+          lng: state.latLng.longitude,
+          notes: state.addressDetailsNote,
+          recipientName: state.recipientName,
+          recipientPhoneNumber: state.recipientPhoneNumber,
+          dateCreated: _dateTimeProvider.now,
+          // TODO (widy): fix with proper structure conversion
+          details: AddressDetailsModel(
+            street: state.addressDetails,
+          ),
+        ),
+      );
+
+      result.fold(
+        (failure) => emit(
+          state.copyWith(
+            errorMessage: failure.message,
+            loading: false,
+          ),
+        ),
+        (success) => emit(
+          state.copyWith(
+            loading: false,
+            addressUpdated: true,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -5,13 +5,27 @@ abstract class AddressDetailEvent extends Equatable {
 }
 
 /// Initial event when [AddressDetailPage] is loaded
-class LoadAddressDetail extends AddressDetailEvent {
+///
+/// P.S: Indicating the use of bloc for create address
+class LoadPlaceDetail extends AddressDetailEvent {
   final PlaceDetailsModel? placeDetailsModel;
 
-  const LoadAddressDetail({this.placeDetailsModel});
+  const LoadPlaceDetail({this.placeDetailsModel});
 
   @override
   List<Object?> get props => [placeDetailsModel];
+}
+
+/// Initial event when [AddressDetailPage] is loaded
+///
+/// P.S: Indicating the use of bloc for edit address
+class LoadDeliveryAddress extends AddressDetailEvent {
+  final DeliveryAddressModel deliveryAddressModel;
+
+  const LoadDeliveryAddress({required this.deliveryAddressModel});
+
+  @override
+  List<Object?> get props => [deliveryAddressModel];
 }
 
 /// Event to change [addressName] and save it to state

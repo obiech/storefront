@@ -61,10 +61,13 @@ class DeliveryAddressModel extends Equatable {
       isPrimaryAddress: address.addressType == AddressType.ADDRESS_TYPE_PRIMARY,
       lat: address.address.coordinates.latitude,
       lng: address.address.coordinates.longitude,
+      notes: address.address.detail,
       recipientName: address.contact.name,
       recipientPhoneNumber: address.contact.phoneNumber,
       dateCreated: address.address.timestamp.createdTime.toDateTime(),
       details: AddressDetailsModel(
+        // TODO: Add Place Name ?
+        name: '',
         // TODO: Find better naming :")
         street: address.address.address,
       ),

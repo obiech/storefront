@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/domain/domains.dart';
@@ -54,7 +55,11 @@ class AddressCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ).withLineHeight(16),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      context.router.push(
+                        AddressDetailRoute(deliveryAddress: address),
+                      );
+                    },
                     child: Row(
                       children: [
                         const Icon(

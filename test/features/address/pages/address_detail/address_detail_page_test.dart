@@ -76,6 +76,28 @@ void main() {
   );
 
   testWidgets(
+    'should set initial value to fields '
+    'when page is rendered and values is provided',
+    (tester) async {
+      when(() => bloc.state).thenReturn(
+        const AddressDetailState(
+          addressName: addressName,
+          addressDetailsNote: addressDetail,
+          recipientName: recipientName,
+          recipientPhoneNumber: recipientPhone,
+        ),
+      );
+
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
+
+      expect(find.text(addressName), findsOneWidget);
+      expect(find.text(addressDetail), findsOneWidget);
+      expect(find.text(recipientName), findsOneWidget);
+      expect(find.text(recipientPhone), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'should show validation error '
     'when save address button is tapped '
     'and form is empty',
@@ -173,6 +195,15 @@ void main() {
     'and form is filled '
     'and error occurred',
     (tester) async {
+      when(() => bloc.state).thenReturn(
+        const AddressDetailState(
+          addressName: addressName,
+          addressDetailsNote: addressDetail,
+          recipientName: recipientName,
+          recipientPhoneNumber: recipientPhone,
+        ),
+      );
+
       whenListen(
         bloc,
         Stream.fromIterable([
@@ -182,30 +213,13 @@ void main() {
 
       await tester.pumpAddressDetailPage(stackRouter, bloc);
 
-      // TODO (widy): pre-fill form to make it simpler
-      // https://dropezy.atlassian.net/browse/STOR-496
-      await tester.enterText(
-        find.byKey(AddressDetailPageKeys.addressNameField),
-        addressName,
-      );
-
-      await tester.enterText(
-        find.byKey(AddressDetailPageKeys.addressDetailField),
-        addressDetail,
-      );
-
-      await tester.enterText(
-        find.byKey(AddressDetailPageKeys.recipientNameField),
-        recipientName,
-      );
-
-      await tester.enterText(
-        find.byKey(AddressDetailPageKeys.phoneNumberField),
-        recipientPhone,
-      );
-
       await tester.tap(find.byKey(AddressDetailPageKeys.saveAddressButton));
       await tester.pumpAndSettle();
+
+      expect(find.text(addressName), findsOneWidget);
+      expect(find.text(addressDetail), findsOneWidget);
+      expect(find.text(recipientName), findsOneWidget);
+      expect(find.text(recipientPhone), findsOneWidget);
 
       verify(() => bloc.add(const FormSubmitted())).called(1);
 

@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
 import '../../../../../test_commons/fixtures/address/places_auto_complete_result.dart';
 import '../../mocks.dart';
 
@@ -27,6 +28,8 @@ void main() {
     dateCreated: now,
   );
 
+  final DeliveryAddressModel loadedAddress = sampleDeliveryAddressList[0];
+
   setUp(() {
     deliveryAddressRepository = MockDeliveryAddressRepository();
     dateTimeProvider = MockDateTimeProvider();
@@ -45,18 +48,43 @@ void main() {
   group('AddressDetailBloc', () {
     blocTest<AddressDetailBloc, AddressDetailState>(
       'should emit lat, lng, & address detail '
-      'when LoadAddressDetail is added '
+      'when LoadPlaceDetail is added '
       'and PlaceDetailsModel is provided',
       // Waiting for map creation (ugly hacks)
       wait: const Duration(milliseconds: 500),
       build: () => bloc,
-      act: (bloc) =>
-          bloc.add(LoadAddressDetail(placeDetailsModel: placeDetails)),
+      act: (bloc) => bloc.add(LoadPlaceDetail(placeDetailsModel: placeDetails)),
       expect: () => [
         AddressDetailState(
           addressDetailsName: placeDetails.name,
           addressDetails: placeDetails.addressDetails.toPrettyAddress,
           latLng: LatLng(placeDetails.lat, placeDetails.lng),
+        ),
+      ],
+    );
+
+    blocTest<AddressDetailBloc, AddressDetailState>(
+      'should emit id, lat, lng, address detail, address name,  '
+      'address notes, recipient name, recipient phone number, '
+      'is primary address, & turn into edit mode '
+      'when LoadDeliveryAddress is added '
+      'and DeliveryAddressModel is provided',
+      // Waiting for map creation (ugly hacks)
+      wait: const Duration(milliseconds: 500),
+      build: () => bloc,
+      act: (bloc) =>
+          bloc.add(LoadDeliveryAddress(deliveryAddressModel: loadedAddress)),
+      expect: () => [
+        AddressDetailState(
+          id: loadedAddress.id,
+          addressDetails: placeDetails.addressDetails.toPrettyAddress,
+          latLng: LatLng(placeDetails.lat, placeDetails.lng),
+          addressName: loadedAddress.title,
+          addressDetailsNote: loadedAddress.notes!,
+          recipientName: loadedAddress.recipientName,
+          recipientPhoneNumber: loadedAddress.recipientPhoneNumber,
+          isPrimaryAddress: loadedAddress.isPrimaryAddress,
+          isEditMode: true,
         ),
       ],
     );
@@ -118,7 +146,7 @@ void main() {
     blocTest<AddressDetailBloc, AddressDetailState>(
       'should emit error message '
       'when FormSubmitted event is added '
-      'and repository returns failure',
+      'and save address returns failure',
       setUp: () {
         when(() => deliveryAddressRepository.saveAddress(addressModel))
             .thenAnswer((_) async => left(Failure('Error!')));
@@ -140,7 +168,7 @@ void main() {
     blocTest<AddressDetailBloc, AddressDetailState>(
       'should emit valid state '
       'when FormSubmitted event is added '
-      'and repository returns right',
+      'and save address returns right',
       setUp: () {
         when(() => deliveryAddressRepository.saveAddress(addressModel))
             .thenAnswer((_) async => right(unit));
@@ -158,5 +186,7 @@ void main() {
             .called(1);
       },
     );
+
+    /// TODO(jeco): add testing for edit case
   });
 }

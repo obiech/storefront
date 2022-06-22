@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// Details of an address such as:
+/// - Address Name
 /// - Street Name & Number
 /// - Sub-District (Desa/Kelurahan)
 /// - District (Kecamatan)
@@ -12,6 +13,7 @@ import 'package:equatable/equatable.dart';
 /// All fields are nullable as they might not be available.
 class AddressDetailsModel extends Equatable {
   const AddressDetailsModel({
+    this.name,
     this.street,
     this.subDistrict,
     this.district,
@@ -20,6 +22,8 @@ class AddressDetailsModel extends Equatable {
     this.province,
     this.country,
   });
+
+  final String? name;
 
   final String? street;
 
@@ -37,6 +41,7 @@ class AddressDetailsModel extends Equatable {
 
   @override
   List<Object?> get props => [
+        name,
         street,
         subDistrict,
         district,

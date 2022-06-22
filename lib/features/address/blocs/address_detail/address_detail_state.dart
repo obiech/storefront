@@ -3,6 +3,9 @@ part of 'address_detail_bloc.dart';
 class AddressDetailState extends Equatable {
   final String addressName;
 
+  // Id address
+  final String? id;
+
   // The address name that comes from places API and shown below map view
   final String addressDetailsName;
 
@@ -19,7 +22,11 @@ class AddressDetailState extends Equatable {
   final bool addressUpdated;
   final LatLng latLng;
 
+  /// Indicating case to handle
+  final bool isEditMode;
+
   const AddressDetailState({
+    this.id,
     this.addressName = '',
     this.addressDetailsName = '',
     this.addressDetails = '',
@@ -31,9 +38,11 @@ class AddressDetailState extends Equatable {
     this.errorMessage,
     this.addressUpdated = false,
     this.latLng = const LatLng(0, 0),
+    this.isEditMode = false,
   });
 
   AddressDetailState copyWith({
+    String? id,
     String? addressName,
     String? addressDetailsName,
     String? addressDetails,
@@ -45,8 +54,10 @@ class AddressDetailState extends Equatable {
     String? errorMessage,
     bool? addressUpdated,
     LatLng? latLng,
+    bool? isEditMode,
   }) {
     return AddressDetailState(
+      id: id ?? this.id,
       addressName: addressName ?? this.addressName,
       addressDetailsName: addressDetailsName ?? this.addressDetailsName,
       addressDetails: addressDetails ?? this.addressDetails,
@@ -58,11 +69,13 @@ class AddressDetailState extends Equatable {
       errorMessage: errorMessage,
       addressUpdated: addressUpdated ?? this.addressUpdated,
       latLng: latLng ?? this.latLng,
+      isEditMode: isEditMode ?? this.isEditMode,
     );
   }
 
   @override
   List<Object?> get props => [
+        id,
         addressName,
         addressDetailsName,
         addressDetails,
@@ -74,5 +87,6 @@ class AddressDetailState extends Equatable {
         errorMessage,
         addressUpdated,
         latLng,
+        isEditMode,
       ];
 }

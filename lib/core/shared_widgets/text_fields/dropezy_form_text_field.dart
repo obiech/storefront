@@ -5,6 +5,7 @@ class DropezyTextFormField extends StatelessWidget {
   final Key? fieldKey;
   final String label;
   final String hintText;
+  final String? initialValue;
   final Function(String)? onChanged;
   final Function(String)? onFieldSubmitted;
   final TextInputType? keyboardType;
@@ -21,6 +22,7 @@ class DropezyTextFormField extends StatelessWidget {
     this.fieldKey,
     required this.label,
     required this.hintText,
+    this.initialValue,
     this.onChanged,
     this.onFieldSubmitted,
     this.validator,
@@ -42,6 +44,7 @@ class DropezyTextFormField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          initialValue: initialValue,
           key: fieldKey,
           keyboardType: keyboardType,
           textInputAction: textInputAction,
