@@ -613,6 +613,13 @@ class IndonesianStrings implements BaseStrings {
   @override
   String get chooseAddress => 'Pilih Alamat';
 
+  /// Remove Address Bottom sheet
+  @override
+  String get remove => 'Hapus';
+
+  @override
+  String get removeYourLocation => 'Hapus lokasi ini dari daftar alamat kamu?';
+
   /// Address List
   @override
   String get addressPrimary => 'Utama';

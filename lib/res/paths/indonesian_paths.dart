@@ -37,6 +37,10 @@ class IndonesianPaths implements BasePaths {
   String get imageDropezySignOut => 'assets/images/auth.svg';
 
   @override
+  String get imageDropezyPinLocation =>
+      'assets/images/dropezy_pin_location.svg';
+
+  @override
   String get imageCart => 'assets/images/cart.svg';
 
   /// Payment Method

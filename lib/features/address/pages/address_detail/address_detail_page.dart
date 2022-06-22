@@ -1,19 +1,21 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/address/index.dart';
 
-part 'keys.dart';
-part 'wrapper.dart';
 part './parts/address_google_map.dart';
 part './parts/address_name_field.dart';
 part './parts/address_note_field.dart';
+part './parts/primary_address_checkbox.dart';
 part './parts/recipient_name_field.dart';
 part './parts/recipient_phone_number_field.dart';
-part './parts/primary_address_checkbox.dart';
+part 'keys.dart';
+part 'parts/remove_address_bottomsheet.dart';
+part 'wrapper.dart';
 
 class AddressDetailPage extends StatefulWidget {
   const AddressDetailPage({Key? key}) : super(key: key);
@@ -32,7 +34,11 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
       actions: [
         IconButton(
           // TODO (Widy): Handle delete address
-          onPressed: () {},
+          onPressed: () {
+            showDropezyBottomSheet(context, (_) {
+              return const RemoveAddressBottomSheet();
+            });
+          },
           icon: const Icon(DropezyIcons.trash),
         ),
       ],

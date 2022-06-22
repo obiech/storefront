@@ -407,6 +407,11 @@ abstract class BaseStrings {
 
   String get chooseAddress;
 
+  /// Remove Address Bottom sheet
+  String get remove;
+
+  String get removeYourLocation;
+
   /// Address List
   String get addressPrimary;
 

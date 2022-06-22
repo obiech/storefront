@@ -616,6 +616,14 @@ class EnglishStrings implements BaseStrings {
   @override
   String get chooseAddress => 'Choose Address';
 
+  /// Remove Address Bottom sheet
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get removeYourLocation =>
+      'Remove this location from your address list?';
+
   /// Address List
   @override
   String get addressPrimary => 'Primary';
