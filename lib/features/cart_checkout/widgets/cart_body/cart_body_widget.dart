@@ -95,11 +95,11 @@ class _PaymentSummary extends StatelessWidget {
         // discounts are added in backend
         OrderPaymentSummary(
             key: CartBodyWidgetKeys.paymentSummary,
-            totalSavings: paymentSummary.discount == '000'
+            totalSavings: paymentSummary.discount.isZeroCurrency
                 ? null
                 : paymentSummary.discount,
             subtotal: paymentSummary.subTotal,
-            discountFromItems: paymentSummary.discount == '000'
+            discountFromItems: paymentSummary.discount.isZeroCurrency
                 ? null
                 : paymentSummary.discount,
             isFreeDelivery: paymentSummary.isFreeDelivery,

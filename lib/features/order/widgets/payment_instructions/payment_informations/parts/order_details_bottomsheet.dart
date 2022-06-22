@@ -25,9 +25,9 @@ class OrderDetailsBottomSheet extends StatelessWidget {
               // TODO : update when new order model is available
               OrderPaymentSummary(
                 totalSavings:
-                    (int.parse(order.discount) + int.parse(order.deliveryFee))
-                        .toString(),
-                discountFromItems: order.discount,
+                    order.discount.isZeroCurrency ? null : order.discount,
+                discountFromItems:
+                    order.discount.isZeroCurrency ? null : order.discount,
                 subtotal: order.subTotal,
                 deliveryFee: order.deliveryFee,
                 isFreeDelivery: true,

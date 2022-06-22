@@ -86,10 +86,13 @@ class OrderDetailsView extends StatelessWidget {
                           ),
                           const ThickDivider(),
                           OrderPaymentSummary(
-                            totalSavings: (int.parse(state.order.discount) +
-                                    int.parse(state.order.deliveryFee))
-                                .toString(),
-                            discountFromItems: state.order.discount,
+                            totalSavings: state.order.discount.isZeroCurrency
+                                ? null
+                                : state.order.discount,
+                            discountFromItems:
+                                state.order.discount.isZeroCurrency
+                                    ? null
+                                    : state.order.discount,
                             subtotal: state.order.subTotal,
                             deliveryFee: state.order.deliveryFee,
                             isFreeDelivery: true,
