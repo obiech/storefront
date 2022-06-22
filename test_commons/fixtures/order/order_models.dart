@@ -105,6 +105,7 @@ final orderPaid = OrderModel(
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 22)),
+  paymentExpiryTime: DateTime.now().add(const Duration(minutes: 10)),
   recipientAddress: sampleDeliveryAddressList[0],
   paymentInformation: paymentInfo,
   paymentMethod: paymentMethod,
@@ -166,6 +167,7 @@ final orderInDelivery = OrderModel(
     ),
   ],
   estimatedArrivalTime: DateTime.now().add(const Duration(minutes: 10)),
+  paymentExpiryTime: DateTime.now().add(const Duration(minutes: 5)),
   driver: OrderDriverModel(
     fullName: 'Andi Hardiawan',
     vehicleLicenseNumber: 'B 1234 EZY',
@@ -210,6 +212,9 @@ final orderArrived = OrderModel(
       days: 1,
       hours: 2,
     ),
+  ),
+  paymentExpiryTime: DateTime.now().subtract(
+    const Duration(days: 1),
   ),
   driver: OrderDriverModel(
     fullName: 'Indra',

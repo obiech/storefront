@@ -26,7 +26,7 @@ class PaymentInformationSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final expireTime = order.paymentExpiryTime ?? DateTime.now();
+    final expireTime = order.paymentExpiryTime;
     return Padding(
       padding: EdgeInsets.fromLTRB(
         context.res.dimens.pagePadding,

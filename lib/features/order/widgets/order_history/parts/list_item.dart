@@ -67,7 +67,7 @@ class OrderHistoryListItem extends StatelessWidget {
                 ),
               if (order.status.isAwaitingPayment)
                 CountdownBuilder(
-                  countdownDuration: order.paymentExpiryTime!
+                  countdownDuration: order.paymentExpiryTime
                       .difference(currentTime ?? DateTime.now())
                       .inSeconds,
                   builder: (seconds) {

@@ -17,7 +17,7 @@ class OrderModel extends Equatable {
     required this.id,
     required this.status,
     required this.orderDate,
-    this.paymentExpiryTime,
+    required this.paymentExpiryTime,
     this.estimatedArrivalTime,
     this.paymentCompletedTime,
     this.pickupTime,
@@ -80,9 +80,7 @@ class OrderModel extends Equatable {
 
   /// Time limit before order expires
   /// because no payment is received
-  ///
-  /// Will be null if status is not [OrderStatus.awaitingPayment]
-  final DateTime? paymentExpiryTime;
+  final DateTime paymentExpiryTime;
 
   /// Estimated arrival time at which
   /// items are delivered to customer's address

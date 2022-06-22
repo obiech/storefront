@@ -133,6 +133,7 @@ class DummyOrderRepository extends IOrderRepository {
         status: OrderStatus.paid,
         orderDate: DateTime.now(),
         paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
+        paymentExpiryTime: DateTime.now().add(const Duration(minutes: 10)),
         deliveryFee: '1500000',
         discount: '1000000',
         subTotal: '15000000',
@@ -198,6 +199,7 @@ class DummyOrderRepository extends IOrderRepository {
         status: OrderStatus.inDelivery,
         orderDate: DateTime.now(),
         paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
+        paymentExpiryTime: DateTime.now().add(const Duration(minutes: 20)),
         pickupTime: DateTime.now().add(const Duration(minutes: 10)),
         deliveryFee: '1500000',
         discount: '0',
@@ -295,6 +297,7 @@ class DummyOrderRepository extends IOrderRepository {
           ),
         ],
         paymentCompletedTime: DateTime.now().add(const Duration(minutes: 5)),
+        paymentExpiryTime: DateTime.now().add(const Duration(minutes: 10)),
         pickupTime: DateTime.now().add(const Duration(minutes: 10)),
         orderCompletionTime: DateTime.now().subtract(
           const Duration(

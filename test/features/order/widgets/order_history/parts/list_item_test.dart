@@ -102,7 +102,7 @@ void main() {
           .firstWhere((el) => el.status == OrderStatus.awaitingPayment);
 
       final mockCurrentTime =
-          order.paymentExpiryTime!.subtract(const Duration(seconds: 900));
+          order.paymentExpiryTime.subtract(const Duration(seconds: 900));
 
       // act
       final context = await tester.pumpListItem(
@@ -124,8 +124,7 @@ void main() {
       final timingText =
           tester.firstWidget(find.byType(TimingText)) as TimingText;
 
-      final remainingTime =
-          order.paymentExpiryTime!.difference(mockCurrentTime);
+      final remainingTime = order.paymentExpiryTime.difference(mockCurrentTime);
 
       // should show time icon and
       // remaining time before payment expiry (hh:mm:ss)
