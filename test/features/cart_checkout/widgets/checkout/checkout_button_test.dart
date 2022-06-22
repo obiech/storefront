@@ -49,7 +49,12 @@ void main() {
 
     // Navigation
     stackRouter = MockStackRouter();
-    when(() => stackRouter.replace(any())).thenAnswer((_) async => null);
+    when(
+      () => stackRouter.pushAndPopUntil(
+        any(),
+        predicate: any(named: 'predicate'),
+      ),
+    ).thenAnswer((_) async => null);
   });
 
   testWidgets(
@@ -283,7 +288,6 @@ void main() {
       'when checkout is successful', (WidgetTester tester) async {
     // arrange
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
-    when(() => cartBloc.add(any())).thenAnswer((_) {});
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
       (_) async => right(samplePaymentMethods.toPaymentDetails()),
@@ -311,8 +315,12 @@ void main() {
     // assert
     verify(() => cartBloc.add(const LoadCart())).called(1);
 
-    final capturedRoutes =
-        verify(() => stackRouter.replace(captureAny())).captured;
+    final capturedRoutes = verify(
+      () => stackRouter.pushAndPopUntil(
+        captureAny(),
+        predicate: any(named: 'predicate'),
+      ),
+    ).captured;
 
     expect(capturedRoutes.length, 1);
 
@@ -337,7 +345,6 @@ void main() {
       'and payment method is [GOPAY]', (WidgetTester tester) async {
     // arrange
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
-    when(() => cartBloc.add(any())).thenAnswer((_) {});
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
       (_) async => right(samplePaymentMethods.toPaymentDetails()),
@@ -378,6 +385,54 @@ void main() {
       mockGoPayPaymentResults.paymentInformation.deeplink ?? '',
       calledDeeplink,
     );
+  });
+
+  testWidgets(
+      'should go to [PaymentInstructionsPage] '
+      'when checkout is successful '
+      'and payment method is [VA]', (WidgetTester tester) async {
+    // arrange
+    when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
+
+    when(() => paymentRepository.getPaymentMethods()).thenAnswer(
+      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+    );
+
+    final paymentResults = mockBcaPaymentResults;
+
+    when(() => paymentRepository.checkoutPayment(any()))
+        .thenAnswer((_) async => right(paymentResults));
+
+    // act
+    await tester.pumpCheckoutButton(
+      cartBloc,
+      paymentCheckoutCubit,
+      paymentMethodCubit,
+      stackRouter: stackRouter,
+      launchGoPay: goPayLauncher,
+    );
+
+    await paymentMethodCubit.queryPaymentMethods();
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(CheckoutButton));
+
+    // assert
+    final capturedRoutes = verify(
+      () => stackRouter.pushAndPopUntil(
+        captureAny(),
+        predicate: any(named: 'predicate'),
+      ),
+    ).captured;
+
+    expect(capturedRoutes.length, 1);
+
+    final routeInfo = capturedRoutes.first as PageRouteInfo;
+
+    expect(routeInfo, isA<PaymentInstructionsRoute>());
+
+    final orderRouter = routeInfo as PaymentInstructionsRoute;
+    expect(orderRouter.args?.order, paymentResults);
   });
 }
 

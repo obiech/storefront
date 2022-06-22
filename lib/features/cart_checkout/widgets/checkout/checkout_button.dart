@@ -26,16 +26,27 @@ class CheckoutButton extends StatelessWidget {
 
           final paymentResults = state.order;
 
-          context.router.replace(
-            OrderRouter(
-              children: [OrderDetailsRoute(id: paymentResults.id)],
-            ),
-          );
-
           // Open GoPay app
-          if (paymentResults.paymentMethod ==
-              PaymentMethod.PAYMENT_METHOD_GOPAY) {
-            launchGoPay(paymentResults.paymentInformation.deeplink ?? '');
+          switch (paymentResults.paymentMethod) {
+            case PaymentMethod.PAYMENT_METHOD_GOPAY:
+              context.router.pushAndPopUntil(
+                OrderRouter(
+                  children: [OrderDetailsRoute(id: paymentResults.id)],
+                ),
+                predicate: (route) => route.isFirst,
+              );
+
+              launchGoPay(paymentResults.paymentInformation.deeplink ?? '');
+              break;
+            case PaymentMethod.PAYMENT_METHOD_VA_BCA:
+              context.router.pushAndPopUntil(
+                PaymentInstructionsRoute(order: paymentResults),
+                predicate: (route) => route.isFirst,
+              );
+              break;
+            default:
+              // Error from backend with Undefined Payment Method
+              break;
           }
         } else if (state is ErrorLoadingPaymentCheckout) {
           context.showToast(
