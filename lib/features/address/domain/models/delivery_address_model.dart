@@ -64,7 +64,7 @@ class DeliveryAddressModel extends Equatable {
       notes: address.address.detail,
       recipientName: address.contact.name,
       recipientPhoneNumber: address.contact.phoneNumber,
-      dateCreated: address.address.timestamp.createdTime.toDateTime(),
+      dateCreated: address.address.timestamp.createdTime.toDateTime().toLocal(),
       details: AddressDetailsModel(
         // TODO: Add Place Name ?
         name: '',
