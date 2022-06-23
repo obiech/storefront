@@ -4,7 +4,7 @@ class AddressDetailState extends Equatable {
   final String addressName;
 
   // Id address
-  final String? id;
+  final String id;
 
   // The address name that comes from places API and shown below map view
   final String addressDetailsName;
@@ -26,7 +26,7 @@ class AddressDetailState extends Equatable {
   final bool isEditMode;
 
   const AddressDetailState({
-    this.id,
+    this.id = 'id',
     this.addressName = '',
     this.addressDetailsName = '',
     this.addressDetails = '',

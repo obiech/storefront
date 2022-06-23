@@ -57,5 +57,49 @@ class DeliveryAddressService implements IDeliveryAddressRepository {
   }
 
   @override
+  RepoResult<Unit> updateAddress(DeliveryAddressModel address) async {
+    try {
+      final Address addressRequest = address.toPb();
+      final UpdateAddressRequest request = UpdateAddressRequest(
+        address: addressRequest.address,
+        addressType: addressRequest.addressType,
+        contact: addressRequest.contact,
+      );
+
+      // Add addresses cache
+      final updateAddressRes = await _customerService.updateAddress(request);
+      final oldIndex = _addresses.indexWhere((e) => e.id == address.id);
+
+      if (address.isPrimaryAddress && _addresses.primaryAddress != null) {
+        final oldPrimaryAddress = _addresses.primaryAddress!;
+        final oldPrimaryIndex = _addresses.indexOf(oldPrimaryAddress);
+
+        // Mark previous primary as non-primary
+        // TODO: replace with copywith
+        _addresses[oldPrimaryIndex] = DeliveryAddressModel(
+          id: oldPrimaryAddress.id,
+          title: oldPrimaryAddress.title,
+          isPrimaryAddress: false,
+          lat: oldPrimaryAddress.lat,
+          lng: oldPrimaryAddress.lng,
+          notes: oldPrimaryAddress.notes,
+          recipientName: oldPrimaryAddress.recipientName,
+          recipientPhoneNumber: oldPrimaryAddress.recipientPhoneNumber,
+          dateCreated: oldPrimaryAddress.dateCreated,
+          details: oldPrimaryAddress.details,
+        );
+      }
+
+      _addresses[oldIndex] = DeliveryAddressModel.fromPb(
+        updateAddressRes.address,
+      );
+
+      return right(unit);
+    } on Exception catch (e) {
+      return left(e.toFailure);
+    }
+  }
+
+  @override
   DeliveryAddressModel? get activeDeliveryAddress => _activeAddress;
 }

@@ -78,52 +78,42 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
   Future<void> _onFormSubmitted(
     Emitter<AddressDetailState> emit,
   ) async {
+    // TODO (widy): Fix model passed to repository
+    final deliveryAddress = DeliveryAddressModel(
+      id: state.id,
+      title: state.addressName,
+      isPrimaryAddress: state.isPrimaryAddress,
+      lat: state.latLng.latitude,
+      lng: state.latLng.longitude,
+      notes: state.addressDetailsNote,
+      recipientName: state.recipientName,
+      recipientPhoneNumber: state.recipientPhoneNumber,
+      dateCreated: _dateTimeProvider.now,
+      // TODO (widy): fix with proper structure conversion
+      details: AddressDetailsModel(
+        street: state.addressDetails,
+      ),
+    );
+
     emit(state.copyWith(loading: true));
 
-    if (state.isEditMode) {
-      ///TODO(jeco): Adding backend implementation
-      emit(
+    final result = state.isEditMode
+        ? await _repository.updateAddress(deliveryAddress)
+        : await _repository.saveAddress(deliveryAddress);
+
+    result.fold(
+      (failure) => emit(
+        state.copyWith(
+          errorMessage: failure.message,
+          loading: false,
+        ),
+      ),
+      (success) => emit(
         state.copyWith(
           loading: false,
           addressUpdated: true,
         ),
-      );
-    } else {
-      final result = await _repository.saveAddress(
-        // TODO (widy): Fix model passed to repository
-        // Notes:
-        // - id can be exist if page opened from edit address
-        DeliveryAddressModel(
-          id: 'id',
-          title: state.addressName,
-          isPrimaryAddress: state.isPrimaryAddress,
-          lat: state.latLng.latitude,
-          lng: state.latLng.longitude,
-          notes: state.addressDetailsNote,
-          recipientName: state.recipientName,
-          recipientPhoneNumber: state.recipientPhoneNumber,
-          dateCreated: _dateTimeProvider.now,
-          // TODO (widy): fix with proper structure conversion
-          details: AddressDetailsModel(
-            street: state.addressDetails,
-          ),
-        ),
-      );
-
-      result.fold(
-        (failure) => emit(
-          state.copyWith(
-            errorMessage: failure.message,
-            loading: false,
-          ),
-        ),
-        (success) => emit(
-          state.copyWith(
-            loading: false,
-            addressUpdated: true,
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 }

@@ -187,6 +187,50 @@ void main() {
       },
     );
 
-    /// TODO(jeco): add testing for edit case
+    blocTest<AddressDetailBloc, AddressDetailState>(
+      'should emit error message '
+      'when FormSubmitted event is added '
+      'and update address returns failure',
+      setUp: () {
+        when(() => deliveryAddressRepository.updateAddress(addressModel))
+            .thenAnswer((_) async => left(Failure('Error!')));
+      },
+      seed: () => const AddressDetailState(isEditMode: true),
+      build: () => bloc,
+      act: (bloc) => bloc.add(
+        const FormSubmitted(),
+      ),
+      expect: () => [
+        const AddressDetailState(loading: true, isEditMode: true),
+        const AddressDetailState(errorMessage: 'Error!', isEditMode: true),
+      ],
+      verify: (_) {
+        verify(() => deliveryAddressRepository.updateAddress(addressModel))
+            .called(1);
+      },
+    );
+
+    blocTest<AddressDetailBloc, AddressDetailState>(
+      'should emit valid state '
+      'when FormSubmitted event is added '
+      'and update address returns right',
+      setUp: () {
+        when(() => deliveryAddressRepository.updateAddress(addressModel))
+            .thenAnswer((_) async => right(unit));
+      },
+      seed: () => const AddressDetailState(isEditMode: true),
+      build: () => bloc,
+      act: (bloc) => bloc.add(
+        const FormSubmitted(),
+      ),
+      expect: () => [
+        const AddressDetailState(loading: true, isEditMode: true),
+        const AddressDetailState(addressUpdated: true, isEditMode: true),
+      ],
+      verify: (_) {
+        verify(() => deliveryAddressRepository.updateAddress(addressModel))
+            .called(1);
+      },
+    );
   });
 }

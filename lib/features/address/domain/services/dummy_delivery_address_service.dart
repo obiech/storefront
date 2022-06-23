@@ -149,5 +149,39 @@ class DummyDeliveryAddressService extends IDeliveryAddressRepository {
   }
 
   @override
+  RepoResult<Unit> updateAddress(DeliveryAddressModel address) async {
+    try {
+      //  Simulate network loading
+      await Future.delayed(const Duration(seconds: 1));
+      final oldIndex = addressList.indexWhere((e) => e.id == address.id);
+
+      if (address.isPrimaryAddress && addressList.primaryAddress != null) {
+        final oldPrimaryAddress = addressList.primaryAddress!;
+        final oldPrimaryIndex = addressList.indexOf(oldPrimaryAddress);
+
+        // Mark previous primary as non-primary
+        // TODO: replace with copywith
+        addressList[oldPrimaryIndex] = DeliveryAddressModel(
+          id: oldPrimaryAddress.id,
+          title: oldPrimaryAddress.title,
+          isPrimaryAddress: false,
+          lat: oldPrimaryAddress.lat,
+          lng: oldPrimaryAddress.lng,
+          notes: oldPrimaryAddress.notes,
+          recipientName: oldPrimaryAddress.recipientName,
+          recipientPhoneNumber: oldPrimaryAddress.recipientPhoneNumber,
+          dateCreated: oldPrimaryAddress.dateCreated,
+          details: oldPrimaryAddress.details,
+        );
+      }
+
+      addressList[oldIndex] = address;
+      return right(unit);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
   DeliveryAddressModel? get activeDeliveryAddress => _activeAddress;
 }
