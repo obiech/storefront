@@ -21,7 +21,7 @@ class OrderDetailsCubit extends Cubit<OrderDetailsState> {
   Future<void> getUserOrderDetails(String id) async {
     emit(LoadingOrderDetails());
 
-    final result = await orderRepository.getOrderById(id);
+    final result = await orderRepository.getOrderById(id, refresh: true);
 
     final state = result.fold(
       (failure) => LoadingErrorOrderDetails(failure.message),

@@ -29,7 +29,12 @@ void main() {
       'Should show [LoadedOrderDetails] with order from '
       '[IOrderRepository.getOrderById()]',
       setUp: () {
-        when(() => repository.getOrderById(orderAwaitingPayment.id)).thenAnswer(
+        when(
+          () => repository.getOrderById(
+            orderAwaitingPayment.id,
+            refresh: any(named: 'refresh'),
+          ),
+        ).thenAnswer(
           (_) async => right(orderAwaitingPayment),
         );
       },
@@ -40,8 +45,12 @@ void main() {
         LoadedOrderDetails(orderAwaitingPayment),
       ],
       verify: (cubit) {
-        verify(() => repository.getOrderById(orderAwaitingPayment.id))
-            .called(1);
+        verify(
+          () => repository.getOrderById(
+            orderAwaitingPayment.id,
+            refresh: true,
+          ),
+        ).called(1);
       },
     );
 
@@ -49,7 +58,12 @@ void main() {
       'Should show [LoadingErrorOrderDetails] '
       'when [IOrderRepository.getOrderById()] return failure',
       setUp: () {
-        when(() => repository.getOrderById(orderAwaitingPayment.id)).thenAnswer(
+        when(
+          () => repository.getOrderById(
+            orderAwaitingPayment.id,
+            refresh: any(named: 'refresh'),
+          ),
+        ).thenAnswer(
           (_) async => left(Failure('An unexpected error occured.')),
         );
       },
@@ -60,8 +74,9 @@ void main() {
         const LoadingErrorOrderDetails('An unexpected error occured.'),
       ],
       verify: (cubit) {
-        verify(() => repository.getOrderById(orderAwaitingPayment.id))
-            .called(1);
+        verify(
+          () => repository.getOrderById(orderAwaitingPayment.id, refresh: true),
+        ).called(1);
       },
     );
 
@@ -69,8 +84,12 @@ void main() {
       blocTest<OrderDetailsCubit, OrderDetailsState>(
         'Should refresh [LoadedOrderDetails] when status is  ${refreshOrderList[x].status}',
         setUp: () {
-          when(() => repository.getOrderById(orderAwaitingPayment.id))
-              .thenAnswer(
+          when(
+            () => repository.getOrderById(
+              orderAwaitingPayment.id,
+              refresh: any(named: 'refresh'),
+            ),
+          ).thenAnswer(
             (_) async => right(orderAwaitingPayment),
           );
         },
@@ -86,8 +105,10 @@ void main() {
           LoadedOrderDetails(orderAwaitingPayment),
         ],
         verify: (cubit) {
-          verify(() => repository.getOrderById(orderAwaitingPayment.id))
-              .called(2);
+          verify(
+            () =>
+                repository.getOrderById(orderAwaitingPayment.id, refresh: true),
+          ).called(2);
         },
       );
     }
@@ -96,8 +117,12 @@ void main() {
       blocTest<OrderDetailsCubit, OrderDetailsState>(
         'Should not refresh [LoadedOrderDetails] when status is ${notRefreshOrderList[x].status}',
         setUp: () {
-          when(() => repository.getOrderById(notRefreshOrderList[x].id))
-              .thenAnswer(
+          when(
+            () => repository.getOrderById(
+              notRefreshOrderList[x].id,
+              refresh: any(named: 'refresh'),
+            ),
+          ).thenAnswer(
             (_) async => right(notRefreshOrderList[x]),
           );
         },
@@ -111,8 +136,12 @@ void main() {
           LoadedOrderDetails(notRefreshOrderList[x]),
         ],
         verify: (cubit) {
-          verify(() => repository.getOrderById(notRefreshOrderList[x].id))
-              .called(1);
+          verify(
+            () => repository.getOrderById(
+              notRefreshOrderList[x].id,
+              refresh: true,
+            ),
+          ).called(1);
         },
       );
     }

@@ -8,7 +8,8 @@ abstract class IOrderRepository {
   RepoResult<List<OrderModel>> getUserOrders();
 
   /// Gets an order by its ID
-  RepoResult<OrderModel> getOrderById(String id);
+  /// [refresh] skips loading of cached order
+  RepoResult<OrderModel> getOrderById(String id, {bool refresh = false});
 
   /// Add order from payment response
   void addOrder(OrderModel order);

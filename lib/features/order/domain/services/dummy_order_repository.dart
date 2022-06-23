@@ -333,7 +333,7 @@ class DummyOrderRepository extends IOrderRepository {
   }
 
   @override
-  RepoResult<OrderModel> getOrderById(String id) async {
+  RepoResult<OrderModel> getOrderById(String id, {bool refresh = false}) async {
     //  Simulate network loading
     await Future.delayed(const Duration(seconds: 1));
     final index = orders.indexById(id);

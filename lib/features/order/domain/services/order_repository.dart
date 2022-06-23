@@ -35,13 +35,15 @@ class OrderRepository extends IOrderRepository {
   }
 
   @override
-  RepoResult<OrderModel> getOrderById(String id) async {
+  RepoResult<OrderModel> getOrderById(String id, {bool refresh = false}) async {
     try {
-      final index = orders.indexById(id);
+      if (!refresh) {
+        final index = orders.indexById(id);
 
-      // Return model from in-memory cache if found
-      if (index > -1) {
-        return right(orders[index]);
+        // Return model from in-memory cache if found
+        if (index > -1) {
+          return right(orders[index]);
+        }
       }
 
       final req = GetRequest(orderId: id);
