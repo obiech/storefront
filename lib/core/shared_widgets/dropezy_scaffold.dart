@@ -113,52 +113,55 @@ class DropezyScaffold extends StatelessWidget {
 
     final res = context.res;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: title,
-        centerTitle: centerTitle,
-        toolbarHeight: toolbarHeight,
-        leading: canPop
-            ? Container(
-                margin: EdgeInsets.only(
-                  left: res.dimens.spacingLarge,
-                ),
-                child: _backButton(context),
-              )
-            : null,
-        leadingWidth: canPop ? res.dimens.leadingWidth : null,
-        actions: actions,
-      ),
-      resizeToAvoidBottomInset: true,
-      body: useRoundedBody
-          ? Column(
-              children: [
-                header ?? const SizedBox.shrink(),
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(
-                        res.dimens.bottomSheetHorizontalPadding,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: title,
+          centerTitle: centerTitle,
+          toolbarHeight: toolbarHeight,
+          leading: canPop
+              ? Container(
+                  margin: EdgeInsets.only(
+                    left: res.dimens.spacingLarge,
+                  ),
+                  child: _backButton(context),
+                )
+              : null,
+          leadingWidth: canPop ? res.dimens.leadingWidth : null,
+          actions: actions,
+        ),
+        resizeToAvoidBottomInset: true,
+        body: useRoundedBody
+            ? Column(
+                children: [
+                  header ?? const SizedBox.shrink(),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                          res.dimens.bottomSheetHorizontalPadding,
+                        ),
+                        topRight: Radius.circular(
+                          res.dimens.bottomSheetHorizontalPadding,
+                        ),
                       ),
-                      topRight: Radius.circular(
-                        res.dimens.bottomSheetHorizontalPadding,
+                      child: Container(
+                        color: bodyColor,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: bodyAlignment ?? Alignment.center,
+                        padding: childPadding,
+                        child: child,
                       ),
-                    ),
-                    child: Container(
-                      color: bodyColor,
-                      width: double.infinity,
-                      height: double.infinity,
-                      alignment: bodyAlignment ?? Alignment.center,
-                      padding: childPadding,
-                      child: child,
                     ),
                   ),
-                ),
-              ],
-            )
-          : child,
-      floatingActionButton: floatingActionButton,
-      floatingActionButtonLocation: floatingActionButtonLocation,
+                ],
+              )
+            : child,
+        floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
+      ),
     );
   }
 
