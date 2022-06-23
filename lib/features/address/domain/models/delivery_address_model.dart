@@ -1,7 +1,9 @@
 import 'package:dropezy_proto/meta/meta.pb.dart' as meta;
 import 'package:dropezy_proto/v1/customer/customer.pb.dart';
 import 'package:equatable/equatable.dart';
+import 'package:storefront_app/core/services/geofence/models/dropezy_latlng.dart';
 
+import '../../../../core/services/geofence/models/dropezy_polygon.dart';
 import 'address_details_model.dart';
 
 class DeliveryAddressModel extends Equatable {
@@ -16,6 +18,7 @@ class DeliveryAddressModel extends Equatable {
     required this.recipientPhoneNumber,
     this.details,
     required this.dateCreated,
+    this.isLocatedWithinGeofence = false,
   });
 
   /// Unique identifier for this address
@@ -52,6 +55,10 @@ class DeliveryAddressModel extends Equatable {
   /// Date & Time at which this address
   /// was first created
   final DateTime dateCreated;
+
+  /// flag that indicates if this Address is
+  /// located within a Geofence Service
+  final bool isLocatedWithinGeofence;
 
   factory DeliveryAddressModel.fromPb(Address address) {
     // TODO: Find better naming :")
@@ -106,6 +113,37 @@ class DeliveryAddressModel extends Equatable {
     );
   }
 
+  DeliveryAddressModel copyWith({
+    AddressDetailsModel? details,
+    String? recipientPhoneNumber,
+    DateTime? dateCreated,
+    String? recipientName,
+    double? lng,
+    double? lat,
+    bool? isPrimaryAddress,
+    String? notes,
+    String? id,
+    String? title,
+    bool? isLocatedWithinGeofence,
+  }) {
+    return DeliveryAddressModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      isPrimaryAddress: isPrimaryAddress ?? this.isPrimaryAddress,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      recipientName: recipientName ?? this.recipientName,
+      recipientPhoneNumber: recipientPhoneNumber ?? this.recipientPhoneNumber,
+      dateCreated: dateCreated ?? this.dateCreated,
+      isLocatedWithinGeofence:
+          isLocatedWithinGeofence ?? this.isLocatedWithinGeofence,
+      notes: notes ?? this.notes,
+      details: details ?? this.details,
+    );
+  }
+
+  DropezyLatLng get getLntLng => DropezyLatLng(lat, lng);
+
   @override
   List<Object?> get props => [id];
 }
@@ -124,4 +162,36 @@ extension ListDeliveryAddressModelX on List<DeliveryAddressModel> {
           orElse: () => first,
         )
       : null;
+}
+
+extension CheckCoverageAreaX on List<DeliveryAddressModel> {
+  List<DeliveryAddressModel> checkCoverageArea(
+    Set<DropezyPolygon> polys,
+    bool Function({
+      required DropezyLatLng point,
+      required Set<DropezyPolygon> polys,
+    })
+        scanMultiplePolygon,
+  ) {
+    final List<DeliveryAddressModel> _scannedAddresses = [];
+
+    if (polys.isEmpty || isEmpty) return this;
+
+    for (final address in this) {
+      late bool locatedWithinArea;
+
+      locatedWithinArea = scanMultiplePolygon(
+        point: address.getLntLng,
+        polys: polys,
+      );
+
+      if (locatedWithinArea) {
+        _scannedAddresses.add(address.copyWith(isLocatedWithinGeofence: true));
+      } else {
+        _scannedAddresses.add(address.copyWith(isLocatedWithinGeofence: false));
+      }
+    }
+
+    return _scannedAddresses;
+  }
 }

@@ -3,6 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/errors/failure.dart';
+import 'package:storefront_app/core/services/geofence/models/dropezy_latlng.dart';
+import 'package:storefront_app/core/services/geofence/models/dropezy_polygon.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_local_persistence.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_repository.dart';
 import 'package:storefront_app/features/address/index.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart'
@@ -11,22 +15,37 @@ import '../../mocks.dart';
 
 void main() {
   late IDeliveryAddressRepository deliveryAddressRepository;
+  late IGeofenceLocalPersistence localPersistence;
+  late IGeofenceRepository geofenceRepository;
   late DeliveryAddressCubit cubit;
 
   setUp(() {
     deliveryAddressRepository = MockDeliveryAddressRepository();
+    geofenceRepository = MockIGeofenceRepository();
+    localPersistence = MockIGeofenceLocalPersistence();
+    when(() => localPersistence.polygons)
+        .thenAnswer((invocation) => Stream.value(polygons));
+
     cubit = DeliveryAddressCubit(
       deliveryAddressRepository: deliveryAddressRepository,
+      geofenceLocalPersistence: localPersistence,
+      geofenceRepository: geofenceRepository,
     );
+  });
+  setUpAll(() {
+    registerFallbackValue(DropezyPolygon(id: 'fake'));
+    registerFallbackValue(const DropezyLatLng(0, 0));
   });
 
   group(
     '[DeliveryAddressCubit]',
     () {
       test(
-        'should start with Initial state',
+        'should start with Initial state '
+        'and create a subscription',
         () {
           expect(cubit.state, isA<DeliveryAddressInitial>());
+          verify(() => localPersistence.polygons).called(1);
         },
       );
 
@@ -45,6 +64,12 @@ void main() {
                   List.from(fixtures.sampleDeliveryAddressList),
                 ),
               );
+              when(
+                () => geofenceRepository.scanMultiplePolygon(
+                  point: any(named: 'point'),
+                  polys: any(named: 'polys'),
+                ),
+              ).thenAnswer((invocation) => false);
             },
             build: () => cubit,
             act: (cubit) async {
@@ -60,6 +85,52 @@ void main() {
                 DeliveryAddressLoaded(
                   addressList: sortedList,
                   activeAddress: sortedList.first,
+                ),
+              ];
+            },
+            verify: (cubit) {
+              verify(() => deliveryAddressRepository.getDeliveryAddresses())
+                  .called(1);
+            },
+          );
+
+          blocTest<DeliveryAddressCubit, DeliveryAddressState>(
+            'should emit Loading state followed by Loaded state '
+            'with addresses sorted by address creation date descending '
+            'and first address from the list to be default address '
+            'add [isLocatedWithinGeofence] as true for when '
+            '[geofenceRepository.containsLocation] is true',
+            setUp: () {
+              when(
+                () => deliveryAddressRepository.getDeliveryAddresses(),
+              ).thenAnswer(
+                (_) async => right(
+                  List.from(fixtures.sampleDeliveryAddressList),
+                ),
+              );
+              when(
+                () => geofenceRepository.scanMultiplePolygon(
+                  point: any(named: 'point'),
+                  polys: any(named: 'polys'),
+                ),
+              ).thenAnswer((invocation) => true);
+            },
+            build: () => cubit,
+            act: (cubit) async {
+              await cubit.fetchDeliveryAddresses();
+            },
+            expect: () {
+              final sortedList = List<DeliveryAddressModel>.from(
+                fixtures.sampleDeliveryAddressList,
+              )..sort((a, b) => b.dateCreated.compareTo(a.dateCreated));
+
+              return [
+                const DeliveryAddressLoading(),
+                DeliveryAddressLoaded(
+                  addressList: sortedList
+                    ..map((e) => e.copyWith(isLocatedWithinGeofence: true)),
+                  activeAddress:
+                      sortedList.first.copyWith(isLocatedWithinGeofence: true),
                 ),
               ];
             },
@@ -116,3 +187,36 @@ void main() {
     },
   );
 }
+
+final polygons = {
+  DropezyPolygon(
+    id: 'Dummy Polygon',
+    points: [
+      const DropezyLatLng(10, 10),
+      const DropezyLatLng(10, 20),
+      const DropezyLatLng(20, 20),
+      const DropezyLatLng(20, 10),
+      const DropezyLatLng(10, 10)
+    ],
+  ),
+  DropezyPolygon(
+    id: 'Dummy Polygon2',
+    points: [
+      const DropezyLatLng(10, 10),
+      const DropezyLatLng(10, 20),
+      const DropezyLatLng(20, 20),
+      const DropezyLatLng(20, 10),
+      const DropezyLatLng(10, 10)
+    ],
+  ),
+  DropezyPolygon(
+    id: 'Dummy Polygon3',
+    points: [
+      const DropezyLatLng(10, 10),
+      const DropezyLatLng(10, 20),
+      const DropezyLatLng(20, 20),
+      const DropezyLatLng(20, 10),
+      const DropezyLatLng(10, 10)
+    ],
+  )
+};

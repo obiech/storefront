@@ -3,6 +3,8 @@ import 'package:dropezy_proto/v1/customer/customer.pbgrpc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_local_persistence.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_repository.dart';
 import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/permission_handler/index.dart';
 
@@ -47,3 +49,8 @@ class MockSearchHistoryBox extends Mock
     implements Box<SearchLocationHistoryQuery> {}
 
 class MockDropezyGeolocator extends Mock implements DropezyGeolocator {}
+
+class MockIGeofenceLocalPersistence extends Mock
+    implements IGeofenceLocalPersistence {}
+
+class MockIGeofenceRepository extends Mock implements IGeofenceRepository {}

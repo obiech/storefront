@@ -9,6 +9,7 @@ import 'package:storefront_app/features/auth/domain/domain.dart';
 import 'package:storefront_app/features/order/index.dart';
 import 'package:uuid/uuid.dart';
 
+import '../core/services/geofence/models/dropezy_polygon.dart';
 import '../features/cart_checkout/index.dart';
 import '../res/strings/base_strings.dart';
 import '../res/strings/base_strings.ext.dart';
@@ -52,7 +53,8 @@ abstract class CoreModule {
   @Named(GEOFENCE_PREF_BOX)
   @singleton
   @preResolve
-  Future<Box> get geofencePrefsBox => Hive.openBox(GEOFENCE_PREF_BOX);
+  Future<Box<DropezyPolygon>> get geofencePrefsBox =>
+      Hive.openBox(GEOFENCE_PREF_BOX);
 
   /// To access translations in Bloc & repositories,
   /// [BaseStrings] can be injected

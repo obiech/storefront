@@ -11,4 +11,11 @@ abstract class IGeofenceRepository {
     required DropezyPolygon polygon,
     bool geodesic,
   });
+
+  /// helper method to simplify calling [containsLocation] for
+  /// a multiple polygons.
+  bool scanMultiplePolygon({
+    required DropezyLatLng point,
+    required Set<DropezyPolygon> polys,
+  });
 }

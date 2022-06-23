@@ -71,6 +71,28 @@ void main() {
     );
   });
 
+  test('contains Location for multiple polygons', () {
+    expect(
+      repo.scanMultiplePolygon(
+        point: DropezyLatLng(
+          polygon.points.first.latitude,
+          polygon.points.first.longitude,
+        ),
+        polys: {emptyPolygon, polygon},
+      ),
+      equals(true),
+    );
+  });
+  test('does not contain Location for multiple polygons', () {
+    expect(
+      repo.scanMultiplePolygon(
+        point: const DropezyLatLng(0, 0),
+        polys: {emptyPolygon, polygon},
+      ),
+      equals(false),
+    );
+  });
+
   test('contains Location with point', () {
     expect(
       repo.containsLocation(

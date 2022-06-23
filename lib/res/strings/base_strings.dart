@@ -503,4 +503,6 @@ abstract class BaseStrings {
 
   // Errors
   AppErrors get errors;
+
+  String get unreachableLocation;
 }

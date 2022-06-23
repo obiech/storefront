@@ -96,6 +96,8 @@ class AddressCard extends StatelessWidget {
                               )
                               .withLineHeight(20),
                         ),
+                        if (!address.isLocatedWithinGeofence)
+                          const _UnreachableErrorWidget()
                       ],
                     ),
                   ),
@@ -108,6 +110,39 @@ class AddressCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _UnreachableErrorWidget extends StatelessWidget {
+  const _UnreachableErrorWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: context.res.dimens.spacingMiddle,
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: context.res.dimens.spacingSmall,
+        horizontal: context.res.dimens.spacingLarge,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(18),
+        color: context.res.colors.lightOrange.withOpacity(0.6),
+      ),
+      child: Text(
+        context.res.strings.unreachableLocation,
+        style: context.res.styles.subtitle
+            .copyWith(
+              fontSize: 12,
+              color: context.res.colors.red,
+              fontWeight: FontWeight.w700,
+            )
+            .withLineHeight(20),
       ),
     );
   }

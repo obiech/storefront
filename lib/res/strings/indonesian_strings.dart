@@ -754,4 +754,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   AppErrors get errors => IndonesianErrors();
+
+  @override
+  String get unreachableLocation => 'Lokasi belum terjangkau';
 }

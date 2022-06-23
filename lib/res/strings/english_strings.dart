@@ -759,4 +759,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   AppErrors get errors => EnglishErrors();
+
+  @override
+  String get unreachableLocation => 'Unreachable Location';
 }

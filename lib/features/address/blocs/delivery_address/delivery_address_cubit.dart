@@ -1,7 +1,14 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_local_persistence.dart';
 import 'package:storefront_app/features/address/index.dart';
+
+import '../../../../core/services/geofence/models/dropezy_polygon.dart';
+import '../../../../core/services/geofence/repository/i_geofence_repository.dart';
 
 part 'delivery_address_state.dart';
 
@@ -10,9 +17,20 @@ part 'delivery_address_state.dart';
 class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
   DeliveryAddressCubit({
     required this.deliveryAddressRepository,
-  }) : super(const DeliveryAddressInitial());
+    required this.geofenceLocalPersistence,
+    required this.geofenceRepository,
+  }) : super(const DeliveryAddressInitial()) {
+    onSubscriptionRequested();
+  }
 
   final IDeliveryAddressRepository deliveryAddressRepository;
+  final IGeofenceRepository geofenceRepository;
+  late final StreamSubscription _subcription;
+  final IGeofenceLocalPersistence geofenceLocalPersistence;
+  Set<DropezyPolygon> _polygons = {};
+
+  @visibleForTesting
+  Set<DropezyPolygon> get geofencePolygonsGetter => _polygons;
 
   Future<void> fetchDeliveryAddresses() async {
     emit(const DeliveryAddressLoading());
@@ -26,9 +44,13 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
           return const DeliveryAddressLoadedEmpty();
         } else {
           addressList.sortDate();
+          final scannedAddress = addressList.checkCoverageArea(
+            geofencePolygonsGetter,
+            geofenceRepository.scanMultiplePolygon,
+          );
           return DeliveryAddressLoaded(
-            addressList: addressList,
-            activeAddress: addressList.first,
+            addressList: scannedAddress,
+            activeAddress: scannedAddress.first,
           );
         }
       },
@@ -47,5 +69,37 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
         addressList: (state as DeliveryAddressLoaded).addressList,
       ),
     );
+  }
+
+  @protected
+  @visibleForTesting
+  Future<void> onSubscriptionRequested() async {
+    _subcription = geofenceLocalPersistence.polygons.listen(
+      (polys) {
+        _polygons = polys;
+
+        if (state is DeliveryAddressLoaded) {
+          final currentState = state as DeliveryAddressLoaded;
+          final _scannedAddresses = currentState.addressList.checkCoverageArea(
+            polys,
+            geofenceRepository.scanMultiplePolygon,
+          );
+
+          emit(
+            DeliveryAddressLoaded(
+              activeAddress: currentState.activeAddress,
+              addressList: _scannedAddresses,
+            ),
+          );
+        }
+      },
+      onError: (error) => emit(DeliveryAddressError(error.toString())),
+    );
+  }
+
+  @override
+  Future<void> close() async {
+    _subcription.cancel();
+    super.close();
   }
 }
