@@ -28,22 +28,25 @@ class SearchHeader extends StatelessWidget {
           SizedBox(
             height: res.dimens.spacingLarge,
           ),
-          TextField(
-            readOnly: true,
-            decoration: res.styles.roundedInputStyle.copyWith(
-              hintText: res.strings.findYourNeeds,
-              contentPadding: EdgeInsets.symmetric(
-                vertical: res.dimens.spacingMiddle,
-                horizontal: 5,
-              ),
-              prefixIcon: Icon(
-                DropezyIcons.search_alt,
-                size: 18,
-                color: res.colors.grey4,
-              ),
-            ),
-            style: res.styles.caption1,
+          GestureDetector(
             onTap: () => MainPage.setToSearch(context),
+            child: TextField(
+              readOnly: true,
+              enabled: false,
+              decoration: res.styles.roundedInputStyle.copyWith(
+                hintText: res.strings.findYourNeeds,
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: res.dimens.spacingMiddle,
+                  horizontal: 5,
+                ),
+                prefixIcon: Icon(
+                  DropezyIcons.search_alt,
+                  size: 18,
+                  color: res.colors.grey4,
+                ),
+              ),
+              style: res.styles.caption1,
+            ),
           ),
         ],
       ),
