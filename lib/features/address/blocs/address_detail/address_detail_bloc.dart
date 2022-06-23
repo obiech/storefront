@@ -37,21 +37,28 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
       }
     });
     on<LoadDeliveryAddress>((event, emit) async {
-      // FIXME: ugly hacks to delay & wait for map creation
-      await Future.delayed(const Duration(milliseconds: 500));
-
       final deliveryAddress = event.deliveryAddressModel;
+
       emit(
         state.copyWith(
+          isEditMode: true,
           id: deliveryAddress.id,
-          latLng: LatLng(deliveryAddress.lat, deliveryAddress.lng),
-          addressDetails: deliveryAddress.details?.toPrettyAddress,
           addressName: deliveryAddress.title,
           addressDetailsNote: deliveryAddress.notes,
           recipientName: deliveryAddress.recipientName,
           recipientPhoneNumber: deliveryAddress.recipientPhoneNumber,
           isPrimaryAddress: deliveryAddress.isPrimaryAddress,
-          isEditMode: true,
+        ),
+      );
+
+      // FIXME: ugly hacks to delay & wait for map creation
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      emit(
+        state.copyWith(
+          latLng: LatLng(deliveryAddress.lat, deliveryAddress.lng),
+          addressDetailsName: deliveryAddress.details?.name,
+          addressDetails: deliveryAddress.details?.toPrettyAddress,
         ),
       );
     });

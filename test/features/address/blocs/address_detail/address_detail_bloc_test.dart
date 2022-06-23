@@ -74,19 +74,25 @@ void main() {
       build: () => bloc,
       act: (bloc) =>
           bloc.add(LoadDeliveryAddress(deliveryAddressModel: loadedAddress)),
-      expect: () => [
-        AddressDetailState(
+      expect: () {
+        final state = AddressDetailState(
           id: loadedAddress.id,
-          addressDetails: placeDetails.addressDetails.toPrettyAddress,
-          latLng: LatLng(placeDetails.lat, placeDetails.lng),
           addressName: loadedAddress.title,
-          addressDetailsNote: loadedAddress.notes!,
+          addressDetailsNote: loadedAddress.notes ?? '',
           recipientName: loadedAddress.recipientName,
           recipientPhoneNumber: loadedAddress.recipientPhoneNumber,
           isPrimaryAddress: loadedAddress.isPrimaryAddress,
           isEditMode: true,
-        ),
-      ],
+        );
+        return [
+          state,
+          state.copyWith(
+            latLng: LatLng(loadedAddress.lat, loadedAddress.lng),
+            addressDetailsName: loadedAddress.details?.name,
+            addressDetails: loadedAddress.details?.toPrettyAddress,
+          ),
+        ];
+      },
     );
 
     blocTest<AddressDetailBloc, AddressDetailState>(

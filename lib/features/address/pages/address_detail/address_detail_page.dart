@@ -7,6 +7,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+part './parts/address_delete_button.dart';
 part './parts/address_google_map.dart';
 part './parts/address_name_field.dart';
 part './parts/address_note_field.dart';
@@ -32,14 +33,13 @@ class _AddressDetailPageState extends State<AddressDetailPage> {
     return DropezyScaffold.textTitle(
       title: context.res.strings.addressDetail,
       actions: [
-        IconButton(
-          // TODO (Widy): Handle delete address
-          onPressed: () {
-            showDropezyBottomSheet(context, (_) {
-              return const RemoveAddressBottomSheet();
-            });
+        BlocBuilder<AddressDetailBloc, AddressDetailState>(
+          buildWhen: (p, c) => p.isEditMode != c.isEditMode,
+          builder: (context, state) {
+            return state.isEditMode
+                ? const DeleteAddressButton()
+                : const SizedBox();
           },
-          icon: const Icon(DropezyIcons.trash),
         ),
       ],
       child: SafeArea(

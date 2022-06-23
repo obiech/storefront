@@ -39,6 +39,34 @@ void main() {
   });
 
   testWidgets(
+    'should display delete button '
+    'when in edit mode',
+    (tester) async {
+      whenListen(
+        bloc,
+        Stream.fromIterable([
+          const AddressDetailState(isEditMode: true),
+        ]),
+      );
+
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DeleteAddressButton), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'should not display delete button '
+    'when not in edit mode',
+    (tester) async {
+      await tester.pumpAddressDetailPage(stackRouter, bloc);
+
+      expect(find.byType(DeleteAddressButton), findsNothing);
+    },
+  );
+
+  testWidgets(
     'should display view correctly '
     'when page is rendered',
     (tester) async {
