@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/checkout/checkout_button.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 import '../../../../../test_commons/finders/cart_checkout_page_finders.dart';
 import '../../../../../test_commons/fixtures/cart/cart_models.dart';
@@ -34,12 +35,13 @@ void main() {
   late PaymentMethodCubit paymentMethodCubit;
   late IPaymentRepository paymentRepository;
   final paymentResults = mockGoPayPaymentResults;
+  final baseStrings = EnglishStrings();
 
   setUp(() {
     cartBloc = MockCartBloc();
     cartModel = mockCartModel;
     paymentRepository = MockPaymentMethodRepository();
-    paymentCheckoutCubit = PaymentCheckoutCubit(paymentRepository);
+    paymentCheckoutCubit = PaymentCheckoutCubit(paymentRepository, baseStrings);
 
     paymentMethodCubit = PaymentMethodCubit(paymentRepository);
 
@@ -61,7 +63,7 @@ void main() {
       'should be disabled', (WidgetTester tester) async {
     /// arrange
     when(() => paymentRepository.getPaymentMethods())
-        .thenAnswer((_) async => left(NoPaymentMethods()));
+        .thenAnswer((_) async => left(NoPaymentMethods(baseStrings)));
 
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 

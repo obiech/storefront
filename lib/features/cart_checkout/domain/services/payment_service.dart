@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/di_environment.dart';
 import 'package:storefront_app/features/address/index.dart';
+import 'package:storefront_app/res/strings/base_strings.dart';
 
 import '../../../discovery/domain/repository/i_store_repository.dart';
 import '../../../order/index.dart';
@@ -30,12 +31,14 @@ class PaymentService implements IPaymentRepository {
   final IStoreRepository storeRepository;
   final IOrderRepository orderRepository;
   final IDeliveryAddressRepository deliveryAddressRepository;
+  final BaseStrings appStrings;
 
   PaymentService(
     this.orderServiceClient,
     this.orderRepository,
     this.storeRepository,
     this.deliveryAddressRepository,
+    this.appStrings,
   );
 
   @override
@@ -47,7 +50,9 @@ class PaymentService implements IPaymentRepository {
       final activePaymentMethods =
           paymentMethodsResponse.paymentMethods.where(channelIsActive).toList();
 
-      if (activePaymentMethods.isEmpty) return left(NoPaymentMethods());
+      if (activePaymentMethods.isEmpty) {
+        return left(NoPaymentMethods(appStrings));
+      }
 
       return right(activePaymentMethods.toPaymentDetails());
     } on Exception catch (e) {
@@ -60,10 +65,11 @@ class PaymentService implements IPaymentRepository {
     return safeCall(() async {
       // TODO(obella465): Fix once minimal submission details are provided
       final storeId = storeRepository.storeStream.valueOrNull;
-      final addressId = deliveryAddressRepository.activeDeliveryAddress?.id;
+      if (storeId == null) return left(NoStore(appStrings));
 
-      // TODO(obella): Handle null storeId
-      // TODO(obella): Handle addressId
+      final addressId = deliveryAddressRepository.activeDeliveryAddress?.id;
+      if (addressId == null) return left(NoAddressFound(appStrings));
+
       final checkoutRequest = CheckoutRequest(
         storeId: storeId,
         addressId: addressId,

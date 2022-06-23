@@ -8,6 +8,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 import 'package:storefront_app/features/cart_checkout/widgets/payment_method/list.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 import '../../../../commons.dart';
 import '../../mocks.dart';
@@ -15,6 +16,7 @@ import '../../mocks.dart';
 void main() {
   late IPaymentRepository _paymentMethodsRepository;
   late PaymentMethodCubit _cubit;
+  final baseStrings = EnglishStrings();
 
   setUp(() {
     _paymentMethodsRepository = MockPaymentMethodRepository();
@@ -52,7 +54,7 @@ void main() {
           'should display empty state ', (WidgetTester tester) async {
         /// Load Payment Methods List
         when(() => _paymentMethodsRepository.getPaymentMethods())
-            .thenAnswer((_) async => left(NoPaymentMethods()));
+            .thenAnswer((_) async => left(NoPaymentMethods(baseStrings)));
 
         await _pumpTestWidget(
           tester,

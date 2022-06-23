@@ -10,6 +10,7 @@ import 'package:storefront_app/di/di_environment.dart';
 import 'package:storefront_app/features/order/index.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../res/strings/base_strings.dart';
 import '../domains.dart';
 
 /// Dummy for [IPaymentRepository]
@@ -90,8 +91,9 @@ import '../domains.dart';
 class DummyPaymentService implements IPaymentRepository {
   final Uuid uuid;
   final IOrderRepository orderRepository;
+  final BaseStrings appStrings;
 
-  DummyPaymentService(this.uuid, this.orderRepository);
+  DummyPaymentService(this.uuid, this.orderRepository, this.appStrings);
 
   @override
   RepoResult<OrderModel> checkoutPayment(PaymentMethod method) async {
@@ -187,7 +189,7 @@ class DummyPaymentService implements IPaymentRepository {
         }
       }
 
-      return left(PaymentMethodNotSupported(method));
+      return left(PaymentMethodNotSupported(appStrings, method));
     } on Exception catch (e) {
       return left(e.toFailure);
     }

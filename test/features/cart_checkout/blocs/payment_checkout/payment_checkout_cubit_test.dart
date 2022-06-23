@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/features/cart_checkout/blocs/blocs.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 import '../../../../commons.dart';
 import '../../mocks.dart';
@@ -17,10 +18,11 @@ void main() {
         samplePaymentMethods.toPaymentDetails();
 
     final paymentResults = mockGoPayPaymentResults;
+    final baseStrings = EnglishStrings();
 
     setUp(() {
       _repository = MockPaymentMethodRepository();
-      _cubit = PaymentCheckoutCubit(_repository);
+      _cubit = PaymentCheckoutCubit(_repository, baseStrings);
     });
 
     test('should have [InitialPaymentCheckoutState] on start', () async {
@@ -62,7 +64,10 @@ void main() {
           () => _repository.checkoutPayment(_paymentMethods.first.method),
         ).thenAnswer(
           (_) async => left(
-            PaymentMethodNotSupported(PaymentMethod.PAYMENT_METHOD_UNSPECIFIED),
+            PaymentMethodNotSupported(
+              baseStrings,
+              PaymentMethod.PAYMENT_METHOD_UNSPECIFIED,
+            ),
           ),
         );
       },

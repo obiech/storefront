@@ -1,5 +1,6 @@
-import 'package:dropezy_proto/v1/order/order.pbenum.dart';
+import 'package:dropezy_proto/v1/order/order.pb.dart';
 import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/res/strings/base_strings.dart';
 
 /// Base for cart checkout errors
 class CheckoutFailure extends Failure {
@@ -8,14 +9,26 @@ class CheckoutFailure extends Failure {
 
 // When available payment methods response is empty
 class NoPaymentMethods extends CheckoutFailure {
-  NoPaymentMethods() : super('No payment method found');
+  NoPaymentMethods(BaseStrings strings)
+      : super(strings.errors.cartCheckout.noPaymentMethods);
 }
 
 // When checkout payment method isn't configured for the app
 class PaymentMethodNotSupported extends CheckoutFailure {
-  // The unsupported payment method
-  final PaymentMethod paymentMethod;
+  PaymentMethodNotSupported(BaseStrings strings, PaymentMethod method)
+      : super(
+          strings.errors.cartCheckout.paymentMethodNotSupported(method.name),
+        );
+}
 
-  PaymentMethodNotSupported(this.paymentMethod)
-      : super('${paymentMethod.name} is not supported');
+// When no store id is found
+class NoStore extends CheckoutFailure {
+  NoStore(BaseStrings strings)
+      : super(strings.errors.cartCheckout.noStoreNearby);
+}
+
+// When no address id is found
+class NoAddressFound extends CheckoutFailure {
+  NoAddressFound(BaseStrings strings)
+      : super(strings.errors.cartCheckout.noDeliveryAddressSelected);
 }

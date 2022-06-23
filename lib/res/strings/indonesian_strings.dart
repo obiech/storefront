@@ -1,4 +1,6 @@
 import 'base_strings.dart';
+import 'errors/errors.dart';
+import 'errors/indonesian_errors/indonesian_errors.dart';
 import 'faq/faq.dart';
 import 'faq/indonesian_faq/indonesian_faq.dart';
 import 'payment_instruction/indonesian_payment_instruction/payment_instruction_indonesian.dart';
@@ -749,4 +751,7 @@ class IndonesianStrings implements BaseStrings {
 
   @override
   String get loading => 'Sedang memuat';
+
+  @override
+  AppErrors get errors => IndonesianErrors();
 }

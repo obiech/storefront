@@ -8,6 +8,7 @@ import 'package:storefront_app/features/address/index.dart';
 import 'package:storefront_app/features/cart_checkout/index.dart';
 import 'package:storefront_app/features/discovery/domain/repository/i_store_repository.dart';
 import 'package:storefront_app/features/order/domain/domains.dart';
+import 'package:storefront_app/res/strings/english_strings.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart';
 import '../../../../commons.dart';
@@ -40,6 +41,8 @@ void main() {
 
   final deliveryAddressModel = sampleDeliveryAddressList.first;
 
+  final baseStrings = EnglishStrings();
+
   /// Store Data
   const storeId = 'mock_store_id';
 
@@ -53,6 +56,7 @@ void main() {
       orderRepository,
       storeRepository,
       deliveryAddressRepository,
+      baseStrings,
     );
   });
 

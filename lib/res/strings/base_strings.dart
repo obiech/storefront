@@ -1,3 +1,4 @@
+import 'errors/errors.dart';
 import 'faq/faq.dart';
 import 'payment_instruction/payment_instructions.dart';
 
@@ -499,4 +500,7 @@ abstract class BaseStrings {
   String get locationConfirm;
 
   String get viewMap;
+
+  // Errors
+  AppErrors get errors;
 }

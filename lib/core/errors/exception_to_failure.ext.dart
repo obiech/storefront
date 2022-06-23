@@ -1,5 +1,6 @@
 part of 'failure.dart';
 
+// TODO - Use [BaseStrings]
 extension ExceptionToFailureX on Exception {
   /// Transforms different types of [Exception]s into
   /// corresponding [Failure]s

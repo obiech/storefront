@@ -1,3 +1,6 @@
+import 'package:storefront_app/res/strings/errors/english_errors/english_errors.dart';
+import 'package:storefront_app/res/strings/errors/errors.dart';
+
 import 'base_strings.dart';
 import 'faq/english_faq/english_faq.dart';
 import 'faq/faq.dart';
@@ -753,4 +756,7 @@ class EnglishStrings implements BaseStrings {
 
   @override
   String get loading => 'Loading';
+
+  @override
+  AppErrors get errors => EnglishErrors();
 }
