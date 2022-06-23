@@ -1,6 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:storefront_app/features/permission_handler/bloc/permission_handler_cubit.dart';
 
 import '../../../../core/core.dart';
 
@@ -50,7 +53,7 @@ class RequestLocationAccessPage extends StatelessWidget {
                     RequestLocationAccessPageKeys.buttonGrantAccess,
                   ),
                   label: context.res.strings.activateNow,
-                  onPressed: _requestLocationAccess,
+                  onPressed: () => _requestLocationAccess(context),
                 ),
               ),
               SizedBox(height: context.res.dimens.spacingSmall),
@@ -74,8 +77,11 @@ class RequestLocationAccessPage extends StatelessWidget {
     );
   }
 
-  void _requestLocationAccess() {
-    // TODO (leovinsen): request location access
+  Future<void> _requestLocationAccess(BuildContext context) async {
+    await context
+        .read<PermissionHandlerCubit>()
+        .requestPermission(Permission.location);
+    context.router.replace(const SearchLocationRoute());
   }
 
   void _skipProcess(BuildContext context) {
