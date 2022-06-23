@@ -19,7 +19,7 @@ class _ChildCategoriesImage extends StatelessWidget {
         shape: BoxShape.circle,
         border: isActive
             ? Border.all(
-                color: res.colors.darkBlue,
+                color: res.colors.blue,
                 width: 2,
               )
             : null,

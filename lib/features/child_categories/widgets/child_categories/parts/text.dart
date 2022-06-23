@@ -19,11 +19,20 @@ class _ChildCategoriesText extends StatelessWidget {
       textAlign: TextAlign.center,
       overflow: TextOverflow.ellipsis,
       style: isActive
-          ? res.styles.caption2.copyWith(
-              color: res.colors.darkBlue,
-              fontWeight: FontWeight.bold,
-            )
-          : res.styles.caption2,
+          ? res.styles.caption3
+              .copyWith(
+                color: res.colors.blue,
+                fontWeight: FontWeight.w500,
+                fontSize: 11,
+              )
+              .withLineHeight(13)
+          : context.res.styles.caption3
+              .copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                color: DropezyColors.grey6,
+              )
+              .withLineHeight(13),
     );
   }
 }
