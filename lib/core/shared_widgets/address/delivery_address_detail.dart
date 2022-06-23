@@ -88,11 +88,15 @@ class DeliveryAddressDetail extends StatelessWidget {
                   color: context.res.colors.grey4,
                 ),
                 SizedBox(width: context.res.dimens.spacingMiddle),
-                Text(
-                  address.notes ?? '',
-                  style: context.res.styles.caption2
-                      .copyWith(fontWeight: FontWeight.w500)
-                      .withLineHeight(16),
+                Expanded(
+                  child: Text(
+                    address.notes ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.res.styles.caption2
+                        .copyWith(fontWeight: FontWeight.w500)
+                        .withLineHeight(16),
+                  ),
                 ),
               ],
             ),
