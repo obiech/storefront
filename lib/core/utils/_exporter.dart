@@ -15,5 +15,6 @@ export 'is_test_mode.dart';
 export 'num.ext.dart';
 export 'phone_number_transformer.dart';
 export 'random.ext.dart';
+export 'scroll_behavior.dart';
 export 'string.ext.dart';
 export 'text_style.ext.dart';

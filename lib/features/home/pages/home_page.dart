@@ -50,15 +50,17 @@ class HomePage extends StatelessWidget implements AutoRouteWrapper {
             padding: EdgeInsets.only(
               left: res.dimens.spacingLarge,
               right: res.dimens.spacingLarge,
-              bottom: 80,
             ),
-            child: const CustomScrollView(
-              physics: ClampingScrollPhysics(),
-              slivers: [
-                SliverToBoxAdapter(
-                  child: ParentCategoriesGrid(),
-                ),
-              ],
+            child: ScrollConfiguration(
+              behavior: DropezyBehavior(),
+              child: const CustomScrollView(
+                physics: ClampingScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: ParentCategoriesGrid(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
