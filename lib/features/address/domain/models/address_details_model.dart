@@ -66,4 +66,13 @@ extension AddressDetailsModelX on AddressDetailsModel {
       country
     ].where((x) => x != null).join(', ');
   }
+
+  /// Function to concatenating place name as part of street
+  /// being saved to backend
+  String get toDetailAddress {
+    return <String?>[
+      name,
+      toPrettyAddress,
+    ].where((x) => x != null).join(', ');
+  }
 }

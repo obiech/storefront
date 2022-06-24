@@ -12,6 +12,7 @@ final sampleDeliveryAddressList = [
     recipientPhoneNumber: '08123123123',
     dateCreated: DateTime(2022, 1, 20),
     details: const AddressDetailsModel(
+      name: 'Monas',
       street: 'Jl. Monas',
       district: 'Gambir',
       subDistrict: 'Gambir',
@@ -30,6 +31,7 @@ final sampleDeliveryAddressList = [
     recipientPhoneNumber: '08123123123',
     dateCreated: DateTime(2022, 2, 27),
     details: const AddressDetailsModel(
+      name: 'Senen Raya No.135',
       street: 'Jl. Senen Raya No.135, RW.2',
       district: 'Senen',
       subDistrict: 'Kec. Senen',

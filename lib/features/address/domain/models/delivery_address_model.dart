@@ -54,6 +54,17 @@ class DeliveryAddressModel extends Equatable {
   final DateTime dateCreated;
 
   factory DeliveryAddressModel.fromPb(Address address) {
+    // TODO: Find better naming :")
+    final addressDetailList = address.address.address.split(', ');
+
+    /// Get place name of address
+    final addressName = addressDetailList[0];
+
+    /// Get place address detail
+    ///
+    /// P.S: Format similiar to [AddressDetailsModel.toPrettyAddress]
+    final addressStreet = addressDetailList.sublist(1).join(', ');
+
     // TODO (widy): Map AddressDetailModel
     return DeliveryAddressModel(
       id: address.address.id,
@@ -66,10 +77,8 @@ class DeliveryAddressModel extends Equatable {
       recipientPhoneNumber: address.contact.phoneNumber,
       dateCreated: address.address.timestamp.createdTime.toDateTime().toLocal(),
       details: AddressDetailsModel(
-        // TODO: Add Place Name ?
-        name: '',
-        // TODO: Find better naming :")
-        street: address.address.address,
+        name: addressName,
+        street: addressStreet,
       ),
     );
   }
@@ -80,7 +89,7 @@ class DeliveryAddressModel extends Equatable {
       address: meta.Address(
         id: id,
         name: title,
-        address: details?.toPrettyAddress,
+        address: details?.toDetailAddress,
         coordinates: meta.Coordinates(
           longitude: lng,
           latitude: lat,

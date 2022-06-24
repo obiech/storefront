@@ -79,6 +79,7 @@ class DummyOrderRepository extends IOrderRepository {
     recipientPhoneNumber: '08123123123',
     dateCreated: DateTime(2022, 1, 20),
     details: const AddressDetailsModel(
+      name: 'Monas',
       street: 'Jl. Monas',
       district: 'Gambir',
       subDistrict: 'Gambir',

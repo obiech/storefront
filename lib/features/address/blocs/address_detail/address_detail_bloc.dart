@@ -100,6 +100,7 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
       dateCreated: _dateTimeProvider.now,
       // TODO (widy): fix with proper structure conversion
       details: AddressDetailsModel(
+        name: state.addressDetailsName,
         street: state.addressDetails,
       ),
     );

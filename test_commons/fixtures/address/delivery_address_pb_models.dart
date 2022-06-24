@@ -9,6 +9,7 @@ final sampleDeliveryAddressPbList = [
       id: 'delivery-address-1',
       name: 'Rumah',
       address: const AddressDetailsModel(
+        name: 'Senen Raya No.135',
         street: 'Jl. Monas',
         district: 'Gambir',
         subDistrict: 'Gambir',
