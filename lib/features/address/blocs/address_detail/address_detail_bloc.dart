@@ -22,9 +22,6 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
         _dateTimeProvider = dateTimeProvider,
         super(const AddressDetailState()) {
     on<LoadPlaceDetail>((event, emit) async {
-      // FIXME: ugly hacks to delay & wait for map creation
-      await Future.delayed(const Duration(milliseconds: 500));
-
       final placeDetails = event.placeDetailsModel;
       if (placeDetails != null) {
         emit(
@@ -51,9 +48,6 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
         ),
       );
 
-      // FIXME: ugly hacks to delay & wait for map creation
-      await Future.delayed(const Duration(milliseconds: 500));
-
       emit(
         state.copyWith(
           latLng: LatLng(deliveryAddress.lat, deliveryAddress.lng),
@@ -64,6 +58,14 @@ class AddressDetailBloc extends Bloc<AddressDetailEvent, AddressDetailState> {
     });
     on<AddressNameChanged>((event, emit) {
       emit(state.copyWith(addressName: event.addressName));
+    });
+    on<MapIsReady>((event, emit) {
+      emit(
+        state.copyWith(
+          isMapReady: true,
+          updateLatLng: true,
+        ),
+      );
     });
     on<AddressDetailNoteChanged>((event, emit) {
       emit(state.copyWith(addressDetailsNote: event.addressDetailNote));

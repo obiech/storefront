@@ -11,7 +11,8 @@ class _AddressGoogleMapView extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Handle when [LatLng] changes
     return BlocListener<AddressDetailBloc, AddressDetailState>(
-      listenWhen: (previous, current) => previous.latLng != current.latLng,
+      listenWhen: (previous, current) =>
+          current.isMapReady && current.updateLatLng,
       listener: (context, state) async {
         mapController?.animateCamera(CameraUpdate.newLatLng(state.latLng));
       },
@@ -27,6 +28,7 @@ class _AddressGoogleMapView extends StatelessWidget {
                   key: AddressDetailPageKeys.googleMapView,
                   onMapCreated: (controller) {
                     mapController = controller;
+                    context.read<AddressDetailBloc>().add(const MapIsReady());
                   },
                   initialCameraPosition: CameraPosition(
                     target: state.latLng,

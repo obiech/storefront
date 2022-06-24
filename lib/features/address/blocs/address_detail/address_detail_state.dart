@@ -22,6 +22,12 @@ class AddressDetailState extends Equatable {
   final bool addressUpdated;
   final LatLng latLng;
 
+  /// Indicating if the map is ready
+  final bool isMapReady;
+
+  /// Indicating if the view should update latlng
+  final bool updateLatLng;
+
   /// Indicating case to handle
   final bool isEditMode;
 
@@ -33,6 +39,8 @@ class AddressDetailState extends Equatable {
     this.addressDetailsNote = '',
     this.recipientName = '',
     this.recipientPhoneNumber = '',
+    this.isMapReady = false,
+    this.updateLatLng = false,
     this.isPrimaryAddress = false,
     this.loading = false,
     this.errorMessage,
@@ -49,6 +57,8 @@ class AddressDetailState extends Equatable {
     String? addressDetailsNote,
     String? recipientName,
     String? recipientPhoneNumber,
+    bool? isMapReady,
+    bool? updateLatLng,
     bool? isPrimaryAddress,
     bool? loading,
     String? errorMessage,
@@ -64,6 +74,8 @@ class AddressDetailState extends Equatable {
       addressDetailsNote: addressDetailsNote ?? this.addressDetailsNote,
       recipientName: recipientName ?? this.recipientName,
       recipientPhoneNumber: recipientPhoneNumber ?? this.recipientPhoneNumber,
+      isMapReady: isMapReady ?? this.isMapReady,
+      updateLatLng: updateLatLng ?? false,
       isPrimaryAddress: isPrimaryAddress ?? this.isPrimaryAddress,
       loading: loading ?? this.loading,
       errorMessage: errorMessage,
@@ -82,6 +94,8 @@ class AddressDetailState extends Equatable {
         addressDetailsNote,
         recipientName,
         recipientPhoneNumber,
+        isMapReady,
+        updateLatLng,
         isPrimaryAddress,
         loading,
         errorMessage,

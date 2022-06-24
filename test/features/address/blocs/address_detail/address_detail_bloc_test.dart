@@ -50,8 +50,6 @@ void main() {
       'should emit lat, lng, & address detail '
       'when LoadPlaceDetail is added '
       'and PlaceDetailsModel is provided',
-      // Waiting for map creation (ugly hacks)
-      wait: const Duration(milliseconds: 500),
       build: () => bloc,
       act: (bloc) => bloc.add(LoadPlaceDetail(placeDetailsModel: placeDetails)),
       expect: () => [
@@ -69,8 +67,6 @@ void main() {
       'is primary address, & turn into edit mode '
       'when LoadDeliveryAddress is added '
       'and DeliveryAddressModel is provided',
-      // Waiting for map creation (ugly hacks)
-      wait: const Duration(milliseconds: 500),
       build: () => bloc,
       act: (bloc) =>
           bloc.add(LoadDeliveryAddress(deliveryAddressModel: loadedAddress)),
@@ -102,6 +98,19 @@ void main() {
       act: (bloc) => bloc.add(AddressNameChanged(addressModel.title)),
       expect: () => [
         AddressDetailState(addressName: addressModel.title),
+      ],
+    );
+
+    blocTest<AddressDetailBloc, AddressDetailState>(
+      'should emit isMapReady & updateLatLng '
+      'when MapIsReady is added',
+      build: () => bloc,
+      act: (bloc) => bloc.add(const MapIsReady()),
+      expect: () => [
+        const AddressDetailState(
+          isMapReady: true,
+          updateLatLng: true,
+        ),
       ],
     );
 

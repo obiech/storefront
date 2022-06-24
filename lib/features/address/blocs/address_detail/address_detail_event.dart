@@ -38,6 +38,14 @@ class AddressNameChanged extends AddressDetailEvent {
   List<Object?> get props => [addressName];
 }
 
+/// Event to indicate that Map View is ready
+class MapIsReady extends AddressDetailEvent {
+  const MapIsReady();
+
+  @override
+  List<Object?> get props => [];
+}
+
 /// Event to change [addressDetailNote] and save it to state
 class AddressDetailNoteChanged extends AddressDetailEvent {
   final String addressDetailNote;
