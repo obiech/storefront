@@ -61,6 +61,12 @@ class CheckoutButton extends StatelessWidget {
             state.message,
             color: res.colors.red,
           );
+
+          // Refresh cart on error
+          context.read<CartBloc>().add(const LoadCart());
+
+          /// TODO(obella): Handle [FailedPreconditionFailure] message
+          /// https://www.figma.com/file/1MehrTeZ2q50qqOO6XYvTR/Final-UI?node-id=5914%3A47887
         }
       },
       builder: (context, checkoutState) {

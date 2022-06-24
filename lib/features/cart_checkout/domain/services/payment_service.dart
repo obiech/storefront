@@ -85,7 +85,7 @@ class PaymentService implements IPaymentRepository {
 
       orderRepository.addOrder(order);
 
-      return right(order);
+      return Right(order);
     });
   }
 }

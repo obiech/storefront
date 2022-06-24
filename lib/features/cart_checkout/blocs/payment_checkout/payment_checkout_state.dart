@@ -28,7 +28,10 @@ class LoadedPaymentCheckout extends PaymentCheckoutState {
 class ErrorLoadingPaymentCheckout extends PaymentCheckoutState {
   final String message;
 
-  const ErrorLoadingPaymentCheckout(this.message);
+  // Error Failure
+  final Failure failure;
+
+  const ErrorLoadingPaymentCheckout(this.message, this.failure);
 
   @override
   List<Object> get props => [message];

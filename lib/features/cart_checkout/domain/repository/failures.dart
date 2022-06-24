@@ -32,3 +32,10 @@ class NoAddressFound extends CheckoutFailure {
   NoAddressFound(BaseStrings strings)
       : super(strings.errors.cartCheckout.noDeliveryAddressSelected);
 }
+
+// When backend cart has thrown exception
+class CartExceptionOccurred extends CheckoutFailure {
+  final String cartError;
+
+  CartExceptionOccurred(this.cartError) : super(cartError);
+}

@@ -1,6 +1,7 @@
 import 'package:dropezy_proto/v1/order/order.pbgrpc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:grpc/grpc.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:storefront_app/core/core.dart';
@@ -203,6 +204,25 @@ void main() {
       );
       expect(response.isLeft(), true);
       expect(response.getLeft(), isA<Failure>());
+
+      // assert
+      verifyNever(
+        () => orderRepository.addOrder(OrderModel.fromPb(order)),
+      );
+    });
+
+    test(
+        'should return a [FailedPreconditionFailure] '
+        'when [checkout] Grpc throws a [failedPrecondition] error', () async {
+      // arrange
+      when(() => orderServiceClient.checkout(any()))
+          .thenThrow(GrpcError.failedPrecondition('[Test Error]'));
+      // act
+      final response = await paymentRepository.checkoutPayment(
+        PaymentMethod.PAYMENT_METHOD_GOPAY,
+      );
+      expect(response.isLeft(), true);
+      expect(response.getLeft(), isA<FailedPreconditionFailure>());
 
       // assert
       verifyNever(

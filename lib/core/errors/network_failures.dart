@@ -25,6 +25,8 @@ class NetworkFailure extends Failure {
         return ResourceForbiddenFailure(error.message);
       case StatusCode.alreadyExists:
         return AlreadyExistFailure(error.message);
+      case StatusCode.failedPrecondition:
+        return FailedPreconditionFailure(error.message);
       default:
         return NetworkFailure(error.message);
     }
@@ -106,5 +108,15 @@ class AlreadyExistFailure extends NetworkFailure {
   AlreadyExistFailure([String? message])
       : super(
           message ?? 'This resource already exists in our database.',
+        );
+}
+
+/// The system is not in a state required for the operation's execution.
+///
+/// e.g Attempting to checkout an empty cart.
+class FailedPreconditionFailure extends NetworkFailure {
+  FailedPreconditionFailure([String? message])
+      : super(
+          message ?? 'System is in an invalid state.',
         );
 }
