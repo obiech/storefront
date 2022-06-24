@@ -74,6 +74,10 @@ extension StringX on String {
   String capitalize() =>
       isNotEmpty ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';
 
+  /// Take any string and capitalize first letter only
+  String capitalizeFirstLetter() =>
+      isNotEmpty ? '${this[0].toUpperCase()}${substring(1)}' : '';
+
   /// Append image URL source to path from backend
   String get toImageUrl {
     final context = Context(style: Style.posix);

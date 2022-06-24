@@ -103,6 +103,17 @@ void main() {
     });
   });
 
+  group('[String].capitalizeFirstLetter()', () {
+    test('should capitalize any string without fail first letter only',
+        () async {
+      expect(''.capitalizeFirstLetter(), '');
+      expect('some stuff'.capitalizeFirstLetter(), 'Some stuff');
+      expect('sOME STUFF'.capitalizeFirstLetter(), 'SOME STUFF');
+      expect('some Stuff'.capitalizeFirstLetter(), 'Some Stuff');
+      expect('soMe STuFf'.capitalizeFirstLetter(), 'SoMe STuFf');
+    });
+  });
+
   group('[String].toImageUrl()', () {
     test('should join img url with host', () async {
       dotenv.testLoad(fileInput: '''ASSETS_URL=https://test.dropezy.com''');

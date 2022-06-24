@@ -9,7 +9,7 @@ class UpperCaseTextFormatter extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     return TextEditingValue(
-      text: newValue.text.capitalize(),
+      text: newValue.text.capitalizeFirstLetter(),
       selection: newValue.selection,
     );
   }
