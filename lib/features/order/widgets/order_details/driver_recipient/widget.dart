@@ -15,12 +15,14 @@ class DriverAndRecipientSection extends StatelessWidget {
     Key? key,
     required this.driverModel,
     this.recipientModel,
+    required this.status,
   }) : super(key: key);
 
   final OrderDriverModel? driverModel;
 
   final OrderRecipientModel? recipientModel;
 
+  final OrderStatus status;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -49,7 +51,7 @@ class DriverAndRecipientSection extends StatelessWidget {
                 onPressed: () => _contactDriverOnWhatsapp(context),
               ),
             ),
-          if (recipientModel != null) ...[
+          if (recipientModel != null && status == OrderStatus.arrived) ...[
             Divider(
               // margin of 12 dp on both vertical sides
               height: context.res.dimens.spacingMiddle * 2,

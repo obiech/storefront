@@ -67,6 +67,7 @@ class OrderDetailsView extends StatelessWidget {
                             DriverAndRecipientSection(
                               driverModel: state.order.driver,
                               recipientModel: state.order.recipient,
+                              status: state.order.status,
                             ),
                             const ThickDivider(),
                           ],

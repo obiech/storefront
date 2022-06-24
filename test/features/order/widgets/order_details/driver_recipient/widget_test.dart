@@ -5,6 +5,7 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/order/index.dart';
 
 import '../../../../../../test_commons/features/order/finders/driver_and_recipient_section_finders.dart';
+import '../../../../../../test_commons/fixtures/order/order_models.dart';
 import '../../../../../../test_commons/utils/locale_setup.dart';
 
 /// Helper functions specific to this test
@@ -12,6 +13,7 @@ extension WidgetTesterX on WidgetTester {
   Future<BuildContext> pumpWidgetForTest({
     required OrderDriverModel driverModel,
     OrderRecipientModel? recipientModel,
+    required OrderStatus status,
   }) async {
     late BuildContext ctx;
     await pumpWidget(
@@ -23,6 +25,7 @@ extension WidgetTesterX on WidgetTester {
               body: DriverAndRecipientSection(
                 driverModel: driverModel,
                 recipientModel: recipientModel,
+                status: status,
               ),
             );
           },
@@ -105,7 +108,8 @@ void main() {
     'DriverAndRecipientSection',
     () {
       testWidgets(
-        'shows driver information, profile image and a button to contact them',
+        'shows driver information, profile image and a button to contact them '
+        'and dont show recipient information when order status is in delivery and recipient is null',
         (tester) async {
           // setup
           final driverModel = OrderDriverModel(
@@ -118,6 +122,55 @@ void main() {
           // act
           final ctx = await tester.pumpWidgetForTest(
             driverModel: driverModel,
+            status: orderInDelivery.status,
+          );
+
+          // assert
+          // Should find driver's information
+          expect(
+            DriverAndRecipientSectionFinders.finderDriverInformation,
+            findsOneWidget,
+          );
+
+          await tester.assertWidgetsForDriverInformation(
+            context: ctx,
+            driverImageUrl: driverImageUrl,
+            driverName: driverName,
+            driverLicenseNumber: driverLicenseNumber,
+          );
+
+          // Should not display recipient information
+          expect(
+            DriverAndRecipientSectionFinders.finderRecipientInformation,
+            findsNothing,
+          );
+        },
+      );
+
+      testWidgets(
+        'shows driver information, profile image and a button to contact them '
+        'and dont show recipient information when order status is in delivery '
+        'and recipient is not null',
+        (tester) async {
+          // setup
+          final driverModel = OrderDriverModel(
+            imageUrl: driverImageUrl,
+            fullName: driverName,
+            vehicleLicenseNumber: driverLicenseNumber,
+            whatsappNumber: driverWhatsappNumber,
+          );
+
+          final recipientModel = OrderRecipientModel(
+            imageUrl: recipientImageUrl,
+            fullName: recipientName,
+            relationToCustomer: recipientRelation,
+          );
+
+          // act
+          final ctx = await tester.pumpWidgetForTest(
+            driverModel: driverModel,
+            status: orderInDelivery.status,
+            recipientModel: recipientModel,
           );
 
           // assert
@@ -144,7 +197,7 @@ void main() {
 
       testWidgets(
         'shows recipient information and profile image '
-        'if OrderRecipientModel is provided',
+        'if OrderRecipientModel is provided and order status is arrived',
         (tester) async {
           // setup
           final driverModel = OrderDriverModel(
@@ -164,6 +217,7 @@ void main() {
           final ctx = await tester.pumpWidgetForTest(
             driverModel: driverModel,
             recipientModel: recipientModel,
+            status: orderArrived.status,
           );
 
           // assert
