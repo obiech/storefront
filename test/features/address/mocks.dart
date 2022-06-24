@@ -16,6 +16,10 @@ class MockAddressDetailBloc
     extends MockBloc<AddressDetailEvent, AddressDetailState>
     implements AddressDetailBloc {}
 
+class MockAddressPinpointBloc
+    extends MockBloc<AddressPinpointEvent, AddressPinpointState>
+    implements AddressPinpointBloc {}
+
 class MockPermissionHandlerCubit extends MockCubit<PermissionHandlerState>
     implements PermissionHandlerCubit {}
 

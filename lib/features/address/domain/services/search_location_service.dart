@@ -24,6 +24,7 @@ class SearchLocationService implements ISearchLocationRepository {
     }
   }
 
+  /// Gets a [PlaceDetailsModel] from a given Google Place ID [id]
   @override
   RepoResult<PlaceDetailsModel> getLocationDetail(String id) async {
     try {
@@ -35,6 +36,7 @@ class SearchLocationService implements ISearchLocationRepository {
     }
   }
 
+  /// Gets a [PlaceDetailsModel] from a given coordinates [latLng]
   @override
   RepoResult<PlaceDetailsModel> getCurrentLocation(LatLng latLng) async {
     try {
