@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:storefront_app/core/core.dart';
 
 class DropezyTextFormField extends StatelessWidget {
@@ -10,6 +11,8 @@ class DropezyTextFormField extends StatelessWidget {
   final Function(String)? onFieldSubmitted;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
+  final TextCapitalization textCapitalization;
+  final List<TextInputFormatter>? inputFormatters;
 
   /// Form Field validation
   ///
@@ -28,6 +31,8 @@ class DropezyTextFormField extends StatelessWidget {
     this.validator,
     this.keyboardType,
     this.textInputAction,
+    this.textCapitalization = TextCapitalization.none,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -44,6 +49,8 @@ class DropezyTextFormField extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          inputFormatters: inputFormatters,
+          textCapitalization: textCapitalization,
           initialValue: initialValue,
           key: fieldKey,
           keyboardType: keyboardType,

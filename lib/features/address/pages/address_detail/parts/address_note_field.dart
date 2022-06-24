@@ -25,6 +25,8 @@ class _AddressNoteField extends StatelessWidget {
           },
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
           textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.sentences,
+          inputFormatters: [UpperCaseTextFormatter()],
         );
       },
     );

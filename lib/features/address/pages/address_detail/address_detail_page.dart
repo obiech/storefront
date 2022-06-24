@@ -7,6 +7,8 @@ import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/di/injection.dart';
 import 'package:storefront_app/features/address/index.dart';
 
+import '../../../../core/utils/text_input_formatter.dart';
+
 part './parts/address_delete_button.dart';
 part './parts/address_google_map.dart';
 part './parts/address_name_field.dart';

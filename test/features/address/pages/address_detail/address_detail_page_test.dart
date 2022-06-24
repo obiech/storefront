@@ -205,10 +205,12 @@ void main() {
       await tester.tap(find.byKey(AddressDetailPageKeys.saveAddressButton));
       await tester.pumpAndSettle();
 
-      verify(() => bloc.add(const AddressNameChanged(addressName))).called(1);
-      verify(() => bloc.add(const AddressDetailNoteChanged(addressDetail)))
+      verify(() => bloc.add(AddressNameChanged(addressName.capitalize())))
           .called(1);
-      verify(() => bloc.add(const RecipientNameChanged(recipientName)))
+      verify(
+        () => bloc.add(AddressDetailNoteChanged(addressDetail.capitalize())),
+      ).called(1);
+      verify(() => bloc.add(RecipientNameChanged(recipientName.capitalize())))
           .called(1);
       verify(() => bloc.add(const RecipientPhoneChanged(recipientPhone)))
           .called(1);

@@ -1,7 +1,9 @@
 part of '../address_detail_page.dart';
 
 class _AddressNameField extends StatelessWidget {
-  const _AddressNameField({Key? key}) : super(key: key);
+  const _AddressNameField({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,8 @@ class _AddressNameField extends StatelessWidget {
           },
           onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
           textInputAction: TextInputAction.next,
+          textCapitalization: TextCapitalization.sentences,
+          inputFormatters: [UpperCaseTextFormatter()],
         );
       },
     );
