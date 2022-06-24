@@ -32,15 +32,13 @@ class ProductsList extends StatelessWidget {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Container(
-                color: context.res.colors.paleBlue,
-                child: CachedNetworkImage(
-                  height: 50,
-                  width: 50,
-                  imageUrl: product.thumbnailUrl,
-                ),
+            SizedBox(
+              width: 50,
+              height: 50,
+              child: DropezyImage(
+                borderRadius: 12,
+                url: product.thumbnailUrl,
+                padding: EdgeInsets.zero,
               ),
             ),
             SizedBox(width: res.dimens.spacingMiddle),

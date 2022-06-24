@@ -56,6 +56,7 @@ class ProductTile extends StatelessWidget {
                   width: imageSize,
                   height: imageSize,
                   child: DropezyImage(
+                    padding: EdgeInsets.zero,
                     url: variant.thumbnailUrl,
                     borderRadius: 8,
                   ),

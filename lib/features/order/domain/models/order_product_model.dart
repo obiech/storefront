@@ -1,5 +1,6 @@
 import 'package:dropezy_proto/v1/order/order.pb.dart' as pb;
 import 'package:equatable/equatable.dart';
+import 'package:storefront_app/core/core.dart';
 
 import '../../../product/domain/models/product_model.dart';
 
@@ -26,12 +27,12 @@ class OrderProductModel extends Equatable {
 
   /// Maps a [pb.Item] into [OrderProductModel]
   factory OrderProductModel.fromPb(pb.Item item) {
-    // TODO (leovinsen): Add missing fields once Item proto is updated
     return OrderProductModel(
       productId: item.product.variantId,
       productName: item.product.name,
-      thumbnailUrl:
-          item.product.imagesUrls.isEmpty ? '' : item.product.imagesUrls[0],
+      thumbnailUrl: item.product.imagesUrls.isEmpty
+          ? ''
+          : item.product.imagesUrls[0].toImageUrl,
       quantity: item.quantity,
       price: item.product.price.num,
       discount: '000',

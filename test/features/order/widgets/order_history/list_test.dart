@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storefront_app/core/core.dart';
@@ -40,6 +41,7 @@ void main() {
     when(() => router.push(any())).thenAnswer((_) async => null);
 
     setUpLocaleInjection();
+    dotenv.testLoad(fileInput: 'ASSETS_URL=https://dropezy.com');
   });
 
   group('[OrderHistoryList]', () {

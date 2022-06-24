@@ -1,4 +1,5 @@
 import 'package:dropezy_proto/v1/order/order.pbenum.dart' as pb;
+import 'package:storefront_app/core/core.dart';
 import 'package:storefront_app/features/cart_checkout/domain/domains.dart';
 
 import '../../../address/index.dart';
@@ -11,6 +12,10 @@ extension OrderModelListX on List<OrderModel> {
 }
 
 extension OrderModelX on OrderModel {
+  /// Thumbnail of the order shown in order history
+  String get orderThumbnail =>
+      productsBought.isEmpty ? '' : productsBought[0].thumbnailUrl.toImageUrl;
+
   /// Copy With
   OrderModel copyWith({
     String? id,

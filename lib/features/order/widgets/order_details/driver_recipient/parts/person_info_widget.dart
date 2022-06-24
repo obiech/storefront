@@ -32,10 +32,13 @@ class _PersonInfoWidget extends StatelessWidget {
     return Row(
       children: [
         ClipOval(
-          child: CachedNetworkImage(
-            imageUrl: imageUrl,
+          child: SizedBox(
             width: 40,
             height: 40,
+            child: DropezyImage(
+              url: imageUrl,
+              padding: EdgeInsets.zero,
+            ),
           ),
         ),
         const SizedBox(width: 12),

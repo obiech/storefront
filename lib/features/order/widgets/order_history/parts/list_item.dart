@@ -104,8 +104,13 @@ class OrderHistoryListItem extends StatelessWidget {
           ),
           Row(
             children: [
-              _ProductImage(
-                thumbnail: order.productsBought[0].thumbnailUrl,
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: DropezyImage(
+                  url: order.orderThumbnail,
+                  padding: EdgeInsets.zero,
+                ),
               ),
               SizedBox(width: context.res.dimens.spacingMiddle),
               Expanded(
@@ -138,31 +143,6 @@ class OrderHistoryListItem extends StatelessWidget {
             ),
           ]
         ],
-      ),
-    );
-  }
-}
-
-//TODO (leovinsen): This Widget might not be needed anymore
-// as Order thumbnails will be removed
-class _ProductImage extends StatelessWidget {
-  const _ProductImage({
-    Key? key,
-    required this.thumbnail,
-  }) : super(key: key);
-
-  final String thumbnail;
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO (leovinsen): add loading animation
-    // TODO (leovinsen): add fallback when image fails to load
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8.0),
-      child: CachedNetworkImage(
-        width: 60,
-        height: 60,
-        imageUrl: thumbnail,
       ),
     );
   }

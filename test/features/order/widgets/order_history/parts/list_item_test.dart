@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
@@ -59,7 +60,7 @@ void main() {
 
   setUpAll(() {
     registerFallbackValue(FakePageRouteInfo());
-
+    dotenv.testLoad(fileInput: 'ASSETS_URL=https://dropezy.com');
     setUpLocaleInjection();
   });
 
@@ -80,7 +81,7 @@ void main() {
 
         expect(
           orderThumbnail.imageUrl,
-          o.productsBought[0].thumbnailUrl,
+          o.productsBought[0].thumbnailUrl.toImageUrl,
         );
       }
     },

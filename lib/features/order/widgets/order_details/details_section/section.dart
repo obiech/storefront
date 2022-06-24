@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../core/core.dart';
@@ -10,8 +9,6 @@ part 'parts/skeleton.dart';
 
 /// Section with heading 'Order Details' and consists of list of
 /// purchased products.
-///
-/// TODO (leovinsen): add delivery address information
 class OrderDetailsSection extends StatelessWidget {
   const OrderDetailsSection({
     Key? key,
