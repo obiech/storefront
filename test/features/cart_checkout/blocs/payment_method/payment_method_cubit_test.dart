@@ -13,7 +13,7 @@ void main() {
   late IPaymentRepository _repository;
 
   final List<PaymentMethodDetails> _paymentMethods =
-      samplePaymentMethods.toPaymentDetails();
+      samplePaymentMethods.toPaymentDetails().toList();
 
   setUp(() {
     _repository = MockPaymentMethodRepository();
@@ -42,6 +42,22 @@ void main() {
       LoadedPaymentMethods(_paymentMethods, _paymentMethods.first)
     ],
     verify: (_) => verify(() => _repository.getPaymentMethods()).called(1),
+  );
+
+  blocTest<PaymentMethodCubit, PaymentMethodState>(
+    'should not query payment methods again '
+    'When they are already loaded ',
+    setUp: () {
+      /// arrange
+      when(
+        () => _repository.getPaymentMethods(),
+      ).thenAnswer((_) async => right(_paymentMethods));
+    },
+    build: () => _cubit,
+    seed: () => LoadedPaymentMethods(_paymentMethods, _paymentMethods.first),
+    act: (cubit) => cubit.queryPaymentMethods(),
+    expect: () => [],
+    verify: (_) => verifyNever(() => _repository.getPaymentMethods()),
   );
 
   blocTest<PaymentMethodCubit, PaymentMethodState>(

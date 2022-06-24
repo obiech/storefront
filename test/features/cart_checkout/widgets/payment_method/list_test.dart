@@ -85,8 +85,11 @@ void main() {
           'When querying payment methods is successful '
           'display full list of all payment methods availed',
           (WidgetTester tester) async {
-        when(() => _paymentMethodsRepository.getPaymentMethods())
-            .thenAnswer((_) async => right(paymentMethods.toPaymentDetails()));
+        when(() => _paymentMethodsRepository.getPaymentMethods()).thenAnswer(
+          (_) async => right(
+            paymentMethods.toPaymentDetails().toList(),
+          ),
+        );
 
         /// Load Payment Methods List
         await _pumpTestWidget(tester);

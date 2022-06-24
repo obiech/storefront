@@ -15,7 +15,7 @@ void main() {
     late PaymentCheckoutCubit _cubit;
     late IPaymentRepository _repository;
     final List<PaymentMethodDetails> _paymentMethods =
-        samplePaymentMethods.toPaymentDetails();
+        samplePaymentMethods.toPaymentDetails().toList();
 
     final paymentResults = mockGoPayPaymentResults;
     final baseStrings = EnglishStrings();

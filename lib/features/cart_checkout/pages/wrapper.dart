@@ -8,15 +8,13 @@ class CartCheckoutPageWrapper extends StatelessWidget
 
   @override
   Widget wrappedRoute(BuildContext context) {
+    getIt<PaymentMethodCubit>().queryPaymentMethods();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => getIt<PaymentCheckoutCubit>(),
         ),
-        BlocProvider(
-          create: (context) =>
-              getIt<PaymentMethodCubit>()..queryPaymentMethods(),
-        )
       ],
       child: this,
     );

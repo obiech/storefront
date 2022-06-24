@@ -81,6 +81,11 @@ Future<void> main() async {
             // Profile
             BlocProvider(
               create: (context) => getIt<ProfileCubit>(),
+            ),
+
+            // Payment methods
+            BlocProvider(
+              create: (context) => getIt<PaymentMethodCubit>(),
             )
           ],
           child: AppWidget(

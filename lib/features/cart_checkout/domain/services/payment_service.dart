@@ -41,23 +41,30 @@ class PaymentService implements IPaymentRepository {
     this.appStrings,
   );
 
+  /// Payment method list
+  final List<PaymentMethodDetails> _paymentMethods = [];
+
   @override
   RepoResult<List<PaymentMethodDetails>> getPaymentMethods() async {
-    try {
+    return safeCall(() async {
+      // Return cached payment methods
+      if (_paymentMethods.isNotEmpty) return Right(_paymentMethods);
+
       final paymentMethodsResponse = await orderServiceClient
           .getAvailablePaymentMethod(GetAvailablePaymentMethodRequest());
 
-      final activePaymentMethods =
-          paymentMethodsResponse.paymentMethods.where(channelIsActive).toList();
+      final activePaymentMethods = paymentMethodsResponse.paymentMethods
+          .where(channelIsActive)
+          .toPaymentDetails()
+          .toList();
 
       if (activePaymentMethods.isEmpty) {
         return left(NoPaymentMethods(appStrings));
       }
 
-      return right(activePaymentMethods.toPaymentDetails());
-    } on Exception catch (e) {
-      return left(e.toFailure);
-    }
+      _paymentMethods.addAll(activePaymentMethods);
+      return right(activePaymentMethods);
+    });
   }
 
   @override

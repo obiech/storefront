@@ -55,7 +55,7 @@ void main() {
       }
 
       setUp(() {
-        final paymentMethods = samplePaymentMethods.toPaymentDetails();
+        final paymentMethods = samplePaymentMethods.toPaymentDetails().toList();
 
         when(() => cartBloc.state)
             .thenAnswer((_) => CartLoaded.success(_cartModel));

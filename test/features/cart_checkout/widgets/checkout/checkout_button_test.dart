@@ -90,7 +90,7 @@ void main() {
       'should be disabled', (WidgetTester tester) async {
     /// arrange
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.loading(cartModel));
@@ -118,7 +118,7 @@ void main() {
       'should be disabled', (WidgetTester tester) async {
     /// arrange
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     when(() => cartBloc.state)
@@ -147,7 +147,7 @@ void main() {
       'should be disabled', (WidgetTester tester) async {
     /// arrange
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     final cartOutOfStock = mockCartModel.copyWith(
@@ -185,7 +185,7 @@ void main() {
       'should show loading', (WidgetTester tester) async {
     /// arrange
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
@@ -238,7 +238,7 @@ void main() {
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     when(() => paymentRepository.checkoutPayment(any()))
@@ -291,7 +291,7 @@ void main() {
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     final paymentResults = mockGoPayPaymentResults;
@@ -349,7 +349,7 @@ void main() {
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     final paymentResults = mockGoPayPaymentResults;
@@ -397,7 +397,7 @@ void main() {
     when(() => cartBloc.state).thenAnswer((_) => CartLoaded.success(cartModel));
 
     when(() => paymentRepository.getPaymentMethods()).thenAnswer(
-      (_) async => right(samplePaymentMethods.toPaymentDetails()),
+      (_) async => right(samplePaymentMethods.toPaymentDetails().toList()),
     );
 
     final paymentResults = mockBcaPaymentResults;

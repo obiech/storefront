@@ -10,10 +10,10 @@ extension PaymentChannelX on PaymentChannel {
 }
 
 /// [PaymentChannel] List extension
-extension PaymentChannelsX on List<PaymentChannel> {
+extension PaymentChannelsX on Iterable<PaymentChannel> {
   /// Convert [PaymentChannel]s to [PaymentMethodDetails]
-  List<PaymentMethodDetails> toPaymentDetails() {
-    return map((channel) => channel.paymentInfo).toList();
+  Iterable<PaymentMethodDetails> toPaymentDetails() {
+    return map((channel) => channel.paymentInfo);
   }
 }
 

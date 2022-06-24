@@ -6,7 +6,7 @@ import '../../domain/domains.dart';
 
 part 'payment_method_state.dart';
 
-@injectable
+@lazySingleton
 class PaymentMethodCubit extends Cubit<PaymentMethodState> {
   final IPaymentRepository paymentMethodRepository;
 
@@ -15,6 +15,8 @@ class PaymentMethodCubit extends Cubit<PaymentMethodState> {
 
   /// Query [PaymentMethodDetails]s from cache or end-point
   Future<void> queryPaymentMethods() async {
+    if (state is LoadedPaymentMethods) return;
+
     emit(LoadingPaymentMethods());
 
     final paymentMethodsResponse =

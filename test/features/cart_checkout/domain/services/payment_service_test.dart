@@ -90,6 +90,32 @@ void main() {
       ).called(1);
     });
 
+    test(
+        'should return only cached payment methods '
+        'when [getPaymentMethods] is called again', () async {
+      when(() => orderServiceClient.getAvailablePaymentMethod(any()))
+          .thenAnswer(
+        (_) => MockResponseFuture.value(
+          GetAvailablePaymentMethodResponse(
+            paymentMethods: paymentMethods,
+          ),
+        ),
+      );
+
+      /// Attempt to [getPaymentMethods] three times
+      for (int i = 0; i < 3; i++) {
+        final response = await paymentRepository.getPaymentMethods();
+        expect(response.isRight(), true);
+        expect(response.getRight(), paymentMethods.toPaymentDetails());
+      }
+
+      verify(
+        () => orderServiceClient.getAvailablePaymentMethod(
+          GetAvailablePaymentMethodRequest(),
+        ),
+      ).called(1);
+    });
+
     test('should return [NoPaymentMethods] if no active payments are found',
         () async {
       when(() => orderServiceClient.getAvailablePaymentMethod(any()))

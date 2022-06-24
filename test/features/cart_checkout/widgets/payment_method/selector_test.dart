@@ -18,7 +18,7 @@ void main() {
 
   setUp(() {
     /// Load sample payment methods
-    paymentMethods = samplePaymentMethods.toPaymentDetails();
+    paymentMethods = samplePaymentMethods.toPaymentDetails().toList();
 
     paymentMethodCubit = MockPaymentMethodCubit();
 
