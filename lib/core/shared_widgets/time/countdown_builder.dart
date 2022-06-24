@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class CountdownBuilderState extends State<CountdownBuilder> {
   @override
   void initState() {
     super.initState();
-    timeLeftInSeconds = widget.countdownDuration;
+    timeLeftInSeconds = math.max(widget.countdownDuration, 0);
 
     // Rebuild UI every 1 seconds for countdown
     timer = Timer.periodic(

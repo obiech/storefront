@@ -38,4 +38,40 @@ void main() {
       expect(state.timeLeftInSeconds, 0);
     },
   );
+
+  testWidgets(
+    'CountdownBuilder should convert negative values into 0 '
+    'and not start countdown',
+    (tester) async {
+      const testDurationInSeconds = -10;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: CountdownBuilder(
+            countdownDuration: testDurationInSeconds,
+            builder: (time) {
+              return Text(time.toString());
+            },
+          ),
+        ),
+      );
+
+      final state = tester.state<CountdownBuilderState>(
+        find.byType(CountdownBuilder),
+      );
+
+      expect(state.timeLeftInSeconds, 0);
+
+      // should not continue ticking
+      for (int i = 0; i < 10; i++) {
+        expect(state.timeLeftInSeconds, 0);
+        expect(find.text('0'), findsOneWidget);
+        await tester.pump(const Duration(seconds: 1));
+      }
+
+      expect(state.timeLeftInSeconds, 0);
+      expect(state.timer, null);
+      expect(find.text('0'), findsOneWidget);
+    },
+  );
 }
