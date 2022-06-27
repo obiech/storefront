@@ -34,33 +34,43 @@ void main() {
     expect(badge.text, context.res.strings.stockLeft(productModel.stock));
   });
 
-  testWidgets('should have a like button', (WidgetTester tester) async {
-    /// arrange
-    await tester.pumpProductDetailSubHeader(mockProduct);
+  // TODO: Re-enable once wishlist feature is available
+  testWidgets(
+    'should have a like button',
+    (WidgetTester tester) async {
+      /// arrange
+      await tester.pumpProductDetailSubHeader(mockProduct);
 
-    /// assert
-    expect(
-      find.ancestor(
-        of: find.byIcon(DropezyIcons.heart_alt),
-        matching: find.byType(IconButton),
-      ),
-      findsOneWidget,
-    );
-  });
+      /// assert
+      expect(
+        find.ancestor(
+          of: find.byIcon(DropezyIcons.heart_alt),
+          matching: find.byType(IconButton),
+        ),
+        findsOneWidget,
+      );
+    },
+    skip: true,
+  );
 
-  testWidgets('should have a share button', (WidgetTester tester) async {
-    /// arrange
-    await tester.pumpProductDetailSubHeader(mockProduct);
+  // TODO: Re-enable once share feature is available
+  testWidgets(
+    'should have a share button',
+    (WidgetTester tester) async {
+      /// arrange
+      await tester.pumpProductDetailSubHeader(mockProduct);
 
-    /// assert
-    expect(
-      find.ancestor(
-        of: find.byIcon(DropezyIcons.share),
-        matching: find.byType(IconButton),
-      ),
-      findsOneWidget,
-    );
-  });
+      /// assert
+      expect(
+        find.ancestor(
+          of: find.byIcon(DropezyIcons.share),
+          matching: find.byType(IconButton),
+        ),
+        findsOneWidget,
+      );
+    },
+    skip: true,
+  );
 }
 
 extension WidgetTesterX on WidgetTester {

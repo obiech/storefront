@@ -36,20 +36,22 @@ class ProductDetailsSubHeader extends StatelessWidget {
                       .withLineHeight(24),
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  // TODO(obella): Add like logic for product
-                },
-                icon: const Icon(DropezyIcons.heart_alt),
-                color: res.colors.black,
-              ),
-              IconButton(
-                onPressed: () {
-                  // TODO(obella): Add share logic for product
-                },
-                icon: const Icon(DropezyIcons.share),
-                color: res.colors.black,
-              )
+              // TODO: Re-enable once wishlist feature is available
+              // IconButton(
+              //   onPressed: () {
+              //     // TODO(obella): Add like logic for product
+              //   },
+              //   icon: const Icon(DropezyIcons.heart_alt),
+              //   color: res.colors.black,
+              // ),
+              // TODO: Re-enable once share feature is available
+              // IconButton(
+              //   onPressed: () {
+              //     // TODO(obella): Add share logic for product
+              //   },
+              //   icon: const Icon(DropezyIcons.share),
+              //   color: res.colors.black,
+              // )
             ],
           ),
 
