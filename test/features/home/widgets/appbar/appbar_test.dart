@@ -55,8 +55,7 @@ void main() {
     () {
       testWidgets(
         'should display dropezy logo, '
-        'address selection and its delivery estimation '
-        'and notifications icon',
+        'address selection and its delivery estimation ',
         (tester) async {
           // act
           final ctx = await tester.pumpHomeAppBar();
@@ -81,11 +80,12 @@ void main() {
           expect(deliveryDurationChip.label, ctx.res.strings.minutes(15));
 
           // should find notification icon
-          final notificationButton = tester.firstWidget<IconButton>(
-            find.byKey(const Key(HomeAppBarKeys.buttonNotifications)),
-          );
+          // TODO: Re-enable once notifications feature is available
+          // final notificationButton = tester.firstWidget<IconButton>(
+          //   find.byKey(const Key(HomeAppBarKeys.buttonNotifications)),
+          // );
 
-          expect((notificationButton.icon as Icon).icon, DropezyIcons.bell);
+          // expect((notificationButton.icon as Icon).icon, DropezyIcons.bell);
         },
       );
 

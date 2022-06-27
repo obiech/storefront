@@ -54,19 +54,20 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
-      actions: [
-        IconButton(
-          key: const ValueKey(HomeAppBarKeys.buttonNotifications),
-          icon: Icon(
-            DropezyIcons.bell,
-            color: context.res.colors.white,
-            size: 24,
-          ),
-          onPressed: () {
-            // TODO: Implement notifications feature
-          },
-        ),
-      ],
+      // TODO: Re-enable once notifications feature is available
+      // actions: [
+      //   IconButton(
+      //     key: const ValueKey(HomeAppBarKeys.buttonNotifications),
+      //     icon: Icon(
+      //       DropezyIcons.bell,
+      //       color: context.res.colors.white,
+      //       size: 24,
+      //     ),
+      //     onPressed: () {
+      //       // TODO: Implement notifications feature
+      //     },
+      //   ),
+      // ],
     );
   }
 
