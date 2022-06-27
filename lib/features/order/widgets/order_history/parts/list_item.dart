@@ -102,22 +102,7 @@ class OrderHistoryListItem extends StatelessWidget {
             height: context.res.dimens.spacingMedium * 2,
             color: context.res.colors.dividerColor,
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: DropezyImage(
-                  url: order.orderThumbnail,
-                  padding: EdgeInsets.zero,
-                ),
-              ),
-              SizedBox(width: context.res.dimens.spacingMiddle),
-              Expanded(
-                child: OrderSummarySection(order: order),
-              ),
-            ],
-          ),
+          OrderSummarySection(order: order),
           if (order.status.isAwaitingPayment) ...[
             SizedBox(height: context.res.dimens.spacingMedium),
             DropezyButton.primary(

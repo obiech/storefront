@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -65,7 +64,7 @@ void main() {
   });
 
   testWidgets(
-    '[OrderHistoryListItem] should display a summary section, order thumbnail, '
+    '[OrderHistoryListItem] should display a summary section '
     'and current order status regardless of order status',
     (tester) async {
       for (final o in sampleOrderModels) {
@@ -75,14 +74,6 @@ void main() {
         );
         expect(find.byType(OrderSummarySection), findsOneWidget);
         expect(find.byType(OrderStatusChip), findsOneWidget);
-
-        final orderThumbnail = tester
-            .firstWidget(find.byType(CachedNetworkImage)) as CachedNetworkImage;
-
-        expect(
-          orderThumbnail.imageUrl,
-          o.productsBought[0].thumbnailUrl.toImageUrl,
-        );
       }
     },
   );
