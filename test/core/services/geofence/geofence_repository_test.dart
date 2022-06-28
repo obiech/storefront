@@ -1,14 +1,37 @@
+import 'package:dropezy_proto/v1/discovery/discovery.pbgrpc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:storefront_app/core/core.dart';
+import 'package:storefront_app/core/services/geofence/models/darkstore_metadata.dart';
 import 'package:storefront_app/core/services/geofence/models/dropezy_latlng.dart';
 import 'package:storefront_app/core/services/geofence/models/dropezy_polygon.dart';
-import 'package:storefront_app/core/services/geofence/repository/i_geofence_repository.dart';
+import 'package:storefront_app/core/services/geofence/repository/i_geofence_local_persistence.dart';
 import 'package:storefront_app/core/services/geofence/services/geofence_repository.dart';
 
+import '../../../src/mock_response_future.dart';
+
+class MockDiscoveryServiceClient extends Mock
+    implements DiscoveryServiceClient {}
+
+class MockIGeofenceLocalPersistence extends Mock
+    implements IGeofenceLocalPersistence {}
+
 void main() {
-  late IGeofenceRepository repo;
+  late GeofenceRepository repo;
+  late DiscoveryServiceClient discoveryServiceClient;
+  late IGeofenceLocalPersistence localPersistence;
 
   setUp(() {
-    repo = GeofenceRepository();
+    discoveryServiceClient = MockDiscoveryServiceClient();
+    localPersistence = MockIGeofenceLocalPersistence();
+    repo = GeofenceRepository(
+      discoveryServiceClient,
+      localPersistence,
+    );
+  });
+
+  setUpAll(() {
+    registerFallbackValue(DarkStoresMetadata(DateTime.now()));
   });
 
   void containsCase(
@@ -53,11 +76,15 @@ void main() {
       const DropezyLatLng(20, 10),
       const DropezyLatLng(10, 10)
     ],
+    name: 'Dummy Name',
+    storeId: 'Dummy StoreId',
   );
 
   final DropezyPolygon emptyPolygon = DropezyPolygon(
     id: 'empty polygon',
     points: [],
+    name: '',
+    storeId: '',
   );
 
   test('contains Location for empty polygon', () {
@@ -176,6 +203,164 @@ void main() {
       );
     });
   });
+
+  group('[getGeofences()', () {
+    test('should return [List<DropezyPolygon] '
+    'when getGeofences() is called', () async {
+      when(() => discoveryServiceClient.getGeofences(GetGeofencesRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetGeofencesResponse()),
+      );
+      when(() => localPersistence.updateGeofencePolygon(any()))
+          .thenAnswer((invocation) => Future.value());
+
+      final res = await repo.getGeofences();
+      expect(res.isRight(), true);
+      expect(res.getRight(), isA<List<DropezyPolygon>>());
+    });
+
+    test('should return an error '
+    'when an Exception is thrown calling getGeofences()', () async {
+      when(() => discoveryServiceClient.getGeofences(GetGeofencesRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetGeofencesResponse()),
+      );
+      when(() => localPersistence.updateGeofencePolygon(any()))
+          .thenAnswer((invocation) => Future.error(Exception('Mock Error')));
+
+      final res = await repo.getGeofences();
+
+      verify(() => localPersistence.updateGeofencePolygon(any())).called(1);
+      verify(() => discoveryServiceClient.getGeofences(GetGeofencesRequest()))
+          .called(1);
+
+      expect(res.isLeft(), true);
+      expect(res.getLeft(), isA<Failure>());
+    });
+  });
+
+  group('[getMetaData()]', () {
+    test('should return the DarkStoreMetaData '
+    'when getMetadata() is called', () async {
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetMetadataResponse()),
+      );
+
+      final res = await repo.getMetaData();
+      verify(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .called(1);
+
+      expect(res.isRight(), true);
+      expect(res.getRight(), isA<DarkStoresMetadata>());
+    });
+
+    test('should return an error '
+    'when an Exception is thrown calling getMetadata()', () async {
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.error(Exception('')),
+      );
+
+      final res = await repo.getMetaData();
+      verify(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .called(1);
+
+      expect(res.getLeft(), isA<Failure>());
+      expect(res.isLeft(), true);
+    });
+  });
+
+  group('[getUpdatedGeofences()]', () {
+    final polygons = {
+      DropezyPolygon(id: 'Mock', storeId: 'MockStore id', name: ''),
+    };
+    test('should return [Set<DropezyPolygon>] '
+    'and fetch a Geofence data '
+    'when getUpdatedGeofences() is called '
+    'and shouldRefresh() returns true', () async {
+      
+      when(() => localPersistence.shouldRefresh(any()))
+          .thenAnswer((invocation) => MockResponseFuture.value(true));
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetMetadataResponse()),
+      );
+      when(() => localPersistence.updateGeofencePolygon(any()))
+          .thenAnswer((invocation) => Future.value());
+      when(() => discoveryServiceClient.getGeofences(GetGeofencesRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetGeofencesResponse()),
+      );
+      
+
+      final res = await repo.getUpdatedGeofences();
+      expect(res.getRight(), isA<Set<DropezyPolygon>>());
+
+      verify(() => localPersistence.shouldRefresh(any())).called(1);
+      verifyNever(() => localPersistence.getGeofencePolygons());
+    });
+
+    test('should return an Error '
+    'when getUpdatedGeofences() is called '
+    'but an Exception is thrown', () async {
+      
+       when(() => localPersistence.shouldRefresh(any()))
+          .thenAnswer((invocation) => MockResponseFuture.value(true));
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetMetadataResponse()),
+      );
+      
+      when(() => discoveryServiceClient.getGeofences(GetGeofencesRequest()))
+          .thenAnswer(
+        (invocation) =>  MockResponseFuture.error(Exception()),
+      );
+
+      final res = await repo.getUpdatedGeofences();
+      expect(res.getLeft(), isA<Failure>());
+
+      verify(() => localPersistence.shouldRefresh(any())).called(1);
+      verifyNever(() => localPersistence.getGeofencePolygons());
+    });
+
+    test('should return [Set<DropezyPolygon>] '
+    'and fetch a Geofence data from local storage '
+    'when getUpdatedGeofences() is called '
+    'and shouldRefresh() returns false', () async {
+      
+ when(() => localPersistence.shouldRefresh(any()))
+          .thenAnswer((invocation) => MockResponseFuture.value(false));
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.value(GetMetadataResponse()),
+      );
+      
+      when(() => localPersistence.getGeofencePolygons()).thenReturn(polygons);
+
+      final res = await repo.getUpdatedGeofences();
+      expect(res.getRight(), isA<Set<DropezyPolygon>>());
+
+      verify(() => localPersistence.shouldRefresh(any())).called(1);
+      verify(() => localPersistence.getGeofencePolygons()).called(1);
+    });
+
+    test('should return a Failure '
+    'when getUpdatedGeofences() is called '
+    'and but an error is thrown while fetching DarkStoreMetaData', () async {
+      
+      when(() => discoveryServiceClient.getMetadata(GetMetadataRequest()))
+          .thenAnswer(
+        (invocation) => MockResponseFuture.error(Exception()),
+      );
+      
+      final res = await repo.getUpdatedGeofences();
+      expect(res.getLeft(), isA<Failure>());
+
+      verifyNever(() => localPersistence.shouldRefresh(any()));
+      verifyNever(() => localPersistence.getGeofencePolygons());
+    });
+  });
 }
 
 List<DropezyLatLng> makeList(List<num> coords) {
@@ -197,7 +382,11 @@ DropezyPolygon makePolygon(
   MakeListArg makeList,
   List<num> coords,
 ) {
-  return DropezyPolygon(id: 'Dummy Polygon', points: makeList(coords));
+  return DropezyPolygon(
+      id: 'Dummy Polygon',
+      points: makeList(coords),
+      name: 'Dummy Name',
+      storeId: 'Dummy Store Id',);
 }
 
 typedef MakeListArg = List<DropezyLatLng> Function(List<num> coords);

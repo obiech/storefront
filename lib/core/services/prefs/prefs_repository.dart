@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
+import 'package:storefront_app/core/services/geofence/models/darkstore_metadata.dart';
 
 import '../../core.dart';
 
@@ -84,5 +85,20 @@ class PrefsRepository implements IPrefsRepository {
       PrefsKeys.kDeviceLocale,
       locale.toLanguageTag(),
     );
+  }
+
+  @override
+  DarkStoresMetadata? getMetaData() {
+    return _prefBox.get(PrefsKeys.kDarkStoreMetaData);
+  }
+
+  @override
+  Future<void> deleteMetaData() async {
+    await _prefBox.delete(PrefsKeys.kDarkStoreMetaData);
+  }
+
+  @override
+  Future<void> setMetaData(DarkStoresMetadata metaData) async {
+    await _prefBox.put(PrefsKeys.kDarkStoreMetaData, metaData);
   }
 }

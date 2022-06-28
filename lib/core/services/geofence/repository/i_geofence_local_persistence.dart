@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:storefront_app/core/services/geofence/models/darkstore_metadata.dart';
 
 import '../models/dropezy_polygon.dart';
 
@@ -6,7 +7,7 @@ abstract class IGeofenceLocalPersistence {
   /// Get Geofence Polygons.
   ///
   /// It returns an empty [Set] if no polygon is found.
-  Future<Set<DropezyPolygon>> getGeofencePolygons();
+  Set<DropezyPolygon> getGeofencePolygons();
 
   /// Updates [GeofencePolygons].
   ///
@@ -22,6 +23,10 @@ abstract class IGeofenceLocalPersistence {
   /// Other [Bloc]s can subscribe to this [Stream] inorder to get
   /// updated when [DropezyPolygon]s are updated.
   Stream<Set<DropezyPolygon>> get polygons;
+
+  /// It returns false only if the locally saved [DarkStoresMetadata]  
+  /// is the same with the value gotten from the backend.
+  Future<bool> shouldRefresh(DarkStoresMetadata metadata);
 
   @protected
   void addToStream(Set<DropezyPolygon> items);

@@ -6,6 +6,7 @@ class HiveTypeIds {
   static const placeModel = 2;
   static const dropezyPolygon = 3;
   static const dropezyLatLng = 4;
+  static const darkStoresMetadata = 5;
 }
 
 /// Unique [SearchLocationHistoryQuery] hive fields ids
@@ -26,10 +27,16 @@ class PlaceModelHiveFieldIds {
 class DropezyPolygonHiveFieldIds {
   static const id = 1;
   static const points = 2;
+  static const name = 3;
+  static const storeId = 4;
 }
 
 /// Unique [DropezyLatLng] hive fields ids
 class DropezyLatLngHiveFieldIds {
   static const latitude = 1;
   static const longitude = 2;
+}
+
+class DarkStoresMetadataFields {
+  static const lastUpdated = 1;
 }

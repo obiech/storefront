@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storefront_app/core/services/geofence/models/darkstore_metadata.dart';
 
 abstract class IPrefsRepository {
   /// Preference helpers for [UserCredentialStorage]
@@ -30,6 +31,15 @@ abstract class IPrefsRepository {
   ///
   /// Retrieve a user's finger print
   String? getFingerPrint();
+  
+  /// Preference helpers to retrieve stored [DarkStoreMetadata] 
+  DarkStoresMetadata? getMetaData();
+  
+  /// Preference helpers to delete stored [DarkStoreMetadata] 
+  Future<void> deleteMetaData();
+  
+  /// Preference helpers to set stored [DarkStoreMetadata] 
+  Future<void> setMetaData(DarkStoresMetadata metaData);
 
   /// This is used to check if fingerPrint is saved.
   bool isDeviceFingerPrintCached();

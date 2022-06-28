@@ -11,6 +11,7 @@ import 'package:storefront_app/features/address/index.dart';
 
 import '../../../../../test_commons/fixtures/address/delivery_address_models.dart'
     as fixtures;
+import '../../../../src/mock_response_future.dart';
 import '../../mocks.dart';
 
 void main() {
@@ -26,6 +27,8 @@ void main() {
     when(() => localPersistence.polygons)
         .thenAnswer((invocation) => Stream.value(polygons));
 
+    when(() => geofenceRepository.getUpdatedGeofences())
+        .thenAnswer((invocation) => MockResponseFuture.value(Right(polygons)));
     cubit = DeliveryAddressCubit(
       deliveryAddressRepository: deliveryAddressRepository,
       geofenceLocalPersistence: localPersistence,
@@ -33,7 +36,13 @@ void main() {
     );
   });
   setUpAll(() {
-    registerFallbackValue(DropezyPolygon(id: 'fake'));
+    registerFallbackValue(
+      DropezyPolygon(
+        id: 'fake',
+        name: 'fake name',
+        storeId: 'fake storeId',
+      ),
+    );
     registerFallbackValue(const DropezyLatLng(0, 0));
   });
 
@@ -46,6 +55,7 @@ void main() {
         () {
           expect(cubit.state, isA<DeliveryAddressInitial>());
           verify(() => localPersistence.polygons).called(1);
+          verify(() => geofenceRepository.getUpdatedGeofences()).called(1);
         },
       );
 
@@ -198,6 +208,8 @@ final polygons = {
       const DropezyLatLng(20, 10),
       const DropezyLatLng(10, 10)
     ],
+    name: 'fake name',
+    storeId: 'fake storeId',
   ),
   DropezyPolygon(
     id: 'Dummy Polygon2',
@@ -208,6 +220,8 @@ final polygons = {
       const DropezyLatLng(20, 10),
       const DropezyLatLng(10, 10)
     ],
+    name: 'fake name 2',
+    storeId: 'fake storeId 2',
   ),
   DropezyPolygon(
     id: 'Dummy Polygon3',
@@ -218,5 +232,7 @@ final polygons = {
       const DropezyLatLng(20, 10),
       const DropezyLatLng(10, 10)
     ],
+    name: 'fake name 3',
+    storeId: 'fake storeId 3',
   )
 };

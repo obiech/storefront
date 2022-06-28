@@ -20,7 +20,7 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
     required this.geofenceLocalPersistence,
     required this.geofenceRepository,
   }) : super(const DeliveryAddressInitial()) {
-    onSubscriptionRequested();
+   onSubscriptionRequested();
   }
 
   final IDeliveryAddressRepository deliveryAddressRepository;
@@ -74,6 +74,7 @@ class DeliveryAddressCubit extends Cubit<DeliveryAddressState> {
   @protected
   @visibleForTesting
   Future<void> onSubscriptionRequested() async {
+    await geofenceRepository.getUpdatedGeofences();
     _subcription = geofenceLocalPersistence.polygons.listen(
       (polys) {
         _polygons = polys;

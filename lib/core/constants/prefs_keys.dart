@@ -11,6 +11,7 @@ class PrefsKeys {
   static const kDeviceFingerPrint = 'fakeDeviceFingerprint';
   static const kSearchQueries = 'kSearchQueries';
   static const kDeviceLocale = 'kDeviceLocale';
+  static const kDarkStoreMetaData = 'kDarkStoreMetaData';
 }
 
 /// DI Hive box named key
